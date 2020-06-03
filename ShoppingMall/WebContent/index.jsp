@@ -47,6 +47,8 @@
 	}
 	
 </style>
+<script type="text/javascript" src="/ShoppingMall/js/jquery-3.3.1.min.js"></script>
+<script type="text/javascript" src="/ShoppingMall/util/myutil.js"></script>
 <script type="text/javascript">
 	function func_slideL(type){
 		console.log(type);

@@ -53,7 +53,15 @@
 	
 	.detailTable{
 		clear:both;
+		width: 1080px;
+		margin-top:50px;
 	}
+	
+	.detailTable > table{
+		width: 100%;
+	}
+	
+	
 	
 	.basket{
 		display: inline-block;
@@ -67,6 +75,37 @@
 		margin-top: 5px;
 		cursor: pointer;
 	}
+	
+	.accordion {
+  background-color: white;
+  color: #444;
+  cursor: pointer;
+  padding: 18px;
+  width: 100%;
+  border: none;
+  text-align: left;
+  outline: none;
+  font-size: 15px;
+  transition: 0.4s;
+}
+
+
+
+.panel {
+  display: none;
+  background-color: white;
+  overflow: hidden;
+  text-align: left;
+}
+
+.panel > td{
+	width: 1080px;
+}
+
+
+
+
+
 </style>
 <script type="text/javascript" src="/ShoppingMall/js/jquery-3.3.1.min.js"></script>
 <script type="text/javascript" src="/ShoppingMall/util/myutil.js"></script>
@@ -77,6 +116,23 @@
 		
 		$(".numPrice").val(money);
 		$(".money").html(func_comma(money));
+		
+		
+		var acc = document.getElementsByClassName("accordion");
+		var i;
+
+		for (i = 0; i < acc.length; i++) {
+		  acc[i].addEventListener("click", function() {
+		    this.classList.toggle("active");
+		    var panel = this.nextElementSibling;
+		    if (panel.style.display === "block") {
+		      panel.style.display = "none";
+		    } else {
+		      panel.style.display = "block";
+		    }
+		  });
+		}
+		
 	});
 	
 	function cntPlus(){
@@ -114,7 +170,6 @@
 </script>
 </head>
 <body>
-	
 	<div class="container">
 		<jsp:include page="include/header.jsp"></jsp:include>
 		<div class="section" align="center">
@@ -163,8 +218,58 @@
 					</div>
 					
 				</div>
+				
 				<div class="detailTable">
 					
+						<table class="table" style="border-bottom:solid 1px black; border-top:solid 2px purple">
+							<tr class="accordion">
+								<td class="underLine">Section 1</td>
+							</tr>
+							<tr class="panel">
+								<td class="underLine">test1</td>
+							</tr>
+							
+							<tr class="accordion">
+								<td class="underLine">Section 2</td>
+							</tr>
+							<tr class="panel">
+								<td class="underLine">test2</td>
+							</tr>
+							
+							<tr class="accordion">
+								<td class="underLine">Section 3</td>
+							</tr>
+							<tr class="panel">
+								<td>
+									<div>내용</div>
+									<div class="userBtn" align="right">
+										<button>수정</button><button>삭제</button>
+									</div>
+								</td>
+							</tr>
+							<tr class="accordion">
+								<td class="underLine">Section 3</td>
+							</tr>
+							<tr class="panel">
+								<td>
+									<div>내용</div>
+									<div class="userBtn" align="right">
+										<button>수정</button><button>삭제</button>
+									</div>
+								</td>
+							</tr>
+							<tr class="accordion">
+								<td class="underLine">Section 3</td>
+							</tr>
+							<tr class="panel">
+								<td>
+									<div>내용</div>
+									<div class="userBtn" align="right">
+										<button>수정</button><button>삭제</button>
+									</div>
+								</td>
+							</tr>
+						</table>
 				</div>
 			</div>
 		</div>

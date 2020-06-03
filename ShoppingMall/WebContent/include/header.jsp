@@ -144,8 +144,7 @@
 	.categori .list:hover{background-color: #f1f1f1;}
 	.list:hover .dropdown-content{display:inline-block;}
 </style>
-<script type="text/javascript" src="/ShoppingMall/js/jquery-3.3.1.min.js"></script>
-<script type="text/javascript" src="/ShoppingMall/util/myutil.js"></script>
+
 <script type="text/javascript">
 	$(document).ready(function(){
 		var $list = $(".list");
