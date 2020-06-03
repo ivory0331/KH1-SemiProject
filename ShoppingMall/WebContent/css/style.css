@@ -1,0 +1,19 @@
+@charset "UTF-8";
+.container{
+	min-width: 1080px;
+	max-width: 1700px;
+	margin: 0px auto;
+	border: solid 1px black;
+}
+
+.section{
+	width:100%;
+}
+
+.contents{
+	width: 1080px;
+}
+
+.underLine{
+	border-bottom: solid 1px #f4f4f4;
+}
