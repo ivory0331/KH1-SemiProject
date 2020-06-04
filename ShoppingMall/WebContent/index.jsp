@@ -24,6 +24,7 @@
 		margin: 0px;
 	}
 	
+	
 	.item_list > li{
 		display: inline-block;
 		width: 250px;
@@ -42,6 +43,7 @@
 		height:440px;
 	}
 	
+	/*footer.jsp가 include되는 영역*/
 	.footer{
 		clear:both;
 	}
@@ -54,23 +56,28 @@
 <script type="text/javascript" src="/ShoppingMall/js/jquery-3.3.1.min.js"></script>
 <script type="text/javascript" src="/ShoppingMall/util/myutil.js"></script>
 <script type="text/javascript">
-	function func_slideL(type){
+
+	// 왼쪽 버튼을 클릭하면 실행되는 function //
+	function func_slideL(type){ //type = 각각의 배너의 class명의 앞부분ex)best, sale
 		console.log(type);
-		
-		var $item = $("."+type+"_item");
-		for(var i=0; i<$item.length; i++){
-			$("."+type+"_item:eq("+i+")").animate({"left":-1080},"normal",function(){
+		var $item = $("."+type+"_item"); //button으로 호출할 때 갖고온 파라미터 값을 이용해 만든 class를 갖는 li태그 선택
+		for(var i=0; i<$item.length; i++){ //각각의 li태그에 함수의 기능을 적용하기 때문에 for문 사용
+			// eq를 사용해서 순차적으로 animate()를 적용
+			$("."+type+"_item:eq("+i+")").animate({"left":-1080},"normal", //x좌표 값을 li가 들어가 있는 ul태그의 화면의 크기만큼 왼쪽으로 움직인다.
+												  function(){ //콜백함수 - animate가 끝나면 오른쪽 버튼은 보이고 왼쪽 버튼은 숨긴다.
 													 $("."+type+"_slideR").show();
 													 $("."+type+"_slideL").hide();
 										          });
 		}	
 	}
 	
+	// 오른쪽 버튼을 클릭하면 실행되는 function //
 	function func_slideR(type){
 		console.log(type);
 		var $item = $("."+type+"_item");
 		for(var i=0; i<$item.length; i++){
-			$("."+type+"_item:eq("+i+")").animate({"left":0},"normal",function(){
+			$("."+type+"_item:eq("+i+")").animate({"left":0},"normal",//x좌표 값을 다시 본래 위치(0)로 이동 
+											      function(){ 
 													 $("."+type+"_slideL").show();
 													 $("."+type+"_slideR").hide();
 										          });
@@ -88,6 +95,7 @@
 				<div class="best">
 					<div class="item_type">
 						<h3>추천 상품</h3>
+						<!-- sale영역에 있는 li(class=best_item)태그를 움직여야 하므로 onclick의 파라미터에 'best'을 입력한다. -->
 						<button class="best_slideL" onclick="func_slideL('best')">클릭L</button>
 						<button class="best_slideR" onclick="func_slideR('best')" style="display:none;">클릭R</button>
 					</div>
@@ -159,6 +167,7 @@
 				<div class="sale">
 					<div class="item_type">
 						<h3>세일 상품</h3>
+						<!-- sale영역에 있는 li(class=sale_item)태그를 움직여야 하므로 onclick의 파라미터에 'sale'을 입력한다. -->
 						<button class="sale_slideL" onclick="func_slideL('sale')">클릭L</button>
 						<button class="sale_slideR" onclick="func_slideR('sale')" style="display:none;">클릭R</button>
 					</div>
