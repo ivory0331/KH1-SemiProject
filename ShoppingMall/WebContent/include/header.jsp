@@ -36,7 +36,7 @@
 		clear:both;
 	}
 	
-	.navi{
+	.header-navi{
 		max-width:1700px;
 		min-width:1080px;
 		border:solid 0px black;
@@ -45,23 +45,12 @@
 		background-color: white;
 		
 	}
-	.naviList{
+	.header-naviList{
 		list-style: none;
 		border:solid 0px blue;
 	}
 	
-	.subNaviList{
-		list-style: none;
-		border:solid 0px blue;
-		padding: 0px;
-		
-	}
-	
-	.subNaviList > li{
-		line-height: 40px;
-	}
-	
-	.naviList > li{
+	.header-naviList > li{
 		text-align: center;
 		display: inline-block;
 		border: solid 0px gray;
@@ -78,6 +67,8 @@
 		display: inline-block;
 		margin: 0px 10px;
 		font-weight: bold;
+		color:black;
+		font-size: 12pt;
 	}
 	
 	.search{
@@ -98,11 +89,11 @@
 		cursor: pointer;
 	}
 	
-	.dropdown{
+	.navi-dropdown{
 		position: relative;
 	}
 	
-	.dropdown-content{
+	.navi-dropdown-content{
 		display:none;
 		position: absolute;
 		z-index: 5;
@@ -112,8 +103,8 @@
 	}
 	
 
-	.categori{
-		width:150px;
+	.navi-categori{
+		width:149px;
 		display:inline-block;
 		list-style: none;
 		padding:0px;
@@ -122,8 +113,8 @@
 		float:left;
 	}
 	
-	.categori2{
-		width:150px;
+	.navi-categori2{
+		width:149px;
 		display:none;
 		list-style: none;
 		padding:0px;
@@ -131,7 +122,7 @@
 		background-color: #f1f1f1;
 	}
 	
-	.categori > li, .categori2 > li{
+	.navi-categori > li, .navi-categori2 > li{
 		line-height: 30px;
 	}
 	
@@ -141,8 +132,8 @@
     	
 	}
 	
-	.categori .list:hover{background-color: #f1f1f1;}
-	.list:hover .dropdown-content{display:inline-block;}
+	.navi-categori .list:hover{background-color: #f1f1f1;}
+	.list:hover .navi-dropdown-content{display:inline-block;}
 </style>
 
 <script type="text/javascript">
@@ -150,35 +141,34 @@
 		var $list = $(".list");
 		
 			$(".list").hover(function(){
-				console.log("하이");
-				$(".dropdown-content").css("min-width","300px");
-				$(".categori2").css("display","inline-block");
+				$(".navi-dropdown-content").css("min-width","300px");
+				$(".navi-categori2").css("display","inline-block");
+				$(".navi-categori").css("display","inline-block");
 				
 			},function(){
 				
 			});
 		
 		
-		$(".dropdown").hover(function(){
-			$(".dropdown-content").css("display","block");
+		$(".navi-dropdown").hover(function(){
+			$(".navi-dropdown-content").css("display","block");
 		},function(){
-			$(".dropdown-content").css({"display":"none","min-width":"150px"});
-			$(".categori2").css("display","none");
+			$(".navi-dropdown-content").css({"display":"none","min-width":"150px"});
+			$(".navi-categori2").css("display","none");
 		});
 		
 		
-		var naviPosition = $(".navi").offset();
+		var naviPosition = $(".header-navi").offset();
 		$(window).scroll(function(){
-			var width = $(".navi").css("width");
-			console.log("scroll:"+width);
+			var width = $(".header-navi").css("width");
 			if($(document).scrollTop()>naviPosition.top){
-				$(".navi").addClass("scroll_fixed");
+				$(".header-navi").addClass("scroll_fixed");
 				$(".scroll_fixed").css("width",width);
 				
 			}
 			else{
-				$(".navi").removeClass("scroll_fixed");
-				$(".navi").removeAttr('style');
+				$(".header-navi").removeClass("scroll_fixed");
+				$(".header-navi").removeAttr('style');
 				
 			}
 		});
@@ -203,20 +193,20 @@
 			
 		</div>
 	</div>
-	<div class="navi" align="center">
-		<ul class="naviList" style="border-bottom:solid 1px green;">
-			<li class="dropdown">
+	<div class="header-navi" align="center">
+		<ul class="header-naviList" style="border-bottom:solid 1px green;">
+			<li class="navi-dropdown">
 				<span class="listType dropbtn">전체 카테고리</span>
 				<span class="bar">I</span><br/>
-				<div class="dropdown-content" align="left">
-					<ul class="categori">
+				<div class="navi-dropdown-content" align="left">
+					<ul class="navi-categori">
 						<li class="list"><span class="listType">채소</span></li>
 						<li class="list"><span class="listType">채소</span></li>
 						<li class="list"><span class="listType">채소</span></li>
 						<li class="list"><span class="listType">채소</span></li>
 						<li class="list"><span class="listType">채소</span></li>
 					</ul>
-					<ul class="categori2">
+					<ul class="navi-categori2">
 						<li class="list"><span class="listType">채소</span></li>
 						<li class="list"><span class="listType">채소</span></li>
 						<li class="list"><span class="listType">채소</span></li>

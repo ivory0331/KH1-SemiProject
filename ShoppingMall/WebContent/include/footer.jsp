@@ -21,6 +21,7 @@
 		margin: 0px;
 		width: 180px;
 		text-align: center;
+		color:black;
 	}
 	
 	.cc_call{
@@ -30,9 +31,11 @@
 	.cc_call > h3{
 		display: inline-block;
 		font-size: 20pt;
-		padding: 0px;
+		padding: 10px 5px;
+		font-weight: bolder;
 		width: 180px;
 		text-align: center;
+		color:black;
 	}
 	
 	.cc_list{
@@ -40,10 +43,9 @@
 		display: inline-block;
 		padding-left: 5px;
 		font-size:10pt;
-	}
-	.cc_list > li:last-child {
 		color:gray;
 	}
+	
 	
 	.cc_kakao{
 		height: 80px;
@@ -55,10 +57,12 @@
 		letter-spacing: 2px;
 		cursor: pointer;
 		margin: 0px;
-		padding: 5px;
-		font-size: 18pt;
+		padding: 10px 5px;
+		font-size: 16pt;
+		font-weight: bolder;
 		width: 180px;
 		text-align: center;
+		color:black;
 	}
 	
 	.cc_qua{
@@ -71,10 +75,12 @@
 		border: solid 1px gray;
 		cursor: pointer;
 		margin: 0px;
-		padding: 5px;
-		font-size: 18pt;
+		padding: 10px 5px;
+		font-size: 16pt;
+		font-weight: bolder;
 		width: 180px;
 		text-align: center;
+		color:black;
 	}
 	.secondInfo{
 		display: inline-block;
