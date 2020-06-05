@@ -37,10 +37,58 @@
 		height: 30px;
 	}
 	
+	.userBtn{
+		width:1080px;
+	}
+	
+	.userBtn > span{
+		display: inline-block;
+		text-align: center;
+		padding : 10px 50px;
+		margin-top:20px;
+		width:60px;
+		border: solid 1px purple;
+		font-size: 16pt;
+		cursor: pointer;
+	}
+	
+	#txt_area{
+		overflow-y: scroll;
+	}
+	
 </style>
 <script type="text/javascript" src="/ShoppingMall/js/jquery-3.3.1.min.js"></script>
 <script type="text/javascript" src="/ShoppingMall/util/myutil.js"></script>
 <script type="text/javascript">
+	$(document).ready(function(){
+		$("#imgFile").change(function(){
+			if(this.files && this.files[0]) {
+				var fileName = this.files[0].name;
+				var index = fileName.indexOf(".");
+				var fileType = fileName.substr(index);
+				if(fileType==".png"||fileType==".jpg"||fileType==".png"){
+					var reader = new FileReader;
+					reader.onload = function(data) {
+						var html = "<img src='"+data.target.result+"' />";
+						$("#txt_area").append(html);
+					}
+					 reader.readAsDataURL(this.files[0]);
+				}
+				else{
+					alert("이미지만 올릴 수 있습니다.");
+				}
+				// input[type='file'] 초기화 //
+				$("#imgFile").replaceWith( $("#imgFile").clone(true) );
+				$("#imgFile").val(""); 
+			}
+			
+		});
+	});
+	
+	function divCheck(){
+		console.log($("#txt_area").html());
+		console.log($("#txt_area").text());
+	}
 	
 </script>
 </head>
@@ -49,6 +97,9 @@
 		<jsp:include page="include/header.jsp"></jsp:include>
 		<div class="section" align="center">
 			<div class="contents">
+				<div class="pageInfo">
+				
+				</div>
 				<form name="questionWriteFrm">
 					<table class="writeTable">
 						<tr>
@@ -81,11 +132,18 @@
 						</tr>
 						<tr>
 							<td class="txt_field" colspan="2">
-								<div contenteditable="true" style="border:solid 1px black;"></div>
-								<input type="hidden" />
+								<div contenteditable="true" style="border:solid 1px black; margin-top:10px; height: 600px;" id="txt_area"></div>
+								<input type="hidden" name="contents"/>
 							</td>
 						</tr>
+						<tr>
+							<td><label for="imgFile">이미지 추가</label></td>
+							<td><input type="file" id="imgFile" accept=".gif, .jpg, .png"/></td>
+						</tr>
 					</table>
+					<div class="userBtn" align="center">
+						<span>취소</span> <span style="background-color:purple; color:white;" onclick="divCheck()">등록</span>
+					</div>
 				</form>
 			</div>
 		</div>

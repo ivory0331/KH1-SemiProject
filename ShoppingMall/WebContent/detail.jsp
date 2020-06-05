@@ -8,7 +8,7 @@
 
 <style type="text/css">
 	
-
+	/*상품 이미지가 보이는 div*/
 	.goodsImg{
 		float:left;
 		display: inline-block;
@@ -21,6 +21,7 @@
 		height:440px;
 	}
 	
+	/*상품 이미지의 옆에 나오는 상품 정보가 들어가 있는 div*/
 	.goodsInfo{
 		display: inline-block;
 		width:600px;
@@ -28,6 +29,7 @@
 		text-align: left;
 	}
 	
+	/*상품 정보가 나열된 리스트에서 각각의 항목 부분의 태그*/
 	dt{
 		
 		display: inline-block;
@@ -35,6 +37,7 @@
 		
 	}
 	
+	/*상품 정보가 나열된 리스트에서 각각의 내용 부분의 태그*/
 	dd{
 		margin-left:-10px;
 		display: inline-block;
@@ -42,25 +45,30 @@
 		
 	}
 	
+	/*수량이 표시되는 input태그*/
 	.count input[type='text']{
 		text-align: center;
 	}
 	
+	/*최종 결과물인 총 결제금액이 나오는 span태그*/
 	.money{
 		font-size: 24pt;
 		font-weight: bold;
 	}
 	
+	/*상품의 다른 이미지와 설명 그리고 후기 및 문의 테이블이 들어간 div*/
 	.detailTable{
 		clear:both;
 		width: 1080px;
 		margin-top:50px;
 	}
 	
+	/*후기 및 문의에 들어가는 table태그*/
 	.table{
 		width: 1080px;
 	}
 	
+	/*장바구니 담기 버튼*/
 	.basket{
 		display: inline-block;
 		width: 240px;
@@ -421,7 +429,7 @@
 							</tr>
 						</table>
 						<p align="right">
-							<span class="writeBtn">목록 보기</span></a><a><span class="writeBtn">문의 쓰기</span>
+							<span class="writeBtn">목록 보기</span><span class="writeBtn" onclick="location.href='productQwrite.jsp'">문의 쓰기</span>
 						</p>
 					</div>
 				</div>
