@@ -24,18 +24,62 @@
 		<jsp:include page="include/header.jsp"></jsp:include>
 		<div class="section" align="center">
 			<div class="contents">
-				<div class="side"></div>
-				<div class="Qboard">
+				<div class="sideMenu">
+					<jsp:include page="include/serviceCenterSide.jsp"></jsp:include>
+				</div>
+				<div class="serviceCenter-board">
 					<div class="boardInfo">
-						<h3>자주하는 질문</h3>
+						<h3 style="display:inline-block">자주하는 질문</h3>
+						<span style="margin-left:10px; font-size:8pt; font-weight: bold;">새로운 소식들과 유용한 정보들을 한곳에 확인하세요.</span>
 					</div>
-					<div class="boardList">
+					<table style="border-top:solid 2px purple; border-bottom:solid 2px purple;" class="boardTable table">
+						<tr style="border-bottom:solid 1px black;">
+							<th class="txt_center">번호</th>
+							<th class="txt_center board-title">제목</th>
+							<th class="txt_center">작성자</th>
+							<th class="txt_center">작성날짜</th>
+							<th class="txt_center">조회수</th>
+						</tr>
 						
+						<%-- DB에서 갖고온 결과물 뿌리는 부분 --%>
+						<tr>
+							<td class="txt_center">공지</td>
+							<td>제목</td>
+							<td class="txt_center">Market kurly</td>
+							<td class="txt_center">2020-06-06</td>
+							<td class="txt_center">0</td>
+						</tr>
+						<tr>
+							<td class="txt_center">공지</td>
+							<td>제목</td>
+							<td class="txt_center">Market kurly</td>
+							<td class="txt_center">2020-06-06</td>
+							<td class="txt_center">0</td>
+						</tr>
+						<tr>
+							<td class="txt_center">공지</td>
+							<td>제목</td>
+							<td class="txt_center">Market kurly</td>
+							<td class="txt_center">2020-06-06</td>
+							<td class="txt_center">0</td>
+						</tr>
+					</table>
+					
+					<div style="border-bottom:solid 1px black; text-align:center;">페이징 처리</div>
+					<div class="boardSearch">
+						<span style="padding-right:20px;">검색어</span>
+						<label for="searchType-user">이름</label><input type="checkbox" value="" id="searchType-user"/>
+						<label for="searchType-title">제목</label><input type="checkbox" value="" id="searchType-title"/>
+						<label for="searchType-content">내용</label><input type="checkbox" value="" id="searchType-content"/>
+						<input type="text" style="float:right"/>
 					</div>
 				</div>
+				
 			</div>
 		</div>
-		<jsp:include page="include/footer.jsp"></jsp:include>
+		<div style="clear:both;">
+			<jsp:include page="include/footer.jsp"></jsp:include>
+		</div>
 	</div>
 </body>
 </html>
