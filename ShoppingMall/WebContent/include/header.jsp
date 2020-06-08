@@ -29,6 +29,42 @@
 		color: purple;
 	}
 	
+	/*고객센터 영역*/
+	.serviceCenter{
+		position: relative;
+	}
+	
+	.underIcon{
+		font-size: 8pt;
+		padding: 0px;
+	}
+	
+	/*고객센터 하위의 메뉴영역*/
+	.serviceCenter-dropdown-content{
+		display:none;
+		position: absolute;
+		z-index: 5;
+		background-color: white;
+		border:solid 1px black;
+	}
+	
+	/*고객센터 하위의 메뉴가 되는 ul*/
+	.serviceCenter-categori{
+		display:inline-block;
+		list-style: none;
+		padding: 0px;
+		text-align: left;
+		margin: 0px;
+		float:left;
+	}
+	
+	.serviceCenter-categori .listType{
+		display: block;
+		margin: 0px 10px;
+		color:black;
+		font-size: 8pt;
+	}
+	
 	/*로고 이미지가 있는 영역*/
 	.logo{
 		width: 300px;
@@ -44,13 +80,14 @@
 		margin: 0 auto;
 		z-index: 4;
 		background-color: white;
-		
 	}
 	
 	/*navigation이 되는 ul태그*/
 	.header-naviList{
 		list-style: none;
 		border:solid 0px blue;
+		margin-top: 10px;
+		margin-bottom: 0;
 	}
 	
 	.header-naviList > li{
@@ -68,13 +105,14 @@
 	}
 	
 	/*navi에 들어가는 li태그 안의 영역(span)*/
-	.listType {
+	.navi-categori .listType, .header-naviList .listType {
 		display: inline-block;
 		margin: 0px 10px;
 		font-weight: bold;
 		color:black;
 		font-size: 12pt;
 		width: 150px;
+		height: 30px;
 	}
 	
 	.listType:hover{
@@ -169,6 +207,13 @@
 			$(".navi-dropdown-content").css({"display":"none","min-width":"150px"}); //원래 있던대로 display와 width 수정
 		});
 		
+		// 고객센터 span태그에 hover했을 때 function
+		$(".serviceCenter-dropdown").hover(function(){
+			$(".serviceCenter-dropdown-content").css("display","block"); //하위 navi가 존재하는 영역 display 변경
+		},function(){
+			$(".serviceCenter-dropdown-content").css({"display":"none"}); //원래 있던대로 display와 width 수정
+		});
+		
 		
 		// === 상단 navi 스크롤 사용 시와 브라우저 가로 길이 변경했을 때 고정하도록 하는 내용 === //
 		
@@ -192,8 +237,8 @@
 		
 		// 브라우저의 가로길이에 변화가 있을 때 실행되는 function
 		$(window).resize(function(){
-			var width = $(".header").css("width"); //상단 navi의 width값 변수에 대입
-			$(".scroll_fixed").css("width",width); //해당 width값을 scroll_fixed클래스에 적용하는 css에 추가
+			var width = $(".header").css("width"); //header(로고+링크)영역의 width값 변수에 대입
+			$(".scroll_fixed").css("width",width); //해당 width값을 scroll_fixed(상단navi)클래스에 적용하는 css에 추가
 		});
 	});
 </script>
@@ -203,13 +248,23 @@
 	<div class="logo_login" align="center">
 		<div class="loginLink"> 
 			<a href="#">회원가입</a> | <a href="#">로그인</a> | 
+			<div class="serviceCenter-dropdown" style="display:inline-block;">
+				<a href="#">고객센터</a> <span class="underIcon">▼</span>
+				<div class="serviceCenter-dropdown-content" align="left">
+					<ul class="serviceCenter-categori">
+						<li class="list"><span class="listType">공지사항</span></li>
+						<li class="list"><span class="listType">자주하는 질문</span></li>
+						<li class="list"><span class="listType">1:1문의</span></li>
+					</ul>
+				</div>
+			</div>
 		</div>
 		<div class="logo">
 			<a href="index.jsp"><img src = "/ShoppingMall/include/images/logo.png" /></a>
 		</div>	
 	</div>
-	<div class="header-navi" align="center">
-		<ul class="header-naviList" style="border-bottom:solid 1px green;">
+	<div class="header-navi" align="center" >
+		<ul class="header-naviList" style="border-bottom:solid 1px purple;">
 			<li class="navi-dropdown">
 				<span class="listType dropbtn">전체 카테고리</span>
 				<span class="bar">I</span><br/>

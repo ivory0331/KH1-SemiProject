@@ -100,6 +100,7 @@
 						<button class="best_slideR" onclick="func_slideR('best')" style="display:none;">클릭R</button>
 					</div>
 					<div class="slide_wrapper">
+					<%-- DB에서 갖고온 결과물 뿌리는 부분 --%>
 					<ul class="item_list">
 						<li class="best_item" id="best_item0">
 							<img alt="상품1" src="include/images/logo.png">
