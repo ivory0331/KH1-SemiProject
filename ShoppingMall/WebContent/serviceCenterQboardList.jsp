@@ -7,6 +7,38 @@
 <title>serviceCenterQboardList</title>
 <link rel="stylesheet" href="css/style.css" />
 <style type="text/css">
+	.sideMenu{
+		display: inline-block;
+		width: 150px;
+		float:left;
+	}
+	
+	.serviceCenter-board{
+		width: 780px;
+		margin-left: 90px;
+		text-align: left;
+	}
+	
+	.board-title{
+		width: 550px;
+	}
+	
+	.txt_center{
+		text-align: center;
+	}
+	
+	.boardSearch{
+		margin-top:10px;
+	}
+	
+	.panel {
+	  display: none;
+	  background-color: white;
+	  overflow: hidden;
+	  text-align: left;
+	  margin : 0px ; 
+	
+	}
 
 </style>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
@@ -15,7 +47,20 @@
 <script type="text/javascript" src="/ShoppingMall/js/jquery-3.3.1.min.js"></script>
 <script type="text/javascript" src="/ShoppingMall/util/myutil.js"></script>
 <script type="text/javascript">
-	
+	$(document).ready(function(){
+		var acc = document.getElementsByClassName("accordion");
+
+		for (i = 0; i < acc.length; i++) {
+		  acc[i].addEventListener("click", function() {
+		    var panel = this.nextElementSibling;
+		    if (panel.style.display === "block") {
+		      panel.style.display = "none";
+		    } else {
+		      panel.style.display = "block";
+		    }
+		  });
+		}
+	})
 </script>
 </head>
 <body>
@@ -30,47 +75,38 @@
 				<div class="serviceCenter-board">
 					<div class="boardInfo">
 						<h3 style="display:inline-block">자주하는 질문</h3>
-						<span style="margin-left:10px; font-size:8pt; font-weight: bold;">새로운 소식들과 유용한 정보들을 한곳에 확인하세요.</span>
+						<span style="margin-left:10px; font-size:8pt; font-weight: bold;">고객님들께서 가장 많이하는 질문들은 모두 모았습니다.</span>
 					</div>
-					<table style="border-top:solid 2px purple; border-bottom:solid 2px purple;" class="boardTable table">
+					<table style="border-top:solid 2px purple;" class="boardTable table">
 						<tr style="border-bottom:solid 1px black;">
 							<th class="txt_center">번호</th>
+							<th class="txt_center">카테고리</th>
 							<th class="txt_center board-title">제목</th>
-							<th class="txt_center">작성자</th>
-							<th class="txt_center">작성날짜</th>
-							<th class="txt_center">조회수</th>
 						</tr>
 						
 						<%-- DB에서 갖고온 결과물 뿌리는 부분 --%>
-						<tr>
+						<tr class=accordion>
 							<td class="txt_center">공지</td>
-							<td>제목</td>
 							<td class="txt_center">Market kurly</td>
-							<td class="txt_center">2020-06-06</td>
-							<td class="txt_center">0</td>
+							<td>제목</td>
+						</tr>
+						<tr class="panel">
+							<td colspan="3">test입니다. 안녕하세요</td>
 						</tr>
 						<tr>
 							<td class="txt_center">공지</td>
-							<td>제목</td>
 							<td class="txt_center">Market kurly</td>
-							<td class="txt_center">2020-06-06</td>
-							<td class="txt_center">0</td>
+							<td>제목</td>
 						</tr>
 						<tr>
 							<td class="txt_center">공지</td>
-							<td>제목</td>
 							<td class="txt_center">Market kurly</td>
-							<td class="txt_center">2020-06-06</td>
-							<td class="txt_center">0</td>
+							<td>제목</td>
 						</tr>
 					</table>
 					
 					<div style="border-bottom:solid 1px black; text-align:center;">페이징 처리</div>
 					<div class="boardSearch">
-						<span style="padding-right:20px;">검색어</span>
-						<label for="searchType-user">이름</label><input type="checkbox" value="" id="searchType-user"/>
-						<label for="searchType-title">제목</label><input type="checkbox" value="" id="searchType-title"/>
-						<label for="searchType-content">내용</label><input type="checkbox" value="" id="searchType-content"/>
 						<input type="text" style="float:right"/>
 					</div>
 				</div>

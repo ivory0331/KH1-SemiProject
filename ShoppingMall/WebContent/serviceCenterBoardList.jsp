@@ -56,7 +56,7 @@
 						<h3 style="display:inline-block">공지사항</h3>
 						<span style="margin-left:10px; font-size:8pt; font-weight: bold;">새로운 소식들과 유용한 정보들을 한곳에 확인하세요.</span>
 					</div>
-					<table style="border-top:solid 2px purple; border-bottom:solid 2px purple;" class="boardTable table">
+					<table style="border-top:solid 2px purple; " class="boardTable table">
 						<tr style="border-bottom:solid 1px black;">
 							<th class="txt_center">번호</th>
 							<th class="txt_center board-title">제목</th>
