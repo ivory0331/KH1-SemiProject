@@ -4,7 +4,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>managerSales.jsp</title>
+<title>managerMember.jsp</title>
 <link rel="stylesheet" href="css/style.css" />
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous"> 
 <!-- 차트 링크 --> 
@@ -18,13 +18,17 @@
 	}
 	.memberList{
 		display:inline-block;
-		width: 780px;
+		width:780px;
 		margin-top: 10px;
 	}
 	
-	.search{
-		width:780px;
-		border:solid 1px black;
+	.member-search{
+		width:100%;
+		margin-bottom:5px;
+	}
+	
+	.member-count{
+		float: right;
 	}
 	
 	.board-title{
@@ -43,6 +47,8 @@
 		background-color: purple;
 		color:white;
 	}
+	
+	
 </style>
 <!-- 부트스트랩 -->
 <script type="text/javascript" src="/ShoppingMall/js/jquery-3.3.1.min.js"></script>
@@ -52,6 +58,13 @@
 		
 		
 	});
+	
+	function func_pop(){
+		window.name="parentFrm";
+		sessionStorage.setItem("recieve","이주명");
+		console.log(sessionStorage.getItem("recieve"));
+		var win = window.open("include/popup.jsp","childFrm","left=100px, top=100px, width=400px, height=350px");
+	}
 	
 </script>
 </head>
@@ -63,9 +76,16 @@
 				<div class="sideMenu">
 					<jsp:include page="include/managerSide.jsp"></jsp:include>
 				</div>
-				<div class="memberList">
-					<div class="search" align="left">
-						
+				<div class="memberList" align="left">
+					<div class="member-search">
+						<h4>회원관리</h4>
+						검색 : <input type="text" />
+						<select>
+							<option>유저명</option>
+							<option>id</option>
+							<option>주소</option>
+						</select>
+						<spna class="member-count">전체 회원 수 : </spna>
 					</div>
 					<table class="table" style="border-top:solid 2px purple;">
 						<tr>
@@ -87,6 +107,12 @@
 					</table>
 				</div>
 				<div style="clear:both;"></div>
+				<div class="managerBtn" align="right">
+					<span class="type" onclick="func_pop()">선택 탈퇴</span> <span class="type" onclick="func_pop()">선택 경고</span>
+				</div>
+				<div class="paging">
+					
+				</div>
 			</div>
 		</div>
 		<jsp:include page="include/footer.jsp"></jsp:include>
