@@ -9,7 +9,7 @@
 
 <style type="text/css">
 	.contents {
-		border: solid 1px black;
+		/* border: solid 1px black; */
 		min-height: 600px;
 	}
 	
@@ -40,7 +40,7 @@
 	}
 	
 	.myPage_SideInnerMenu > a:hover {
-		color: green;
+		color: #5f0080;
 		background-color: #eee;
 		text-decoration: none;
 		cursor: pointer;
@@ -205,7 +205,7 @@
 			<div class="contents">	
 			
 			<div id="myPage_Side">
-				<h2 id="myPage_Title">마이페이지</h2>
+				<h3 id="myPage_Title">마이페이지</h3>
 				<div id="myPage_Menu">
 					<table id="myPage_SideMenu">
 						<tr>
