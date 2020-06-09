@@ -16,13 +16,19 @@
 		width: 150px;
 		float:left;
 	}
-	.sales{
+	.memberList{
+		display:inline-block;
 		width: 780px;
-		margin-left: 90px;
+		margin-top: 10px;
 	}
 	
-	.range{
-		margin-top:15px;
+	.search{
+		width:780px;
+		border:solid 1px black;
+	}
+	
+	.board-title{
+		width: 400px;
 	}
 	
 	.type{
@@ -39,30 +45,13 @@
 	}
 </style>
 <!-- 부트스트랩 -->
-<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script> 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script> 
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script> 
 <script type="text/javascript" src="/ShoppingMall/js/jquery-3.3.1.min.js"></script>
 <script type="text/javascript" src="/ShoppingMall/util/myutil.js"></script>
 <script type="text/javascript">
 	$(document).ready(function(){
-		func_lineGraph();
 		
 		
 	});
-	
-	function func_lineGraph(){
-		var ctx = document.getElementById('myChart').getContext('2d'); 
-		var chart = new Chart(ctx, 
-				{ 	// 챠트 종류를 선택 
-					type: 'line', 
-					// 챠트를 그릴 데이타
-					data: { labels: ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월','9월','10월','11월','12월'], 
-					datasets: [{ label: 'My First dataset', backgroundColor: 'transparent', borderColor: 'red', data: [0, 10, 5, 2, 20, 30, 45, 60, 80, 24, 11, 60] }] }, 
-					// 옵션
-					 options: {} 
-			})
-	}
 	
 </script>
 </head>
@@ -74,12 +63,28 @@
 				<div class="sideMenu">
 					<jsp:include page="include/managerSide.jsp"></jsp:include>
 				</div>
-				<div class="sales">
-					<canvas id="myChart"></canvas> 
-					<div class="range" align="right">
-						<span class="type month">월간</span>
-						<span class="type year">년간</span>
+				<div class="memberList">
+					<div class="search" align="left">
+						
 					</div>
+					<table class="table" style="border-top:solid 2px purple;">
+						<tr>
+							<th>선택</th>
+							<th>No.</th>
+							<th>유저명</th>
+							<th>id</th>
+							<th class="board-title">주소</th>
+							<th>모바일</th>
+						</tr>
+						<tr>
+							<td><input type="checkbox" /></td>
+							<td>No.</td>
+							<td>유저명</td>
+							<td>id</td>
+							<td class="board-title">주소</td>
+							<td>모바일</td>
+						</tr>
+					</table>
 				</div>
 				<div style="clear:both;"></div>
 			</div>

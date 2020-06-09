@@ -98,10 +98,10 @@
 						<input type="text" style="float:right"/>
 					</div>
 				</div>
-				
+				<div style="clear:both;"></div>
 			</div>
 		</div>
-		<div style="clear:both;">
+		<div>
 			<jsp:include page="include/footer.jsp"></jsp:include>
 		</div>
 	</div>
