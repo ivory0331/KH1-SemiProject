@@ -42,44 +42,18 @@ span.error {
 	font-size: 10pt;
 }
 
-fieldset {
-	text-align: left;
-	border: none;
-}
 
 
-fieldset>ul {
-	list-style: none;
-	padding: 0;
-}
-
-fieldset>ul>li {
-	line-height: 60px;
-}
-
-fieldset>ul>li>label {
-	display: inline-block;
-	width: 130px;
-	font-size: 14px;
-	font-weight: 700;
-	border: solid 1px skyblue;	
-	padding: 30px 0 0 15px;   
-    color: #333;
-    line-height: 40px;
-    vertical-align: top;
-}
-
-input {
+td>input {
 	width: 300px;
 	height: 40px;
 	border: solid 1px #ccc;
 	border-radius: 5px;  
-	border: solid 1px pink;	
 }
 
 label.genderbtn{
 	padding: 30px 0 0 0px;
-	width: 90px;
+	
 }
 
 .btnCheck{
@@ -92,7 +66,6 @@ label.genderbtn{
     border: 1px solid #5f0080;
     color: #fff;
     font-size: 15px;
-    float: right;
     margin-left: 2px;
     font-size: 13px;
     border-radius: 5px;  
@@ -109,37 +82,60 @@ td {
 }
 
 
-.memberCols1 {      
+.memberCols1 {
+	display : inline-block;      
 	width: 130px;
 	font-size: 14px;
 	font-weight: 700;
 	border: solid 1px navy;	
-	padding: 30px 0 0 15px;   
+	padding: 20px 0 0 15px;   
     color: #333;
-    line-height: 20px;
-    vertical-align: top;
+    height: 60px;
+    vertical-align: middle;
 }
 
 .memberCols2 {
-    padding: 20px 0 0;
+
+	display : inline-block; 
+    padding: 0;
     border-top: 0;
     font-size: 0;
     vertical-align: top;
     text-align: left;
-    width: 461px;
-	height: 20px;
-	border: solid 1px #ccc;
-	border-radius: 5px;  
+    width: 460px;
+    height: 60px;
+	border: solid 1px pink;	 
+	vertical-align: middle; 
+}
+
+.fieldAdress{
+
+}
+
+.group_radio .label_radio {
+    display: inline-block;
+    padding: 20px 0 0 0px;
+    margin-right: 21px;
+    font-size: 14px;
+    color: #000;
+    line-height: 18px;
+    cursor: pointer;
+   
+}
+
+.birth_day {
+  	width: 300px;
+	height: 40px;    
+    border: 1px solid #ccc;
+    border-radius: 3px;
 }
 
 
-
-li {
-	display: flex;
- 	flex-direction: row; 
-	align-items: center;
-}
 </style>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+<link rel="stylesheet" href="css/style.css" />
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 <script type="text/javascript" src="/JqueryStudy/js/jquery-3.3.1.min.js"></script>
 <script type="text/javascript">
 $(document).ready(function(){
@@ -152,6 +148,13 @@ $(document).ready(function(){
 </script>
 </head>
 <body>
+<div class="Mycontainer">
+		<jsp:include page="include/header.jsp"></jsp:include>
+		<div class="section" align="center">
+			<div class="contents">
+
+
+
 	<div class = "page_article">
 	<div class=" head_join">
 		<h3 class="tit">회원가입</h3>
@@ -164,15 +167,14 @@ $(document).ready(function(){
 		<div>
 			
 			<form id="form" name="frmMember" method="post" action="/shop/member/indb.php">
-			<fieldset>
-			
+					
 			<table>
 				<tr>
 					<td class="memberCols1">아이디*</td>
 					<td class="memberCols2">
-						<input type="text" name="userid" id="userid" placeholder ="6자 이상의 영문 혹은 영문과 숫자를 조합" value="" maxlength="16" required autofocus autocomplete="off">
+						<input type="text" name="userid" id="userid" placeholder="6자 이상의 영문 혹은 영문과 숫자를 조합" value="" maxlength="16" required autofocus autocomplete="off">
 						<a href="javascript:chkId()"><span class="btnCheck">중복확인</span></a>
-						<p class="txt_guide"></p>
+						
 					</td>
 				</tr>
 				
@@ -218,50 +220,65 @@ $(document).ready(function(){
 					</td>
 				</tr>
 				
+				<tr>
+					<td class="memberCols1">배송주소</td>
+					<td class="memberCols2">
+						<div class="fieldAdress">  
+							<a href="javascript:chkAddress()"><span class="btnCheck ">주소검색 </span></a>	
+							<span class="txt">배송가능여부를 확인할 수 있습니다.</span>
+						</div>
+										  					
+					</td>
+				</tr>
 				
+				<tr>
+					<td class="memberCols1">성별</td>
+					<td class="memberCols2">
+						<div class="group_radio">
+							<label class="label_radio">
+							<input type="radio" name="sex_option"  value="m">
+							<span class="text_position">남자</span>
+							</label>
+							<label class="label_radio">
+							<input type="radio" name="sex_option"  value="w">
+							<span class="text_position">여자</span>
+							</label>
+							<label class="label_radio">
+							<input type="radio" name="sex_option" value="n">
+							<span class="text_position">선택안함</span>
+							</label>							
+						</div>						 					
+					</td>
+				</tr>
 				
-			</table>
-				<ul>
-													
-					
-								
-					
-					
-					<li>
-						<label for="tel">휴대폰*</label>
-						<input type="tel"  name="tel" id="tel" value="" maxlength="13" placeholder="숫자만 입력해주세요"/>
-						<span class="tel tel_error"></span>
-					</li>
-					
-					
-					<li>
-						<label for="address">배송주소</label>
-						<button class="btnCheck">주소검색</button>
-						<h6 class="tit"></h6>
-						<span class="error address_error"></span>
-					</li>
-					
-					<li>
-						<label>성별</label>
-						<label class="genderbtn"><input type="radio" name="gender" value="M" />남</label>&nbsp;
-						<label class="genderbtn"><input type="radio" name="gender" value="F" />여</label>&nbsp;
-						<label class="genderbtn""><input type="radio" name="gender" value="N" />선택안함</label>
-					</li>	
-					
-					<li>
-						<label>생년월일</label>
-						<label class="birth_year"><input type="text" name="birth_year" value="M" />남</label>&nbsp;
-						
-					</li>	
-		
-		
-		
-					
-				</ul>
-			</fieldset>
+				<tr class="birth field_birth">
+					<td class="memberCols1">생년월일</td>
+					<td class="memberCols2">
+						<div class="birth_day">
+							<input type="text" name="birth_year" id="birth_year" value="" size="4" maxlength="4" placeholder="YYYY">
+							<span class="bar"><span>/</span></span>
+							<input type="text" name="birth_month" id="birth_month" value="" size="2" maxlength="2" placeholder="MM">
+							<span class="bar"><span>/</span></span>
+							<input type="text" name="birth_day" id="birth_day" value="" size="2" maxlength="2" placeholder="DD">
+						</div>
+						<p class="txt_guide">
+						<span class="txt bad"></span>
+						</p>
+					</td>
+				</tr>
+				
+			</table>				
+			
 			</form>		
 		</div>	
 	</div>
+	</div>
+
+	</div>
+		</div>
+		
+		<jsp:include page="include/footer.jsp"></jsp:include>
+		
 	</div>
 
 </body>
