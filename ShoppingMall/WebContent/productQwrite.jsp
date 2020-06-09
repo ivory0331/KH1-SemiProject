@@ -97,8 +97,8 @@
 		<jsp:include page="include/header.jsp"></jsp:include>
 		<div class="section" align="center">
 			<div class="contents">
-				<div class="pageInfo">
-				
+				<div class="pageInfo" align="left">
+					상품문의 작성페이지
 				</div>
 				<form name="questionWriteFrm">
 					<table class="writeTable">

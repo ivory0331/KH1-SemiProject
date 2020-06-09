@@ -31,14 +31,20 @@
 		margin-top:10px;
 	}
 	
+	
 	.panel {
-	  display: none;
+	  
 	  background-color: white;
 	  overflow: hidden;
 	  text-align: left;
 	  margin : 0px ; 
 	
 	}
+	
+	.panel-none{
+		display: none;
+	}
+	
 
 </style>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
@@ -51,13 +57,11 @@
 		var acc = document.getElementsByClassName("accordion");
 
 		for (i = 0; i < acc.length; i++) {
-		  acc[i].addEventListener("click", function() {
-		    var panel = this.nextElementSibling;
-		    if (panel.style.display === "block") {
-		      panel.style.display = "none";
-		    } else {
-		      panel.style.display = "block";
-		    }
+		  acc[i].addEventListener("click", function(event) {
+			var $target = $(this).next();
+			var $other = $(".panel");
+			$other.addClass("panel-none");
+			$target.toggleClass("panel-none");
 		  });
 		}
 	})
@@ -76,6 +80,13 @@
 					<div class="boardInfo">
 						<h3 style="display:inline-block">자주하는 질문</h3>
 						<span style="margin-left:10px; font-size:8pt; font-weight: bold;">고객님들께서 가장 많이하는 질문들은 모두 모았습니다.</span>
+						<br/>
+						<select>
+							<option>선택</option>
+							<option>회원문의</option>
+							<option>주문/결제</option>
+							<option>배송문의</option>
+						</select>
 					</div>
 					<table style="border-top:solid 2px purple;" class="boardTable table">
 						<tr style="border-bottom:solid 1px black;">
@@ -90,18 +101,24 @@
 							<td class="txt_center">Market kurly</td>
 							<td>제목</td>
 						</tr>
-						<tr class="panel">
-							<td colspan="3">test입니다. 안녕하세요</td>
+						<tr class="panel panel-none">
+							<td colspan="3" >test입니다. 안녕하세요1</td>
 						</tr>
-						<tr>
+						<tr class=accordion>
 							<td class="txt_center">공지</td>
 							<td class="txt_center">Market kurly</td>
 							<td>제목</td>
 						</tr>
-						<tr>
+						<tr class="panel panel-none">
+							<td colspan="3" >test입니다. 안녕하세요2</td>
+						</tr>
+						<tr class=accordion>
 							<td class="txt_center">공지</td>
 							<td class="txt_center">Market kurly</td>
 							<td>제목</td>
+						</tr>
+						<tr class="panel panel-none">
+							<td colspan="3" >test입니다. 안녕하세요3</td>
 						</tr>
 					</table>
 					

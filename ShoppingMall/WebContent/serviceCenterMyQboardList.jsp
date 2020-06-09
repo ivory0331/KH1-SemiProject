@@ -48,6 +48,19 @@
 		color:purple;
 	}
 
+	.panel {
+	  
+	  background-color: white;
+	  overflow: hidden;
+	  text-align: left;
+	  margin : 0px ; 
+	
+	}
+	
+	.panel-none{
+		display: none;
+	}
+
 </style>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -55,7 +68,24 @@
 <script type="text/javascript" src="/ShoppingMall/js/jquery-3.3.1.min.js"></script>
 <script type="text/javascript" src="/ShoppingMall/util/myutil.js"></script>
 <script type="text/javascript">
+	$(document).ready(function(){
+		var acc = document.getElementsByClassName("accordion");
 	
+		for (i = 0; i < acc.length; i++) {
+		  acc[i].addEventListener("click", function(event) {
+			var $target = $(this).next();
+			var $other = $(".panel");
+			$other.each(function(index, item){
+				if(item == $target[0]){
+					$target.toggleClass("panel-none");
+				}else{
+					item.addClass("panel-none");
+				}
+			});
+			
+		  });
+		}
+	})
 </script>
 </head>
 <body>
@@ -83,7 +113,7 @@
 						</tr>
 						
 						<%-- DB에서 갖고온 결과물 뿌리는 부분 --%>
-						<tr>
+						<tr class="accordion">
 							<td class="txt_center">1</td>
 							<td class="txt_center">회원정보 문의</td>
 							<td>제목</td>
@@ -91,7 +121,10 @@
 							<td class="txt_center">2020-06-06</td>
 							<td class="txt_center">0</td>
 						</tr>
-						<tr>
+						<tr class="panel panel-none">
+							<td colspan="6" >test입니다. 안녕하세요1</td>
+						</tr>
+						<tr class="accordion">
 							<td class="txt_center">1</td>
 							<td class="txt_center">회원정보 문의</td>
 							<td>제목</td>
@@ -99,13 +132,19 @@
 							<td class="txt_center">2020-06-06</td>
 							<td class="txt_center">0</td>
 						</tr>
-						<tr>
+						<tr class="panel panel-none">
+							<td colspan="6" >test입니다. 안녕하세요1</td>
+						</tr>
+						<tr class="accordion">
 							<td class="txt_center">1</td>
 							<td class="txt_center">회원정보 문의</td>
 							<td>제목</td>
 							<td class="txt_center">test</td>
 							<td class="txt_center">2020-06-06</td>
 							<td class="txt_center">0</td>
+						</tr>
+						<tr class="panel panel-none">
+							<td colspan="6" >test입니다. 안녕하세요1</td>
 						</tr>
 					</table>
 					
