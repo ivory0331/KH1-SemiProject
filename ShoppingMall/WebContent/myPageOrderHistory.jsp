@@ -12,7 +12,7 @@
 		/* border: solid 1px black; */
 		min-height: 600px;
 	}
-	
+	    
 	#myPage_Side {
 		/* border: solid 1px red; */
 		width: 20%;
