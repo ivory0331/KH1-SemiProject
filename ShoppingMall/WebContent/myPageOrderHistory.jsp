@@ -100,9 +100,9 @@
 		padding: 10px 5px;
 		text-align: left;
 		color: black;
-	}
+	}  
 	
-	.myOrder_Name > a {
+	.myOrder_Name > a {  
 		color: black;
 	}
 	
