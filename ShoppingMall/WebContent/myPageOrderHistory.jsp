@@ -29,7 +29,7 @@
 		border: solid 1px gray;
 		border-collapse: collapse;
 	}
-	
+	   
 	.myPage_SideInnerMenu > a {
 		display: table-cell;
 		vertical-align: middle;
