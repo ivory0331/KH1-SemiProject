@@ -15,12 +15,14 @@
 	    
 	#myPage_Side {
 		/* border: solid 1px red; */
+		margin-top: 50px;
 		width: 20%;
 		float: left;
 	}
 	
 	#myPage_Contents {
 		/* border: solid 1px blue; */
+		margin-top: 50px;
 		width: 78%;
 		float: right;
 	}
@@ -44,6 +46,11 @@
 		background-color: #eee;
 		text-decoration: none;
 		cursor: pointer;
+	}
+	
+	.menu1 > a {
+		color: #5f0080;
+		background-color: #eee;
 	}
 	
 	li {
@@ -209,16 +216,16 @@
 				<div id="myPage_Menu">
 					<table id="myPage_SideMenu">
 						<tr>
-							<td class="myPage_SideInnerMenu"><a>주문 내역</a></td>
+							<td class="myPage_SideInnerMenu menu1"><a href="/ShoppingMall/myPageOrderHistory.jsp">주문 내역</a></td>
 						</tr>
 						<tr>
-							<td class="myPage_SideInnerMenu"><a>상품후기</a></td>
+							<td class="myPage_SideInnerMenu menu2"><a>상품후기</a></td>
 						</tr>
 						<tr>
-							<td class="myPage_SideInnerMenu"><a>개인 정보 수정</a></td>
+							<td class="myPage_SideInnerMenu menu3"><a href="/ShoppingMall/myPageMyInfoUpdatePW.jsp">개인 정보 수정</a></td>
 						</tr>
 						<tr>
-							<td class="myPage_SideInnerMenu"><a>1:1 문의</a></td>
+							<td class="myPage_SideInnerMenu menu4"><a>1:1 문의</a></td>
 						</tr>
 					</table>
 				</div>
