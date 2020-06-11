@@ -9,52 +9,17 @@
 
 <style type="text/css">
 	.contents {
-		/* border: solid 1px black; */
+		border: solid 0px black;
 		min-height: 600px;
-	}
-	    
-	#myPage_Side {
-		/* border: solid 1px red; */
-		margin-top: 50px;
-		width: 20%;
-		float: left;
-	}
-	
-	#myPage_Contents {
-		/* border: solid 1px blue; */
-		margin-top: 60px;
-		width: 78%;
-		float: right;
-	}
-	
-	#myPage_SideMenu, .myPage_SideInnerMenu {
-		border: solid 1px gray;
-		border-collapse: collapse;
-	}
-	   
-	.myPage_SideInnerMenu > a {
-		display: table-cell;
-		vertical-align: middle;
-		padding-left: 5px;
-		width: 200px;
-		height: 50px;
-		color: black;
-	}
-	
-	.myPage_SideInnerMenu > a:hover {
-		color: #5f0080;
-		background-color: #eee;
-		text-decoration: none;
-		cursor: pointer;
-	}
+	}	    
 	
 	.menu3 > a {
-		color: #5f0080;
+		color: #5f0080 !important;
 		background-color: #eee;
 	}
 	
 	#myInfoUpdate_Title {
-		/* border: solid 1px blue; */
+		border: solid 0px blue;
 		font-size: 16pt;
 		display: inline-block;
 		float: left;
@@ -110,28 +75,10 @@
 	<div class="container">
 		<jsp:include page="include/header.jsp"></jsp:include>
 		<div class="section" align="center">
-			<div class="contents">	
-			
-			<div id="myPage_Side">
-				<h3 id="myPage_Title">마이페이지</h3>
-				<div id="myPage_Menu">
-					<table id="myPage_SideMenu">
-						<tr>
-							<td class="myPage_SideInnerMenu menu1"><a href="/ShoppingMall/myPageOrderHistory.jsp">주문 내역</a></td>
-						</tr>
-						<tr>
-							<td class="myPage_SideInnerMenu menu2"><a>상품후기</a></td>
-						</tr>
-						<tr>
-							<td class="myPage_SideInnerMenu menu3"><a href="/ShoppingMall/myPageMyInfoUpdatePW.jsp">개인 정보 수정</a></td>
-						</tr>
-						<tr>
-							<td class="myPage_SideInnerMenu menu4"><a>1:1 문의</a></td>
-						</tr>
-					</table>
-				</div>
-			</div>
-			
+			<div class="contents">
+							
+			<jsp:include page="include/myPageSideMenu.jsp"></jsp:include>	
+					
 			<div id="myPage_Contents">		
 				<div id="myInfoUpdate_Header">
 					<h2 id="myInfoUpdate_Title">개인 정보 수정</h2>
