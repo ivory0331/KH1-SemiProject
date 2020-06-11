@@ -4,7 +4,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>마이페이지 주문내역</title>
+<title>마이페이지 주문 내역</title>
 <link rel="stylesheet" href="css/style.css" />
 
 <style type="text/css">
@@ -200,12 +200,12 @@
 						<div class="myOrder_Date">0000.00.00 (00시 00분)</div>
 						<div class="myOrder_Goods">
 							<div class="myOrder_Name">
-								<a>상품명 (ex.코코넛간식) 외 2건</a>
+								<a>상품명1 외 2건</a>
 							</div>
 							<div class="myOrder_block">
 								<div class="myOrder_Info">
 									<div class="myOrder_Image">
-										<img src="https://img-cf.kurly.com/shop/data/goods/1514871081387s0.jpg" alt="해당 주문 대표 상품 이미지">
+										<img alt="해당 주문 대표 상품 이미지" src="include/images/logo.png">
 									</div> 
 									<table class="myOrder_Desc">
 										<tr>
@@ -225,16 +225,16 @@
 								</div>						
 								<div class="myOrder_Status">
 									<span class="myOrder_InnerStatus">
-										<a class="link link_review">후기 쓰기</a>
+										<a class="link link_review">후기 작성</a>
 										<a class="link link_question">1:1 문의</a>
 									</span>
 								</div>
 							</div>
 						</div>
 					</div>						
-				</div>				
-			</div>
-				
+				</div>	
+				<div style="border-bottom:solid 1px black; text-align:center;">페이징 처리</div>			
+			</div>						
 			</div>
 			<div style="clear:both;"></div>
 		</div>	
