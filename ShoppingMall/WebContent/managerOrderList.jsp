@@ -4,9 +4,8 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>managerGoods.jsp</title>
+<title>managerOrderList.jsp</title>
 <link rel="stylesheet" href="css/style.css" />
-<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous"> 
 <!-- 차트 링크 --> 
 <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script> 
 <style type="text/css">
@@ -16,10 +15,15 @@
 		width: 150px;
 		float:left;
 	}
-	.memberList{
+	.orderList{
 		display:inline-block;
-		width:780px;
+		width:800px;
 		margin-top: 10px;
+	}
+	
+	.order-table{
+		width: 100%;
+		text-align: center;
 	}
 	
 	.member-search{
@@ -33,7 +37,7 @@
 	}
 	
 	.board-title{
-		width: 150px;
+		width: 400px;
 	}
 	
 	.type{
@@ -70,7 +74,7 @@
 				<div class="sideMenu">
 					<jsp:include page="include/managerSide.jsp"></jsp:include>
 				</div>
-				<div class="memberList" align="left">
+				<div class="orderList" align="left">
 					<div class="member-search">
 						<h4>주문관리</h4>
 						검색 : <input type="text" />
@@ -80,7 +84,7 @@
 							<option>주문번호</option>
 						</select>
 					</div>
-					<table class="table" style="border-top:solid 2px purple;">
+					<table class="table order-table" style="border-top:solid 2px purple;">
 						<tr>
 							<th>선택</th>
 							<th>No.</th>

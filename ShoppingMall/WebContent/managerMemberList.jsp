@@ -17,8 +17,13 @@
 	}
 	.memberList{
 		display:inline-block;
-		width:780px;
+		width:800px;
 		margin-top: 10px;
+	}
+	
+	.member-table{
+		width: 100%;
+		text-align: center;
 	}
 	
 	.member-search{
@@ -86,7 +91,7 @@
 						</select>
 						<span class="member-count">전체 회원 수 : </span>
 					</div>
-					<table class="table" style="border-top:solid 2px purple;">
+					<table class="table member-table" style="border-top:solid 2px purple;">
 						<tr>
 							<th>선택</th>
 							<th>No.</th>

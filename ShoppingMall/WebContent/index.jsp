@@ -58,11 +58,11 @@
 		
 	}
 	
-	.best_slideL, .sale_slideL{
+	.slideL{
 		float:left;
 	}
 	
-	.best_slideR, .sale_slideR{
+	.slideR{
 		float:right;
 	}
 	
@@ -84,8 +84,8 @@
 			// eq를 사용해서 순차적으로 animate()를 적용
 			$("."+type+"_item:eq("+i+")").animate({"left":-1080},"normal", //x좌표 값을 li가 들어가 있는 ul태그의 화면의 크기만큼 왼쪽으로 움직인다.
 												  function(){ //콜백함수 - animate가 끝나면 오른쪽 버튼은 보이고 왼쪽 버튼은 숨긴다.
-													 $("."+type+"_slideR").show();
-													 $("."+type+"_slideL").hide();
+													 $("#"+type+"_slideR").show();
+													 $("#"+type+"_slideL").hide();
 										          });
 		}	
 	}
@@ -97,8 +97,8 @@
 		for(var i=0; i<$item.length; i++){
 			$("."+type+"_item:eq("+i+")").animate({"left":0},"normal",//x좌표 값을 다시 본래 위치(0)로 이동 
 											      function(){ 
-													 $("."+type+"_slideL").show();
-													 $("."+type+"_slideR").hide();
+													 $("#"+type+"_slideL").show();
+													 $("#"+type+"_slideR").hide();
 										          });
 		}	
 	}
@@ -111,12 +111,12 @@
 		<jsp:include page="include/header.jsp"></jsp:include>
 		<div class="section" align="center">
 			<div class="contents">
-				<div class="best">
+				<div id="best">
 					<div class="item_type">
 						<h3>추천 상품</h3>
 						<!-- sale영역에 있는 li(class=best_item)태그를 움직여야 하므로 onclick의 파라미터에 'best'을 입력한다. -->
-						<button class="best_slideL" onclick="func_slideL('best')">클릭L</button>
-						<button class="best_slideR" onclick="func_slideR('best')" style="display:none;">클릭R</button>
+						<button id="best_slideL" class="slideL" onclick="func_slideL('best')">클릭L</button>
+						<button id="best_slideR" class="slideR" onclick="func_slideR('best')" style="display:none;">클릭R</button>
 					</div>
 					<div class="slide_wrapper">
 					<%-- DB에서 갖고온 결과물 뿌리는 부분 --%>
@@ -184,12 +184,12 @@
 					</div>
 				</div>
 				
-				<div class="sale">
+				<div id="sale">
 					<div class="item_type">
 						<h3>세일 상품</h3>
 						<!-- sale영역에 있는 li(class=sale_item)태그를 움직여야 하므로 onclick의 파라미터에 'sale'을 입력한다. -->
-						<button class="sale_slideL" onclick="func_slideL('sale')">클릭L</button>
-						<button class="sale_slideR" onclick="func_slideR('sale')" style="display:none;">클릭R</button>
+						<button id="sale_slideL" class="slideL" onclick="func_slideL('sale')">클릭L</button>
+						<button id="sale_slideR" class="slideR"onclick="func_slideR('sale')" style="display:none;">클릭R</button>
 					</div>
 					<div class="slide_wrapper">
 					<ul class="item_list">

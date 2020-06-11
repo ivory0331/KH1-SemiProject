@@ -18,13 +18,18 @@
 	}
 	.memberList{
 		display:inline-block;
-		width:780px;
+		width:800px;
 		margin-top: 10px;
 	}
 	
 	.member-search{
 		width:100%;
 		margin-bottom:5px;
+	}
+	
+	.goodsList{
+		width: 100%;
+		text-align: center;
 	}
 	
 	.goods-add{
@@ -86,7 +91,7 @@
 						</select>
 						<span class="type goods-add">상품 추가</span>
 					</div>
-					<table class="table" style="border-top:solid 2px purple;">
+					<table class="table goodsList" style="border-top:solid 2px purple;">
 						<tr>
 							<th>선택</th>
 							<th>No.</th>

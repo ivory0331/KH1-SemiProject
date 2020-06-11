@@ -95,6 +95,18 @@
 		color:purple;
 	}
 	
+	.detail_img{
+		display: inline-block;
+		width: 100px;
+		height: 100px;
+		margin-left: 50px;
+		border: solid 1px black;
+	}
+	
+	.btn_area{
+		margin-top:30px;
+	}
+	
 </style>
 <!-- 부트스트랩 -->
 <script type="text/javascript" src="/ShoppingMall/js/jquery-3.3.1.min.js"></script>
@@ -172,7 +184,18 @@
 							상품 상세 설명<br/>
 							test입니다.
 					</div>
-					<div class="price" align="right" >
+					<div id="goodsInfo-img">
+						<div class="detail_img">
+							첫번째 상세 이미지
+						</div>
+						<div class="detail_img">
+							두번째 상세 이미지
+						</div>
+						<div class="detail_img">
+							세번째 상세 이미지
+						</div>
+					</div>
+					<div class="btn_area" align="right" >
 							<span class="managerBtn">수정</span>
 							<span class="managerBtn">삭제</span>
 					</div>

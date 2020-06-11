@@ -89,6 +89,23 @@
 		color:purple;
 	}
 	
+	.detail_img{
+		display: inline-block;
+		width: 200px;
+		height: 200px;
+		margin-left: 50px;
+		border: solid 1px black;
+	}
+	
+	.detail_img > div{
+		height:200px;
+	}
+	
+	.btn_area{
+		margin-top:30px;
+	}
+	
+	
 </style>
 <!-- 부트스트랩 -->
 <script type="text/javascript" src="/ShoppingMall/js/jquery-3.3.1.min.js"></script>
@@ -122,7 +139,7 @@
 				<div class="info">
 					<div class="goodsImg">
 						<img alt="상품1" src="include/images/logo.png"/>
-						<input type="file" id="imgFile" accept=".gif, .jpg, .png" />
+						<input type="file" id="imgFile0" accept=".gif, .jpg, .png" />
 					</div>
 					<div class="goodsInfo-table">
 						<dl>
@@ -167,10 +184,25 @@
 							상품 상세 설명<br/>
 							test입니다.
 					</div>
-					<div class="price" >
+					<div id="goodsInfo-img">
+						<div class="detail_img">
+							<div>첫번째 상세 이미지</div>
+							<input type="file" id="imgFile1" accept=".gif, .jpg, .png" />
+						</div>
+						<div class="detail_img">
+							<div>두번째 상세 이미지</div>
+							<input type="file" id="imgFile1" accept=".gif, .jpg, .png" />
+						</div>
+						<div class="detail_img">
+							<div>세번째 상세 이미지</div>
+							<input type="file" id="imgFile1" accept=".gif, .jpg, .png" />
+						</div>
+					</div>
+					<div class="btn_area" >
 							<span class="managerBtn">확인</span>
 							<span class="managerBtn">취소</span>
 					</div>
+					
 				</div>
 				<div style="clear:both;"></div>
 				
