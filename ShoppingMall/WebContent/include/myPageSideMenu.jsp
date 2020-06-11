@@ -48,13 +48,13 @@
 		<div id="myPage_Menu">
 			<table id="myPage_SideMenu">
 				<tr>
-					<td class="myPage_SideInnerMenu menu1"><a href="/ShoppingMall/myPageOrderHistory.jsp">주문 내역</a></td>
+					<td class="myPage_SideInnerMenu menu1"><a>주문 내역</a></td>
 				</tr>
 				<tr>
 					<td class="myPage_SideInnerMenu menu2"><a>상품후기</a></td>
 				</tr>
 				<tr>
-					<td class="myPage_SideInnerMenu menu3"><a href="/ShoppingMall/myPageMyInfoUpdatePW.jsp">개인 정보 수정</a></td>
+					<td class="myPage_SideInnerMenu menu3"><a>개인 정보 수정</a></td>
 				</tr>
 				<tr>
 					<td class="myPage_SideInnerMenu menu4"><a>1:1 문의</a></td>
