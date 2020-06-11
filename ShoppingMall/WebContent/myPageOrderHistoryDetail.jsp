@@ -16,11 +16,7 @@
 	.menu1 > a {
 		color: #5f0080 !important;
 		background-color: #eee;
-	}
-	
-	li {
-		list-style-type: none;
-	}	
+	}		
 	
 	#myOrderHistoryDetail_Header {
 		border: solid 0px pink;
@@ -46,8 +42,13 @@
 	.myOrder_number > h3 {
 		border: solid 0px blue;
 		text-align: left;
-		font-size: 14pt;
-		
+		font-size: 14pt;		
+	}
+	
+	a.productName:hover {
+		text-decoration: none;
+		color: black;
+		cursor: pointer;
 	}
 	
 	table.myOrder_Desc {
