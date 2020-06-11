@@ -34,6 +34,7 @@
 	.goodsImg > img{
 		width:100%;
 		height:300px;
+		border-bottom: solid 1px black;
 	}
 	
 	/*상품 이미지의 옆에 나오는 상품 정보가 들어가 있는 div*/
@@ -60,16 +61,10 @@
 		
 	}
 	
-	/*수량이 표시되는 input태그*/
-	.count input[type='text']{
-		text-align: center;
+	.goodsInfo-table input[type='text']{
+	
 	}
 	
-	/*최종 결과물인 총 결제금액이 나오는 span태그*/
-	.money{
-		font-size: 24pt;
-		font-weight: bold;
-	}
 	
 	.goodsInfo-div{
 		background-color: white;
@@ -78,7 +73,6 @@
 		border-top : solid 1px #f4f4f4;
 		border-bottom : solid 1px #f4f4f4;
 		margin-bottom: 5px;
-		
 	}
 	
 	.managerBtn{
@@ -127,40 +121,41 @@
 				</div>
 				<div class="info">
 					<div class="goodsImg">
-						<img alt="상품1" src="include/images/logo.png" />
+						<img alt="상품1" src="include/images/logo.png"/>
+						<input type="file" id="imgFile" accept=".gif, .jpg, .png" />
 					</div>
 					<div class="goodsInfo-table">
 						<dl>
 							<dt>상품명</dt>
-							<dd><input type="text" value="tet" disabled /></dd>
+							<dd><input type="text" value="tet" /></dd>
 						</dl>
 						<dl class="underLine">
 							<dt>대분류</dt>
-							<dd><input type="text" value="채소" disabled /></dd>
+							<dd><input type="text" value="채소" /></dd>
 						</dl>
 						<dl class="underLine">
 							<dt>소분류</dt>
-							<dd><input type="text" value="쌈" disabled /></dd>
+							<dd><input type="text" value="쌈" /></dd>
 						</dl>
 						<dl class="underLine">
 							<dt>단위 / 그램</dt>
-							<dd><input type="text" value="100g" disabled /></dd>
+							<dd><input type="text" value="100g" /></dd>
 						</dl>
 						<dl class="underLine">
 							<dt>원산지</dt>
-							<dd><input type="text" value="국내산" disabled /></dd>
+							<dd><input type="text" value="국내산" /></dd>
 						</dl>
 						<dl class="underLine">
 							<dt>구매 담당자</dt>
-							<dd><input type="text" value="OOO" disabled /></dd>
+							<dd><input type="text" value="OOO" /></dd>
 						</dl>
 						<dl class="underLine">
 							<dt>담당자 번호</dt>
-							<dd><input type="text" value="010-0000-0000" disabled /></dd>
+							<dd><input type="text" value="010-0000-0000" /></dd>
 						</dl>
 						<dl class="underLine">
 							<dt>가격</dt>
-							<dd><input type="text" value="1,000" disabled /></dd>
+							<dd><input type="text" value="1,000" /></dd>
 						</dl>
 						<dl class="underLine">
 							<dt>재고 수</dt>
@@ -168,13 +163,13 @@
 						</dl>
 						
 					</div>
-					<div class="goodsInfo-div">
+					<div class="goodsInfo-div" contenteditable="true">
 							상품 상세 설명<br/>
 							test입니다.
 					</div>
-					<div class="price" align="right" >
-							<span class="managerBtn">수정</span>
-							<span class="managerBtn">삭제</span>
+					<div class="price" >
+							<span class="managerBtn">확인</span>
+							<span class="managerBtn">취소</span>
 					</div>
 				</div>
 				<div style="clear:both;"></div>

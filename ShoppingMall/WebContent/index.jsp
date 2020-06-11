@@ -34,6 +34,7 @@
 		margin-right:20px;
 		
 		
+		
 	}
 	
 	.item_list > li > img{
@@ -47,6 +48,24 @@
 	.footer{
 		clear:both;
 	}
+	
+	
+	#best_item0 {
+		position:relative;
+	}
+	
+	#best_item0 > img{
+		
+	}
+	
+	.best_slideL, .sale_slideL{
+		float:left;
+	}
+	
+	.best_slideR, .sale_slideR{
+		float:right;
+	}
+	
 	
 </style>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
@@ -102,7 +121,7 @@
 					<div class="slide_wrapper">
 					<%-- DB에서 갖고온 결과물 뿌리는 부분 --%>
 					<ul class="item_list">
-						<li class="best_item" id="best_item0">
+						<li class="best_item" id="best_item0" >
 							<img alt="상품1" src="include/images/logo.png">
 							<a href="#">	
 								상품명0
