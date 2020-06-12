@@ -146,7 +146,20 @@
 		text-decoration: none;		
 		color: white;
 		cursor: pointer;
-	}	
+	}
+			
+	.panel-heading {
+		padding: 20px 0;
+	}		
+			
+	span.title {
+		font-size: 12pt;
+	}
+
+	.image > img {
+		width: 600px;
+		height: 600px;
+	}
 
 }
 	
@@ -181,15 +194,50 @@
 					<div style="clear:both; height:20px;"></div>
 					
 					<div class="tab">
-						<a class="tab possibleReview">작성가능 후기<span>(3)</span></a>	
+						<a class="tab possibleReview">작성가능 후기(<span>3</span>)</a>	
 					</div>				
 					<div class="tab">					
-						<a class="tab completedReview">작성완료 후기<span>(2)</span></a>	
+						<a class="tab completedReview">작성완료 후기(<span>2</span>)</a>	
 					</div>	
 					
-					<div style="clear:both; height:10px;"></div>
-								
+					<div style="clear:both; height:10px;"></div>								
 				</div>			
+
+				<div class="panel-group" id="accordion">
+				
+				    <div class="panel panel-default">
+				      <div class="panel-heading">				          
+				          <a data-toggle="collapse" data-parent="#accordion" href="#collapse1">제품명1</a>
+				      </div>
+				      <div id="collapse1" class="panel-collapse collapse">
+				        <div class="panel-body">
+				        	<span class="title">후기 제목1~~</span>
+				        	<div class="image">				        		
+				        		<img alt="해당 주문 대표 상품 이미지" src="include/images/logo.png">
+				        	</div>				        	
+				        	<span class="contents">후기 내용1~~~~~~~~~~~~~~~~~</span>
+				        </div>
+				      </div>
+				    </div>
+				    
+				    <div class="panel panel-default">
+				      <div class="panel-heading">
+				        <h4 class="panel-title">
+				          <a data-toggle="collapse" data-parent="#accordion" href="#collapse2">Collapsible Group 2</a>
+				        </h4>
+				      </div>
+				      <div id="collapse2" class="panel-collapse collapse">
+				        <div class="panel-body">
+				        	<span class="name">제품명2</span>
+				        	<div class="image">
+				        		<img alt="해당 주문 대표 상품 이미지" src="include/images/logo.png">
+				        	</div>
+				        	<span class="contents">후기 내용2</span>
+				        </div>
+				      </div>
+				    </div>				    
+				    
+				</div>
 
 				<div style="border-bottom:solid 1px black; text-align:center;">페이징 처리</div>			
 			</div>						
