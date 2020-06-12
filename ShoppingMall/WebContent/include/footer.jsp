@@ -9,6 +9,7 @@
 	.footer{
 		min-width:1080px;
 		max-width: 1700px;
+		background-color: white;
 	}
 	
 	.firstInfo{

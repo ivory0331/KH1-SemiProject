@@ -11,6 +11,7 @@
 		width:1080px;
 		margin: 10px auto;
 		border:solid 0px black;
+		background-color: white;
 	}
 	
 	/*회원가입, 로그인 링크 영역*/
