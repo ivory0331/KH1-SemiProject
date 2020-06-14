@@ -206,7 +206,8 @@ img.imgsmall {
 			if(bChecked) {
 				alert("["+arrFood[i].name+"] 상품을 삭제하기를 누르셨습니다");
 				$("#deleteFood"+[i]+"").hide();
-			
+				$('#food'+[i]+'').prop("checked", false);
+				choiceFood();
 			}
 		}
 	}
