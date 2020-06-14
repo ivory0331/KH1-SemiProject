@@ -148,19 +148,56 @@
 		cursor: pointer;
 	}
 			
-	.panel-heading {
-		padding: 20px 0;
-	}		
-			
-	span.title {
-		font-size: 12pt;
+	.column {
+		border-bottom: solid 2px #5f0080;
+		padding-top: 10px;
+		height: 50px;
 	}
-
-	.image > img {
+	
+	div.col {
+		display: inline-block;		
+	}
+	
+	.accordion {
+		border-bottom: solid 1px #eee;
+		padding-top: 15px;		
+		height: 50px;		
+	}
+	
+	div.num {
+		width: 70px;
+	}
+	
+	div.name {
+		width: 550px;
+	}
+	
+	div.date {
+		width: 100px;
+	}
+	
+	div.view {
+		width: 80px;
+	}
+	
+	div.panel {
+		border-bottom: solid 1px #eee;
+		padding: 10px;
+	}
+	
+	.title {
+		border: solid 0px red;
+		text-align: left;
+	}	
+	
+	img.image {
 		width: 600px;
 		height: 600px;
 	}
-
+	
+	.review {
+		text-align: left;
+	}
 }
 	
 	
@@ -174,7 +211,31 @@
 <script type="text/javascript" src="/ShoppingMall/util/myutil.js"></script>
 
 <script type="text/javascript">
+	$(document).ready(function() {
 
+		$("div.panel").css('display','none');
+	  
+		$("div.accordion").click(function(event){						
+			
+			var $targetNext = $(event.target).next();
+		
+			var targetNextDisplayProperty = $targetNext.css('display');				
+			
+			if(targetNextDisplayProperty == 'none') {
+				
+				$("div.panel").css('display','none');
+								
+				$targetNext.css('display','');	
+			}
+			
+			else {
+				
+				$targetNext.css('display','none');	
+			}
+			
+		});
+		
+	});
 </script>
 
 </head>
@@ -185,7 +246,7 @@
 			<div class="contents">	
 			
 			<jsp:include page="include/myPageSideMenu.jsp"></jsp:include>
-				
+							
 			<div id="myPage_Contents">		
 				<div id="myProductReview_Header">
 					<h2 id="myProductReview_Title">상품후기</h2>
@@ -203,42 +264,44 @@
 					<div style="clear:both; height:10px;"></div>								
 				</div>			
 
-				<div class="panel-group" id="accordion">
-				
-				    <div class="panel panel-default">
-				      <div class="panel-heading">				          
-				          <a data-toggle="collapse" data-parent="#accordion" href="#collapse1">제품명1</a>
-				      </div>
-				      <div id="collapse1" class="panel-collapse collapse">
-				        <div class="panel-body">
-				        	<span class="title">후기 제목1~~</span>
-				        	<div class="image">				        		
-				        		<img alt="해당 주문 대표 상품 이미지" src="include/images/logo.png">
-				        	</div>				        	
-				        	<span class="contents">후기 내용1~~~~~~~~~~~~~~~~~</span>
-				        </div>
-				      </div>
+				<div class="reviewList">    				
+					<div class="column">
+						<div class="col" style="width:70px;">번호</div>
+						<div class="col" style="width:550px;">상품명</div>
+						<div class="col" style="width:100px;">작성일</div>
+						<div class="col" style="width:80px;">조회</div>
+					</div>
+					
+					<div class="accordion">
+				    	<div class="col num" style="width:70px;">2</div>
+						<div class="col name" style="width:550px;">상품명2</div>
+						<div class="col date" style="width:100px;">0000-00-00</div>
+						<div class="col view" style="width:80px;">2</div>
+				    </div>
+				    <div class="panel">
+				    	<div class="title">~~제목2~~</div>
+				    	<div class="image">
+				    		<img class="image" alt="해당 주문 대표 상품 이미지" src="include/images/logo.png">
+				    	</div>
+				    	<div class="review">~~~~~~~~~~~~~~내용2~~~~~~~~~~~~~~</div>
 				    </div>
 				    
-				    <div class="panel panel-default">
-				      <div class="panel-heading">
-				        <h4 class="panel-title">
-				          <a data-toggle="collapse" data-parent="#accordion" href="#collapse2">Collapsible Group 2</a>
-				        </h4>
-				      </div>
-				      <div id="collapse2" class="panel-collapse collapse">
-				        <div class="panel-body">
-				        	<span class="name">제품명2</span>
-				        	<div class="image">
-				        		<img alt="해당 주문 대표 상품 이미지" src="include/images/logo.png">
-				        	</div>
-				        	<span class="contents">후기 내용2</span>
-				        </div>
-				      </div>
-				    </div>				    
-				    
+				    <div class="accordion">
+				    	<div class="col num" style="width:70px;">1</div>
+						<div class="col name" style="width:550px;">상품명1</div>
+						<div class="col date" style="width:100px;">0000-00-00</div>
+						<div class="col view" style="width:80px;">1</div>
+				    </div>
+				    <div class="panel">
+				    	<div class="title">~~제목1~~</div>
+				    	<div class="image">
+				    		<img class="image" alt="해당 주문 대표 상품 이미지" src="include/images/logo.png">
+				    	</div>
+				    	<div class="review">~~~~~~~~~~~~~~내용1~~~~~~~~~~~~~~</div>
+				    </div>
+				
 				</div>
-
+				
 				<div style="border-bottom:solid 1px black; text-align:center;">페이징 처리</div>			
 			</div>						
 			</div>
@@ -248,14 +311,6 @@
 	</div>
 </body>
 </html>
-
-
-
-
-
-
-
-
 
 
 
