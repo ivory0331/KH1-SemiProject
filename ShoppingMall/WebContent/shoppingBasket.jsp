@@ -57,16 +57,16 @@ img.imgsmall {
 <script type="text/javascript" src="/ShoppingMall/util/myutil.js"></script>
 <script type="text/javascript">
 
-	var arrFood = [{name:"루비 싱글 바",filename:"iscream.png",price:"3600"}
-				  ,{name:"병 샐러드",filename:"salad.png",price:"6200"}
-				  ,{name:"동물복지 우유",filename:"milk.png",price:"2650"}];
+	var arrFood = [{name:"루비 싱글 바 (3,600원)",filename:"iscream.png",price:"3600"}
+				  ,{name:"병 샐러드 (6,200원)",filename:"salad.png",price:"6200"}
+				  ,{name:"동물복지 우유 (2,650원)",filename:"milk.png",price:"2650"}];
 			  
 	$(document).ready(function(){
 		// 선택한 목록 테이블에 넣어주기
 		
 		var html = "";
 		for(var i=0; i<arrFood.length; i++) {
-			html += "<tr> <td>"+
+			html += "<tr id='deleteFood"+[i]+"'> <td>"+
 						"<input type='checkbox' class='singleCheck' id='food"+[i]+"' onClick='choiceFood()' ></input>"+
 							"<img class='imgsmall' src='images/"+arrFood[i].filename+"'/>"+
 						"</td> <td>"+
@@ -141,6 +141,7 @@ img.imgsmall {
 				else {
 					arrCost[i].innerText = arrFood[i].price;
 				}
+				choiceFood();
 		}
 	}
 
@@ -203,7 +204,9 @@ img.imgsmall {
 			var bChecked = document.getElementById('food'+[i]+'').checked;
 			
 			if(bChecked) {
-				alert("["+arrFood[i].name+"] 상품을 삭제하기를 누르셨습니다")
+				alert("["+arrFood[i].name+"] 상품을 삭제하기를 누르셨습니다");
+				$("#deleteFood"+[i]+"").hide();
+			
 			}
 		}
 	}
