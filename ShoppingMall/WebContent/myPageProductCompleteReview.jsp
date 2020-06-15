@@ -217,7 +217,7 @@
 	  
 		$("div.accordion").click(function(event){						
 			
-			var $targetNext = $(event.target).next();
+			var $targetNext = $(this).next();
 		
 			var targetNextDisplayProperty = $targetNext.css('display');				
 			
