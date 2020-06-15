@@ -22,40 +22,7 @@
 		margin-left:10px;
 		margin-top:10px;
 	}
-	
-	#goodsInfo-table{
-		display: inline-block;
-		width:600px;
-		margin-right:30px;
-		text-align: left;
-	}
-	
-	/*상품 정보가 나열된 리스트에서 각각의 항목 부분의 태그*/
-	#goodsInfo-table dt{
-		
-		display: inline-block;
-		width: 200px;
-		
-	}
-	
-	/*상품 정보가 나열된 리스트에서 각각의 내용 부분의 태그*/
-	#goodsInfo-table dd{
-		margin-left:-10px;
-		display: inline-block;
-		width: 350px;
-		
-	}
 
-	
-	#goodsInfo-div{
-		background-color: white;
-		text-align: left;
-		line-height: 30px;
-		border-top : solid 1px #f4f4f4;
-		border-bottom : solid 1px #f4f4f4;
-		margin-bottom: 5px;
-		
-	}
 	
 	.managerBtn{
 		display: inline-block;
@@ -71,17 +38,75 @@
 		color:purple;
 	}
 	
-	.detail_img{
-		display: inline-block;
-		width: 100px;
-		height: 100px;
-		margin-left: 50px;
-		border: solid 1px black;
-	}
-	
 	.btn_area{
 		margin-top:30px;
 	}
+	
+	.newGoodsAdd{
+		margin-top:5px;
+		/*background-color: #f4f4f4;*/
+		border:solid 1px gray;
+	}
+	
+	.newGoodsTitle > h4{
+		display: inline-block;
+	}
+	
+	.newGoodsTitle > span{
+		float:right;
+		font-size: 16pt;
+		background-color: red;
+		padding: 0 10px;
+		cursor: pointer;
+	}
+	
+	.newGoodsImg{
+		width: 400px;
+		min-height:300px;
+		display: inline-block;
+		border: solid 1px black;
+		float: left;
+		margin: 0 20px;
+		background-color: white;
+	
+	}
+	
+	.representation-img{
+		width:50%;
+		height: 200px;
+		border:solid 1px red;
+		margin-bottom: 10px;
+	}
+	
+	.detail-img{
+		width: 80px;
+		height: 80px;
+		display: inline-block;
+		margin: 0 20px;
+		border: solid 1px black;
+	}
+	
+	.newGoodsForm{
+		display: inline-block;
+		background-color: white;
+		margin-bottom:5px;
+	}
+	
+	.newGoods-info{
+		list-style: none;
+		padding: 0;
+		
+	}
+	
+	.newGoods-info > li{
+		margin-bottom: 20px;
+	}
+	
+	.newGoods-info > li > label{
+		width: 80px;
+	}
+	
+	
 	
 </style>
 <!-- 부트스트랩 -->
@@ -92,18 +117,75 @@
 <script type="text/javascript" src="/ShoppingMall/util/myutil.js"></script>
 <script type="text/javascript">
 	var offSet = new Array();
+	var newGoodsCnt = 0;
+	var existGoodsCnt = 0;
+	var $newGoodsForm = "";
 	$(document).ready(function(){
-		for(var i=0; i<$(".detailTablePart").length; i++){
-			offSet[i] = $(".detailTablePart")[i].offsetTop;
-			console.log(offSet[i]);
-		}
-	});
+		$("#newGoodsAdd0").hide();
 		
-	function goTable(num){
-			
-		var top = offSet[num]-Number("81");
-		console.log("top:"+top);
-		$('html, body').animate({scrollTop : top}, 0);		
+	});
+	
+	function func_newGoodsAdd(){
+		var Frm = document.goodsInsert;
+		if(newGoodsCnt == 0){
+			$("#newGoodsAdd0").show();
+		}
+		else{
+			Frm.innerHTML+="<div class='newGoodsAdd' id='newGoodsAdd"+newGoodsCnt+"' align='left'>"
+			  +"<div class='newGoodsTitle' id='newGoodsTitle"+newGoodsCnt+"'>"
+			  +"<h4>신규 상품 추가 폼</h4>"
+			  +"<span>X</span>"
+			  +"</div>"
+			  +"<div class='newGoodsImg' align='center' id='newGoodsImg"+newGoodsCnt+"'>"
+			  +"<div class='representation-img'>"
+			  +"</div>"
+			  +"<div class='detail-img'></div>"
+			  +"<div class='detail-img'></div>"
+			  +"<div class='detail-img'></div>"
+			  +"</div>"
+			  +"<div class='newGoodsForm' align='left' id='newGoodsForm"+newGoodsCnt+"'>"
+			  +"<select id='bigSelect"+newGoodsCnt+"' class='bigSelect'>"
+			  +"<option>채소</option>"
+			  +"</select>"
+			  +"<select id='smallSelect"+newGoodsCnt+"' class='smallSelect'>"
+			  +"<option>쌈</option>"
+			  +"</select>"
+			  +"<ul class='newGoods-info' id='newGoods-info"+newGoodsCnt+"'>"
+			  +"<li>"
+			  +"<label for='goddsName"+newGoodsCnt+"'>상품명</label>"
+			  +"<input type='text' id='goodsName"+newGoodsCnt+"' />"
+			  +"</li>"
+			  +"<li>"
+			  +"<label for='goddsUnit"+newGoodsCnt+"'>단위</label>"
+			  +"<input type='text' id='goddsUnit"+newGoodsCnt+"' />"
+			  +"</li>"
+			  +"<li>"
+			  +"<label for='packageType"+newGoodsCnt+"'>포장타입</label>"
+			  +"<input type='text' id='packageType"+newGoodsCnt+"' />"
+			  +"</li>"
+			  +"<li>"
+			  +"<label for='goodsOrigin"+newGoodsCnt+"'>원산지</label>"
+			  +"<input type='text' id='goodsOrigin"+newGoodsCnt+"' />"
+			  +"</li>"
+			  +"<li>"
+			  +"<label for='goodsShelflife"+newGoodsCnt+"'>유통기한</label>"
+			  +"<input type='text' id='goodsShelflife"+newGoodsCnt+"' />"
+			  +"</li>"
+			  +"<li>"
+			  +"<label for='goodsPrice"+newGoodsCnt+"'>가격</label>"
+			  +"<input type='text' id='goodsPrice"+newGoodsCnt+"' />"
+			  +"</li>"
+			  +"<li style='margin:0;'>"
+			  +"<label for='goodsCount"+newGoodsCnt+"'>재고 수</label>"
+			  +"<input type='text' id='goodsCount"+newGoodsCnt+"' />"
+			  +"</li>"
+			  +"</ul>"
+			  +"</div>"
+			  +"</div>"
+			  +"<div style='clear:both;'></div>";
+		}
+		
+		newGoodsCnt++;		
 	}
 	
 </script>
@@ -118,29 +200,73 @@
 				</div>
 				<div id="info">
 					<div id="add_area" align="right">
-							<span class="managerBtn">신규상품 추가</span>
+							<span class="managerBtn" onclick="func_newGoodsAdd()">신규상품 추가</span>
 							<span class="managerBtn">기존상품 재고 추가</span>
 					</div>
 					<form name="goodsInsert" >
-						<div class="newGoodsForm">
-							<h4>신규 상품 추가 폼</h4>
-							<select id="bigSelect">
-								<option>채소</option>
-							</select>
-							<select id="smallSelect">
-								<option>쌈</option>
-							</select>
-							<br/>
+						<div class="newGoodsAdd" id="newGoodsAdd0" align="left">
+							<div class="newGoodsTitle" id="newGoodsTitle0">
+								<h4>신규 상품 추가 폼</h4>
+								<span>X</span>
+							</div>
+							<div class="newGoodsImg" align="center" id="newGoodsImg0">
+								<div class="representation-img">		
+									
+								</div>
+								<div class="detail-img"></div>
+								<div class="detail-img"></div>
+								<div class="detail-img"></div>
+							</div>
 							
+							<div class="newGoodsForm" align="left" id="newGoodsForm0">
+								<select id="bigSelect0" class="bigSelect">
+									<option>채소</option>
+								</select>
+								<select id="smallSelect0" class="smallSelect">
+									<option>쌈</option>
+								</select>
+								
+								<ul class="newGoods-info" id="newGoods-info0">
+									<li>
+										<label for="goddsName0">상품명</label>
+										<input type="text" id="goodsName0" />
+									</li>
+									<li>
+										<label for="goddsUnit0">단위</label>
+										<input type="text" id="goddsUnit0" />
+									</li>
+									<li>
+										<label for="packageType0">포장타입</label>
+										<input type="text" id="packageType0" />
+									</li>
+									<li>
+										<label for="goodsOrigin0">원산지</label>
+										<input type="text" id="goodsOrigin0" />
+									</li>
+									<li>
+										<label for="goodsShelflife0">유통기한</label>
+										<input type="text" id="goodsShelflife0" />
+									</li>
+									<li>
+										<label for="goodsPrice0">가격</label>
+										<input type="text" id="goodsPrice0" />
+									</li>
+									<li style="margin:0;">
+										<label for="goodsCount0">재고 수</label>
+										<input type="text" id="goodsCount0" />
+									</li>
+								</ul>
+							</div>
 						</div>
-						
+						<div style="clear:both;"></div>
 					</form>
+					
 					<div class="btn_area" align="right" >
 							<span class="managerBtn">확인</span>
 							<span class="managerBtn">취소</span>
 					</div>
 				</div>
-				<div style="clear:both;"></div>
+				
 			</div>
 		</div>
 		<jsp:include page="include/footer.jsp"></jsp:include>
