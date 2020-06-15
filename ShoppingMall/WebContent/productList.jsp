@@ -37,9 +37,9 @@
 	#smallT {
 		float: left;
 	}
-	select {
+	#list {
 		border: solid 0px red;
-		margin-top: 100px;
+		margin-top: 80px;
 		float: right;
 	}
 </style>
@@ -78,13 +78,14 @@
 					<h3>상품 리스트</h3>
 					<h4>전체보기</h4>
 				</div>
+				<div id="list">
 					<select>
 						<option>신상품순</option>
 						<option>인기상품순</option>
-						<option>낮은 가격순</option>
+						<option>낮은 가격순</option>   
 						<option>높은 가격순</option>
 					</select>
-				
+				</div>
 				
 				<div class="productList" align="center">
 					<div>
