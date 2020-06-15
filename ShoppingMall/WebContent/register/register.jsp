@@ -199,7 +199,7 @@ div.reg_agree {
     border: 1px solid #f3f2f4;
     background-color: #fff;
     width : 640px;
-    height : 340px;
+    height : 280px;
     /*border : solid 1px red;*/
 }
 
@@ -227,16 +227,15 @@ a {
 }
 .head_tit_agree{
 	/*border : solid 1px pink;*/
-	padding-left : 20px;
-	padding-top: 8px;
+	padding: 8px 0 8px 18px;
 	color: #333;
-	letter-spacing: 0.3px;
+	letter-spacing: 0px;
 }
 
 .head_sub_agree{
 	font-size: 12px;
 	font-weight: normal;
-	padding-left : 10px;
+	padding: 0;
 	color: #333;
 }
 
@@ -266,7 +265,7 @@ button.btn_submit{
     padding : 0 0 10px 20px;
 }
 .check_view{
-	padding : 4px 0 4px 40px; 
+	padding : 5px 0 5px 40px; 
 	font-size : 14px;
 	letter-spacing: 0.6px;
 	color: #333;
@@ -278,11 +277,7 @@ span.sub_agree{
 div.check_event{
 	padding : 7px 0 4px 45px; 
 }
-.sms_info_img{
-	width: 323px;
-	height : 30px;
-	padding : 0 0 0px 45px; 
-}
+
 
 </style>
 <script type="text/javascript" src="/SemiProject/js/jquery-3.3.1.min.js"></script>
@@ -460,29 +455,7 @@ $(document).ready(function(){
 				</label>
 				<a href="#none" class="link btn_choice">&nbsp;&nbsp; 약관보기 > </a>
 				</div>
-				
-				<div class="check_view">
-					<label class="select_check check_agree ">
-					<input type="checkbox" name="marketing" class="styled-checkbox-black">
-					<span class="txt_checkbox no_pd">무료배송, 할인쿠폰 등 혜택/정보 수신 <span class="sub_agree">(선택)</span></span>
-					</label>
-				
-						<div class="check_event email_sms">
-						<label class="select_check check_agree ">
-						<input type="checkbox" name="sms" class="styled-checkbox-black" value="n">
-						<span class="txt_checkbox no_pd">SMS &emsp;&emsp;&emsp;</span>
-						</label>
-						
-						<label class="select_check check_agree ">
-						<input type="checkbox" name="mailling" class="styled-checkbox-black" value="n">
-						<span class="txt_checkbox no_pd">이메일</span>
-						</label>
-						</div>
-					<div class="sms_info"> 
-						<img class="sms_info_img" src="https://res.kurly.com/pc/img/1901/img_event_check_x2.png" alt="동의 시 한 달간 [5%적립]과 [무료배송](첫 구매 후 1주일 내 적용)">
-					</div>
-				</div>
-				
+												
 				<div class="check_view">
 						<label class="select_check check_agree check_fourteen">
 						<input type="checkbox" value="n" name="fourteen_chk" required class="styled-checkbox-black">

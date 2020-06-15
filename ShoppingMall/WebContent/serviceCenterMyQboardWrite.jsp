@@ -66,13 +66,14 @@
 }
 
 th.input_txt {
-    width: 110px;
-    padding: 15px 0 15px 20px;
+    width: 200px;
+    padding: 30px 0 0 30px;
     background-color: #f7f5f8;
     border-bottom: 1px solid #e8e8e8;
     text-align: left;
     font-weight: 400;
     vertical-align: middle;
+    font-size: 9pt;   
 }
 
 table td {
@@ -86,9 +87,8 @@ table td {
 }
 
 .edit_area{
-	font-size : 12px;
+	font-size : 8.5pt;
 	color : #333;
-
 }
 
 .select{
@@ -147,7 +147,7 @@ input[type=text]{
 								<colgroup><col width="14%" align="right"></colgroup>
 									<tbody>
 									<tr>
-										<th class="input_txt">제목</th>
+										<th class="input_txt" style="border-top: solid 2px purple;">제목</th>
 										<td><select name="itemcd" required class="select">
 												<option value="">선택해주세요.</option>
 												<option value="01">배송지연/불만</option>
@@ -164,6 +164,16 @@ input[type=text]{
 										</select><br> <input type="text" name="subject" style="width: 100%" required value=""></td>
 									</tr>
 									
+									<tr>
+										<th class="input_txt">주문번호</th>
+										<td>
+										<input type="text" name="ordno" style="width:25%" value="" readonly="readonly"">
+										<input onclick="order_open()" type="button" class="bhs_button" value="주문조회" style="float:none; line-height:27px; width:100px;">
+										<div style="position:relative;">
+										<iframe id="ifm_order" style="display:none;position:absolute;width:560px;height:380px;background-color:#fff;position:absolute;left:0;top:0;border:1px solid #000"></iframe>
+										</div>
+										</td>
+									</tr>
 									<tr>
 										<th class="input_txt">이메일</th>
 										<td><input type="text" name="email" value="userId@naver.com" size="26" readonly="readonly" class="read_only"> 
@@ -216,7 +226,7 @@ input[type=text]{
 								
 								<tbody>
 								<tr> 
-								<td style= "border:none" id="submit">
+								<td colspan="2" style= "border:none" id="submit" align="right"; >
 									<input type="submit" class="bhs_button" value="저장">
 								</td>
 								</tr>
