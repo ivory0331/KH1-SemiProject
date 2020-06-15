@@ -131,61 +131,83 @@
 			$("#newGoodsAdd0").show();
 		}
 		else{
-			Frm.innerHTML+="<div class='newGoodsAdd' id='newGoodsAdd"+newGoodsCnt+"' align='left'>"
-			  +"<div class='newGoodsTitle' id='newGoodsTitle"+newGoodsCnt+"'>"
-			  +"<h4>신규 상품 추가 폼</h4>"
-			  +"<span>X</span>"
-			  +"</div>"
-			  +"<div class='newGoodsImg' align='center' id='newGoodsImg"+newGoodsCnt+"'>"
-			  +"<div class='representation-img'>"
-			  +"</div>"
-			  +"<div class='detail-img'></div>"
-			  +"<div class='detail-img'></div>"
-			  +"<div class='detail-img'></div>"
-			  +"</div>"
-			  +"<div class='newGoodsForm' align='left' id='newGoodsForm"+newGoodsCnt+"'>"
-			  +"<select id='bigSelect"+newGoodsCnt+"' class='bigSelect'>"
-			  +"<option>채소</option>"
-			  +"</select>"
-			  +"<select id='smallSelect"+newGoodsCnt+"' class='smallSelect'>"
-			  +"<option>쌈</option>"
-			  +"</select>"
-			  +"<ul class='newGoods-info' id='newGoods-info"+newGoodsCnt+"'>"
-			  +"<li>"
-			  +"<label for='goddsName"+newGoodsCnt+"'>상품명</label>"
-			  +"<input type='text' id='goodsName"+newGoodsCnt+"' />"
-			  +"</li>"
-			  +"<li>"
-			  +"<label for='goddsUnit"+newGoodsCnt+"'>단위</label>"
-			  +"<input type='text' id='goddsUnit"+newGoodsCnt+"' />"
-			  +"</li>"
-			  +"<li>"
-			  +"<label for='packageType"+newGoodsCnt+"'>포장타입</label>"
-			  +"<input type='text' id='packageType"+newGoodsCnt+"' />"
-			  +"</li>"
-			  +"<li>"
-			  +"<label for='goodsOrigin"+newGoodsCnt+"'>원산지</label>"
-			  +"<input type='text' id='goodsOrigin"+newGoodsCnt+"' />"
-			  +"</li>"
-			  +"<li>"
-			  +"<label for='goodsShelflife"+newGoodsCnt+"'>유통기한</label>"
-			  +"<input type='text' id='goodsShelflife"+newGoodsCnt+"' />"
-			  +"</li>"
-			  +"<li>"
-			  +"<label for='goodsPrice"+newGoodsCnt+"'>가격</label>"
-			  +"<input type='text' id='goodsPrice"+newGoodsCnt+"' />"
-			  +"</li>"
-			  +"<li style='margin:0;'>"
-			  +"<label for='goodsCount"+newGoodsCnt+"'>재고 수</label>"
-			  +"<input type='text' id='goodsCount"+newGoodsCnt+"' />"
-			  +"</li>"
-			  +"</ul>"
-			  +"</div>"
-			  +"</div>"
-			  +"<div style='clear:both;'></div>";
+			Frm.innerHTML+= newGoodsaddForm(newGoodsCnt);
+			console.log($("#newGoodsAddNum"+newGoodsCnt).val());
 		}
 		
 		newGoodsCnt++;		
+	}
+	
+	function newGoodsaddForm(cnt){
+		var html = "<div class='newGoodsAdd' id='newGoodsAdd"+cnt+"' align='left'>"
+		  +"<input type='hidden' value='"+cnt+"' name='newGoodsAddNum"+cnt+"' id='newGoodsAddNum"+cnt+"'/>"
+		  +"<div class='newGoodsTitle' id='newGoodsTitle"+cnt+"'>"
+		  +"<h4>신규 상품 추가 폼</h4>"
+		  +"<span onclick='func_deleteAddForm("+cnt+")'>X</span>"
+		  +"</div>"
+		  +"<div class='newGoodsImg' align='center' id='newGoodsImg"+cnt+"'>"
+		  +"<div class='representation-img'>"
+		  +"<input type='file' name='representation-img"+cnt+"' />"
+		  +"</div>"
+		  +"<div class='detail-img'><input type='file' name='detailFirst-img"+cnt+"'/></div>"
+		  +"<div class='detail-img'><input type='file' name='detailSecond-img"+cnt+"'/></div>"
+		  +"<div class='detail-img'><input type='file' name='detailThird-img"+cnt+"'/></div>"
+		  +"</div>"
+		  +"<div class='newGoodsForm' align='left' id='newGoodsForm"+cnt+"'>"
+		  +"<select id='bigSelect"+cnt+"' class='bigSelect' name='bigSelect"+cnt+"'>"
+		  +"<option>채소</option>"
+		  +"</select>"
+		  +"<select id='smallSelect"+cnt+"' class='smallSelect' name='smallSelect"+cnt+"'>"
+		  +"<option>쌈</option>"
+		  +"</select>"
+		  +"<ul class='newGoods-info' id='newGoods-info"+cnt+"'>"
+		  +"<li>"
+		  +"<label for='goddsName"+cnt+"'>상품명</label>"
+		  +"<input type='text' id='goodsName"+cnt+"' name='goodsName"+cnt+"' class='goodName' />"
+		  +"</li>"
+		  +"<li>"
+		  +"<label for='goddsUnit"+cnt+"'>단위</label>"
+		  +"<input type='text' id='goddsUnit"+cnt+"' name='goddsUnit"+cnt+"' />"
+		  +"</li>"
+		  +"<li>"
+		  +"<label for='packageType"+cnt+"'>포장타입</label>"
+		  +"<input type='text' id='packageType"+cnt+"' name='packageType"+cnt+"' />"
+		  +"</li>"
+		  +"<li>"
+		  +"<label for='goodsOrigin"+cnt+"'>원산지</label>"
+		  +"<input type='text' id='goodsOrigin"+cnt+"' name='goodsOrigin"+cnt+"' />"
+		  +"</li>"
+		  +"<li>"
+		  +"<label for='goodsShelflife"+cnt+"'>유통기한</label>"
+		  +"<input type='text' id='goodsShelflife"+cnt+"' name='goodsShelflife"+cnt+"' />"
+		  +"</li>"
+		  +"<li>"
+		  +"<label for='goodsPrice"+cnt+"'>가격</label>"
+		  +"<input type='text' id='goodsPrice"+cnt+"' name='goodsPrice"+cnt+"' />"
+		  +"</li>"
+		  +"<li style='margin:0;'>"
+		  +"<label for='goodsCount"+cnt+"'>재고 수</label>"
+		  +"<input type='text' id='goodsCount"+cnt+"' name='goodsCount"+cnt+"' />"
+		  +"</li>"
+		  +"</ul>"
+		  +"</div>"
+		  +"</div>"
+		  +"<div style='clear:both;'></div>";
+		  
+		  return html;
+	}
+	
+	function func_deleteAddForm(cnt){
+		$("#newGoodsAdd"+cnt).remove();
+	}
+	
+	function goSubmit(){
+		var frm = document.goodsInsert;
+		var data={"test":"dddd"};
+		frm.action="index.jsp";
+		frm.method="post";
+		frm.data=data;
+		frm.submit();
 	}
 	
 </script>
@@ -205,55 +227,62 @@
 					</div>
 					<form name="goodsInsert" >
 						<div class="newGoodsAdd" id="newGoodsAdd0" align="left">
+							<input type="hidden" value="0" name="newGoodsAddNum0" />
 							<div class="newGoodsTitle" id="newGoodsTitle0">
 								<h4>신규 상품 추가 폼</h4>
 								<span>X</span>
 							</div>
 							<div class="newGoodsImg" align="center" id="newGoodsImg0">
 								<div class="representation-img">		
-									
+									<input type="file" name="representation-img0" />
 								</div>
-								<div class="detail-img"></div>
-								<div class="detail-img"></div>
-								<div class="detail-img"></div>
+								<div class="detail-img">
+									<input type="file" name="detailFirst-img0" />
+								</div>
+								<div class="detail-img">
+									<input type="file" name="detailSecond-img0" />
+								</div>
+								<div class="detail-img">
+									<input type="file" name="detailThird-img0" />
+								</div>
 							</div>
 							
 							<div class="newGoodsForm" align="left" id="newGoodsForm0">
-								<select id="bigSelect0" class="bigSelect">
+								<select id="bigSelect0" name="bigSelect0" class="bigSelect">
 									<option>채소</option>
 								</select>
-								<select id="smallSelect0" class="smallSelect">
+								<select id="smallSelect0" name="smallSelect0" class="smallSelect">
 									<option>쌈</option>
 								</select>
 								
 								<ul class="newGoods-info" id="newGoods-info0">
 									<li>
 										<label for="goddsName0">상품명</label>
-										<input type="text" id="goodsName0" />
+										<input type="text" id="goodsName0" name="goodsName0" class="goodsName"/>
 									</li>
 									<li>
 										<label for="goddsUnit0">단위</label>
-										<input type="text" id="goddsUnit0" />
+										<input type="text" id="goddsUnit0" name="goddsUnit0" class="goddsUnit"/>
 									</li>
 									<li>
 										<label for="packageType0">포장타입</label>
-										<input type="text" id="packageType0" />
+										<input type="text" id="packageType0" name="packageType0" class="packageType"/>
 									</li>
 									<li>
 										<label for="goodsOrigin0">원산지</label>
-										<input type="text" id="goodsOrigin0" />
+										<input type="text" id="goodsOrigin0" name="goodsOrigin0" class="goodsOrigin"/>
 									</li>
 									<li>
 										<label for="goodsShelflife0">유통기한</label>
-										<input type="text" id="goodsShelflife0" />
+										<input type="text" id="goodsShelflife0" name="goodsShelflife0" class="goodsShelflife"/>
 									</li>
 									<li>
 										<label for="goodsPrice0">가격</label>
-										<input type="text" id="goodsPrice0" />
+										<input type="text" id="goodsPrice0" name="goodsPrice0" class="goodsPrice"/>
 									</li>
 									<li style="margin:0;">
 										<label for="goodsCount0">재고 수</label>
-										<input type="text" id="goodsCount0" />
+										<input type="text" id="goodsCount0" name="goodsCount0" class="goodsCount"/>
 									</li>
 								</ul>
 							</div>
@@ -262,7 +291,7 @@
 					</form>
 					
 					<div class="btn_area" align="right" >
-							<span class="managerBtn">확인</span>
+							<span class="managerBtn" onclick="goSubmit()">확인</span>
 							<span class="managerBtn">취소</span>
 					</div>
 				</div>
