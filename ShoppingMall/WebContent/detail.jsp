@@ -68,6 +68,10 @@
 		width: 1080px;
 	}
 	
+	.table > thead{
+		text-align: center;
+	}
+	
 	/*장바구니 담기 버튼*/
 	.basket{
 		display: inline-block;
@@ -128,31 +132,37 @@
 	
 	
 	
-	.tableTitle{
+	 .tableTitle{
 		font-size: 18pt;
-	}
+	} 
 	
-	.accordion {
+	 .accordion {
 	  background-color: white;
 	  color: #444;
 	  cursor: pointer;
-	  width: 100%;
 	  border: none;
-	  text-align: left;
+	  text-align: center;
 	  outline: none;
 	  font-size: 15px;
 	  transition: 0.4s;
+	} 
+	
+	.content-title{
+		width:50%;
+		text-align: left;
 	}
 	
-	
-	
 	.panel {
-	  display: none;
+	  
 	  background-color: white;
 	  overflow: hidden;
 	  text-align: left;
 	  margin : 0px ; 
 	
+	}
+	
+	.panel-none{
+		display: none;
 	}
 	
 	.goodsQ_content{
@@ -163,9 +173,6 @@
 		min-height: 200px;
 	}
 	
-	.userBtn{
-		width:1080px;
-	}
 	
 	.userBtn > span{
 		display: inline-block;
@@ -233,16 +240,17 @@
 		var acc = document.getElementsByClassName("accordion");
 
 		for (i = 0; i < acc.length; i++) {
-		  acc[i].addEventListener("click", function() {
-		    this.classList.toggle("active");
-		    var panel = this.nextElementSibling;
-		    if (panel.style.display === "block") {
-		      panel.style.display = "none";
-		    } else {
-		      panel.style.display = "block";
-		    }
-		  });
-		}
+			  acc[i].addEventListener("click", function(event) {
+				var $target = $(this).next();
+				var $other = $target.siblings();
+				$other.each(function(index, item){
+					if($(item).hasClass("panel")){
+						$(item).addClass("panel-none");	
+					}
+				});
+				$target.toggleClass("panel-none");
+			  });
+			}
 		
 		
 	});
@@ -357,34 +365,57 @@
 							<button class="tablinks" onclick="goTable('2')" style="border-right:solid 1px black">상품 문의</button>
 						</div>
 						<table class="table review" style="border-bottom:solid 1px gray;">
-							<tr>
-								<th style="border:none" class="tableTitle">고객 후기</th>
-							</tr>
-							<tr class="accordion">
-								<td >Section 1</td>
-							</tr>
-							<tr class="panel">
-								<td ><div class="review_content">내용</div></td>
-							</tr>
-							
-							<tr class="accordion">
-								<td >Section 2</td>
-							</tr>
-							<tr class="panel">
-								<td ><div class="review_content">내용</div></td>
-							</tr>
-							
-							<tr class="accordion">
-								<td >Section 3</td>
-							</tr>
-							<tr class="panel">
-								<td colspan="2">
-									<div class="review_content">내용</div>
-									<div class="userBtn" align="right">
-										<span>수정</span><span>삭제</span>
-									</div>
-								</td>
-							</tr>
+							<thead>
+								<tr>
+									<th style="border:none" class="tableTitle">고객 후기</th>
+								</tr>
+								<tr>
+									<td>글 번호</td>
+									<td>제목</td>
+									<td>작성자</td>
+									<td>작성날짜</td>
+									<td>조회 수</td>
+								</tr>
+							</thead>
+							<tbody>
+								<tr class="accordion">
+									<td>0</td>
+									<td class="content-title" >test</td>
+									<td>이주명</td>
+									<td>작성날짜</td>
+									<td>조회 수</td>
+								</tr>
+								<tr class="panel panel-none">
+									<td colspan="5"><div class="review_content">내용1</div></td>
+								</tr>
+								
+								<tr class="accordion">
+									<td>0</td>
+									<td class="content-title" >test</td>
+									<td>이주명</td>
+									<td>작성날짜</td>
+									<td>조회 수</td>
+								</tr>
+								<tr class="panel panel-none">
+									<td colspan="5"><div class="review_content">내용1</div></td>
+								</tr>
+								
+								<tr class="accordion">
+									<td>0</td>
+									<td class="content-title" >test</td>
+									<td>이주명</td>
+									<td>작성날짜</td>
+									<td>조회 수</td>
+								</tr>
+								<tr class="panel panel-none">
+									<td colspan="5">
+										<div class="review_content">내용</div>
+										<div class="userBtn" align="right">
+											<span>수정</span><span>삭제</span>
+										</div>
+									</td>
+								</tr>
+							</tbody>
 						</table>
 						<p align="right">
 							<span class="writeBtn">후기 쓰기</span>
@@ -399,34 +430,57 @@
 							<button class="tablinks choice" onclick="goTable('2')" style="border-right:solid 1px black">상품 문의</button>
 						</div>
 						<table class="table goodsQ" style="border-bottom:solid 1px black;">
-							<tr>
-								<th style="border:none" class="tableTitle">상품 문의</th>
-							</tr>
-							<tr class="accordion">
-								<td >Section 1</td>
-							</tr>
-							<tr class="panel">
-								<td ><div class="goodsQ_content">내용</div></td>
-							</tr>
-							
-							<tr class="accordion">
-								<td >Section 2</td>
-							</tr>
-							<tr class="panel">
-								<td ><div class="goodsQ_content">내용</div></td>
-							</tr>
-							
-							<tr class="accordion">
-								<td >Section 3</td>
-							</tr>
-							<tr class="panel">
-								<td colspan="2">
-									<div class="goodsQ_content">내용</div>
-									<div class="userBtn" align="right">
-										<span>수정</span><span>삭제</span>
-									</div>
-								</td>
-							</tr>
+							<thead>
+								<tr>
+									<th style="border:none" class="tableTitle">상품 문의</th>
+								</tr>
+								<tr>
+									<td>글 번호</td>
+									<td>제목</td>
+									<td>작성자</td>
+									<td>작성날짜</td>
+									<td>조회 수</td>
+								</tr>
+							</thead>
+							<tbody>
+								<tr class="accordion">
+									<td>0</td>
+									<td class="content-title" >test</td>
+									<td>이주명</td>
+									<td>작성날짜</td>
+									<td>조회 수</td>
+								</tr>
+								<tr class="panel panel-none">
+									<td colspan="5"><div class="review_content">내용1</div></td>
+								</tr>
+								
+								<tr class="accordion">
+									<td>0</td>
+									<td class="content-title" >test</td>
+									<td>이주명</td>
+									<td>작성날짜</td>
+									<td>조회 수</td>
+								</tr>
+								<tr class="panel panel-none">
+									<td colspan="5"><div class="review_content">내용1</div></td>
+								</tr>
+								
+								<tr class="accordion">
+									<td>0</td>
+									<td class="content-title" >test</td>
+									<td>이주명</td>
+									<td>작성날짜</td>
+									<td>조회 수</td>
+								</tr>
+								<tr class="panel panel-none">
+									<td colspan="5">
+										<div class="review_content">내용</div>
+										<div class="userBtn" align="right">
+											<span>수정</span><span>삭제</span>
+										</div>
+									</td>
+								</tr>
+							</tbody>
 						</table>
 						<p align="right">
 							<span class="writeBtn">목록 보기</span><span class="writeBtn" onclick="location.href='productQwrite.jsp'">문의 쓰기</span>

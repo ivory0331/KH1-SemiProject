@@ -57,13 +57,17 @@
 		var acc = document.getElementsByClassName("accordion");
 
 		for (i = 0; i < acc.length; i++) {
-		  acc[i].addEventListener("click", function(event) {
-			var $target = $(this).next();
-			var $other = $(".panel");
-			$other.addClass("panel-none");
-			$target.toggleClass("panel-none");
-		  });
-		}
+			  acc[i].addEventListener("click", function(event) {
+				var $target = $(this).next();
+				var $other = $target.siblings();
+				$other.each(function(index, item){
+					if($(item).hasClass("panel")){
+						$(item).addClass("panel-none");	
+					}
+				});
+				$target.toggleClass("panel-none");
+			  });
+			}
 	})
 </script>
 </head>

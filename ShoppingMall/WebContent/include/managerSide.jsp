@@ -27,7 +27,7 @@
 </style>
 </head>
 <body>
-	<h3>관리자 페이지</h3>
+	<h4>관리자 페이지</h4>
 	<ul class="menu">
 		<li class="underLine">매출관리</li>
 		<li class="underLine">회원관리</li>

@@ -161,7 +161,7 @@
 	
 	/*하위 navi가 되는 ul 두번째*/
 	.navi-categori2{
-		width:149px;
+		width:148px;
 		display:none;
 		list-style: none;
 		padding:0px;

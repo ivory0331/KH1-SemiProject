@@ -4,7 +4,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>managerSales.jsp</title>
+<title>GoodsInsert.jsp</title>
 <link rel="stylesheet" href="css/style.css" />
 <!-- 차트 링크 --> 
 <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script> 
@@ -16,28 +16,14 @@
 		float:left;
 	}
 	
-	.info{
+	#info{
 		display:inline-block;
 		width: 900px;
 		margin-left:10px;
 		margin-top:10px;
 	}
 	
-	/*상품 이미지가 보이는 div*/
-	.goodsImg{
-		float:left;
-		display: inline-block;
-		width: 200px;
-		border:solid 1px black;
-	}
-	
-	.goodsImg > img{
-		width:100%;
-		height:300px;
-	}
-	
-	/*상품 이미지의 옆에 나오는 상품 정보가 들어가 있는 div*/
-	.goodsInfo-table{
+	#goodsInfo-table{
 		display: inline-block;
 		width:600px;
 		margin-right:30px;
@@ -45,7 +31,7 @@
 	}
 	
 	/*상품 정보가 나열된 리스트에서 각각의 항목 부분의 태그*/
-	dt{
+	#goodsInfo-table dt{
 		
 		display: inline-block;
 		width: 200px;
@@ -53,25 +39,15 @@
 	}
 	
 	/*상품 정보가 나열된 리스트에서 각각의 내용 부분의 태그*/
-	dd{
+	#goodsInfo-table dd{
 		margin-left:-10px;
 		display: inline-block;
 		width: 350px;
 		
 	}
+
 	
-	/*수량이 표시되는 input태그*/
-	.count input[type='text']{
-		text-align: center;
-	}
-	
-	/*최종 결과물인 총 결제금액이 나오는 span태그*/
-	.money{
-		font-size: 24pt;
-		font-weight: bold;
-	}
-	
-	.goodsInfo-div{
+	#goodsInfo-div{
 		background-color: white;
 		text-align: left;
 		line-height: 30px;
@@ -109,6 +85,9 @@
 	
 </style>
 <!-- 부트스트랩 -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 <script type="text/javascript" src="/ShoppingMall/js/jquery-3.3.1.min.js"></script>
 <script type="text/javascript" src="/ShoppingMall/util/myutil.js"></script>
 <script type="text/javascript">
@@ -137,71 +116,31 @@
 				<div class="sideMenu">
 					<jsp:include page="include/managerSide.jsp"></jsp:include>
 				</div>
-				<div class="info">
-					<div class="goodsImg">
-						<img alt="상품1" src="include/images/logo.png" />
+				<div id="info">
+					<div id="add_area" align="right">
+							<span class="managerBtn">신규상품 추가</span>
+							<span class="managerBtn">기존상품 재고 추가</span>
 					</div>
-					<div class="goodsInfo-table">
-						<dl>
-							<dt>상품명</dt>
-							<dd><input type="text" value="tet" disabled /></dd>
-						</dl>
-						<dl class="underLine">
-							<dt>대분류</dt>
-							<dd><input type="text" value="채소" disabled /></dd>
-						</dl>
-						<dl class="underLine">
-							<dt>소분류</dt>
-							<dd><input type="text" value="쌈" disabled /></dd>
-						</dl>
-						<dl class="underLine">
-							<dt>단위 / 그램</dt>
-							<dd><input type="text" value="100g" disabled /></dd>
-						</dl>
-						<dl class="underLine">
-							<dt>원산지</dt>
-							<dd><input type="text" value="국내산" disabled /></dd>
-						</dl>
-						<dl class="underLine">
-							<dt>구매 담당자</dt>
-							<dd><input type="text" value="OOO" disabled /></dd>
-						</dl>
-						<dl class="underLine">
-							<dt>담당자 번호</dt>
-							<dd><input type="text" value="010-0000-0000" disabled /></dd>
-						</dl>
-						<dl class="underLine">
-							<dt>가격</dt>
-							<dd><input type="text" value="1,000" disabled /></dd>
-						</dl>
-						<dl class="underLine">
-							<dt>재고 수</dt>
-							<dd><input type="text" value="100" disabled /></dd>
-						</dl>
+					<form name="goodsInsert" >
+						<div class="newGoodsForm">
+							<h4>신규 상품 추가 폼</h4>
+							<select id="bigSelect">
+								<option>채소</option>
+							</select>
+							<select id="smallSelect">
+								<option>쌈</option>
+							</select>
+							<br/>
+							
+						</div>
 						
-					</div>
-					<div class="goodsInfo-div">
-							상품 상세 설명<br/>
-							test입니다.
-					</div>
-					<div id="goodsInfo-img">
-						<div class="detail_img">
-							첫번째 상세 이미지
-						</div>
-						<div class="detail_img">
-							두번째 상세 이미지
-						</div>
-						<div class="detail_img">
-							세번째 상세 이미지
-						</div>
-					</div>
+					</form>
 					<div class="btn_area" align="right" >
-							<span class="managerBtn">수정</span>
-							<span class="managerBtn">삭제</span>
+							<span class="managerBtn">확인</span>
+							<span class="managerBtn">취소</span>
 					</div>
 				</div>
 				<div style="clear:both;"></div>
-				
 			</div>
 		</div>
 		<jsp:include page="include/footer.jsp"></jsp:include>
