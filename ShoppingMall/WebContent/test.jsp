@@ -551,7 +551,7 @@
 								<td colspan="2" style="height:10px"></td>
 							</tr>
 																							
-					</table>
+					</table> 
 					
 				</div>	
 				
