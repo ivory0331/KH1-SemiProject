@@ -64,6 +64,7 @@
 	
 	.myOrder_Goods {
 		border: solid 1px #eee;
+		margin-bottom: 20px;
 	}
 	
 	.myOrder_Name {
@@ -119,7 +120,7 @@
 		border: solid 0px lime;
 		display: inline-block;
 		width: 15%;
-	}
+	}	
 	
 	a.link {
 		border: solid 1px #5f0080;
@@ -231,7 +232,44 @@
 								</div>
 							</div>
 						</div>
-					</div>						
+					</div>	
+					
+					<div>
+						<div class="myOrder_Date">0000.00.00 (00시 00분)</div>
+						<div class="myOrder_Goods">
+							<div class="myOrder_Name">
+								<a>상품명2 외 1건</a>
+							</div>
+							<div class="myOrder_block">
+								<div class="myOrder_Info">
+									<div class="myOrder_Image">
+										<img alt="해당 주문 대표 상품 이미지" src="include/images/logo.png">
+									</div> 
+									<table class="myOrder_Desc">
+										<tr>
+											<td class="mytd1">주문번호</td>
+											<td class="mytd2">2222222222</td>
+										</tr>
+										<tr>
+											<td class="mytd1">결제금액</td>
+											<td class="mytd2">22,222원</td>
+										</tr>
+										<tr>
+											<td class="mytd1">주문상태</td>
+											<td class="status end mytd2">배송완료</td>
+										</tr>															
+									</table>						
+									<div style="clear:both;"></div>
+								</div>						
+								<div class="myOrder_Status">
+									<span class="myOrder_InnerStatus">
+										<a class="link link_review">후기 작성</a>
+										<a class="link link_question">1:1 문의</a>
+									</span>
+								</div>
+							</div>
+						</div>
+					</div>					
 				</div>	
 				<div style="border-bottom:solid 1px black; text-align:center;">페이징 처리</div>			
 			</div>						
