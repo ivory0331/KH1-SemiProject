@@ -222,11 +222,13 @@ div.reg_agree {
    text-decoration: none;
    
 }
-.head_tit_agree{
+#head_tit_agree{
    /*border : solid 1px pink;*/
    padding: 8px 0 8px 18px;
    color: #333;
    letter-spacing: 0px;
+   font-size: 12pt;
+   font-weight: bold;
 }
 
 .head_sub_agree{
@@ -277,9 +279,9 @@ div.check_event{
 
 
 </style>
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+ <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script> 
 <script type="text/javascript" src="/ShoppingMall/js/jquery-3.3.1.min.js"></script>
 <script type="text/javascript" src="/ShoppingMall/util/myutil.js"></script>
 <script type="text/javascript">
@@ -424,7 +426,7 @@ $(document).ready(function(){
 			            
 			         <div class="reg_agree" align="left">
 			            
-			            <h3 class="head_tit_agree">이용약관동의*  
+			            <h3 id="head_tit_agree">이용약관동의*  
 			            <span class="head_sub_agree">선택항목에 동의하지 않은 경우도 회원가입 및 일반적인 서비스를 이용할 수 있습니다.</span>
 			            </h3>
 			            
