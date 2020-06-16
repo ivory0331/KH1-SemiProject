@@ -108,7 +108,7 @@
 <body>
 	
 	<div class="Mycontainer">
-		<jsp:include page="include/header.jsp"></jsp:include>
+		<jsp:include page="../include/header.jsp"></jsp:include>
 		<div class="section" align="center">
 			<div class="contents">
 				<div id="best">
@@ -258,7 +258,7 @@
 			</div>
 		</div>
 		
-		<jsp:include page="include/footer.jsp"></jsp:include>
+		<jsp:include page="../include/footer.jsp"></jsp:include>
 		
 	</div>
 </body>
