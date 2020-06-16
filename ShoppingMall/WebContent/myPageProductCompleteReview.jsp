@@ -87,7 +87,7 @@
 		width: 100%;
 	}
 	
-	.list {
+	.desc-list {
 		border: solid 1px #eee;
 	}
 	

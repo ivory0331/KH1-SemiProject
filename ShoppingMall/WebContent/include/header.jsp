@@ -17,6 +17,7 @@
 	/*회원가입, 로그인 링크 영역*/
 	.loginLink{
 		float:right;
+		margin-right: 50px;
 	}
 	
 	
@@ -45,6 +46,7 @@
 		display:none;
 		position: absolute;
 		z-index: 5;
+		min-width: 100px;
 		background-color: white;
 		border:solid 1px black;
 	}

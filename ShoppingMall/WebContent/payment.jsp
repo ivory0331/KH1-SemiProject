@@ -14,14 +14,14 @@
 		font-family : noto sans, sans-serif, malgun gothic;
 	}
 	
-	input{
+	.contents input{
 		height:35px;
 		vertical-align: middle;
 		margin-right:10px;
 		border: solid 1px #949296; /* 회색 */
 	}
 	
-	input[type=radio]{
+	.contents input[type=radio]{
 		margin-right : 8px !important;
 	}	
 	
@@ -57,24 +57,23 @@
 	
 	
 	/* 테이블 전체 설정 */
-	table{
-		border-bottom: solid 1px #ddd;
-		width : 100%;		
+	.contents table{
+		border-bottom: solid 1px #ddd;		
 	}
 	
-	th, td{
+	 th,  td{
 		height : 50px;
 		vertical-align: middle;	
 		padding : 20px;
 	}
 	
-	th{
+	 th{
 		width: 200px;
 		text-align: left;
 		padding-left: 10px;
 	}
 	
-	td.last_td{
+	 td.last_td{
 		padding-bottom: 15px;
 	}
 	
@@ -139,12 +138,16 @@
 	
 	
 	/* 주문자 정보 */	
+	#ordererTable{
+		width: 1080px;
+	}
+	
 	input.peopleInfo{
 		border : 0 none;
 	}
 	
-	/* 배송 정보 */
 	
+	/* 배송 정보 */
 	p#p_deliver{
 		font-size : 12px;
     	color : #333333;
@@ -200,19 +203,29 @@
 	
 	/* 결제 정보 */
 	
+	div#paymentInfo{
+		
+	}
+	
+	div.payment_tableArea{
+		display: inline-block;
+		width: 600px;
+		float:left;
+	}
+	
 	table#payment_table{
-		width: 1080px;
+		width: 900px;
 		border-bottom: solid 1px #ddd;
 	}	
 	
-	div#costInfo{
-		position:fixed;
-		left : 900px;
-		top : 400px;
-	}
+	 div#costInfo{
+		position:relative; 
+		display: inline-block;
+		max-width:400px;
+	} 
 	
 	div#cosInfo.on{
-		position:absolute;	
+		/*position:absolute;*/	
 	}
 	
 	
@@ -256,6 +269,9 @@
 	    color: #fff;
 	}       
     
+    .scroll_fixed{
+    	position: fixed;
+    }
 	
 	
 
@@ -377,7 +393,6 @@
 	    }); 
 	     */
 	    
-	    
 	    var $w = $(window),
 	    footerHei = $('footer').outerHeight(),
 	    $banner = $('#costInfo');
@@ -407,8 +422,6 @@
 
 			}
 		});
-				
-		
 		
 	});
 	
@@ -487,11 +500,10 @@
 </head>
 <body>
 	
-	<div class="container">
+	<div class="Mycontainer">
 		<jsp:include page="include/header.jsp"></jsp:include>
 		<div class="section" align="center">
 			<div class="contents">
-
 				<form name="frm_payment" action = 'market.html' method='post'>
 					<!-- 0 주문서 -->						
 					<div id="header_div">
@@ -664,154 +676,152 @@
 					
 					
 					<!-- 4.결제수단 -->
-					<div id="paymentInfo">
+					<div id="paymentInfo" align="left">
 						<div class="payment_title">결제 수단</div>
-						<table class="payment_table" >
-							<tr>
-								<td colspan="2" style="height:10px"></td>
-							</tr>
-							<tr>
-								<th>일반결제</th>
-								<td class="noline" style="position:relative">
-									<label for="card" >
-										<input type="radio" name="pay" id="card" checked="checked">신용카드</label>
-									<label for="mobilePay">
-										<input type="radio" name="pay" id="mobilePay" style="margin-left:15px;">휴대폰</label>
-								</td>
-							</tr>
-							
-							<tr id="card_detail">
-							<th></th>
-								<td style="height:40px;">
-									<div id="cardSelect" style="display:inline-block">
-										<select name="card_list" class="list">
-												<option disabled="disabled" value="">카드를 선택해주세요</option> 
-												<option value="61">현대 (무이자)</option>
-												<option value="41">신한</option>
-												<option value="31">비씨</option>
-												<option value="11">KB국민</option>
-												<option value="51">삼성</option>
-												<option value="71">롯데</option>
-												<option value="91">NH채움</option>
-												<option value="33">우리</option>
-												<option value="62">신협체크</option>
-												<option value="15">카카오뱅크</option></select>
-									</div>
-									<div id="installSelect" style="display:inline-block" style="margin-left:10px">
-										<select name="install_list" class="list">
-												<option disabled="disabled" value="">할부기간을 선택해주세요</option> 
-												<option value="0">일시불</option>		
-												<option value="3">3개월</option>													
-										</select>		
-									</div>
-								</td>
-							</tr>
-							
-							<tr>
-								<th>스마일페이 결제</th>
-								<td>
-									<label for="smailPay">
-										<input type="radio" name="pay" id="smailPay"><img src="//res.kurly.com/pc/service/order/1712/ico_smilepay_v2.png" height="18"/>
-									</label>
-								</td>
-							</tr>
-							
-							<tr>
-								<th>Paynow 결제</th>
-								<td>
-									<label for="Paynow">
-										<input type="radio"  name="pay" id="Paynow"><img src="https://res.kurly.com/pc/service/order/1801/logo_paynow.png" height="18"/>									
-									</label>
-								</td>
-							</tr>
-							
-							<tr>
-								<th>PAYCO 결제</th>
-								<td>
-									<label for="payco">
-										<input type="radio" name="pay" id="payco"><img src="https://static-bill.nhnent.com/payco/checkout/img/v2/btn_checkout2.png" height="18"/>									
-									</label>
-								</td>
-							</tr>	
-														
-							<tr>
-								<th>네이버페이 결제</th>
-								<td>
-									<label for="naverPay">
-										<input type="radio" name="pay" id="naverPay"><img src="//res.kurly.com/pc/service/order/1710/ico_naverpay_v3.png" height="18"/>
-									</label>
-								</td>
-							</tr>
-							
-							<tr>
-								<th>토스 결제</th>
-								<td>
-									<label for="toss">
-										<input type="radio" name="pay" id="toss"><img src="http://res.kurly.com/pc/service/order/1912/toss-logo-signature.svg" height="18"/>
-									</label>
-								</td>
-							</tr>
-							
-							<tr>
-								<th>CHAI 결제</th>
-								<td>
-									<label for="chai">
-										<input type="radio" name="pay" id="chai"><img src="https://res.kurly.com/pc/service/order/2001/logo_chi_x2.png" height="18"/>
-										<img src="https://res.kurly.com/pc/service/order/2005/bubble_chai.png" height="20" alt="첫결제 시 5천원 즉시할인, 5천원 캐시백" class="bubble">											
-									</label>
-								</td>
-							</tr>
-																		
-							<tr>
-								<td colspan="2">
-									<div id="payment_notice">
-										<p>※ 페이코, 네이버페이, 토스 결제는 결제 시 결제하신 수단으로만 환불되는 점 양해부탁드립니다.</p>
-										<p>※ 보안강화로 Internet Explorer 8 미만 사용 시 결제창이 뜨지 않을 수 있습니다. </p>
-									</div>
-								</td>								
-							</tr>
-							<tr>
-								<td colspan="2" style="height:10px"></td>
-							</tr>
-						</table>
-					</div>	
-					
-						<!-- 5.결제금액 -->					
-					<div id="costInfo">
-						<div class="payment_title" style="border:none;"><h4>결제 금액</h4></div>		
-						<div id="costInfo_div">		
-							<table id="costInfo_table" style="border:none;">
+						<div class="payment_tableArea" align="center">
+							<table class="payment_table" >
 								<tr>
-									<th>상품 금액</th>
-									<td>12,000 원</td>
-								</tr>								
-								<tr style="height:2px;">
-									<td colspan="2" style="height:2px;"><hr style="border-top:solid 1px black;"></td>
-								</tr>																
+									<td colspan="2" style="height:10px"></td>
+								</tr>
 								<tr>
-									<th>상품 할인 금액</th>
-									<td>0 원</td>
+									<th>일반결제</th>
+									<td class="noline" style="position:relative">
+										<label for="card" >
+											<input type="radio" name="pay" id="card" checked="checked">신용카드</label>
+										<label for="mobilePay">
+											<input type="radio" name="pay" id="mobilePay" style="margin-left:15px;">휴대폰</label>
+									</td>
+								</tr>
+								
+								<tr id="card_detail">
+								<th></th>
+									<td style="height:40px;">
+										<div id="cardSelect" style="display:inline-block">
+											<select name="card_list" class="list">
+													<option disabled="disabled" value="">카드를 선택해주세요</option> 
+													<option value="61">현대 (무이자)</option>
+													<option value="41">신한</option>
+													<option value="31">비씨</option>
+													<option value="11">KB국민</option>
+													<option value="51">삼성</option>
+													<option value="71">롯데</option>
+													<option value="91">NH채움</option>
+													<option value="33">우리</option>
+													<option value="62">신협체크</option>
+													<option value="15">카카오뱅크</option></select>
+										</div>
+										<div id="installSelect" style="display:inline-block" style="margin-left:10px">
+											<select name="install_list" class="list">
+													<option disabled="disabled" value="">할부기간을 선택해주세요</option> 
+													<option value="0">일시불</option>		
+													<option value="3">3개월</option>													
+											</select>		
+										</div>
+									</td>
 								</tr>
 								
 								<tr>
-									<th>배송비</th>
-									<td>3,000 원</td>
+									<th>스마일페이 결제</th>
+									<td>
+										<label for="smailPay">
+											<input type="radio" name="pay" id="smailPay"><img src="//res.kurly.com/pc/service/order/1712/ico_smilepay_v2.png" height="18"/>
+										</label>
+									</td>
 								</tr>
-								<tr class="tbl_hr">
-									<th><hr class="line"></th>
-									<td><hr class="line"></td>
-								</tr>							
+								
 								<tr>
-									<th>최종 결제 금액</th>
-									<td>15,000 원</td>
-								</tr>						
-							</table>	
-						</div>	
-					</div>
-					
-					
-					
-					
+									<th>Paynow 결제</th>
+									<td>
+										<label for="Paynow">
+											<input type="radio"  name="pay" id="Paynow"><img src="https://res.kurly.com/pc/service/order/1801/logo_paynow.png" height="18"/>									
+										</label>
+									</td>
+								</tr>
+								
+								<tr>
+									<th>PAYCO 결제</th>
+									<td>
+										<label for="payco">
+											<input type="radio" name="pay" id="payco"><img src="https://static-bill.nhnent.com/payco/checkout/img/v2/btn_checkout2.png" height="18"/>									
+										</label>
+									</td>
+								</tr>	
+															
+								<tr>
+									<th>네이버페이 결제</th>
+									<td>
+										<label for="naverPay">
+											<input type="radio" name="pay" id="naverPay"><img src="//res.kurly.com/pc/service/order/1710/ico_naverpay_v3.png" height="18"/>
+										</label>
+									</td>
+								</tr>
+								
+								<tr>
+									<th>토스 결제</th>
+									<td>
+										<label for="toss">
+											<input type="radio" name="pay" id="toss"><img src="http://res.kurly.com/pc/service/order/1912/toss-logo-signature.svg" height="18"/>
+										</label>
+									</td>
+								</tr>
+								
+								<tr>
+									<th>CHAI 결제</th>
+									<td>
+										<label for="chai">
+											<input type="radio" name="pay" id="chai"><img src="https://res.kurly.com/pc/service/order/2001/logo_chi_x2.png" height="18"/>
+											<img src="https://res.kurly.com/pc/service/order/2005/bubble_chai.png" height="20" alt="첫결제 시 5천원 즉시할인, 5천원 캐시백" class="bubble">											
+										</label>
+									</td>
+								</tr>
+																			
+								<tr>
+									<td colspan="2">
+										<div id="payment_notice">
+											<p>※ 페이코, 네이버페이, 토스 결제는 결제 시 결제하신 수단으로만 환불되는 점 양해부탁드립니다.</p>
+											<p>※ 보안강화로 Internet Explorer 8 미만 사용 시 결제창이 뜨지 않을 수 있습니다. </p>
+										</div>
+									</td>								
+								</tr>
+								<tr>
+									<td colspan="2" style="height:10px"></td>
+								</tr>
+							</table>
+						</div>
+						<!-- 5.결제금액 -->					
+						<div id="costInfo">
+							<div class="payment_title" style="border:none; padding: 0;"><h4>결제 금액</h4></div>		
+							<div id="costInfo_div">		
+								<table id="costInfo_table" style="border:none;">
+									<tr>
+										<th>상품 금액</th>
+										<td>12,000 원</td>
+									</tr>								
+									<tr style="height:2px;">
+										<td colspan="2" style="height:2px;"><hr style="border-top:solid 1px black;"></td>
+									</tr>																
+									<tr>
+										<th>상품 할인 금액</th>
+										<td>0 원</td>
+									</tr>
+									
+									<tr>
+										<th>배송비</th>
+										<td>3,000 원</td>
+									</tr>
+									<tr class="tbl_hr">
+										<th><hr class="line"></th>
+										<td><hr class="line"></td>
+									</tr>							
+									<tr>
+										<th>최종 결제 금액</th>
+										<td>15,000 원</td>
+									</tr>						
+								</table>	
+							</div>	
+						</div>
+					</div>	
+					<div style="clear:both;"></div>
 					<!-- 6.개인정보수집제공 -->					
 					<div id="agreeInfo">
 						<div class="payment_title">개인정보 수집/제공</div>		

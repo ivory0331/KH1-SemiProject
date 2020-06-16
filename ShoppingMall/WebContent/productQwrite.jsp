@@ -44,12 +44,13 @@
 	.userBtn > span{
 		display: inline-block;
 		text-align: center;
-		padding : 10px 50px;
+		padding : 10px 0;
 		margin-top:20px;
-		width:60px;
+		width:80px;
 		border: solid 1px purple;
-		font-size: 16pt;
+		font-size: 14pt;
 		cursor: pointer;
+		margin-right:10px;
 	}
 	
 	#txt_area{
@@ -101,8 +102,8 @@
 		<div class="section" align="center">
 			<div class="contents">
 				<div class="boardInfo">
-					<h3 style="display:inline-block">공지사항</h3>
-					<span style="margin-left:10px; font-size:8pt; font-weight: bold;">새로운 소식들과 유용한 정보들을 한곳에 확인하세요.</span>
+					<h3 style="display:inline-block">상품문의 작성</h3>
+					<span style="margin-left:10px; font-size:8pt; font-weight: bold;"></span>
 				</div>
 				<form name="questionWriteFrm">
 					<table class="writeTable">

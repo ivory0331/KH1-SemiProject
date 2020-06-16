@@ -13,22 +13,22 @@
 		display: inline-block;
 		margin: 30px;
 	}
-	li {
+	.contents li {
 		border: solid 1px gray;
 		display: inline-block;
 		cursor: pointer;
 	}
-	li:hover {
+	.contents li:hover {
 		border: solid 3px purple;
 	}
-	li>img {
+	.contents li>img {
 		width: 300px;
 		height: 400px;
 	}
-	h3{
+	.contents h3{
 		margin-left: 30px;
 	}
-	h4 {
+	.contents h4 {
 		border-bottom: solid 2px purple;
 		width: 100px;
 		margin-left: 30px;

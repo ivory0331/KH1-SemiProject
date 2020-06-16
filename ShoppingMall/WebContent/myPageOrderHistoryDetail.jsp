@@ -56,7 +56,7 @@
 		width: 100%;
 	}
 	
-	.list {
+	.desc-list {
 		border: solid 1px #eee;
 	}
 	
@@ -196,7 +196,7 @@
 							<div class="myOrder_Info">
 							
 								<table class="myOrder_Desc">
-									<tr class="list">
+									<tr class="desc-list">
 										<td class="image">
 											<img alt="해당 주문 대표 상품 이미지" src="include/images/logo.png">
 										</td>
@@ -217,7 +217,7 @@
 										</td>																	
 									</tr>	
 									
-									<tr class="list">
+									<tr class="desc-list">
 										<td class="image">
 											<img alt="해당 주문 대표 상품 이미지" src="include/images/logo.png">
 										</td>

@@ -20,6 +20,7 @@
 		display:inline-block;
 		width: 900px;
 		margin-left:10px;
+		
 	}
 	
 	.detailTablePart{
@@ -62,15 +63,19 @@
 	.tableTitle{
 		font-size: 18pt;
 	}
-	
-	.userBtn{
-		margin-top:5px;
+	#userBtn{
+		margin-top:10px;
+		
 	}
 	
 	.type{
+		text-align:center;
+		display: inline-block;
+		position: relative;
 		border:solid 1px purple;
 		margin-left:10px;
-		padding:10px 20px;
+		padding:10px 0;
+		width: 80px;
 		color:purple;
 	}
 	

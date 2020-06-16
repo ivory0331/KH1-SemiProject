@@ -4,7 +4,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>managerSales.jsp</title>
+<title>managerGoodsDetail.jsp</title>
 <link rel="stylesheet" href="css/style.css" />
 <!-- 차트 링크 --> 
 <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script> 
@@ -20,10 +20,8 @@
 		display:inline-block;
 		width: 900px;
 		margin-left:10px;
-<<<<<<< HEAD
+
 		margin-top:10px;
-=======
->>>>>>> hyemin
 	}
 	
 	/*상품 이미지가 보이는 div*/
@@ -40,11 +38,8 @@
 	}
 	
 	/*상품 이미지의 옆에 나오는 상품 정보가 들어가 있는 div*/
-<<<<<<< HEAD
+
 	.goodsInfo-table{
-=======
-	.goodsInfo{
->>>>>>> hyemin
 		display: inline-block;
 		width:600px;
 		margin-right:30px;
@@ -78,7 +73,6 @@
 		font-weight: bold;
 	}
 	
-<<<<<<< HEAD
 	.goodsInfo-div{
 		background-color: white;
 		text-align: left;
@@ -120,11 +114,6 @@
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-=======
-	
-</style>
-<!-- 부트스트랩 -->
->>>>>>> hyemin
 <script type="text/javascript" src="/ShoppingMall/js/jquery-3.3.1.min.js"></script>
 <script type="text/javascript" src="/ShoppingMall/util/myutil.js"></script>
 <script type="text/javascript">
@@ -157,7 +146,6 @@
 					<div class="goodsImg">
 						<img alt="상품1" src="include/images/logo.png" />
 					</div>
-<<<<<<< HEAD
 					<div class="goodsInfo-table">
 						<dl>
 							<dt>상품명</dt>
@@ -217,50 +205,9 @@
 							<span class="managerBtn">삭제</span>
 					</div>
 				</div>
-				<div style="clear:both;"></div>
 				
-=======
-					<div class="goodsInfo">
-						<p><strong>상품명</strong></p>
-						<dl>
-							<dt>판매단위</dt>
-							<dd>1팩</dd>
-						</dl>
-						<dl class="underLine">
-							<dt>중량/용량</dt>
-							<dd>100g</dd>
-						</dl>
-						<dl class="underLine">
-							<dt>배송구분</dt>
-							<dd>샛별배송/택배배송</dd>
-						</dl>
-						<dl class="underLine">
-							<dt>원산지</dt>
-							<dd>국산</dd>
-						</dl>
-						<dl class="underLine">
-							<dt>포장타입</dt>
-							<dd>냉장/종이포장</dd>
-						</dl>
-						<dl class="underLine">
-							<dt>유통기한</dt>
-							<dd>농산물임으로 별도 유통기한은 없으나 가급적 빨리 드시기 바랍니다.</dd>
-						</dl>
-						<dl class="underLine">
-							<dt>구매수량</dt>
-							<dd><spna class="count"><button onclick="cntMynus()">-</button><input type="text" value="1" size="3" readonly id="count"/><button onclick="cntPlus()">+</button></spna></dd>
-						</dl>
-						<div class="price" align="right" >
-							총 상품금액 : <span class="money"></span>원
-							<input type="hidden" class="numPrice" />
-							<br />
-							<span class="basket">장바구니 담기</span>
-						</div>
-					</div>
-				</div>
-				<div style="clear:both;"></div>
->>>>>>> hyemin
 			</div>
+			<div style="clear:both;"></div>
 		</div>
 		<jsp:include page="include/footer.jsp"></jsp:include>
 	</div>

@@ -89,13 +89,13 @@
 					</div>
 					<table class="table order-table" style="border-top:solid 2px purple;">
 						<tr>
-							<th>선택</th>
-							<th>No.</th>
-							<th>주문번호</th>
-							<th>주문자</th>
-							<th class="board-title">주소</th>
-							<th>금액</th>
-							<th>주문상태</th>
+							<td>선택</td>
+							<td>No.</td>
+							<td>주문번호</td>
+							<td>주문자</td>
+							<td>주소</td>
+							<td>금액</td>
+							<td>주문상태</td>
 						</tr>
 						<tr>
 							<td><input type="checkbox" /></td>
