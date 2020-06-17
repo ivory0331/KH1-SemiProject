@@ -45,6 +45,13 @@ create table product_category_table
 ,constraint pk_category_num primary key (category_num)
 );
 
+insert into product_category_table(category_num, category_content) values(1,'채소');
+insert into product_category_table(category_num, category_content) values(2,'과일 견과');
+insert into product_category_table(category_num, category_content) values(3,'수산 해산');
+insert into product_category_table(category_num, category_content) values(4,'정육 계란');
+insert into product_category_table(category_num, category_content) values(5,'음료 우유');
+
+
 -- 상품 소분류 카테고리 테이블 생성 --
 create table product_subcategory_table
 (subcategory_num    number  -- 소분류 카테고리 번호 필수+고유
@@ -52,7 +59,24 @@ create table product_subcategory_table
 ,constraint pk_product_subcategory_table primary key (subcategory_num)
 );
 
+insert into product_subcategory_table(subcategory_num, subcategory_content) values(11,'기본채소');
+insert into product_subcategory_table(subcategory_num, subcategory_content) values(12,'쌈 샐러드');
+insert into product_subcategory_table(subcategory_num, subcategory_content) values(13,'특수채소');
+insert into product_subcategory_table(subcategory_num, subcategory_content) values(21,'국산과일');
+insert into product_subcategory_table(subcategory_num, subcategory_content) values(22,'수입과일');
+insert into product_subcategory_table(subcategory_num, subcategory_content) values(23,'냉동 건과일');
+insert into product_subcategory_table(subcategory_num, subcategory_content) values(31,'생선류');
+insert into product_subcategory_table(subcategory_num, subcategory_content) values(32,'오징어 낙지 문어');
+insert into product_subcategory_table(subcategory_num, subcategory_content) values(33,'새우 게 랍스타');
+insert into product_subcategory_table(subcategory_num, subcategory_content) values(41,'소고기');
+insert into product_subcategory_table(subcategory_num, subcategory_content) values(42,'돼지고기');
+insert into product_subcategory_table(subcategory_num, subcategory_content) values(43,'닭 오리고기');
+insert into product_subcategory_table(subcategory_num, subcategory_content) values(51,'생수 음료 주스');
+insert into product_subcategory_table(subcategory_num, subcategory_content) values(52,'커피 차');
+insert into product_subcategory_table(subcategory_num, subcategory_content) values(53,'우유 두유 요거트');
 
+select * from product_category_table;
+select * from product_subcategory_table;
 
 
 -- 상품 테이블 생성 --
@@ -75,6 +99,7 @@ create table product_table
 ,constraint fk_product_category_num FOREIGN key(fk_category_num) REFERENCES product_category_table(category_num)
 ,constraint fk_product_subcategory_num FOREIGN key(fk_subcategory_num) REFERENCES product_subcategory_table(subcategory_num)
 );
+
 
 -- 상품 테이블에 사용할 시퀀스 생성 --
 create sequence seq_product_table

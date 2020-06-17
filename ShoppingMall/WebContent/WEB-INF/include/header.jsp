@@ -73,9 +73,14 @@
 	
 	/*로고 이미지가 있는 영역*/
 	.logo{
-		width: 300px;
-		border:solid 1px gray;
+		width: 150px;
+		
 		clear:both;
+	}
+	
+	.logo img{
+		width: 110px;
+		height: 100px;
 	}
 	
 	/*상단에 고정해야 하는 navigation이 있을 영역*/
@@ -171,7 +176,8 @@
 		list-style: none;
 		padding:0px;
 		text-align: left;
-		background-color: #f1f1f1; 
+		background-color: #f1f1f1;
+		min-height:150px; 
 	}
 	
 	/*하위 navi에 들어가는 li*/
@@ -191,8 +197,14 @@
 	}
 	
 	/*첫번째 하위 navi 안에 있는 li태그에 hover 했을 때 그 li태그의 배경색 변경*/
-	.navi-categori .list:hover{background-color: #f1f1f1;}
+	/*.navi-categori .list:hover{background-color: #f1f1f1;}*/
 	
+	
+	.navi-basket > img{
+		width:40px;
+		heigth:40px;
+		cursor: pointer;
+	}
 </style>
 
 <script type="text/javascript">
@@ -200,13 +212,15 @@
 		var $list = $(".list"); //하위 navi에 존재하는 li태그들 (배열)
 		
 		// 하위 navi에 존재하는 li태그에 hover했을 때 function
-		$(".list").hover(function(){ //마우스를 올렸을 때
+		$(".navi-categori .list").hover(function(){ //마우스를 올렸을 때
+			var other = $(this).siblings();
 			$(".navi-dropdown-content").css("min-width","340px"); //하위 navi가 존재하는 영역의 넓이 300px로 조정
 			$(".navi-categori2").css("display","inline-block"); //navi-categori 옆에 붙을 navi-categori2(ul)태그의 display변경
-			
+			$(this).css("background-color","#f1f1f1");
+			other.css("background-color","white");
 		},function(){ //마우스를 내렸을 때
-			$(".navi-dropdown-content").css("min-width","170px"); //하위 navi가 존재하는 영역의 넓이 150px로 조정
-			$(".navi-categori2").css("display","none"); //navi-categori2(ul)태그의 display none(안보이도록)
+			/* $(".navi-dropdown-content").css("min-width","170px"); //하위 navi가 존재하는 영역의 넓이 150px로 조정
+			$(".navi-categori2").css("display","none"); //navi-categori2(ul)태그의 display none(안보이도록) */
 		});
 		
 		
@@ -215,6 +229,7 @@
 			$(".navi-dropdown-content").css("display","block"); //하위 navi가 존재하는 영역 display 변경
 		},function(){
 			$(".navi-dropdown-content").css({"display":"none","min-width":"150px"}); //원래 있던대로 display와 width 수정
+			$(".navi-categori2").css("display","none");
 		});
 		
 		// 고객센터 span태그에 hover했을 때 function
@@ -253,7 +268,7 @@
 		
 		
 		// 전체 카테고리에서 서브 카테고리 변화주기 //
-		 var $category = $(".navi-categori").find(".listType");
+		var $category = $(".navi-categori").find(".listType");
 		$category.each(function(index, item){
 			var sub = ["기본채소,쌈 샐러드,특수채소"
 				      ,"국산과일,수입과일,냉동 건과일"
@@ -262,12 +277,9 @@
 				      ,"생수 음료 주스,커피 차,우유 두유 요거트"];
 				
 			$(item).mouseover(function(){
-				$(".navi-categori2").empty();
 				var subArr = sub[index].split(",");
 				for(var i=0; i<subArr.length; i++){
-						// $(".navi-categori2").find(".listType:eq("+i+")").html(subArr[i]);
-						var html="<li class='list'><span class='listType'>"+subArr[i]+"</span></li>";
-						$(".navi-categori2").append(html);
+						 $(".navi-categori2").find(".listType:eq("+i+")").html(subArr[i]);
 					} 
 			});
 				
@@ -275,6 +287,14 @@
 		}); 
 		
 	});
+	
+	function goBasket(){
+		location.href="<%= ctxPath%>/shoppingBasket.do";
+	}
+	
+	function goList(){
+		location.href="<%= ctxPath%>/productList.do";
+	}
 </script>
 </head>
 <body>
@@ -304,26 +324,24 @@
 				<span class="bar">I</span><br/>
 				<div class="navi-dropdown-content" align="left">
 					<ul class="navi-categori">
-						<li class="list"><span class="listType">채소</span></li>
-						<li class="list"><span class="listType">과일 견과 쌀</span></li>
-						<li class="list"><span class="listType">수산 해산 건어물</span></li>
-						<li class="list"><span class="listType">정육 계란</span></li>
-						<li class="list"><span class="listType">음료 우유 간식</span></li>
+						<li class="list" onclick="goList()"><span class="listType">채소</span></li>
+						<li class="list" onclick="goList()"><span class="listType">과일 견과 쌀</span></li>
+						<li class="list" onclick="goList()"><span class="listType">수산 해산 건어물</span></li>
+						<li class="list" onclick="goList()"><span class="listType">정육 계란</span></li>
+						<li class="list" onclick="goList()"><span class="listType">음료 우유 간식</span></li>
 					</ul>
 					<ul class="navi-categori2">
-						<li class="list"><span class="listType">채소6</span></li>
-						<li class="list"><span class="listType">채소7</span></li>
-						<li class="list"><span class="listType">채소8</span></li>
-						<li class="list"><span class="listType">채소9</span></li>
-						<li class="list"><span class="listType">채소10</span></li>
+						<li class="list" onclick="goList()"><span class="listType"></span></li>
+						<li class="list" onclick="goList()"><span class="listType"></span></li>
+						<li class="list" onclick="goList()"><span class="listType"></span></li>
 					</ul>
 				</div>
 			</li>
-			<li><a><span class="listType">알뜰쇼핑</span></a><span class="bar">I</span></li>
-			<li><a><span class="listType">신상품</span></a><span class="bar">I</span></li>
-			<li><a><span class="listType">추천쇼핑</span></a></li>
+			<li><a><span class="listType" onclick="goList()">알뜰쇼핑</span></a><span class="bar">I</span></li>
+			<li><a><span class="listType" onclick="goList()">신상품</span></a><span class="bar">I</span></li>
+			<li><a><span class="listType" onclick="goList()">추천쇼핑</span></a></li>
 			<li><span class="search"><input type="text" placeholder="test"/></span></li>
-			<li><span class="">장바구니 아이콘</span></li>
+			<li><span class="navi-basket"><img src="<%=ctxPath %>/images/basket.jpg" onclick="goBasket()"/></span></li>
 		</ul>		
 	</div>
 </body>

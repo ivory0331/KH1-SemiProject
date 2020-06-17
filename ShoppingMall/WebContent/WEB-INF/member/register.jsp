@@ -9,10 +9,11 @@
 <title>회원가입</title>
 <style type="text/css">
 
-.page_article .fieldhead{
+ .page_article .fieldhead{
    margin: 0 auto;
    width: 640px;
 }
+
 .page_article {
    background-color: #f2f2f2;
    margin: 0 auto;
@@ -25,12 +26,14 @@
    width: 640px;
    height: 100%;
    margin: 0 auto;
-   /*border: solid 1px hotpink;*/
+  /* border: solid 1px hotpink; */
 }
+
 .tit {
    text-align: center;
    color: #333;
 }
+
 .fieldhead_tit{
     padding: 8px 0;
     margin:0;
@@ -55,7 +58,7 @@ fieldset {
    background-color: #fff;
    width: 613px;
    height: 900px;
-   /*border : solid 1px navy;*/
+  /* border : solid 1px navy; */
 }
 
 .contents input {
@@ -69,6 +72,7 @@ input::placeholder {
   color: #ccc;
   padding : 0 5px;
 }
+
 input.tel_confirm{
    margin-top: 10px;
 }
@@ -82,7 +86,7 @@ span.btn_tel{
 span.btnCheck_tel{
    margin-top: 10px;
     background-color: #fff;
-    border: 1px solid #ccc;
+   /* border: 1px solid #ccc; */
     color: #ccc;
 }
 
@@ -92,6 +96,7 @@ input.gender{
    border: solid 1px #ccc;
    margin : 10px 5px;
 }
+
 label.text_position {
     padding: 0px 15px 0px 2px;
     margin:0;
@@ -112,6 +117,7 @@ button.btn_address{
    border: solid 1px #ccc;
    border-radius: 5px;  
 }
+
 .birth_day input[type=text] {
     float: left;
     width: 80px;
@@ -163,20 +169,20 @@ button.btn_address{
    width: 130px;
    font-size: 14px;
    font-weight: 500;
-   /*border: solid 1px pink;*/
+   /* border: solid 1px pink; */
    padding: 20px 0 20px 15px;   
     color: #333;
     line-height: 20px;
     vertical-align: top;
 }
 
+
 .memberCols2 {
-    padding: 10px 0 ;
-    border-top: 0;
-    font-size: 0;
-    vertical-align: top;
-    text-align: left;
-    width: 461px;
+   padding: 10px 0 ;
+   border-top: 0;
+   vertical-align: top;
+   text-align: left;
+   width: 461px;
    height: 20px;
    /*border: solid 1px skyblue;*/
    border-radius: 5px;  
@@ -243,7 +249,7 @@ div#submit {
    display: flex;
    aline-items : center;
    justify-content : center;
-   /*border: solid 1px black;*/
+   /* border: solid 1px black; */
 }
 button.btn_submit{
    width: 340px;
@@ -275,7 +281,7 @@ span.sub_agree{
 }
 div.check_event{
    padding : 7px 0 4px 45px; 
-}
+} 
 
 
 </style>
@@ -315,7 +321,7 @@ $(document).ready(function(){
 			            <tr>
 			               <td class="memberCols1">아이디*</td>
 			               <td class="memberCols2">
-			                  <input type="text" name="userid" id="userid" placeholder ="6자 이상의 영문 혹은 영문과 숫자를 조합" value="" maxlength="16" required autofocus autocomplete="off">
+			                  <input type="text" name="userid" id="userid" placeholder ="6자 이상의 영문 혹은 영문과 숫자를 조합" value="" maxlength="16" required  >
 			                  <a href="javascript:chkId()"><span class="btnCheck">중복확인</span></a>
 			                  <p class="txt_guide" style="display: block;">
 			                  <span class="txt txt_case1">6자 이상의 영문 혹은 영문과 숫자를 조합</span><br/>
