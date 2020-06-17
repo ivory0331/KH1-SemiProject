@@ -121,9 +121,9 @@ nocycle
 nocache;
 
 
--- 주문상테 테이블 생성 --
+-- 배송상테 테이블 생성 --
 create table order_state_table
-(category_num   number  not null -- 주문상태 카테고리 번호
+(category_num   number  not null -- 배송상태 카테고리 번호
 ,order_state    varchar2(50) -- 번호에 해당하는 실제 내용
 ,constraint pk_order_state  primary key(category_num)
 );
@@ -156,3 +156,123 @@ nominvalue
 nocycle
 nocache;
 
+
+-- 주문상품 테이블 생성 --
+create table order_product_table
+(product_count  number not null -- 주문한 상품의 갯수 필수
+,fk_order_num   number not null -- 주문정보 테이블의 주문번호를 참조하는 컬럼
+,fk_product_num number not null -- 상품테이블의 상품번호를 참조하는 컬럼
+,constraint fk_order FOREIGN key (fk_order_num) REFERENCES order_table(order_num)
+,constraint fk_product FOREIGN key (fk_product_num ) REFERENCES product_table(product_num)
+);
+
+
+-- 고객 후기 테이블 --
+create table review_table
+(review_num number not null -- 후기 번호 필수+고유 시퀀스 사용
+,subject    varchar2(50) not null -- 후기 제목  필수
+,content    varchar2(4000) not null -- 후기 내용 필수
+,write_date date default sysdate -- 작성 날짜
+,image      varchar2(4000) -- 내용에 들어가는 이미지
+,fk_product_num number not null -- 상품테이블에서 상품번호를 참조하는 컬럼 -- 두 개의 컬럼을 복합해서 유니크 키로 제약 
+,fk_order_num   number not null -- 주문테이블에서 주문번호를 참조하는 컬럼 --
+,fk_member_num  number not null -- 회원테이블에서 회원번호를 참조하는 컬림
+,constraint pk_review_table primary key (review_num)
+,constraint fk_review_order FOREIGN key (fk_order_num) REFERENCES order_table(order_num)
+,constraint fk_review_product FOREIGN key (fk_product_num) REFERENCES product_table(product_num) on delete CASCADE
+,constraint fk_review_member FOREIGN key (fk_member_num) REFERENCES member_table(member_num) on delete CASCADE
+,constraint uq_review_orderProduct UNIQUE (fk_product_num, fk_order_num)
+);
+
+
+
+-- 리뷰테이블에 사용할 시퀀스 생성 --
+create sequence seq_review_table
+start with 1
+increment by 1
+nomaxvalue
+nominvalue
+nocycle
+nocache;
+
+
+-- 1:1문의 카테고리 테이블 생성 --
+create table one_category_table
+(category_num   number not null
+,category_content varchar2(50)
+,constraint pk_one_category primary key (category_num)
+);
+
+-- 1:1문의 테이블 생성 --
+create table one_inquiry_table
+(one_inquiry_num number not null    -- 1:1문의 게시글 번호
+,subject    varchar2(50) not null   -- 문의 제목 필수
+,content    varchar2(4000) not null -- 문의 내용 필수
+,write_date date default sysdate    -- 작성날짜
+,answer     varchar2(4000)          -- 관리자가 작성하는 답변
+,fk_member_num  number not null     -- 회원테이블에서 회원번호를 참조하는 컬럼
+,fk_order_num   number not null     -- 주문테이블에서 주문번호를 참조하는 컬럼
+,fk_category_num number not null    -- 1:1문의 카테고리 테이블에서 카테고리번호를 참조하는 컬럼
+,constraint pk_one_inquiry primary key (one_inquiry_num)
+,constraint fk_one_member FOREIGN key (fk_member_num) REFERENCES member_table(member_num) on delete CASCADE
+,constraint fk_one_order FOREIGN key (fk_order_num) REFERENCES order_table(order_num)
+,constraint fk_one_category FOREIGN key (fk_category_num) REFERENCES one_category_table(category_num)
+);
+
+-- 1:1문의 테이블에서 사용할 시퀀스 생성 --
+create sequence seq_one_inquiry_table
+start with 1
+increment by 1
+nomaxvalue
+nominvalue
+nocycle
+nocache;
+
+-- 공지사항 테이블 생성 --
+create table notice_table
+(notice_num number not null
+,subject    varchar2(50) not null
+,content    varchar2(4000) not null
+,write_date date default sysdate
+,hits   number default 0
+,constraint pk_notice_table primary key (notice_num)
+);
+
+-- 공지사항 테이블에 사용할 시퀀스 생성 --
+create sequence seq_notice_table
+start with 1
+increment by 1
+nomaxvalue
+nominvalue
+nocycle
+nocache;
+
+
+-- 자주하는 질문 카테고리 테이블 생성 --
+create table inquiry_category_table
+(category_num   number not null
+,category_content   varchar2(50)
+,constraint pk_inquiry_category primary key (category_num)
+);
+
+-- 자주하는 질문 테이블 생성 --
+create table FAQ_table
+(FAQ_num number not null
+,subject varchar2(50) not null
+,content varchar2(4000) not null
+,write_date date default sysdate
+,hits   number default 0
+,fk_category_num    number not null
+,constraint pk_FAQ_table primary key(FAQ_num)
+,constraint fk_FAQ_category FOREIGN key(fk_category_num) REFERENCES inquiry_category_table(category_num)
+);
+
+
+-- 자주하는 질문 테이블에서 사용할 시퀀스 생성 --
+create sequence seq_FAQ_table
+start with 1
+increment by 1
+nomaxvalue
+nominvalue
+nocycle
+nocache;
