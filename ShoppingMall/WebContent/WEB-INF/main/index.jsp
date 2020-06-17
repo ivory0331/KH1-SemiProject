@@ -27,6 +27,15 @@
 		margin: 0px;
 	}
 	
+	.item_type > h3{
+		font-weight: bold;
+	}
+	
+	.item_type > h6{
+		font-weight: bold;
+		font-size:10pt;
+		color: gray;
+	}
 	
 	.item_list > li{
 		display: inline-block;
@@ -77,6 +86,19 @@
 		cursor: pointer;
 	}
 	
+	#list_category{
+		list-style: none;
+		padding: 0;
+	}
+	
+	#list_category > li{
+		display: inline-block;
+		padding: 10px 20px;
+		font-size: 12pt;
+		background-color: #f4f4f4;
+		border-radius: 20px;
+		margin-right: 10px;
+	}
 	
 </style>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
@@ -123,23 +145,23 @@
 			<div class="contents">
 				<div id="best">
 					<div class="item_type">
-						<h3>추천 상품</h3>
+						<h3>이 상품 어때요?</h3>
 						<!-- sale영역에 있는 li(class=best_item)태그를 움직여야 하므로 onclick의 파라미터에 'best'을 입력한다. -->
-						<span id="best_slideL" class="slideL" onclick="func_slideL('best')">&lt;&lt;&lt;</span>
-						<span id="best_slideR" class="slideR" onclick="func_slideR('best')" style="display:none;">&gt;&gt;&gt;</span>
+						<span id="random_slideL" class="slideL" onclick="func_slideL('random')">&lt;&lt;&lt;</span>
+						<span id="random_slideR" class="slideR" onclick="func_slideR('random')" style="display:none;">&gt;&gt;&gt;</span>
 					</div>
 					<div style="clear:both"></div>
 					<div class="slide_wrapper">
 					<%-- DB에서 갖고온 결과물 뿌리는 부분 --%>
 					<ul class="item_list">
-						<li class="best_item" id="best_item0" >
+						<li class="random_item" id="random_item0" >
 							<img alt="상품1" src="<%=ctxPath %>/images/logo.png">
 							<a href="#">	
 								상품명0
 							</a><br/>
 							<span>가격</span>
 						</li>
-						<li class="best_item" id="best_item1">
+						<li class="random_item" id="random_item1">
 							<img alt="상품1" src="<%=ctxPath %>/images/logo.png">
 							<a href="#">	
 								상품명1
@@ -147,42 +169,42 @@
 							<br/>
 							<span>가격</span>
 						</li>
-						<li class="best_item" id="best_item2">
+						<li class="random_item" id="random_item2">
 							<img alt="상품1" src="<%=ctxPath %>/images/logo.png">
 							<a href="#">	
 								상품명2
 							</a><br/>
 							<span>가격</span>
 						</li>
-						<li class="best_item" id="best_item3">
+						<li class="random_item" id="random_item3">
 							<img alt="상품1" src="<%=ctxPath %>/images/logo.png">
 							<a href="#">	
 								상품명3
 							</a><br/>
 							<span>가격</span>
 						</li>
-						<li class="best_item" id="best_item4">
+						<li class="random_item" id="random_item4">
 							<img alt="상품1" src="<%=ctxPath %>/images/logo.png">
 							<a href="#">	
 								상품명4
 							</a><br/>
 							<span>가격</span>
 						</li>
-						<li class="best_item" id="best_item5">
+						<li class="random_item" id="random_item5">
 							<img alt="상품1" src="<%=ctxPath %>/images/logo.png">
 							<a href="#">	
 								상품명5
 							</a><br/>
 							<span>가격</span>
 						</li>
-						<li class="best_item" id="best_item6">
+						<li class="random_item" id="random_item6">
 							<img alt="상품1" src="<%=ctxPath %>/images/logo.png">
 							<a href="#">	
 								상품명6
 							</a><br/>
 							<span>가격</span>
 						</li>
-						<li class="best_item" id="best_item7">
+						<li class="random_item" id="random_item7">
 							<img alt="상품1" src="<%=ctxPath %>/images/logo.png">
 							<a href="#">	
 								상품명7
@@ -266,6 +288,162 @@
 					
 					</div>
 				</div>
+				
+				<div id="MDbest">
+					<div class="item_type">
+						<h3>MD의 추천</h3>
+						<div id="category_menu">
+							<ul id="list_category">
+								<li>채소</li>
+								<li>과일</li>
+								<li>수산</li>
+								<li>정육</li>
+								<li>음료</li>
+							</ul>
+						</div>
+						<!-- sale영역에 있는 li(class=sale_item)태그를 움직여야 하므로 onclick의 파라미터에 'sale'을 입력한다. -->
+						<span id="MDbest_slideL" class="slideL" onclick="func_slideL('MDbest')">&lt;&lt;&lt;</span>
+						<span id="MDbest_slideR" class="slideR"onclick="func_slideR('MDbest')" style="display:none;">&gt;&gt;&gt;</span>
+					</div>
+					<div class="slide_wrapper">
+					<ul class="item_list">
+						<li class="MDbest_item" id="MDbest_item0">
+							<img alt="상품1" src="<%=ctxPath %>/images/logo.png">
+							<a href="#">	
+								상품명0
+							</a><br/>
+							<span>가격</span>
+						</li>
+						<li class="MDbest_item" id="MDbest_item1">
+							<img alt="상품1" src="<%=ctxPath %>/images/logo.png">
+							<a href="#">	
+								상품명1
+							</a>
+							<br/>
+							<span>가격</span>
+						</li>
+						<li class="MDbest_item" id="MDbest_item2">
+							<img alt="상품1" src="<%=ctxPath %>/images/logo.png">
+							<a href="#">	
+								상품명2
+							</a><br/>
+							<span>가격</span>
+						</li>
+						<li class="MDbest_item" id="MDbest_item3">
+							<img alt="상품1" src="<%=ctxPath %>/images/logo.png">
+							<a href="#">	
+								상품명3
+							</a><br/>
+							<span>가격</span>
+						</li>
+						<li class="MDbest_item" id="MDbest_item4">
+							<img alt="상품1" src="<%=ctxPath %>/images/logo.png">
+							<a href="#">	
+								상품명4
+							</a><br/>
+							<span>가격</span>
+						</li>
+						<li class="MDbest_item" id="MDbest_item5">
+							<img alt="상품1" src="<%=ctxPath %>/images/logo.png">
+							<a href="#">	
+								상품명5
+							</a><br/>
+							<span>가격</span>
+						</li>
+						<li class="MDbest_item" id="MDbest_item6">
+							<img alt="상품1" src="<%=ctxPath %>/images/logo.png">
+							<a href="#">	
+								상품명6
+							</a><br/>
+							<span>가격</span>
+						</li>
+						<li class="MDbest_item" id="MDbest_item7">
+							<img alt="상품1" src="<%=ctxPath %>/images/logo.png">
+							<a href="#">	
+								상품명7
+							</a><br/>
+							<span>가격</span>
+						</li>
+					</ul>
+					<span style="clear:both;"></span>
+					
+					</div>
+				</div>
+				
+				<div id="new">
+					<div class="item_type">
+						<h3>오늘의 신상품</h3>
+						<h6>매일 정오 신상품을 확인해보세요</h6>
+						<!-- sale영역에 있는 li(class=sale_item)태그를 움직여야 하므로 onclick의 파라미터에 'sale'을 입력한다. -->
+						<span id="new_slideL" class="slideL" onclick="func_slideL('new')">&lt;&lt;&lt;</span>
+						<span id="new_slideR" class="slideR"onclick="func_slideR('new')" style="display:none;">&gt;&gt;&gt;</span>
+					</div>
+					<div class="slide_wrapper">
+					<ul class="item_list">
+						<li class="new_item" id="new_item0">
+							<img alt="상품1" src="<%=ctxPath %>/images/logo.png">
+							<a href="#">	
+								상품명0
+							</a><br/>
+							<span>가격</span>
+						</li>
+						<li class="new_item" id="new_item1">
+							<img alt="상품1" src="<%=ctxPath %>/images/logo.png">
+							<a href="#">	
+								상품명1
+							</a>
+							<br/>
+							<span>가격</span>
+						</li>
+						<li class="new_item" id="new_item2">
+							<img alt="상품1" src="<%=ctxPath %>/images/logo.png">
+							<a href="#">	
+								상품명2
+							</a><br/>
+							<span>가격</span>
+						</li>
+						<li class="new_item" id="new_item3">
+							<img alt="상품1" src="<%=ctxPath %>/images/logo.png">
+							<a href="#">	
+								상품명3
+							</a><br/>
+							<span>가격</span>
+						</li>
+						<li class="new_item" id="new_item4">
+							<img alt="상품1" src="<%=ctxPath %>/images/logo.png">
+							<a href="#">	
+								상품명4
+							</a><br/>
+							<span>가격</span>
+						</li>
+						<li class="new_item" id="new_item5">
+							<img alt="상품1" src="<%=ctxPath %>/images/logo.png">
+							<a href="#">	
+								상품명5
+							</a><br/>
+							<span>가격</span>
+						</li>
+						<li class="new_item" id="new_item6">
+							<img alt="상품1" src="<%=ctxPath %>/images/logo.png">
+							<a href="#">	
+								상품명6
+							</a><br/>
+							<span>가격</span>
+						</li>
+						<li class="new_item" id="new_item7">
+							<img alt="상품1" src="<%=ctxPath %>/images/logo.png">
+							<a href="#">	
+								상품명7
+							</a><br/>
+							<span>가격</span>
+						</li>
+					</ul>
+					<span style="clear:both;"></span>
+					
+					</div>
+				</div>
+				
+				
 			</div>
 		</div>
 		

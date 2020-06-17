@@ -148,14 +148,14 @@
 		display:none;
 		position: absolute;
 		z-index: 5;
-		min-width:150px;
+		min-width:170px;
 		background-color: white;
 		border:solid 1px black;
 	}
 	
 	/*전체 카테고리 하위의 navi가 되는 ul*/
 	.navi-categori{
-		width:149px;
+		width:170px;
 		display:inline-block;
 		list-style: none;
 		padding:0px;
@@ -166,16 +166,20 @@
 	
 	/*하위 navi가 되는 ul 두번째*/
 	.navi-categori2{
-		width:148px;
+		width:168px;
 		display:none;
 		list-style: none;
 		padding:0px;
 		text-align: left;
-		background-color: #f1f1f1;
+		background-color: #f1f1f1; 
 	}
 	
 	/*하위 navi에 들어가는 li*/
-	.navi-categori > li, .navi-categori2 > li{
+	.navi-categori > li {
+		line-height: 30px;
+	}
+	
+	.navi-categori2 > li{
 		line-height: 30px;
 	}
 	
@@ -197,11 +201,11 @@
 		
 		// 하위 navi에 존재하는 li태그에 hover했을 때 function
 		$(".list").hover(function(){ //마우스를 올렸을 때
-			$(".navi-dropdown-content").css("min-width","300px"); //하위 navi가 존재하는 영역의 넓이 300px로 조정
+			$(".navi-dropdown-content").css("min-width","340px"); //하위 navi가 존재하는 영역의 넓이 300px로 조정
 			$(".navi-categori2").css("display","inline-block"); //navi-categori 옆에 붙을 navi-categori2(ul)태그의 display변경
 			
 		},function(){ //마우스를 내렸을 때
-			$(".navi-dropdown-content").css("min-width","150px"); //하위 navi가 존재하는 영역의 넓이 150px로 조정
+			$(".navi-dropdown-content").css("min-width","170px"); //하위 navi가 존재하는 영역의 넓이 150px로 조정
 			$(".navi-categori2").css("display","none"); //navi-categori2(ul)태그의 display none(안보이도록)
 		});
 		
@@ -246,6 +250,30 @@
 			var width = $(".header").css("width"); //header(로고+링크)영역의 width값 변수에 대입
 			$(".scroll_fixed").css("width",width); //해당 width값을 scroll_fixed(상단navi)클래스에 적용하는 css에 추가
 		});
+		
+		
+		// 전체 카테고리에서 서브 카테고리 변화주기 //
+		 var $category = $(".navi-categori").find(".listType");
+		$category.each(function(index, item){
+			var sub = ["기본채소,쌈 샐러드,특수채소"
+				      ,"국산과일,수입과일,냉동 건과일"
+				      ,"생선류,오징어 낙지 문어,새우 게 랍스타"
+				      ,"소고기,돼지고기,닭 오리고기"
+				      ,"생수 음료 주스,커피 차,우유 두유 요거트"];
+				
+			$(item).mouseover(function(){
+				$(".navi-categori2").empty();
+				var subArr = sub[index].split(",");
+				for(var i=0; i<subArr.length; i++){
+						// $(".navi-categori2").find(".listType:eq("+i+")").html(subArr[i]);
+						var html="<li class='list'><span class='listType'>"+subArr[i]+"</span></li>";
+						$(".navi-categori2").append(html);
+					} 
+			});
+				
+			
+		}); 
+		
 	});
 </script>
 </head>
@@ -276,11 +304,11 @@
 				<span class="bar">I</span><br/>
 				<div class="navi-dropdown-content" align="left">
 					<ul class="navi-categori">
-						<li class="list"><span class="listType">채소1</span></li>
-						<li class="list"><span class="listType">채소2</span></li>
-						<li class="list"><span class="listType">채소3</span></li>
-						<li class="list"><span class="listType">채소4</span></li>
-						<li class="list"><span class="listType">채소5</span></li>
+						<li class="list"><span class="listType">채소</span></li>
+						<li class="list"><span class="listType">과일 견과 쌀</span></li>
+						<li class="list"><span class="listType">수산 해산 건어물</span></li>
+						<li class="list"><span class="listType">정육 계란</span></li>
+						<li class="list"><span class="listType">음료 우유 간식</span></li>
 					</ul>
 					<ul class="navi-categori2">
 						<li class="list"><span class="listType">채소6</span></li>

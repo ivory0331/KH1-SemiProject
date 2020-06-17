@@ -65,6 +65,7 @@ create table product_table
 ,packing        varchar2(80) -- 포장방법
 ,unit           varchar2(50) -- 단위
 ,registerdate   date default sysdate -- 등록날짜
+,sale           number 
 ,seller         varchar2(50) -- 판매자(관리자 모드시에 사용)
 ,seller_phone   varchar2(80) -- 판매자 번호(관리자 모드시에 사용)
 ,fk_category_num    number not null -- product_category_table에 있는 category_num을 참조하는 컬럼
