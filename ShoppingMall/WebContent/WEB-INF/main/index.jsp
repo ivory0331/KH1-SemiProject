@@ -63,10 +63,18 @@
 	
 	.slideL{
 		float:left;
+		font-size:18pt;
+		color: purple;
+		font-weight: bold;
+		cursor: pointer;
 	}
 	
 	.slideR{
 		float:right;
+		font-size:18pt;
+		color: purple;
+		font-weight: bold;
+		cursor: pointer;
 	}
 	
 	
@@ -117,8 +125,8 @@
 					<div class="item_type">
 						<h3>추천 상품</h3>
 						<!-- sale영역에 있는 li(class=best_item)태그를 움직여야 하므로 onclick의 파라미터에 'best'을 입력한다. -->
-						<button id="best_slideL" class="slideL" onclick="func_slideL('best')">클릭L</button>
-						<button id="best_slideR" class="slideR" onclick="func_slideR('best')" style="display:none;">클릭R</button>
+						<span id="best_slideL" class="slideL" onclick="func_slideL('best')">&lt;&lt;&lt;</span>
+						<span id="best_slideR" class="slideR" onclick="func_slideR('best')" style="display:none;">&gt;&gt;&gt;</span>
 					</div>
 					<div style="clear:both"></div>
 					<div class="slide_wrapper">
@@ -191,8 +199,8 @@
 					<div class="item_type">
 						<h3>세일 상품</h3>
 						<!-- sale영역에 있는 li(class=sale_item)태그를 움직여야 하므로 onclick의 파라미터에 'sale'을 입력한다. -->
-						<button id="sale_slideL" class="slideL" onclick="func_slideL('sale')">클릭L</button>
-						<button id="sale_slideR" class="slideR"onclick="func_slideR('sale')" style="display:none;">클릭R</button>
+						<span id="sale_slideL" class="slideL" onclick="func_slideL('sale')">&lt;&lt;&lt;</span>
+						<span id="sale_slideR" class="slideR"onclick="func_slideR('sale')" style="display:none;">&gt;&gt;&gt;</span>
 					</div>
 					<div class="slide_wrapper">
 					<ul class="item_list">
