@@ -1,11 +1,14 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%
+	String ctxPath = request.getContextPath();
+%>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
 <title>index.jsp</title>
-<link rel="stylesheet" href="css/style.css" />
+<link rel="stylesheet" href="<%= ctxPath %>/css/style.css" />
 <style type="text/css">
 	
 	/*슬라이드 영역*/
@@ -68,7 +71,6 @@
 	
 	
 </style>
-<link rel="stylesheet" href="css/style.css" />
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
@@ -118,18 +120,19 @@
 						<button id="best_slideL" class="slideL" onclick="func_slideL('best')">클릭L</button>
 						<button id="best_slideR" class="slideR" onclick="func_slideR('best')" style="display:none;">클릭R</button>
 					</div>
+					<div style="clear:both"></div>
 					<div class="slide_wrapper">
 					<%-- DB에서 갖고온 결과물 뿌리는 부분 --%>
 					<ul class="item_list">
 						<li class="best_item" id="best_item0" >
-							<img alt="상품1" src="include/images/logo.png">
+							<img alt="상품1" src="<%=ctxPath %>/images/logo.png">
 							<a href="#">	
 								상품명0
 							</a><br/>
 							<span>가격</span>
 						</li>
 						<li class="best_item" id="best_item1">
-							<img alt="상품1" src="include/images/logo.png">
+							<img alt="상품1" src="<%=ctxPath %>/images/logo.png">
 							<a href="#">	
 								상품명1
 							</a>
@@ -137,42 +140,42 @@
 							<span>가격</span>
 						</li>
 						<li class="best_item" id="best_item2">
-							<img alt="상품1" src="include/images/logo.png">
+							<img alt="상품1" src="<%=ctxPath %>/images/logo.png">
 							<a href="#">	
 								상품명2
 							</a><br/>
 							<span>가격</span>
 						</li>
 						<li class="best_item" id="best_item3">
-							<img alt="상품1" src="include/images/logo.png">
+							<img alt="상품1" src="<%=ctxPath %>/images/logo.png">
 							<a href="#">	
 								상품명3
 							</a><br/>
 							<span>가격</span>
 						</li>
 						<li class="best_item" id="best_item4">
-							<img alt="상품1" src="include/images/logo.png">
+							<img alt="상품1" src="<%=ctxPath %>/images/logo.png">
 							<a href="#">	
 								상품명4
 							</a><br/>
 							<span>가격</span>
 						</li>
 						<li class="best_item" id="best_item5">
-							<img alt="상품1" src="include/images/logo.png">
+							<img alt="상품1" src="<%=ctxPath %>/images/logo.png">
 							<a href="#">	
 								상품명5
 							</a><br/>
 							<span>가격</span>
 						</li>
 						<li class="best_item" id="best_item6">
-							<img alt="상품1" src="include/images/logo.png">
+							<img alt="상품1" src="<%=ctxPath %>/images/logo.png">
 							<a href="#">	
 								상품명6
 							</a><br/>
 							<span>가격</span>
 						</li>
 						<li class="best_item" id="best_item7">
-							<img alt="상품1" src="include/images/logo.png">
+							<img alt="상품1" src="<%=ctxPath %>/images/logo.png">
 							<a href="#">	
 								상품명7
 							</a><br/>
@@ -194,14 +197,14 @@
 					<div class="slide_wrapper">
 					<ul class="item_list">
 						<li class="sale_item" id="sale_item0">
-							<img alt="상품1" src="include/images/logo.png">
+							<img alt="상품1" src="<%=ctxPath %>/images/logo.png">
 							<a href="#">	
 								상품명0
 							</a><br/>
 							<span>가격</span>
 						</li>
 						<li class="sale_item" id="sale_item1">
-							<img alt="상품1" src="include/images/logo.png">
+							<img alt="상품1" src="<%=ctxPath %>/images/logo.png">
 							<a href="#">	
 								상품명1
 							</a>
@@ -209,42 +212,42 @@
 							<span>가격</span>
 						</li>
 						<li class="sale_item" id="sale_item2">
-							<img alt="상품1" src="include/images/logo.png">
+							<img alt="상품1" src="<%=ctxPath %>/images/logo.png">
 							<a href="#">	
 								상품명2
 							</a><br/>
 							<span>가격</span>
 						</li>
 						<li class="sale_item" id="sale_item3">
-							<img alt="상품1" src="include/images/logo.png">
+							<img alt="상품1" src="<%=ctxPath %>/images/logo.png">
 							<a href="#">	
 								상품명3
 							</a><br/>
 							<span>가격</span>
 						</li>
 						<li class="sale_item" id="sale_item4">
-							<img alt="상품1" src="include/images/logo.png">
+							<img alt="상품1" src="<%=ctxPath %>/images/logo.png">
 							<a href="#">	
 								상품명4
 							</a><br/>
 							<span>가격</span>
 						</li>
 						<li class="sale_item" id="sale_item5">
-							<img alt="상품1" src="include/images/logo.png">
+							<img alt="상품1" src="<%=ctxPath %>/images/logo.png">
 							<a href="#">	
 								상품명5
 							</a><br/>
 							<span>가격</span>
 						</li>
 						<li class="sale_item" id="sale_item6">
-							<img alt="상품1" src="include/images/logo.png">
+							<img alt="상품1" src="<%=ctxPath %>/images/logo.png">
 							<a href="#">	
 								상품명6
 							</a><br/>
 							<span>가격</span>
 						</li>
 						<li class="sale_item" id="sale_item7">
-							<img alt="상품1" src="include/images/logo.png">
+							<img alt="상품1" src="<%=ctxPath %>/images/logo.png">
 							<a href="#">	
 								상품명7
 							</a><br/>

@@ -1,5 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%
+	String ctxPath = request.getContextPath();
+%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -250,20 +253,20 @@
 	
 	<div class="logo_login" align="center">
 		<div class="loginLink"> 
-			<a href="#">회원가입</a> | <a href="#">로그인</a> | 
+			<a href="javascript:location.href='<%=ctxPath%>/member/register.do'">회원가입</a> | <a href="javascript:location.href='<%=ctxPath%>/member/login.do'">로그인</a> | 
 			<div class="serviceCenter-dropdown" style="display:inline-block;">
-				<a href="#">고객센터</a> <span class="underIcon">▼</span>
+				<a href="javascript:location.href='<%=ctxPath%>/service.do'">고객센터</a> <span class="underIcon">▼</span>
 				<div class="serviceCenter-dropdown-content" align="left">
 					<ul class="serviceCenter-categori">
-						<li class="list"><span class="listType">공지사항</span></li>
-						<li class="list"><span class="listType">자주하는 질문</span></li>
-						<li class="list"><span class="listType">1:1문의</span></li>
+						<li class="list"><a href="javascript:location.href='<%=ctxPath%>/service/board.do'"><span class="listType">공지사항</span></a></li>
+						<li class="list"><a href="javascript:location.href='<%=ctxPath%>/service/FAQ.do'"><span class="listType">자주하는 질문</span></a></li>
+						<li class="list"><a href="javascript:location.href='<%=ctxPath%>/service/MyQue.do'"><span class="listType">1:1문의</span></a></li>
 					</ul>
 				</div>
 			</div>
 		</div>
 		<div class="logo">
-			<a href="index.jsp"><img src = "/ShoppingMall/include/images/logo.png" /></a>
+			<a href="javascript:location.href='<%=ctxPath %>/index.do'"><img src="<%=ctxPath %>/images/logo.png" /> </a>
 		</div>	
 	</div>
 	<div class="header-navi" align="center" >

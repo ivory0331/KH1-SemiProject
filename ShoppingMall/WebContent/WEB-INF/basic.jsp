@@ -25,7 +25,7 @@
 		<jsp:include page="include/header.jsp"></jsp:include>
 		<div class="section" align="center">
 			<div class="contents">
-				
+				basic입니다.
 				
 				
 				

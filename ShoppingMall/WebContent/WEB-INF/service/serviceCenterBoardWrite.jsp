@@ -1,11 +1,13 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<% String ctxPath = request.getContextPath(); %>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
+<link rel="stylesheet" href="<%= ctxPath %>/css/style.css" />
+<meta charset="UTF-8">
 <title>serviceCenterBoardWrite.jsp</title>
-<link rel="stylesheet" href="css/style.css" />
 <style type="text/css">
 	.writeTable{
 		width:1080px;
@@ -54,11 +56,6 @@
 	#txt_area{
 		overflow-y: scroll;
 	}
-	
-	#Qboard-categori{
-		width:100px;
-		height:30px;
-	}
 </style>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -98,26 +95,14 @@ $(document).ready(function(){
 		<div class="section" align="center">
 			<div class="contents">
 				<div class="boardInfo" align="left">
-					<h3 style="display:inline-block">자주하는 질문 작성</h3>
-					<span style="margin-left:10px; font-size:8pt; font-weight: bold;">고객님들께서 가장 많이하는 질문들은 모두 모았습니다.</span>
-					
+					<h3 style="display:inline-block">공지사항 작성</h3>
+					<span style="margin-left:10px; font-size:8pt; font-weight: bold;">새로운 소식들과 유용한 정보들을 고객에게 전달할게요.</span>
 				</div>
 				<form name="questionWriteFrm">
 					<table class="writeTable">
 						<tr>
 							<td class="frmTitle">작성자</td>
 							<td><input type="text" value="test" disabled name="userName"/></td>
-						</tr>
-						<tr>
-							<td class="frmTitle">카테고리</td>
-							<td>
-								<select id="Qboard-categori">
-									<option>선택</option>
-									<option>회원문의</option>
-									<option>주문/결제</option>
-									<option>배송문의</option>
-								</select>
-							</td>
 						</tr>
 						<tr>
 							<td class="frmTitle">제목</td>

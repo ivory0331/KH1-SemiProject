@@ -1,11 +1,12 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<% String ctxPath = request.getContextPath(); %>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
+<link rel="stylesheet" href="<%= ctxPath %>/css/style.css" />
 <title>detail.jsp</title>
-
 <style type="text/css">
 	
 	/*상품 이미지가 보이는 div*/
@@ -216,7 +217,7 @@
 
 </style>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-<link rel="stylesheet" href="css/style.css" />
+
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 <script type="text/javascript" src="/ShoppingMall/js/jquery-3.3.1.min.js"></script>

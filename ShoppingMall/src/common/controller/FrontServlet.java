@@ -77,8 +77,8 @@ public class FrontServlet extends HttpServlet {
 				
 				String key = (String) en.nextElement();
 				
-			//	System.out.println("~~~~ 확인용 key => " + key);
-			//	System.out.println("~~~~ 확인용 value => " + pr.getProperty(key)); 
+				System.out.println("~~~~ 확인용 key => " + key);
+				System.out.println("~~~~ 확인용 value => " + pr.getProperty(key)); 
 			/*
 			    ~~~~ 확인용 key => /main.up
 				~~~~ 확인용 value => common.controller.MainController
