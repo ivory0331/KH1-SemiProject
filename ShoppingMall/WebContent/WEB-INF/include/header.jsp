@@ -334,7 +334,7 @@
 						<li class="list" onclick="goList()"><span class="listType"></span></li>
 						<li class="list" onclick="goList()"><span class="listType"></span></li>
 						<li class="list" onclick="goList()"><span class="listType"></span></li>
-					</ul>
+					</ul> 
 				</div>
 			</li>
 			<li><a><span class="listType" onclick="goList()">알뜰쇼핑</span></a><span class="bar">I</span></li>
