@@ -99,9 +99,9 @@
 	}
 	
 	#btnSubmit {
-	    border: 1px solid #ddd;
-	    background-color: #fff;
-	    color: #ccc;
+	    border: 1px solid #5f0080;
+	    background-color: #5f0080;
+	    color: white;
 	    width: 200px;
 	    padding: 10px;
 	}
@@ -118,6 +118,47 @@
 <script type="text/javascript" src="/ShoppingMall/util/myutil.js"></script>
 
 <script type="text/javascript">
+
+	$(document).ready(function(){
+		
+		$("#btnRegister").click(function(){
+		
+			// == 제목 입력했는지 확인 == //
+			$("input#title").blur(function(){
+	
+				if($(this).val().trim()=="") {
+					
+					alert("제목을 입력해주세요.");	
+										
+					$(this).val("");
+					$(this).focus();
+				}
+				
+			});// end of $("input#title").blur(function(){})---------------------------
+			
+			
+			// == 내용 10글자 이상 입력했는지 확인 == //
+			$("input#fieldCmt").blur(function(){	
+				
+				if($(this).val().length >= 10) {
+					
+					alert("제목을 입력해주세요.");	
+										
+					$(this).val("");
+					$(this).focus();
+				}
+				
+			});// end of $("input#fieldCmt").blur(function(){})------------------------
+			
+			var frm = document.registerFrm;
+			frm.action="register.do";
+			frm.method="post";
+			frm.submit();
+		
+		};// end of $("#btnRegister").click(function(){})-----------------------------------	
+		
+		
+	});
 
 </script>
 

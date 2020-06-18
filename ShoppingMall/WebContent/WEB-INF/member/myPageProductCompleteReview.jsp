@@ -256,10 +256,10 @@
 					<div style="clear:both; height:20px;"></div>
 					
 					<div class="tab">
-						<a class="tab possibleReview">작성가능 후기(<span>3</span>)</a>	
+						<a class="tab possibleReview" href="<%= ctxPath %>/member/myPageProductPossibleReview.do">작성가능 후기(<span>3</span>)</a>	
 					</div>				
 					<div class="tab">					
-						<a class="tab completedReview">작성완료 후기(<span>2</span>)</a>	
+						<a class="tab completedReview" href="<%= ctxPath %>/member/myPageProductCompleteReview.do">작성완료 후기(<span>2</span>)</a>	
 					</div>	
 					
 					<div style="clear:both; height:10px;"></div>								
