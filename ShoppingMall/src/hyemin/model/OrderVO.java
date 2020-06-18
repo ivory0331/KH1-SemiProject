@@ -13,6 +13,8 @@ public class OrderVO {
 	private int price;							// 주문금액 - 필수
 	private String memo;						// 요청사항
 	
+	public OrderVO() { }
+	
 	public OrderVO(int order_num, String order_date, String recipient, String recipient_mobile,
 			String recipient_postcode, String recipient_address, String recipient_detailaddress,
 			String recipient_extraaddress, int price, String memo) {

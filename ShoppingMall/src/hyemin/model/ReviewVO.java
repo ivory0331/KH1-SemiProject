@@ -8,6 +8,8 @@ public class ReviewVO {
 	private String write_date;	// 작성 날짜
 	private String image;		// 내용에 들어가는 이미지
 	
+	public ReviewVO() { }
+	
 	public ReviewVO(int review_num, String subject, String content, String write_date, String image) {
 		super();
 		this.review_num = review_num;
