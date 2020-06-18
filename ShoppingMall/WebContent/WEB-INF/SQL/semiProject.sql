@@ -24,7 +24,7 @@ create table member_table
 ,constraint pk_member_table PRIMARY KEY (member_num)
 ,constraint uq_member_table_userid UNIQUE(userid)
 ,constraint uq_member_table_email unique(email)
-,constraint ck_member_table_gender CHECK (gender in (1,2))
+,constraint ck_member_table_gender CHECK (gender in (1,2,3))
 ,constraint ck_member_table_status CHECK (status in(1,2,3))
 );
 
@@ -147,6 +147,32 @@ create table order_table
 ,constraint fk_order_member FOREIGN key(fk_member_num) REFERENCES member_table(member_num)
 ,constraint fk_order_category foreign key(fk_category_num) references order_state_table(category_num)
 );
+
+/*
+
+order_table 에서 member_num 이 2의
+     
+  주문날짜           상품명               상품개수                  주문번호                금액              배송상태       
+order_table     product_table    order_product_table          order_table           order_table     order_state_table
+                                                          order_product_table
+
+order_table O    
+
+
+select P.fk_order_num, O.to_char(order_date,'yyyy-mm-dd hh24:mi:ss') as order_date, O.price,P.product_count,Q.product_name
+,S.order_state
+from order_table O join order_product_table P on O.order_num = P.fk_order_num
+join product_table Q on P.fk_product_num = Q.product_num
+join order_state_table S on O.fk_category_num = S.category_num
+where O.fk_member_num = ?;
+
+*/
+
+String sql = "select P.fk_order_num, O.to_char(order_date,'yyyy.mm.dd (hh24시 mi분)') as order_date, O.price,P.product_count, Q.product_name, S.order_state\n"+
+"from order_table O join order_product_table P on O.order_num = P.fk_order_num\n"+
+"join product_table Q on P.fk_product_num = Q.product_num\n"+
+"join order_state_table S on O.fk_category_num = S.category_num\n"+
+"where O.fk_member_num = ?";
 
 -- 주문 테이블에 사용할 시퀀스 생성 --
 create sequence seq_order_table
@@ -404,23 +430,3 @@ insert into product_table (product_num, product_name, price, stock, origin, pack
 values(seq_product_table.nextval, '손질 가을수꽃게 6조각(중 300~400g)(냉동)', '14900', '15', '국산', '냉동/종이포장', '1팩', '김진하', '01075653393', 3, 33);
 insert into product_table (product_num, product_name, price, stock, origin, packing, unit, seller, seller_phone, fk_category_num, fk_subcategory_num) 
 values(seq_product_table.nextval, '싱싱 흰다리새우(중 220~270g)(냉동)', '10500', '15', '국산', '냉동/종이포장', '1팩', '김진하', '01075653393', 3, 33);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
