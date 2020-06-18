@@ -98,6 +98,12 @@
 		background-color: #f4f4f4;
 		border-radius: 20px;
 		margin-right: 10px;
+		cursor: pointer;
+	}
+	
+	.select_MDbest{
+		background-color: purple !important;
+		color:white;
 	}
 	
 </style>
@@ -107,6 +113,18 @@
 <script type="text/javascript" src="/ShoppingMall/js/jquery-3.3.1.min.js"></script>
 <script type="text/javascript" src="/ShoppingMall/util/myutil.js"></script>
 <script type="text/javascript">
+	
+	$(document).ready(function(){
+		func_saleItemCall();
+		func_newItemCall();
+		func_MDItemCall(1);
+		$("#list_category li").click(function(){
+			var index = $("#list_category li").index(this)+1;
+			$(this).addClass("select_MDbest");
+			$(this).siblings().removeClass("select_MDbest");
+			func_MDItemCall(index);
+		});
+	}); // end of $(document).ready(function()) ----------------------------------
 
 	// 왼쪽 버튼을 클릭하면 실행되는 function //
 	function func_slideL(type){ //type = 각각의 배너의 class명의 앞부분ex)best, sale
@@ -120,7 +138,7 @@
 													 $("#"+type+"_slideL").hide();
 										          });
 		}	
-	}
+	} //end of func_slideL(type) ---------------------------------------------
 	
 	// 오른쪽 버튼을 클릭하면 실행되는 function //
 	function func_slideR(type){
@@ -133,8 +151,69 @@
 													 $("#"+type+"_slideR").hide();
 										          });
 		}	
-	}
+	} //end of func_slideR(type)------------------------------------------------
 
+	function func_newItemCall(){
+		var url="/listCall.do";
+		var data={"type":"new"};
+		reqServer(url,data);
+	} // end of func_newItemCall()-----------------------------------------------
+	
+	function func_MDItemCall(category){
+		var url="/listCall.do";
+		var data={"type":"best","category":category};
+		reqServer(url,data);
+	} // end of func_MDItemCall(category)----------------------------------------
+	
+	
+	
+	function goDetail(idx){
+		console.log(idx);
+		location.href="<%=ctxPath%>/detail.do?idx="+idx;
+	} // end of goDetail(idx)----------------------------------------------------
+	
+	
+	
+	function reqServer(url, data){
+	      console.log(url);
+	      console.log(data);
+	      $.ajax({
+	         url:"<%=ctxPath%>"+url,
+	         type:"get",
+	         data:data,
+	         dataType:"JSON",
+	         success:function(json){
+	            console.log(json);
+	            if(data.type=="new"){
+	            	for(var i=0; i<json.length; i++){
+	            		var imgFileName = decodeURIComponent(json[i].product_name);
+		            	var html="<img alt='상품1' src='<%=ctxPath %>/images/"+imgFileName+".png' onclick = 'goDetail("+json[i].product_num+")'>"
+		            	        +"<a href='#'>"
+		            	        +json[i].product_name
+		            	        +"</a><br/>"
+		            	        +"<span>"+func_comma(""+json[i].price)+"원</span>";
+		            	$("#new_item"+i).html(html);
+		            }
+	            }
+	            else if(data.type=="best"){
+	            	for(var i=0; i<json.length; i++){
+	            		var imgFileName = decodeURIComponent(json[i].product_name);
+		            	var html="<img alt='상품1' src='<%=ctxPath %>/images/"+imgFileName+".png' onclick = 'goDetail("+json[i].product_num+")'>"
+		            	        +"<a href='javascript:goDetail("+json[i].product_num+")'>"
+		            	        +json[i].product_name
+		            	        +"</a><br/>"
+		            	        +"<span>"+func_comma(""+json[i].price)+"원</span>";
+		            	$("#MDbest_item"+i).html(html);
+		            }
+	            }
+	            
+	         },
+	         error:function(error){
+	           
+	         }
+	   });
+	} // end of reqServer(url, data) --------------------------------------------
+	
 </script>
 </head>
 <body>
@@ -294,7 +373,7 @@
 						<h3>MD의 추천</h3>
 						<div id="category_menu">
 							<ul id="list_category">
-								<li>채소</li>
+								<li class="select_MDbest">채소</li>
 								<li>과일</li>
 								<li>수산</li>
 								<li>정육</li>

@@ -99,6 +99,11 @@
 		margin: 10px 20px;
 	}
 	
+	#explain{
+		font-size: 18pt;
+		
+	}
+	
 	/* Style the tab */
 	.tab {
 	  overflow: hidden;
@@ -224,7 +229,7 @@
 <script type="text/javascript" src="/ShoppingMall/util/myutil.js"></script>
 <script type="text/javascript">
 
-	var money = "1000";
+	var money = "${product.price}";
 	var offSet = new Array();
 	
 	
@@ -304,13 +309,13 @@
 			<div class="contents">
 				<div class="info">
 					<div class="goodsImg">
-						<img alt="상품1" src="<%=ctxPath %>/images/logo.png" />
+						<img alt="상품1" src="<%=ctxPath %>/images/${product.representative_img}" />
 					</div>
 					<div class="goodsInfo">
-						<p><strong>상품명</strong></p>
+						<p style="font-size:18pt;">${product.product_name}</p>
 						<dl>
 							<dt>판매단위</dt>
-							<dd>1팩</dd>
+							<dd>${product.unit}</dd>
 						</dl>
 						<dl class="underLine">
 							<dt>중량/용량</dt>
@@ -322,11 +327,11 @@
 						</dl>
 						<dl class="underLine">
 							<dt>원산지</dt>
-							<dd>국산</dd>
+							<dd>${product.origin}</dd>
 						</dl>
 						<dl class="underLine">
 							<dt>포장타입</dt>
-							<dd>냉장/종이포장</dd>
+							<dd>${product.packing}</dd>
 						</dl>
 						<dl class="underLine">
 							<dt>유통기한</dt>
@@ -356,7 +361,7 @@
 						<img alt="상품이미지1" src="<%=ctxPath %>/images/logo.png" class="otherImg">
 						<img alt="상품이미지1" src="<%=ctxPath %>/images/logo.png" class="otherImg">
 						<img alt="상품이미지1" src="<%=ctxPath %>/images/logo.png" class="otherImg">
-						<div>상품정보(설명)</div>
+						<div id="explain">${product.explain }</div>
 					</div>
 				
 					<div class="detailTablePart" id="review">

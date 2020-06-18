@@ -89,7 +89,8 @@ create table product_table
 ,packing        varchar2(80) -- 포장방법
 ,unit           varchar2(50) -- 단위
 ,registerdate   date default sysdate -- 등록날짜
-,sale           number 
+,sale           number default 0 -- 세일 상태(0=> 세일x 10=>10%세일)
+,best_point     number default 0 -- MD best 용도 컬럼
 ,seller         varchar2(50) -- 판매자(관리자 모드시에 사용)
 ,seller_phone   varchar2(80) -- 판매자 번호(관리자 모드시에 사용)
 ,fk_category_num    number not null -- product_category_table에 있는 category_num을 참조하는 컬럼
@@ -100,6 +101,7 @@ create table product_table
 ,constraint fk_product_subcategory_num FOREIGN key(fk_subcategory_num) REFERENCES product_subcategory_table(subcategory_num)
 );
 
+alter table product_table MODIFY sale number default 0;
 
 -- 상품 테이블에 사용할 시퀀스 생성 --
 create sequence seq_product_table
@@ -392,17 +394,16 @@ values(seq_product_table.nextval, '바다장어 2마리 450g내외(생물)', '24
 
 
 -- 수산 오징어
-insert into product_table (product_num, product_name, price, stock,깨끗하게 손질된 오징어 두마리(생물)', '14900', '15', '국내산', '냉장/종이포장', '1팩', '김진하', '01075653393', 3, 32);
+insert into product_table (product_num, product_name, price, stock, origin, packing, unit, seller, seller_phone, fk_category_num, fk_subcategory_num) 
+values(seq_product_table.nextval, '깨끗하게 손질된 오징어 두마리(생물)', '14900', '15', '국내산', '냉장/종이포장', '1팩', '김진하', '01075653393', 3, 32);
 insert into product_table (product_num, product_name, price, stock, origin, packing, unit, seller, seller_phone, fk_category_num, fk_subcategory_num) 
 values(seq_product_table.nextval, '동해안 찜용 오징어 330g(냉동)', '11900', '22', '국내산', '냉장/종이포장', '1팩', '김진하', '01075653393', 3, 32);
 insert into product_table (product_num, product_name, price, stock, origin, packing, unit, seller, seller_phone, fk_category_num, fk_subcategory_num) 
-values(seq_product_table.nextval, '모리타니산 자숙문어 한마리(냉동)', ' origin, packing, unit, seller, seller_phone, fk_category_num, fk_subcategory_num) 
-values(seq_product_table.nextval, '27000', '33', '모리타니산', '냉동/종이포장', '1마리', '김진하', '01075653393', 3, 32);
+values(seq_product_table.nextval, '모리타니산 자숙문어 한마리(냉동)', '27000', '33', '모리타니산', '냉동/종이포장', '1마리', '김진하', '01075653393', 3, 32);
 insert into product_table (product_num, product_name, price, stock, origin, packing, unit, seller, seller_phone, fk_category_num, fk_subcategory_num) 
 values(seq_product_table.nextval, '문어 슬라이스 120g(냉장)', '9900', '26', '모리타니산', '냉장/종이포장', '1팩', '김진하', '01075653393', 3, 32);
 insert into product_table (product_num, product_name, price, stock, origin, packing, unit, seller, seller_phone, fk_category_num, fk_subcategory_num) 
 values(seq_product_table.nextval, '손질 통오징어', '8300', '30', '국산', '냉동/종이포장', '1팩', '김진하', '01075653393', 3, 32);
-
 
 -- 수산 새우 게
 insert into product_table (product_num, product_name, price, stock, origin, packing, unit, seller, seller_phone, fk_category_num, fk_subcategory_num) 
@@ -411,3 +412,31 @@ insert into product_table (product_num, product_name, price, stock, origin, pack
 values(seq_product_table.nextval, '손질 가을수꽃게 6조각(중 300~400g)(냉동)', '14900', '15', '국산', '냉동/종이포장', '1팩', '김진하', '01075653393', 3, 33);
 insert into product_table (product_num, product_name, price, stock, origin, packing, unit, seller, seller_phone, fk_category_num, fk_subcategory_num) 
 values(seq_product_table.nextval, '싱싱 흰다리새우(중 220~270g)(냉동)', '10500', '15', '국산', '냉동/종이포장', '1팩', '김진하', '01075653393', 3, 33);
+
+select * from product_table;
+
+select RON, product_name, sale from
+(select rownum as RON, product_name, sale from
+    (select product_num, product_name, price, stock, sale, to_char(registerdate,'yyyy-mm-dd') as registerdate from product_table))T
+    where T.RON between 1 and 8;
+    
+    
+    
+select P.product_num, P.product_name, P.price, P.stock, P.origin, P.packing, P.unit, C.category_content , S.subcategory_content
+from product_table P join product_category_table C 
+on P.fk_category_num = C.category_num 
+join product_subcategory_table S
+on P.fk_subcategory_num = S.subcategory_num
+join product_detail_table D 
+on P.product_num = D.fk_product_num;
+
+select * from product_table;
+
+insert into product_detail_table (fk_product_num, representative_image, explain)
+values(1,'1등급 한우 갈빗살 구이용 200g(냉장).png','1등급 한우 갈빗살');
+insert into product_detail_table (fk_product_num, representative_image, explain)
+values(2,'1등급 한우 목심 샤브샤브용 200g(냉장).png','1등급 한우 목심');
+insert into product_detail_table (fk_product_num, representative_image, explain)
+values(3,'1등급 한우 안심 추리 200g(냉장).png','1등급 한우 안심');
+insert into product_detail_table (fk_product_num, representative_image, explain)
+values(4,'1등급 한우 알사태 수육용 500g(냉장).png','1등급 한우 알사태');
