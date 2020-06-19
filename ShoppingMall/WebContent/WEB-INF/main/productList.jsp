@@ -1,6 +1,16 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<% String ctxPath = request.getContextPath(); %>
+    
+<%@ page import="java.util.List" %>
+<% 
+	String ctxPath = request.getContextPath(); 
+	List<String> productList = (List<String>)request.getAttribute("productList");
+	int cnt=0;
+
+%>
+
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -52,19 +62,30 @@
 <script type="text/javascript">
 	
 	$(document).ready(function(){
+		var cnt = 2;
 		
-		$("li").click(function(){
+		html = "";
+		var productList = "${productList.get(3).product_name}"; // 9개
+		console.log(productList);
+		var productListArr = productList.split(",");
+		var productPhoto = decodeURIComponent("${productList.get(0).product_name}");
+		//var arrProductList = productList.split(",");
+		for(var i=0; i<(productListArr.length/3); i++) { // 3번 반복
+			html += "<tr>";
+			for(var j=0; j<3; j++){
+				html += "<td>"+
+							"<div><img src='pimages/productPhoto.png' /></div>"+
+							"<div>${productList.get(cnt).product_name}</div>"+
+							"<div>${productList.get(cnt).price}</div>"+
+						"</td>";
+						
+			}		
 			
-			alert("상품을 선택하셨습니다");
+			html += "</tr>";
 			
-		});
+		} // end of for---------------------------------------
 		
-		$("h4").click(function(){
-			
-			alert("전체보기를 선택하셨습니다");
-			
-		});
-		
+		$("#pList").html(html); 
 	});
 	
 </script>
@@ -87,60 +108,18 @@
 					</select>
 				</div>
 				
-				<div class="productList" align="center">
-					<div>
-						<li class="product" id="product1">
-							<img alt="상품1" src="images/iscream.png"><br/>
-							루비 싱글 바<br/>
-							<span>3,600 원</span>
-						</li>
-						<li class="product" id="product2">
-							<img alt="상품2" src="images/salad.png"><br/>
-							병 샐러드<br/>
-							<span>6,200 원</span>
-						</li>	
-						<li class="product" id="product3">
-							<img alt="상품3" src="images/milk.png"><br/>
-							동물복지 우유<br/>
-							<span>2,650 원</span>
-						</li>
-					</div>
-					<div>
-						<li class="product" id="product4">
-							<img alt="상품1" src="images/iscream.png"><br/>
-							루비 싱글 바<br/>
-							<span>3,600 원</span>
-						</li>
-						<li class="product" id="product5">
-							<img alt="상품2" src="images/salad.png"><br/>
-							병 샐러드<br/>
-							<span>6,200 원</span>
-						</li>	
-						<li class="product" id="product6">
-							<img alt="상품3" src="images/milk.png"><br/>
-							동물복지 우유<br/>
-							<span>2,650 원</span>
-						</li>
-					</div>
-					<div>
-						<li class="product" id="product7">
-							<img alt="상품1" src="images/iscream.png"><br/>
-							루비 싱글 바<br/>
-							<span>3,600 원</span>
-						</li>
-						<li class="product" id="product8">
-							<img alt="상품2" src="images/salad.png"><br/>
-							병 샐러드<br/>
-							<span>6,200 원</span>
-						</li>	
-						<li class="product" id="product9">
-							<img alt="상품3" src="images/milk.png"><br/>
-							동물복지 우유<br/>
-							<span>2,650 원</span>
-						</li>
-					</div>
+		<div class="productList" align="center">
+		<table>
+	        <tbody id="pList">
+				<%-- 일단은 페이징처리를 안한 관리자를 제외한 모든 회원정보를 조회하도록 한다. --%>
+			</tbody>
+		</table>
+		
+	    <div>
+	    	${pageBar}
+	    </div>	
+				</div>
 			</div>
-		</div>
 		
 		<jsp:include page="../include/footer.jsp"></jsp:include>
 		
