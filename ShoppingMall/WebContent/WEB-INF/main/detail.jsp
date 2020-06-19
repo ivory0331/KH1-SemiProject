@@ -222,10 +222,8 @@
 
 </style>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-<script type="text/javascript" src="/ShoppingMall/js/jquery-3.3.1.min.js"></script>
 <script type="text/javascript" src="/ShoppingMall/util/myutil.js"></script>
 <script type="text/javascript">
 
@@ -299,6 +297,32 @@
 		
 		
 	}
+	
+	function inBasket(product){
+		console.log(product)
+		if($("#count").val()==0){
+			alert("장바구니에 담을 상품을 선택하세요");
+			return;
+		}
+		
+		$.ajax({
+			 url:"<%=ctxPath%>/inBasket.do",
+	         type:"post",
+	         data:{"product_num":product,
+	        	   "price":$(".numPrice").val(),
+	        	   "count":$("#count").val()
+	        	   },
+	         dataType:"JSON",
+	         success:function(json){
+	        	alert(json.message);
+	        	// $("#basketCnt").html(json.cnt);
+	        	history.go(0);
+	         },
+	         error:function(e){
+	        	 console.log(e);
+	         }
+		});
+	}
 
 </script>
 </head>
@@ -345,7 +369,7 @@
 							총 상품금액 : <span class="money"></span>원
 							<input type="hidden" class="numPrice" />
 							<br />
-							<span class="basket">장바구니 담기</span>
+							<span class="basket" onclick = "inBasket('${product.product_num}');">장바구니 담기</span>
 						</div>
 					</div>
 				</div>
@@ -496,6 +520,9 @@
 			</div>
 		</div>
 		<jsp:include page="../include/footer.jsp"></jsp:include>
+	</div>
+	<div class="popupLayer" style="display:none;">
+						클릭했을때 나오는 곳
 	</div>
 </body>
 </html>

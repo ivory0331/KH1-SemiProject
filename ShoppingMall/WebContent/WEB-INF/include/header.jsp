@@ -1,7 +1,17 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ page import="java.util.List" %>
+<%@ page import="java.util.Map" %>
 <%
 	String ctxPath = request.getContextPath();
+	Object obj = session.getAttribute("basket");
+	List<Map<String,String>> basketNum = null;
+	if(obj!=null){
+		basketNum = (List<Map<String,String>>)obj;
+	}
+	 
+	int n = 0;
+	if(basketNum!=null) n = basketNum.size();
 %>
 <!DOCTYPE html>
 <html>
@@ -205,12 +215,24 @@
 		heigth:40px;
 		cursor: pointer;
 	}
+	
+	#basketCnt{
+		position: absolute;
+		top: -9px;
+		left: 18px;
+		border:solid 1px white;
+		width: 20px;
+		height: 20px;
+		border-radius: 50%;
+		background-color: purple;
+		color:white;
+	}
 </style>
 
 <script type="text/javascript">
 	$(document).ready(function(){
 		var $list = $(".list"); //하위 navi에 존재하는 li태그들 (배열)
-		
+		  
 		// 하위 navi에 존재하는 li태그에 hover했을 때 function
 		$(".navi-categori .list").hover(function(){ //마우스를 올렸을 때
 			var other = $(this).siblings();
@@ -341,7 +363,18 @@
 			<li><a><span class="listType" onclick="goList()">신상품</span></a><span class="bar">I</span></li>
 			<li><a><span class="listType" onclick="goList()">추천쇼핑</span></a></li>
 			<li><span class="search"><input type="text" placeholder="test"/></span></li>
-			<li><span class="navi-basket"><img src="<%=ctxPath %>/images/basket.jpg" onclick="goBasket()"/></span></li>
+			<li>
+				<span class="navi-basket" style="position:relative;">
+					<img src="<%=ctxPath %>/images/basket.jpg" onclick="goBasket()" />
+					<% if(n>0){ %>
+					<div id="basketCnt">
+					
+						<%=n %>
+					
+					</div>
+					<%} %>
+				</span>
+			</li>
 		</ul>		
 	</div>
 </body>

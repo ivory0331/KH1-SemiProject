@@ -10,4 +10,7 @@ public interface InterIndexDAO {
 
 	// Index.jsp에 출력된 리스트 상품의 상세페이지 값 출력
 	ProductVO productDetail(String idx) throws SQLException;
+
+	// 모든 상품번호를 조회
+	List<String> product_numFind() throws SQLException;
 }

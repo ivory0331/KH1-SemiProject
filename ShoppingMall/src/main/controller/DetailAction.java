@@ -20,7 +20,12 @@ public class DetailAction extends AbstractController {
 			super.setViewPage("/WEB-INF/main/detail.jsp");
 		}
 		else {
-			System.out.println("에러~~~");
+			String message = "상품정보가 없습니다.";
+			String loc = "javascript:history.back()";
+			request.setAttribute("message", message);
+			request.setAttribute("loc", loc);
+			
+			super.setViewPage("/WEB-INF/msg.jsp");
 		}
 		
 		

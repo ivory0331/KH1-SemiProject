@@ -115,9 +115,13 @@
 <script type="text/javascript">
 	
 	$(document).ready(function(){
+		// 각각의 div에 해당하는 리스트 호출 //
+		func_randomItemCall();
 		func_saleItemCall();
 		func_newItemCall();
 		func_MDItemCall(1);
+		
+		// MD추천에서 해당 분류버튼을 클릭하면 리스트 호출 //
 		$("#list_category li").click(function(){
 			var index = $("#list_category li").index(this)+1;
 			$(this).addClass("select_MDbest");
@@ -153,20 +157,37 @@
 		}	
 	} //end of func_slideR(type)------------------------------------------------
 
+	
+	function func_randomItemCall(){
+		var url="/listCall.do";
+		var data={"type":"random"};
+		reqServer(url,data);
+	}
+	
+	// 신상품 리스트 불러오기 url 호출
 	function func_newItemCall(){
 		var url="/listCall.do";
 		var data={"type":"new"};
 		reqServer(url,data);
 	} // end of func_newItemCall()-----------------------------------------------
 	
+	// MD추천 리스트 불러오기 url 호출
 	function func_MDItemCall(category){
 		var url="/listCall.do";
 		var data={"type":"best","category":category};
 		reqServer(url,data);
 	} // end of func_MDItemCall(category)----------------------------------------
 	
+	// 세일상품 리스트 불러오기 url 호출
+	function func_saleItemCall(){
+		var url="/listCall.do";
+		var data={"type":"sale"};
+		reqServer(url,data);
+	} // end of func_saleItemCall()-----------------------------------------------
 	
 	
+	
+	// 상세보기 url 이동
 	function goDetail(idx){
 		console.log(idx);
 		location.href="<%=ctxPath%>/detail.do?idx="+idx;
@@ -174,6 +195,8 @@
 	
 	
 	
+	
+	// ajax 기능
 	function reqServer(url, data){
 	      console.log(url);
 	      console.log(data);
@@ -204,6 +227,29 @@
 		            	        +"</a><br/>"
 		            	        +"<span>"+func_comma(""+json[i].price)+"원</span>";
 		            	$("#MDbest_item"+i).html(html);
+		            }
+	            }
+	            else if(data.type=="sale"){
+	            	for(var i=0; i<json.length; i++){
+	            		var imgFileName = decodeURIComponent(json[i].product_name);
+		            	var html="<img alt='상품1' src='<%=ctxPath %>/images/"+imgFileName+".png' onclick = 'goDetail("+json[i].product_num+")'>"
+		            	        +"<a href='javascript:goDetail("+json[i].product_num+")'>"
+		            	        +json[i].product_name
+		            	        +"</a><br/>"
+		            	        +"<span>"+func_comma(""+json[i].price)+"원</span>";
+		            	$("#sale_item"+i).html(html);
+		            }
+	            }
+	            
+	            else if(data.type=="random"){
+	            	for(var i=0; i<json.length; i++){
+	            		var imgFileName = decodeURIComponent(json[i].product_name);
+		            	var html="<img alt='상품1' src='<%=ctxPath %>/images/"+imgFileName+".png' onclick = 'goDetail("+json[i].product_num+")'>"
+		            	        +"<a href='javascript:goDetail("+json[i].product_num+")'>"
+		            	        +json[i].product_name
+		            	        +"</a><br/>"
+		            	        +"<span>"+func_comma(""+json[i].price)+"원</span>";
+		            	$("#random_item"+i).html(html);
 		            }
 	            }
 	            

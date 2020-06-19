@@ -81,7 +81,7 @@ public class IndexDAO implements InterIndexDAO{
 			}
 			
 			if("random".equals(type)) {
-				
+				sql= subSql+" where product_num in(?,?,?,?,?,?,?,?) ";
 			}
 			else {
 				sql="select ROM,product_num, product_name, price, stock from (select rownum as ROM, product_num, product_name, price, stock from("+subSql+") )T where T.ROM between 1 and 8 ";
@@ -90,6 +90,14 @@ public class IndexDAO implements InterIndexDAO{
 			pstmt = conn.prepareStatement(sql);
 			
 			if("best".equals(type)) pstmt.setString(1, paraMap.get("category"));
+			
+			else if("random".equals(type)) {
+				String num = paraMap.get("random");
+				String[] numArr = num.split(",");
+				for(int i=0; i<numArr.length; i++) {
+					pstmt.setString(i+1, numArr[i]);
+				}
+			}
 			
 			rs = pstmt.executeQuery();
 			
@@ -153,6 +161,26 @@ public class IndexDAO implements InterIndexDAO{
 			close();
 		}
 		return product;
+	}
+
+	// 모든 상품번호 조회 //
+	@Override
+	public List<String> product_numFind() throws SQLException {
+		List<String> product_numArr = new ArrayList<String>();
+		try {
+			conn = ds.getConnection();
+			String sql = " select product_num from product_table where stock > 0 ";
+			pstmt = conn.prepareStatement(sql);
+			rs = pstmt.executeQuery();
+			while(rs.next()) {
+				String product_num = rs.getString(1);
+				product_numArr.add(product_num);
+			}
+		}
+		finally {
+			close();
+		}
+		return product_numArr;
 	}
 	
 }
