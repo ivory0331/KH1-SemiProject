@@ -87,7 +87,7 @@
 	        <tbody id="pList">
 				<%-- 일단은 페이징처리를 안한 관리자를 제외한 모든 회원정보를 조회하도록 한다. --%>
 				<c:if test="${empty productList}">
-					<tr>
+					<tr> 
 						<td colspan = "3">현재 상품 준비중...</td>
 					</tr>
 				</c:if>
