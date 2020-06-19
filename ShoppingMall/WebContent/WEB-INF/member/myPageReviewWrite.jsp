@@ -124,31 +124,24 @@
 		$("#btnSubmit").click(function(){
 		
 			// == 제목 입력했는지 확인 == //
-			$("input#title").blur(function(){
-	
-				if($(this).val().trim()=="") {
-					
-					alert("제목을 입력해주세요.");	
-										
-					$(this).focus();					
-					return;
-				}
+			if($("input#title").val().trim()=="") {
 				
-			});// end of $("input#title").blur(function(){})---------------------------
+				alert("제목을 입력해주세요.");	
+									
+				$(this).focus();					
+				return;
+			}
 			
 			
-			// == 내용 10글자 이상 입력했는지 확인 == //
-			$("input#fieldCmt").blur(function(){	
+			// == 내용 10글자 이상 입력했는지 확인 == //				
+			if($("input#fieldCmt").val().length < 10) {
 				
-				if($(this).val().length < 10) {
-					
-					alert("내용은 최소 10글자 이상 입력해야 합니다.");	
-										
-					$(this).focus();
-					return;
-				}
+				alert("내용은 최소 10글자 이상 입력해야 합니다.");	
+									
+				$(this).focus();
+				return;
+			}
 				
-			});// end of $("input#fieldCmt").blur(function(){})------------------------
 			
 		
 		});// end of $("#btnRegister").click(function(){})-----------------------------------	
