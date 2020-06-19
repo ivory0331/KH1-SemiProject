@@ -1,6 +1,10 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+    
 <% String ctxPath = request.getContextPath(); %>
+
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -69,6 +73,41 @@
 
 <script type="text/javascript">
 
+	$(document).ready(function(){
+		
+		$("#submit").click(function(){
+			
+		});
+		
+		$("#submit").keydown(function(event){
+			if(event.keyCode == 13) {	// 암호입력란에 엔터를 했을 경우
+				
+			}
+		});
+		
+	});
+	
+	
+	// === 비밀번호 체크 === //
+	function checkPasswd() {
+		
+		var userid = $("#userid").val(); 
+		var pwd = $("#pwd").val().trim();
+		
+		if(pwd == "") {
+			alert("비밀번호를 정확하게 입력해 주세요.");
+			$("#pwd").val("");
+			$("#pwd").focus();
+			return;	// checkPasswd() 함수 종료
+		}
+		
+		var frm = document.loginFrm;
+		frm.method = "post";
+		frm.action = "<%= ctxPath%>/member/myPageMyInfoUpdatePW.do";
+		frm.submit();
+		
+	}// end of function checkPasswd()---------------------------------
+
 </script>
 
 </head>
@@ -78,27 +117,31 @@
 		<div class="section" align="center">
 			<div class="contents">
 							
-			<jsp:include page="../include/myPageSideMenu.jsp"></jsp:include>	
-					
-			<div id="myPage_Contents">		
-				<div id="myInfoUpdate_Header">
-					<h2 id="myInfoUpdate_Title">개인 정보 수정</h2>
-					<div id="line" style="clear:both;"></div>
-				</div>
-				<div id="myInfoUpdate_Section">
-					<h3>비밀번호 재확인</h3>
-					<h5>회원님의 정보를 안전하게 보호하기 위해 비밀번호를 다시 한번 확인해주세요.</h5>
-					<div id="myInfoUpdate_PWcheck">
-						<div>아이디</div>
-						<span id="userid">leess</span>
-						<div>비밀번호</div>
-						<input type="password" name="passwd" id="passwd" />
+			<jsp:include page="../include/myPageSideMenu.jsp"></jsp:include>
+				
+			<c:if test="${not empty sessionScope.loginuser}">		
+			<form name="checkPasswdFrm">
+				<div id="myPage_Contents">		
+					<div id="myInfoUpdate_Header">
+						<h2 id="myInfoUpdate_Title">개인 정보 수정</h2>
+						<div id="line" style="clear:both;"></div>
 					</div>
-					<div>
-						<a id="submit">확인</a>
+					<div id="myInfoUpdate_Section">
+						<h3>비밀번호 재확인</h3>
+						<h5>회원님의 정보를 안전하게 보호하기 위해 비밀번호를 다시 한번 확인해주세요.</h5>
+						<div id="myInfoUpdate_PWcheck">
+							<div>아이디</div>
+							<span id="userid">${(sessionScope.loginuser).userid}</span>
+							<div>비밀번호</div>
+							<input type="password" name="passwd" id="passwd" />
+						</div>
+						<div>
+							<a id="submit">확인</a>
+						</div>
 					</div>
 				</div>
-			</div>
+			</form>	
+			</c:if>
 				
 			</div>
 			<div style="clear:both;"></div>

@@ -149,6 +149,7 @@ create table order_table
 );
 
 /*
+---- #### 주문내역 #### ---- 
 
 order_table 에서 member_num 이 2의
      
@@ -168,11 +169,9 @@ where O.fk_member_num = ?;
 
 */
 
-String sql = "select P.fk_order_num, O.to_char(order_date,'yyyy.mm.dd (hh24시 mi분)') as order_date, O.price,P.product_count, Q.product_name, S.order_state\n"+
-"from order_table O join order_product_table P on O.order_num = P.fk_order_num\n"+
-"join product_table Q on P.fk_product_num = Q.product_num\n"+
-"join order_state_table S on O.fk_category_num = S.category_num\n"+
-"where O.fk_member_num = ?";
+/*
+---- #### 주문 상세내역 #### ---- 
+*/
 
 -- 주문 테이블에 사용할 시퀀스 생성 --
 create sequence seq_order_table
