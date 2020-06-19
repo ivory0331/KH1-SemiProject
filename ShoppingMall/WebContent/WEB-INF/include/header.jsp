@@ -226,6 +226,7 @@
 		border-radius: 50%;
 		background-color: purple;
 		color:white;
+		cursor: pointer;
 	}
 </style>
 
@@ -364,10 +365,10 @@
 			<li><a><span class="listType" onclick="goList()">추천쇼핑</span></a></li>
 			<li><span class="search"><input type="text" placeholder="test"/></span></li>
 			<li>
-				<span class="navi-basket" style="position:relative;">
-					<img src="<%=ctxPath %>/images/basket.jpg" onclick="goBasket()" />
+				<span class="navi-basket" style="position:relative; ">
+					<img src="<%=ctxPath %>/images/basket.jpg"/>
 					<% if(n>0){ %>
-					<div id="basketCnt">
+					<div id="basketCnt" onclick="goBasket()">
 					
 						<%=n %>
 					
