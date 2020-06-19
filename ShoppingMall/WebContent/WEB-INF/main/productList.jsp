@@ -60,33 +60,7 @@
 <script type="text/javascript" src="/ShoppingMall/js/jquery-3.3.1.min.js"></script>
 <script type="text/javascript" src="/ShoppingMall/util/myutil.js"></script>
 <script type="text/javascript">
-	
-	$(document).ready(function(){
-		var cnt = 2;
-		
-		html = "";
-		var productList = "${productList.get(3).product_name}"; // 9개
-		console.log(productList);
-		var productListArr = productList.split(",");
-		var productPhoto = decodeURIComponent("${productList.get(0).product_name}");
-		//var arrProductList = productList.split(",");
-		for(var i=0; i<(productListArr.length/3); i++) { // 3번 반복
-			html += "<tr>";
-			for(var j=0; j<3; j++){
-				html += "<td>"+
-							"<div><img src='pimages/productPhoto.png' /></div>"+
-							"<div>${productList.get(cnt).product_name}</div>"+
-							"<div>${productList.get(cnt).price}</div>"+
-						"</td>";
-						
-			}		
-			
-			html += "</tr>";
-			
-		} // end of for---------------------------------------
-		
-		$("#pList").html(html); 
-	});
+
 	
 </script>
 <body>
@@ -112,6 +86,24 @@
 		<table>
 	        <tbody id="pList">
 				<%-- 일단은 페이징처리를 안한 관리자를 제외한 모든 회원정보를 조회하도록 한다. --%>
+				<c:if test="${empty productList}">
+					<tr>
+						<td colspan = "3">현재 상품 준비중...</td>
+					</tr>
+				</c:if>
+				
+				<c:if test="${not empty productList}">
+					<tr>
+						<td></td>
+						<td></td>
+						<td></td>
+						
+						<c:forEach var="pvo" items="${productList}">
+							<td></td>
+						</c:forEach>
+						
+					</tr>
+				</c:if>
 			</tbody>
 		</table>
 		
