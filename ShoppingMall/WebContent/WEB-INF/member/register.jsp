@@ -556,7 +556,7 @@ div.check_event{
 	   $("#birthdd").html(ddhtml);
 	   
 	   
-	   
+	   // 전체 선택 클릭 시 //
 	   $("input[name='agree_allcheck']").click(function(){
 		   var status = $(this).prop("checked");
 		   console.log(status);
@@ -564,6 +564,23 @@ div.check_event{
 	   });
 	   
 	   
+	   // 필수 선택 클릭 시 //
+	   $("input.agree").click(function(){
+		  var flag = true;
+		  if($(this).prop("checked")){
+			  $("input.agree").each(function(){
+				  var bChecked = $(this).prop("checked");
+			  	if(!bChecked){
+			  		flag = false;
+			  		return false;
+			  	}
+			  });
+		  }
+		  else{
+			  flag = false;
+		  }
+		  $("input[name='agree_allcheck']").prop("checked",flag);
+	   });
 	   
 	         
    }); // end of $(document).ready()-----------------
