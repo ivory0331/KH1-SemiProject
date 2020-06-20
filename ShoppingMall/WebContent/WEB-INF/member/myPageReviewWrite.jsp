@@ -111,7 +111,7 @@
 </style>
 
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-<link rel="stylesheet" href="css/style.css" />
+<link rel="stylesheet" href="<%= ctxPath %>/css/style.css" />
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 <script type="text/javascript" src="/ShoppingMall/js/jquery-3.3.1.min.js"></script>
@@ -134,7 +134,7 @@
 			
 			
 			// == 내용 10글자 이상 입력했는지 확인 == //				
-			if($("input#fieldCmt").val().length < 10) {
+			if($("textarea#fieldCmt").val().length < 10) {
 				
 				alert("내용은 최소 10글자 이상 입력해야 합니다.");	
 									
@@ -142,6 +142,19 @@
 				return;
 			}				
 			
+			// == 이미지 파일을 선택했는지 확인 == //
+			var imgFile = $('#isFile').val().toLowerCase();
+			var fileForm = /(.*?)\.(jpg|jpeg|png|gif|bmp|pdf)$/;
+			var fileSize;		
+			
+			if(imgFile != "") {
+				fileSize = document.getElementById("isFile").files[0].size;
+			    
+			    if(!imgFile.match(fileForm)) {
+			    	alert("이미지 파일만 업로드 가능합니다.");
+			        return;
+			    }
+			}
 		
 		});// end of $("#btnRegister").click(function(){})-----------------------------------	
 		
@@ -201,7 +214,7 @@
 						<tr class="reviewTR image">
 							<th class="reviewTH">사진등록</th>
 							<td class="reviewTD">
-								<input type="file" name="addFile" id="addFile" />
+								<input type="file" name="isFile" id="isFile" accept="image/*" />
 								<span style="font-size:8pt;">구매한 상품이 아니거나 캡쳐 사진을 첨부한 경우, 통보없이 삭제됩니다.</span>
 							</td>
 						</tr>
