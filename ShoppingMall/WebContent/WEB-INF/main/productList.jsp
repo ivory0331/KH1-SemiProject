@@ -1,15 +1,12 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
     
-<%@ page import="java.util.List" %>
 <% 
 	String ctxPath = request.getContextPath(); 
-	List<String> productList = (List<String>)request.getAttribute("productList");
-	int cnt=0;
-
 %>
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
 <!DOCTYPE html>
 <html>
@@ -24,25 +21,13 @@
 		display: inline-block;
 		margin: 30px;
 	}
-	.contents li {
-		border: solid 1px gray;
-		display: inline-block;
-		cursor: pointer;
-	}
-	.contents li:hover {
-		border: solid 3px purple;
-	}
-	.contents li>img {
-		width: 300px;
-		height: 400px;
-	}
 	.contents h3{
 		margin-left: 30px;
 	}
-	.contents h4 {
+	.sub {
 		border-bottom: solid 2px purple;
-		width: 100px;
-		margin-left: 30px;
+		font-size: 15pt;
+		padding: 0px 15px;
 		cursor: pointer;
 	}
 	#smallT {
@@ -52,6 +37,11 @@
 		border: solid 0px red;
 		margin-top: 80px;
 		float: right;
+	}
+	tr, td {
+		border: solid 1px red;
+		display: inline-block;
+		padding: 30px;
 	}
 </style>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
@@ -70,8 +60,11 @@
 			<div class="contents">
 			
 				<div id="smallT">
-					<h3>상품 리스트</h3>
-					<h4>전체보기</h4>
+					<h3>${categoryInfo}</h3>
+					
+					<c:forEach var="cate" items="${categoryList}">
+						<span class="sub">${cate.subcategory_content}</span>
+					</c:forEach>
 				</div>
 				<div id="list">
 					<select>
@@ -94,14 +87,25 @@
 				
 				<c:if test="${not empty productList}">
 					<tr>
-						<td></td>
-						<td></td>
-						<td></td>
+						<c:forEach var="pvo" items="${productList}" varStatus="status">
+							<td>
+								<img width="300px;" height="400px;" src="/ShoppingMall/pImages/beef/${pvo.product_name}.png" />
+								<br/>${pvo.product_name}
+								<c:if test="${pvo.sale != 0}">
+									<br/><span style="text-decoration: line-through;"><fmt:formatNumber value="${pvo.price}" pattern="###,###"/> 원</span>
+									<br/><fmt:formatNumber value="${pvo.salePrice}" pattern="###,###" /> 원
+								</c:if>
+								<c:if test="${pvo.sale == 0}">
+									<br/><fmt:formatNumber value="${pvo.price}" pattern="###,###"/> 원
+									<br/>정가 품목 입니다.
+								</c:if>
+							</td> 
+						<c:if test="${(status.count)%3 == 0 }">
+							</tr>
+							<tr>
+						</c:if>
 						
-						<c:forEach var="pvo" items="${productList}">
-							<td></td>
 						</c:forEach>
-						
 					</tr>
 				</c:if>
 			</tbody>

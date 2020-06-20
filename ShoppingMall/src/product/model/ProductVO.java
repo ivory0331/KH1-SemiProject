@@ -13,6 +13,10 @@ public class ProductVO {
 	private int sale;
 	private int fk_category_num;
 	private int fk_subcategory_num;
+	private int category_num;
+	private String category_content;
+	private int subcategory_num;
+	private String subcategory_content;
 	
 	public ProductVO() { }
 	
@@ -97,6 +101,49 @@ public class ProductVO {
 	}
 	public void setFk_subcategory_num(int fk_subcategory_num) {
 		this.fk_subcategory_num = fk_subcategory_num;
+	}
+	
+	// 세일하는 제품의 가격 알아오기
+	public int getSalePrice() {
+		int result = 0;
+				
+		if(sale != 0) {
+			result = price - (price*(sale/100));
+		}
+		
+		return result;
+	}
+
+	public String getCategory_content() {
+		return category_content;
+	}
+
+	public void setCategory_content(String category_content) {
+		this.category_content = category_content;
+	}
+
+	public String getSubcategory_content() {
+		return subcategory_content;
+	}
+
+	public void setSubcategory_content(String subcategory_content) {
+		this.subcategory_content = subcategory_content;
+	}
+
+	public int getCategory_num() {
+		return category_num;
+	}
+
+	public void setCategory_num(int category_num) {
+		this.category_num = category_num;
+	}
+
+	public int getSubcategory_num() {
+		return subcategory_num;
+	}
+
+	public void setSubcategory_num(int subcategory_num) {
+		this.subcategory_num = subcategory_num;
 	}
 	
 	

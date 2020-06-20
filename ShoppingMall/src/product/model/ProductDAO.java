@@ -57,23 +57,42 @@ public class ProductDAO implements InterProductDAO {
 		try {
 			conn = ds.getConnection();
 			
-			String sql = " select product_num, product_name, price, sale " + 
-						 " from product_table " + 
-						 " where fk_category_num =? and fk_subcategory_num = ? ";
 			
-			pstmt = conn.prepareStatement(sql);
+			String sql = " select P.product_num AS product_num, c.category_content AS category_content, "+
+						 "        S.subcategory_content AS subcategory_content, P.product_name AS product_name, "+
+						 "        P.price AS price, P.stock AS stock, P.sale AS sale "+
+						 " from product_table P JOIN product_category_table C "+
+						 " ON P.fk_category_num = C.category_num "+
+						 " JOIN product_subcategory_table S "+
+						 " on P.fk_subcategory_num = S.subcategory_num "+
+						 " where fk_category_num = ? "; 
 			
-			pstmt.setInt(1, Integer.parseInt(paraMap.get("fk_category_num")));
-			pstmt.setInt(2, Integer.parseInt(paraMap.get("fk_subcategory_num")));
+			if(paraMap.get("fk_subcategory_num") == null) { // 전체보기
+				
+				pstmt = conn.prepareStatement(sql);
+				pstmt.setInt(1, Integer.parseInt(paraMap.get("fk_category_num")));
+			}
+			else if(paraMap.get("fk_subcategory_num") != null) { // 소분류 보기
+				
+				sql += "and fk_subcategory_num = ? ";
+				
+				pstmt = conn.prepareStatement(sql);
+				pstmt.setInt(1, Integer.parseInt(paraMap.get("fk_category_num")));
+				pstmt.setInt(2, Integer.parseInt(paraMap.get("fk_subcategory_num")));	
+			}
+							
 			rs = pstmt.executeQuery();
 			
 			while(rs.next()) {
 				ProductVO pvo = new ProductVO();
 				
 				pvo.setProduct_num(rs.getInt(1));
-				pvo.setProduct_name(rs.getString(2));
-				pvo.setPrice(rs.getInt(3));
-				pvo.setSale(rs.getInt(4));
+				pvo.setCategory_content(rs.getString(2));
+				pvo.setSubcategory_content(rs.getString(3));
+				pvo.setProduct_name(rs.getString(4));
+				pvo.setPrice(rs.getInt(5));
+				pvo.setStock(rs.getInt(6));
+				pvo.setSale(rs.getInt(7));
 				
 				productList.add(pvo);
 			}
@@ -83,6 +102,72 @@ public class ProductDAO implements InterProductDAO {
 		}
 		
 		return productList;
+	}
+
+	
+	// 대분류와 소분류 불러오기
+	@Override
+	public List<ProductVO> categoryList(String fk_category_num) throws SQLException {
+		List<ProductVO> categoryList = new ArrayList<>();
+
+		try {
+			conn = ds.getConnection();
+			
+			String sql = " select distinct C.category_content AS category_content, S.subcategory_content AS subcategory_content "+
+						 " from product_table P JOIN product_category_table C "+
+						 " ON P.fk_category_num = C.category_num "+
+						 " JOIN product_subcategory_table S "+
+						 " on P.fk_subcategory_num = S.subcategory_num "+
+						 " where fk_category_num = ? ";
+			
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, Integer.parseInt(fk_category_num));
+			
+			rs = pstmt.executeQuery();
+			
+			while(rs.next()) {
+				ProductVO pvo = new ProductVO();
+				
+				pvo.setCategory_content(rs.getString(1));
+				pvo.setSubcategory_content(rs.getString(2));
+				
+				categoryList.add(pvo);
+			}
+			
+		} finally {
+			close();
+		}
+		
+		return categoryList;
+	}
+
+	// 소분류 불러오기
+	@Override
+	public String categoryInfo(String fk_category_num) throws SQLException {
+		String categoryInfo = null;
+		
+		try {
+			conn = ds.getConnection();
+			
+			String sql = " select distinct C.category_content AS category_content "+
+						 " from product_table P JOIN product_category_table C "+
+						 " ON P.fk_category_num = C.category_num "+
+						 " where fk_category_num = ?";
+			
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, Integer.parseInt(fk_category_num));
+			
+			rs = pstmt.executeQuery();
+			
+			if(rs.next()) {
+				categoryInfo = rs.getString("category_content");
+			}
+			
+		} finally {
+			close();
+		}
+		
+		return categoryInfo;
 	}
 	
 	

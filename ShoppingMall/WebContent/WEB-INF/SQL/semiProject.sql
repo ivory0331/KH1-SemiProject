@@ -328,6 +328,29 @@ commit;
 select *
 from product_table;
 
+
+update product_table set product_name = '1등급 한우 갈빗살 구이용 200g(냉장)'
+where product_num = 1;
+
+ select P.product_num as PRODUCT_NUM, c.category_content as CATEGORY_CONTENT,
+             S.subcategory_content as SUBCATEGORY_CONTENT, P.product_name as PRODUCT_NAME,
+             P.price as PRICE, P.stock as STOCK, p.sale as sale
+ from product_table P join product_category_table C
+ on P.fk_category_num = C.category_num
+ join product_subcategory_table S
+ on P.fk_subcategory_num = S.subcategory_num
+ where fk_category_num =4 and fk_subcategory_num = 41 ;
+ 
+  select P.product_num AS product_num, c.category_content AS category_content, 
+             S.subcategory_content AS subcategory_content, P.product_name AS product_name,
+             P.price AS price, P.stock AS stock, P.sale AS sale
+ from product_table P JOIN product_category_table C 
+ ON P.fk_category_num = C.category_num 
+ JOIN product_subcategory_table S 
+ on P.fk_subcategory_num = S.subcategory_num 
+ where fk_category_num = 4 and fk_subcategory_num = 41; 
+
+
 update product_table set sale = 10
 where product_num = 1;
 
