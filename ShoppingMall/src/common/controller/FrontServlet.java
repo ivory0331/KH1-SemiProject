@@ -23,7 +23,8 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet(description = "사용자가 웹에서 *.do 을 했을 경우 이 서블릿이 먼저 응답을 해주도록 한다.", 
 			urlPatterns = { "*.do" }, 
 			initParams = { 
-					 @WebInitParam(name = "propertyConfig", value = "C:/Users/user1/Documents/GitHub/KH1-SemiProject/ShoppingMall/WebContent/WEB-INF/Command.properties", description = "*.do 에 대한 클래스의 매핑파일")
+					@WebInitParam(name = "propertyConfig", value = "C:/myjsp/KH1-SemiProject/ShoppingMall/WebContent/WEB-INF/Command.properties", description = "*.do 에 대한 클래스의 매핑파일")
+					//@WebInitParam(name = "propertyConfig", value = "C:/Users/user1/Documents/GitHub/KH1-SemiProject/ShoppingMall/WebContent/WEB-INF/Command.properties", description = "*.do 에 대한 클래스의 매핑파일")
 					//@WebInitParam(name = "propertyConfig", value = "D:/JWA/myjsp/MyMVC/WebContent/WEB-INF/Command.properties", description = "*.up 에 대한 클래스의 매핑파일")
 			})
 public class FrontServlet extends HttpServlet {

@@ -140,8 +140,7 @@
 									
 				$(this).focus();
 				return;
-			}
-				
+			}				
 			
 		
 		});// end of $("#btnRegister").click(function(){})-----------------------------------	
@@ -171,7 +170,7 @@
 						<table class="myOrder_Desc">
 							<tr class="list">
 								<td class="image">
-									<img alt="해당 주문 대표 상품 이미지" src="include/images/logo.png">
+									<img alt="해당 주문 대표 상품 이미지" src="../images/iscream.png">
 								</td>
 								<td class="info">
 									<div class="name">
