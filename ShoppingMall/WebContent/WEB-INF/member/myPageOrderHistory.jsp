@@ -1,5 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>    
+    
 <% String ctxPath = request.getContextPath(); %>
 <!DOCTYPE html>
 <html>
@@ -169,6 +172,16 @@
 
 <script type="text/javascript">
 
+	$(document).ready(function(){
+		
+		$(".myOrder_Name").click(function(){
+			  var order_num = $(this).children(".order_num").text();
+			  // alert(order_num);
+		    location.href="<%= ctxPath%>/member/myPageOrderHistoryDetail.do?order_num="+order_num;  
+		});
+		
+	});// end of $(document).ready()---------------------
+
 </script>
 
 </head>
@@ -198,11 +211,12 @@
 				</div>
 			
 				<div id="myOrderHistory_List">
+					<c:forEach var="ovo" items="${orderList}">
 					<div>
-						<div class="myOrder_Date">0000.00.00 (00시 00분)</div>
+						<div class="myOrder_Date">${ovo.order_date}</div>
 						<div class="myOrder_Goods">
 							<div class="myOrder_Name">
-								<a>상품명1 외 2건</a>
+								<a class="myOrder_Name">상품명1 외 ${ovo.product_count}건</a>
 							</div>
 							<div class="myOrder_block">
 								<div class="myOrder_Info">
@@ -212,15 +226,15 @@
 									<table class="myOrder_Desc">
 										<tr>
 											<td class="mytd1">주문번호</td>
-											<td class="mytd2">1111111111</td>
+											<td class="mytd2 order_num">${ovo.order_num}</td>
 										</tr>
 										<tr>
 											<td class="mytd1">결제금액</td>
-											<td class="mytd2">11,111원</td>
+											<td class="mytd2">${ovo.price}원</td>
 										</tr>
 										<tr>
 											<td class="mytd1">주문상태</td>
-											<td class="status end mytd2">배송완료</td>
+											<td class="status end mytd2">${ovo.order_state}</td>
 										</tr>															
 									</table>						
 									<div style="clear:both;"></div>
@@ -232,45 +246,10 @@
 									</span>
 								</div>
 							</div>
-						</div>
+						</div>						
 					</div>	
-					
-					<div>
-						<div class="myOrder_Date">0000.00.00 (00시 00분)</div>
-						<div class="myOrder_Goods">
-							<div class="myOrder_Name">
-								<a>상품명2 외 1건</a>
-							</div>
-							<div class="myOrder_block">
-								<div class="myOrder_Info">
-									<div class="myOrder_Image">
-										<img alt="해당 주문 대표 상품 이미지" src="include/images/logo.png">
-									</div> 
-									<table class="myOrder_Desc">
-										<tr>
-											<td class="mytd1">주문번호</td>
-											<td class="mytd2">2222222222</td>
-										</tr>
-										<tr>
-											<td class="mytd1">결제금액</td>
-											<td class="mytd2">22,222원</td>
-										</tr>
-										<tr>
-											<td class="mytd1">주문상태</td>
-											<td class="status end mytd2">배송완료</td>
-										</tr>															
-									</table>						
-									<div style="clear:both;"></div>
-								</div>						
-								<div class="myOrder_Status">
-									<span class="myOrder_InnerStatus">
-										<a class="link link_review">후기 작성</a>
-										<a class="link link_question">1:1 문의</a>
-									</span>
-								</div>
-							</div>
-						</div>
-					</div>					
+					</c:forEach>
+								
 				</div>	
 				<div style="border-bottom:solid 1px black; text-align:center;">페이징 처리</div>			
 			</div>						

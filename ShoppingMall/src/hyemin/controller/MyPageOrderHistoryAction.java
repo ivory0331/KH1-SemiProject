@@ -7,7 +7,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import common.controller.AbstractController;
-import hyemin.model.InterMemberDAO;
 import hyemin.model.InterOrderDAO;
 import hyemin.model.MemberVO;
 import hyemin.model.OrderDAO;
@@ -31,6 +30,7 @@ public class MyPageOrderHistoryAction extends AbstractController {
 			String message = "로그인을 하셔야 합니다.";
 			String loc = "javascript:history.back()";
 			
+			request.setAttribute("message", message);
 			request.setAttribute("loc", loc);
 			
 			super.setViewPage("/WEB-INF/msg.jsp");
@@ -57,7 +57,10 @@ public class MyPageOrderHistoryAction extends AbstractController {
 			
 			// *** 페이징처리를 안 한, 특정 회원의 모든 주문내역 보여주기 *** //
 			List<OrderVO> orderList = orderdao.selectOneMemberAllOrder(member_num);
+		
+			request.setAttribute("orderList", orderList);
 			
+		//	super.setRedirect(false);	
 			super.setViewPage("/WEB-INF/member/myPageOrderHistory.jsp");
 		}
 

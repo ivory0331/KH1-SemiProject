@@ -1,12 +1,14 @@
 package hyemin.model;
 
 import java.io.UnsupportedEncodingException;
+import java.security.GeneralSecurityException;
 import java.sql.*;
 
 import javax.naming.*;
 import javax.sql.DataSource;
 
 import util.security.AES256;
+import util.security.Sha256;
 
 public class ReviewDAO implements InterReviewDAO {
 	
@@ -44,6 +46,67 @@ public class ReviewDAO implements InterReviewDAO {
 				e.printStackTrace();
 			}
 		}
+
+		
+		// 상품 후기 작성하기
+		@Override
+		public int writeReview(ReviewVO reviewvo) throws SQLException {
+
+			int result = 0;
+
+		//	try {
+				 conn = ds.getConnection();
+				 
+				 String sql = " insert into review_table(review_num, subject, content, write_date, image, fk_product_num, fk_order_num, fk_member_num) "+
+						 	  " values(seq_review_table.nextval, ?, ?, default, ?, ?, ?, ?) ";
+				 
+				 pstmt = conn.prepareStatement(sql);
+				 
+				 pstmt.setString(1, reviewvo.getSubject());
+				 pstmt.setString(2, reviewvo.getContent());
+				 pstmt.setString(3, reviewvo.getImage());
+				 
+					
+				 
+				 
+				 result = pstmt.executeUpdate();
+		/*		 
+			} catch( UnsupportedEncodingException | GeneralSecurityException e) {
+				e.printStackTrace();
+			} finally {
+				close();
+			}
+		*/	
+			return result;
+		}
 		
 		
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

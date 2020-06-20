@@ -89,11 +89,11 @@
 		padding: 10px;
 	}
 	
-	#title {
+	#subject {
 		width: 100%;
 	}
 	
-	#fieldCmt {
+	#content {
 		resize: none;
 		width: 100%;
 	}
@@ -124,7 +124,7 @@
 		$("#btnSubmit").click(function(){
 		
 			// == 제목 입력했는지 확인 == //
-			if($("input#title").val().trim()=="") {
+			if($("input#subject").val().trim()=="") {
 				
 				alert("제목을 입력해주세요.");	
 									
@@ -134,7 +134,7 @@
 			
 			
 			// == 내용 10글자 이상 입력했는지 확인 == //				
-			if($("textarea#fieldCmt").val().length < 10) {
+			if($("textarea#content").val().length < 10) {
 				
 				alert("내용은 최소 10글자 이상 입력해야 합니다.");	
 									
@@ -142,8 +142,8 @@
 				return;
 			}				
 			
-			// == 이미지 파일을 선택했는지 확인 == //
-			var imgFile = $('#isFile').val().toLowerCase();
+			// == 이미지 파일 유효성 검사 == //
+			var imgFile = $('#image').val().toLowerCase();
 			var fileForm = /(.*?)\.(jpg|jpeg|png|gif|bmp|pdf)$/;
 			var fileSize;		
 			
@@ -156,6 +156,11 @@
 			    }
 			}
 		
+			var frm = document.reviewFrm;
+			frm.method = "POST";
+			frm.action = "myPageReviewWrite.do";
+			frm.submit();			
+			
 		});// end of $("#btnRegister").click(function(){})-----------------------------------	
 		
 		
@@ -170,8 +175,8 @@
 		<div class="section" align="center">
 			<div class="contents">	
 			
-			<jsp:include page="../include/myPageSideMenu.jsp"></jsp:include>
-				
+			<jsp:include page="../include/myPageSideMenu.jsp"></jsp:include>			
+			
 			<div id="myPage_Contents">		
 				<div id="myProductReview_Header">
 					<h2 id="myProductReview_Title">후기 작성</h2>
@@ -193,37 +198,40 @@
 							</tr>
 						</table>	
 					</div>	
-				</div>
+				</div>				
 				
 				<div class="review">
+				<form name="reviewFrm">	
 					<table class="write">
 						<tr class="reviewTR title">
 							<th class="reviewTH">제목</th>
 							<td class="reviewTD">
-								<input type="text" id="title" name="subject" placeholder="제목을 입력해주세요." value="">
+								<input type="text" id="subject" name="subject" placeholder="제목을 입력해주세요." value="">
 							</td>
 						</tr>
 						<tr class="reviewTR contents">
 							<th class="reviewTH">후기작성</th>
 							<td class="reviewTD">
 								<div class="field_cmt">
-									<textarea id="fieldCmt" name="contents" cols="100" rows="10" placeholder="최소 10글자 이상 작성 가능합니다."></textarea>
+									<textarea id="content" name="content" cols="100" rows="10" placeholder="최소 10글자 이상 작성 가능합니다."></textarea>
 								</div>
 							</td>
 						</tr>
 						<tr class="reviewTR image">
 							<th class="reviewTH">사진등록</th>
 							<td class="reviewTD">
-								<input type="file" name="isFile" id="isFile" accept="image/*" />
+								<input type="file" name="image" id="image" accept="image/*" />
 								<span style="font-size:8pt;">구매한 상품이 아니거나 캡쳐 사진을 첨부한 경우, 통보없이 삭제됩니다.</span>
 							</td>
 						</tr>
-					</table>				
-				</div>
+					</table>
+				</form>					
+				</div>				
 				
 				<button type="button" id="btnSubmit" class="button">등록하기</button>
-						
+					
 			</div>
+				
 								
 			</div>
 			<div style="clear:both;"></div>
