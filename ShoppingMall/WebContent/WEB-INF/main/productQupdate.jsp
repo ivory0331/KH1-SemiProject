@@ -55,7 +55,7 @@
 	}
 	
 	#txt_area{
-		overflow-y: scroll;
+		overflow-y: scroll; 
 	}
 	
 </style>

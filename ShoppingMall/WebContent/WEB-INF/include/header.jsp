@@ -73,8 +73,7 @@
 	
 	/*로고 이미지가 있는 영역*/
 	.logo{
-		width: 150px;
-		
+		width: 150px;		
 		clear:both;
 	}
 	
@@ -205,6 +204,7 @@
 		heigth:40px;
 		cursor: pointer;
 	}
+
 </style>
 
 <script type="text/javascript">
@@ -230,6 +230,7 @@
 		},function(){
 			$(".navi-dropdown-content").css({"display":"none","min-width":"150px"}); //원래 있던대로 display와 width 수정
 			$(".navi-categori2").css("display","none");
+
 		});
 		
 		// 고객센터 span태그에 hover했을 때 function
@@ -268,7 +269,9 @@
 		
 		
 		// 전체 카테고리에서 서브 카테고리 변화주기 //
+
 		var $category = $(".navi-categori").find(".listType");
+
 		$category.each(function(index, item){
 			var sub = ["기본채소,쌈 샐러드,특수채소"
 				      ,"국산과일,수입과일,냉동 건과일"
@@ -280,6 +283,7 @@
 				var subArr = sub[index].split(",");
 				for(var i=0; i<subArr.length; i++){
 						 $(".navi-categori2").find(".listType:eq("+i+")").html(subArr[i]);
+
 					} 
 			});
 				
@@ -295,6 +299,7 @@
 	function goList(){
 		location.href="<%= ctxPath%>/productList.do";
 	}
+
 </script>
 </head>
 <body>

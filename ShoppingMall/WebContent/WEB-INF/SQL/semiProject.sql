@@ -24,7 +24,7 @@ create table member_table
 ,constraint pk_member_table PRIMARY KEY (member_num)
 ,constraint uq_member_table_userid UNIQUE(userid)
 ,constraint uq_member_table_email unique(email)
-,constraint ck_member_table_gender CHECK (gender in (1,2))
+,constraint ck_member_table_gender CHECK (gender in (1,2,3))
 ,constraint ck_member_table_status CHECK (status in(1,2,3))
 );
 
@@ -79,6 +79,7 @@ select * from product_category_table;
 select * from product_subcategory_table;
 
 
+
 -- 상품 테이블 생성 --
 create table product_table
 (product_num    number not null -- 상품번호 필수+고유 시퀀스 사용
@@ -99,7 +100,6 @@ create table product_table
 ,constraint fk_product_category_num FOREIGN key(fk_category_num) REFERENCES product_category_table(category_num)
 ,constraint fk_product_subcategory_num FOREIGN key(fk_subcategory_num) REFERENCES product_subcategory_table(subcategory_num)
 );
-
 
 -- 상품 테이블에 사용할 시퀀스 생성 --
 create sequence seq_product_table
@@ -155,8 +155,6 @@ create table order_state_table
 );
 
 
-
-
 -- 주문 정보 테이블 생성 --
 create table order_table
 (order_num  number  not null    -- 주문번호 필수+고유 시퀀스 사용
@@ -175,6 +173,32 @@ create table order_table
 ,constraint fk_order_member FOREIGN key(fk_member_num) REFERENCES member_table(member_num)
 ,constraint fk_order_category foreign key(fk_category_num) references order_state_table(category_num)
 );
+
+
+/*
+---- #### 주문내역 #### ---- 
+
+order_table 에서 member_num 이 2의
+     
+  주문날짜           상품명               상품개수                  주문번호                금액              배송상태       
+order_table     product_table    order_product_table          order_table           order_table     order_state_table
+                                                          order_product_table
+
+order_table O    
+
+
+select P.fk_order_num, O.to_char(order_date,'yyyy-mm-dd hh24:mi:ss') as order_date, O.price,P.product_count,Q.product_name
+,S.order_state
+from order_table O join order_product_table P on O.order_num = P.fk_order_num
+join product_table Q on P.fk_product_num = Q.product_num
+join order_state_table S on O.fk_category_num = S.category_num
+where O.fk_member_num = ?;
+
+*/
+
+/*
+---- #### 주문 상세내역 #### ---- 
+*/
 
 -- 주문 테이블에 사용할 시퀀스 생성 --
 create sequence seq_order_table
@@ -307,6 +331,31 @@ nocycle
 nocache;
 
 
+
+
+
+insert into product_category_table(category_num, category_content) values(1,'채소');
+insert into product_category_table(category_num, category_content) values(2,'과일 견과');
+insert into product_category_table(category_num, category_content) values(3,'수산 해산');
+insert into product_category_table(category_num, category_content) values(4,'정육 계란');
+insert into product_category_table(category_num, category_content) values(5,'음료 우유');
+
+insert into product_subcategory_table(subcategory_num, subcategory_content) values(11,'기본채소');
+insert into product_subcategory_table(subcategory_num, subcategory_content) values(12,'쌈 샐러드');
+insert into product_subcategory_table(subcategory_num, subcategory_content) values(13,'특수채소');
+insert into product_subcategory_table(subcategory_num, subcategory_content) values(21,'국산과일');
+insert into product_subcategory_table(subcategory_num, subcategory_content) values(22,'수입과일');
+insert into product_subcategory_table(subcategory_num, subcategory_content) values(23,'냉동 건과일');
+insert into product_subcategory_table(subcategory_num, subcategory_content) values(31,'생선류');
+insert into product_subcategory_table(subcategory_num, subcategory_content) values(32,'오징어 낙지 문어');
+insert into product_subcategory_table(subcategory_num, subcategory_content) values(33,'새우 게 랍스타');
+insert into product_subcategory_table(subcategory_num, subcategory_content) values(41,'소고기');
+insert into product_subcategory_table(subcategory_num, subcategory_content) values(42,'돼지고기');
+insert into product_subcategory_table(subcategory_num, subcategory_content) values(43,'닭 오리고기');
+insert into product_subcategory_table(subcategory_num, subcategory_content) values(51,'생수 음료 주스');
+insert into product_subcategory_table(subcategory_num, subcategory_content) values(52,'커피 차');
+insert into product_subcategory_table(subcategory_num, subcategory_content) values(53,'우유 두유 요거트');
+
 -- 소고기
 insert into product_table (product_num, product_name, price, stock, origin, packing, unit, seller, seller_phone, fk_category_num, fk_subcategory_num) 
 values(seq_product_table.nextval, '1등급 한우 갈빗살 구이용 200g(냉장)', '31000', '10', '국내산(한우)', '냉장/종이포장', '1팩', '김진하', '01075653393', 4, 41);
@@ -327,7 +376,9 @@ values(seq_product_table.nextval, '와규 MB4+채끝 스테이크 200g(냉장)',
 insert into product_table (product_num, product_name, price, stock, origin, packing, unit, seller, seller_phone, fk_category_num, fk_subcategory_num) 
 values(seq_product_table.nextval, '초이스 찜갈비 2kg(냉동)', '58000', '5', '국내산(한우)', '냉동/종이포장', '1팩', '김진하', '01075653393', 4, 41);
 
+
 commit;
+
 
 -- 돼지고기
 insert into product_table (product_num, product_name, price, stock, origin, packing, unit, seller, seller_phone, fk_category_num, fk_subcategory_num) 
@@ -349,7 +400,9 @@ values(seq_product_table.nextval, '연저육찜', '15000', '6', '국내산', '�
 insert into product_table (product_num, product_name, price, stock, origin, packing, unit, seller, seller_phone, fk_category_num, fk_subcategory_num) 
 values(seq_product_table.nextval, '짭쪼름한맛 삼겹살구이 (냉동)', '4900', '15', '돼지고기(브라질산)', '냉동/종이포장', '1팩', '김진하', '01075653393', 4, 42);
 
+
 commit;
+
 
 -- 닭고기
 insert into product_table (product_num, product_name, price, stock, origin, packing, unit, seller, seller_phone, fk_category_num, fk_subcategory_num) 
@@ -392,17 +445,16 @@ values(seq_product_table.nextval, '바다장어 2마리 450g내외(생물)', '24
 
 
 -- 수산 오징어
-insert into product_table (product_num, product_name, price, stock,깨끗하게 손질된 오징어 두마리(생물)', '14900', '15', '국내산', '냉장/종이포장', '1팩', '김진하', '01075653393', 3, 32);
+insert into product_table (product_num, product_name, price, stock, origin, packing, unit, seller, seller_phone, fk_category_num, fk_subcategory_num) 
+values(seq_product_table.nextval, '깨끗하게 손질된 오징어 두마리(생물)', '14900', '15', '국내산', '냉장/종이포장', '1팩', '김진하', '01075653393', 3, 32);
 insert into product_table (product_num, product_name, price, stock, origin, packing, unit, seller, seller_phone, fk_category_num, fk_subcategory_num) 
 values(seq_product_table.nextval, '동해안 찜용 오징어 330g(냉동)', '11900', '22', '국내산', '냉장/종이포장', '1팩', '김진하', '01075653393', 3, 32);
 insert into product_table (product_num, product_name, price, stock, origin, packing, unit, seller, seller_phone, fk_category_num, fk_subcategory_num) 
-values(seq_product_table.nextval, '모리타니산 자숙문어 한마리(냉동)', ' origin, packing, unit, seller, seller_phone, fk_category_num, fk_subcategory_num) 
-values(seq_product_table.nextval, '27000', '33', '모리타니산', '냉동/종이포장', '1마리', '김진하', '01075653393', 3, 32);
+values(seq_product_table.nextval, '모리타니산 자숙문어 한마리(냉동)', '27000', '33', '모리타니산', '냉동/종이포장', '1마리', '김진하', '01075653393', 3, 32);
 insert into product_table (product_num, product_name, price, stock, origin, packing, unit, seller, seller_phone, fk_category_num, fk_subcategory_num) 
 values(seq_product_table.nextval, '문어 슬라이스 120g(냉장)', '9900', '26', '모리타니산', '냉장/종이포장', '1팩', '김진하', '01075653393', 3, 32);
 insert into product_table (product_num, product_name, price, stock, origin, packing, unit, seller, seller_phone, fk_category_num, fk_subcategory_num) 
 values(seq_product_table.nextval, '손질 통오징어', '8300', '30', '국산', '냉동/종이포장', '1팩', '김진하', '01075653393', 3, 32);
-
 
 -- 수산 새우 게
 insert into product_table (product_num, product_name, price, stock, origin, packing, unit, seller, seller_phone, fk_category_num, fk_subcategory_num) 

@@ -1,5 +1,11 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+   
+<%
+    String ctxPath = request.getContextPath();
+    //    /MyMVC
+%>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -48,13 +54,13 @@
 		<div id="myPage_Menu">
 			<table id="myPage_SideMenu">
 				<tr>
-					<td class="myPage_SideInnerMenu menu1"><a>주문 내역</a></td>
+					<td class="myPage_SideInnerMenu menu1"><a href="<%= ctxPath %>/member/myPageOrderHistory.do">주문 내역</a></td>
 				</tr>
 				<tr>
-					<td class="myPage_SideInnerMenu menu2"><a>상품후기</a></td>
+					<td class="myPage_SideInnerMenu menu2"><a href="<%= ctxPath %>/member/myPageProductPossibleReview.do">상품후기</a></td>
 				</tr>
 				<tr>
-					<td class="myPage_SideInnerMenu menu3"><a>개인 정보 수정</a></td>
+					<td class="myPage_SideInnerMenu menu3"><a href="<%= ctxPath %>/member/myPageMyInfoUpdatePW.do">개인 정보 수정</a></td>
 				</tr>
 				<tr>
 					<td class="myPage_SideInnerMenu menu4"><a>1:1 문의</a></td>

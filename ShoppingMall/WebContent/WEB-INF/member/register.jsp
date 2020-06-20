@@ -9,7 +9,7 @@
 <title>회원가입</title>
 <style type="text/css">
 
- .page_article .fieldhead{
+.page_article .fieldhead{
    margin: 0 auto;
    width: 640px;
 }
@@ -59,6 +59,7 @@ fieldset {
    width: 613px;
    height: 900px;
   /* border : solid 1px navy; */
+
 }
 
 .contents input {
@@ -84,7 +85,7 @@ span.btn_tel{
 }
 
 span.btnCheck_tel{
-   margin-top: 10px;
+    margin-top: 10px;
     background-color: #fff;
    /* border: 1px solid #ccc; */
     color: #ccc;
@@ -176,7 +177,6 @@ button.btn_address{
     vertical-align: top;
 }
 
-
 .memberCols2 {
    padding: 10px 0 ;
    border-top: 0;
@@ -250,7 +250,7 @@ div#submit {
    aline-items : center;
    justify-content : center;
    /* border: solid 1px black; */
-}
+
 button.btn_submit{
    width: 340px;
    height: 54px;
@@ -282,6 +282,7 @@ span.sub_agree{
 div.check_event{
    padding : 7px 0 4px 45px; 
 } 
+
 
 
 </style>
