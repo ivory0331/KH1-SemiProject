@@ -33,14 +33,6 @@
 		font-size: 16pt;
 		display: inline-block;
 		float: left;
-	}
-	
-	#myProductReview_Text {
-		border: solid 0px red;	
-		font-size: 8pt;
-		display: inline-block;
-		margin: 30px 0 0 10px;
-		float: left;
 	}	
 	
 	a.tab {
@@ -107,7 +99,7 @@
 	}
 	
 	.info {
-		width: 400px;
+		width: 550px;
 	}
 	
 	.productName {
@@ -124,12 +116,6 @@
 	.count {
 		font-size: 9pt;
 	}
-	
-	td.delivery {
-		width: 160px;
-		text-align: center;
-		font-size: 10pt;
-	}	
 	
 	a.link_review {
 		border: solid 1px #5f0080;
@@ -177,15 +163,14 @@
 			<div id="myPage_Contents">		
 				<div id="myProductReview_Header">
 					<h2 id="myProductReview_Title">상품후기</h2>
-					<span id="myProductReview_Text">후기 작성은 배송 완료일로부터 30일 이내 가능합니다.</span>	
 					
 					<div style="clear:both; height:20px;"></div>
 					
 					<div class="tab">
-						<a class="tab possibleReview">작성가능 후기(<span>3</span>)</a>	
+						<a class="tab possibleReview" href="<%= ctxPath %>/member/myPageProductPossibleReview.do">작성가능 후기(<span>3</span>)</a>	
 					</div>				
 					<div class="tab">					
-						<a class="tab completedReview">작성완료 후기(<span>2</span>)</a>	
+						<a class="tab completedReview" href="<%= ctxPath %>/member/myPageProductCompleteReview.do">작성완료 후기(<span>2</span>)</a>	
 					</div>	
 					
 					<div style="clear:both; height:10px;"></div>
@@ -213,9 +198,6 @@
 												<span class="count">1개 구매</span>
 											</div>											
 										</td>		
-										<td class="delivery">
-											<span>00월00일 배송완료</span>
-										</td>
 										<td class="link">
 											<a class="link_review">후기 작성</a>
 										</td>																	
@@ -233,9 +215,6 @@
 												<span class="count">1개 구매</span>
 											</div>											
 										</td>		
-										<td class="delivery">
-											<span>00월00일 배송완료</span>
-										</td>
 										<td class="link">
 											<a class="link_review">후기 작성</a>
 										</td>																	
@@ -264,9 +243,6 @@
 												<span class="count">1개 구매</span>
 											</div>											
 										</td>		
-										<td class="delivery">
-											<span>00월00일 배송완료</span>
-										</td>
 										<td class="link">
 											<a class="link_review">후기 작성</a>
 										</td>																	

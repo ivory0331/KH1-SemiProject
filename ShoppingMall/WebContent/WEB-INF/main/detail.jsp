@@ -288,7 +288,7 @@
 	
 	function goTable(num){
 		
-		var top = offSet[num]-Number("81");
+		var top = offSet[num]-Number("90");
 		console.log("top:"+top);
 		$('html, body').animate({scrollTop : top}, 0);
 		
@@ -304,7 +304,7 @@
 			<div class="contents">
 				<div class="info">
 					<div class="goodsImg">
-						<img alt="상품1" src="include/images/logo.png" />
+						<img alt="상품1" src="<%=ctxPath %>/images/logo.png" />
 					</div>
 					<div class="goodsInfo">
 						<p><strong>상품명</strong></p>
@@ -353,9 +353,9 @@
 							<button class="tablinks" onclick="goTable('2')" style="border-right:solid 1px black">상품 문의</button>
 						</div>
 						
-						<img alt="상품이미지1" src="include/images/logo.png" class="otherImg">
-						<img alt="상품이미지1" src="include/images/logo.png" class="otherImg">
-						<img alt="상품이미지1" src="include/images/logo.png" class="otherImg">
+						<img alt="상품이미지1" src="<%=ctxPath %>/images/logo.png" class="otherImg">
+						<img alt="상품이미지1" src="<%=ctxPath %>/images/logo.png" class="otherImg">
+						<img alt="상품이미지1" src="<%=ctxPath %>/images/logo.png" class="otherImg">
 						<div>상품정보(설명)</div>
 					</div>
 				
@@ -484,7 +484,7 @@
 							</tbody>
 						</table>
 						<p align="right">
-							<span class="writeBtn">목록 보기</span><span class="writeBtn" onclick="location.href='productQwrite.jsp'">문의 쓰기</span>
+							<span class="writeBtn" onclick="location.href='<%=ctxPath %>/productList.do'">목록 보기</span><span class="writeBtn" onclick="location.href='<%=ctxPath %>/productQwrite.do'">문의 쓰기</span>
 						</p>
 					</div>
 				</div>

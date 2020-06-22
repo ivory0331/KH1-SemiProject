@@ -10,7 +10,8 @@ public class Sha256 {
             md.update(planText.getBytes());
             byte byteData[] = md.digest();
            /*
-	         1. SHA-256으로 해시
+
+	         1. SHA-256으로 해서
 
              - MessageDigest객체 생성시 알고리즘을 "SHA-256"으로 해서 만든다. 
                              해시된 데이터는 바이트 배열타입의 바이너리 데이터(이진 데이터)이다.

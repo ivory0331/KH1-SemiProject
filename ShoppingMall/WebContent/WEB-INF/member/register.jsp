@@ -8,6 +8,7 @@
 <link rel="stylesheet" href="<%= ctxPath %>/css/style.css" />
 <title>회원가입</title>
 <style type="text/css">
+<<<<<<< HEAD
 
 <<<<<<< HEAD
  .page_article .fieldhead{
@@ -16,11 +17,18 @@
 }
 
 =======
+=======
+
+>>>>>>> hyemin
 .page_article .fieldhead{
    margin: 0 auto;
    width: 640px;
 }
+<<<<<<< HEAD
 >>>>>>> origin/sanga
+=======
+
+>>>>>>> hyemin
 .page_article {
    background-color: #f2f2f2;
    margin: 0 auto;
@@ -32,6 +40,7 @@
 #form {
    width: 640px;
    height: 100%;
+<<<<<<< HEAD
    margin: 0 auto;
 <<<<<<< HEAD
   /* border: solid 1px hotpink; */
@@ -41,14 +50,24 @@
    /*border: solid 1px hotpink;*/
 }
 >>>>>>> origin/sanga
+=======
+   margin: 0 auto;
+  /* border: solid 1px hotpink; */
+}
+
+>>>>>>> hyemin
 .tit {
    text-align: center;
    color: #333;
 }
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 =======
 >>>>>>> origin/sanga
+=======
+
+>>>>>>> hyemin
 .fieldhead_tit{
     padding: 8px 0;
     margin:0;
@@ -72,12 +91,18 @@ fieldset {
    border: none;
    background-color: #fff;
    width: 613px;
+<<<<<<< HEAD
    height: 900px;
 <<<<<<< HEAD
   /* border : solid 1px navy; */
 =======
    /*border : solid 1px navy;*/
 >>>>>>> origin/sanga
+=======
+   height: 900px;
+  /* border : solid 1px navy; */
+
+>>>>>>> hyemin
 }
 
 .contents input {
@@ -92,9 +117,13 @@ input::placeholder {
   padding : 0 5px;
 }
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 =======
 >>>>>>> origin/sanga
+=======
+
+>>>>>>> hyemin
 input.tel_confirm{
    margin-top: 10px;
 }
@@ -106,6 +135,7 @@ span.btn_tel{
 }
 
 span.btnCheck_tel{
+<<<<<<< HEAD
    margin-top: 10px;
     background-color: #fff;
 <<<<<<< HEAD
@@ -113,6 +143,11 @@ span.btnCheck_tel{
 =======
     border: 1px solid #ccc;
 >>>>>>> origin/sanga
+=======
+    margin-top: 10px;
+    background-color: #fff;
+   /* border: 1px solid #ccc; */
+>>>>>>> hyemin
     color: #ccc;
 }
 
@@ -123,9 +158,13 @@ input.gender{
    margin : 10px 5px;
 }
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 =======
 >>>>>>> origin/sanga
+=======
+
+>>>>>>> hyemin
 label.text_position {
     padding: 0px 15px 0px 2px;
     margin:0;
@@ -147,9 +186,13 @@ button.btn_address{
    border-radius: 5px;  
 }
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 =======
 >>>>>>> origin/sanga
+=======
+
+>>>>>>> hyemin
 .birth_day input[type=text] {
     float: left;
     width: 80px;
@@ -200,25 +243,35 @@ button.btn_address{
 .memberCols1 {      
    width: 130px;
    font-size: 14px;
+<<<<<<< HEAD
    font-weight: 500;
 <<<<<<< HEAD
    /* border: solid 1px pink; */
 =======
    /*border: solid 1px pink;*/
 >>>>>>> origin/sanga
+=======
+   font-weight: 500;
+   /* border: solid 1px pink; */
+>>>>>>> hyemin
    padding: 20px 0 20px 15px;   
     color: #333;
     line-height: 20px;
     vertical-align: top;
+<<<<<<< HEAD
 }
 
 <<<<<<< HEAD
+=======
+}
+>>>>>>> hyemin
 
 .memberCols2 {
    padding: 10px 0 ;
    border-top: 0;
    vertical-align: top;
    text-align: left;
+<<<<<<< HEAD
    width: 461px;
 =======
 .memberCols2 {
@@ -229,6 +282,9 @@ button.btn_address{
     text-align: left;
     width: 461px;
 >>>>>>> origin/sanga
+=======
+   width: 461px;
+>>>>>>> hyemin
    height: 20px;
    /*border: solid 1px skyblue;*/
    border-radius: 5px;  
@@ -294,6 +350,7 @@ div#submit {
    padding: 40px 0;
    display: flex;
    aline-items : center;
+<<<<<<< HEAD
    justify-content : center;
 <<<<<<< HEAD
    /* border: solid 1px black; */
@@ -301,6 +358,11 @@ div#submit {
    /*border: solid 1px black;*/
 >>>>>>> origin/sanga
 }
+=======
+   justify-content : center;
+   /* border: solid 1px black; */
+
+>>>>>>> hyemin
 button.btn_submit{
    width: 340px;
    height: 54px;
@@ -330,12 +392,18 @@ span.sub_agree{
    color: gray;
 }
 div.check_event{
+<<<<<<< HEAD
    padding : 7px 0 4px 45px; 
 <<<<<<< HEAD
 } 
 =======
 }
 >>>>>>> origin/sanga
+=======
+   padding : 7px 0 4px 45px; 
+} 
+
+>>>>>>> hyemin
 
 
 </style>
@@ -374,12 +442,17 @@ $(document).ready(function(){
 			         <table>
 			            <tr>
 			               <td class="memberCols1">아이디*</td>
+<<<<<<< HEAD
 			               <td class="memberCols2">
 <<<<<<< HEAD
 			                  <input type="text" name="userid" id="userid" placeholder ="6자 이상의 영문 혹은 영문과 숫자를 조합" value="" maxlength="16" required  >
 =======
 			                  <input type="text" name="userid" id="userid" placeholder ="6자 이상의 영문 혹은 영문과 숫자를 조합" value="" maxlength="16" required autofocus autocomplete="off">
 >>>>>>> origin/sanga
+=======
+			               <td class="memberCols2">
+			                  <input type="text" name="userid" id="userid" placeholder ="6자 이상의 영문 혹은 영문과 숫자를 조합" value="" maxlength="16" required  >
+>>>>>>> hyemin
 			                  <a href="javascript:chkId()"><span class="btnCheck">중복확인</span></a>
 			                  <p class="txt_guide" style="display: block;">
 			                  <span class="txt txt_case1">6자 이상의 영문 혹은 영문과 숫자를 조합</span><br/>

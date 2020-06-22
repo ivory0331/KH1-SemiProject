@@ -99,6 +99,7 @@
 		border-radius: 20px;
 		margin-right: 10px;
 <<<<<<< HEAD
+<<<<<<< HEAD
 		cursor: pointer;
 	}
 	
@@ -107,6 +108,8 @@
 		color:white;
 =======
 >>>>>>> origin/sanga
+=======
+>>>>>>> hyemin
 	}
 	
 </style>
@@ -116,6 +119,7 @@
 <script type="text/javascript" src="/ShoppingMall/js/jquery-3.3.1.min.js"></script>
 <script type="text/javascript" src="/ShoppingMall/util/myutil.js"></script>
 <script type="text/javascript">
+<<<<<<< HEAD
 <<<<<<< HEAD
 	
 	$(document).ready(function(){
@@ -135,6 +139,8 @@
 	}); // end of $(document).ready(function()) ----------------------------------
 =======
 >>>>>>> origin/sanga
+=======
+>>>>>>> hyemin
 
 	// 왼쪽 버튼을 클릭하면 실행되는 function //
 	function func_slideL(type){ //type = 각각의 배너의 class명의 앞부분ex)best, sale
@@ -149,10 +155,14 @@
 										          });
 		}	
 <<<<<<< HEAD
+<<<<<<< HEAD
 	} //end of func_slideL(type) ---------------------------------------------
 =======
 	}
 >>>>>>> origin/sanga
+=======
+	}
+>>>>>>> hyemin
 	
 	// 오른쪽 버튼을 클릭하면 실행되는 function //
 	function func_slideR(type){
@@ -165,6 +175,7 @@
 													 $("#"+type+"_slideR").hide();
 										          });
 		}	
+<<<<<<< HEAD
 <<<<<<< HEAD
 	} //end of func_slideR(type)------------------------------------------------
 
@@ -275,6 +286,10 @@
 	}
 
 >>>>>>> origin/sanga
+=======
+	}
+
+>>>>>>> hyemin
 </script>
 </head>
 <body>
@@ -435,10 +450,14 @@
 						<div id="category_menu">
 							<ul id="list_category">
 <<<<<<< HEAD
+<<<<<<< HEAD
 								<li class="select_MDbest">채소</li>
 =======
 								<li>채소</li>
 >>>>>>> origin/sanga
+=======
+								<li>채소</li>
+>>>>>>> hyemin
 								<li>과일</li>
 								<li>수산</li>
 								<li>정육</li>
