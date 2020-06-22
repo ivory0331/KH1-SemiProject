@@ -98,12 +98,15 @@
 		background-color: #f4f4f4;
 		border-radius: 20px;
 		margin-right: 10px;
+<<<<<<< HEAD
 		cursor: pointer;
 	}
 	
 	.select_MDbest{
 		background-color: purple !important;
 		color:white;
+=======
+>>>>>>> origin/sanga
 	}
 	
 </style>
@@ -113,6 +116,7 @@
 <script type="text/javascript" src="/ShoppingMall/js/jquery-3.3.1.min.js"></script>
 <script type="text/javascript" src="/ShoppingMall/util/myutil.js"></script>
 <script type="text/javascript">
+<<<<<<< HEAD
 	
 	$(document).ready(function(){
 		// 각각의 div에 해당하는 리스트 호출 //
@@ -129,6 +133,8 @@
 			func_MDItemCall(index);
 		});
 	}); // end of $(document).ready(function()) ----------------------------------
+=======
+>>>>>>> origin/sanga
 
 	// 왼쪽 버튼을 클릭하면 실행되는 function //
 	function func_slideL(type){ //type = 각각의 배너의 class명의 앞부분ex)best, sale
@@ -142,7 +148,11 @@
 													 $("#"+type+"_slideL").hide();
 										          });
 		}	
+<<<<<<< HEAD
 	} //end of func_slideL(type) ---------------------------------------------
+=======
+	}
+>>>>>>> origin/sanga
 	
 	// 오른쪽 버튼을 클릭하면 실행되는 function //
 	function func_slideR(type){
@@ -155,6 +165,7 @@
 													 $("#"+type+"_slideR").hide();
 										          });
 		}	
+<<<<<<< HEAD
 	} //end of func_slideR(type)------------------------------------------------
 
 	
@@ -260,6 +271,10 @@
 	   });
 	} // end of reqServer(url, data) --------------------------------------------
 	
+=======
+	}
+
+>>>>>>> origin/sanga
 </script>
 </head>
 <body>
@@ -419,7 +434,11 @@
 						<h3>MD의 추천</h3>
 						<div id="category_menu">
 							<ul id="list_category">
+<<<<<<< HEAD
 								<li class="select_MDbest">채소</li>
+=======
+								<li>채소</li>
+>>>>>>> origin/sanga
 								<li>과일</li>
 								<li>수산</li>
 								<li>정육</li>

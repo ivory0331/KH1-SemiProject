@@ -54,14 +54,18 @@
 		margin-right:10px;
 	}
 	
+<<<<<<< HEAD
 	input[name='imgFile']{
 		display: inline-block;
 	}
 	
+=======
+>>>>>>> origin/sanga
 	#txt_area{
 		overflow-y: scroll;
 	}
 	
+<<<<<<< HEAD
 	#imgAdd{
 		display: inline-block;
 		width: 80px;
@@ -71,6 +75,8 @@
 		cursor: pointer;
 		color:white;
 	}
+=======
+>>>>>>> origin/sanga
 </style>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -78,9 +84,35 @@
 <script type="text/javascript" src="/ShoppingMall/js/jquery-3.3.1.min.js"></script>
 <script type="text/javascript" src="/ShoppingMall/util/myutil.js"></script>
 <script type="text/javascript">
+<<<<<<< HEAD
 	var cnt=1;
 	$(document).ready(function(){
 		
+=======
+	$(document).ready(function(){
+		$("#imgFile").change(function(){
+			if(this.files && this.files[0]) {
+				var fileName = this.files[0].name;
+				var index = fileName.indexOf(".");
+				var fileType = fileName.substr(index);
+				if(fileType==".png"||fileType==".jpg"||fileType==".png"){
+					var reader = new FileReader;
+					reader.onload = function(data) {
+						var html = "<img src='"+data.target.result+"' />";
+						$("#txt_area").append(html);
+					}
+					 reader.readAsDataURL(this.files[0]);
+				}
+				else{
+					alert("이미지만 올릴 수 있습니다.");
+				}
+				// input[type='file'] 초기화 //
+				$("#imgFile").replaceWith( $("#imgFile").clone(true) );
+				$("#imgFile").val(""); 
+			}
+			
+		});
+>>>>>>> origin/sanga
 	});
 	
 	function divCheck(){
@@ -88,12 +120,15 @@
 		console.log($("#txt_area").text());
 	}
 	
+<<<<<<< HEAD
 	function func_addArea(){
 		var html="<input type='file' name=imgFile id='imgFile"+cnt+"' accept='.gif, .jpg, .png' style='margin-top:10px;'/>";
 		$(".productQ-img").append(html);
 		cnt++;
 	}
 	
+=======
+>>>>>>> origin/sanga
 </script>
 </head>
 <body>
@@ -141,6 +176,7 @@
 								<input type="hidden" name="contents"/>
 							</td>
 						</tr>
+<<<<<<< HEAD
 						<tr >
 							<td style="vertical-align: top;">
 								<span id="imgAdd" onclick="func_addArea()">추가 업로드</span>
@@ -148,6 +184,11 @@
 								
 							</td>
 							<td class="productQ-img"><input type="file" name=imgFile id="imgFile0" accept=".gif, .jpg, .png"/> </td>
+=======
+						<tr>
+							<td><label for="imgFile">이미지 추가</label></td>
+							<td><input type="file" id="imgFile" accept=".gif, .jpg, .png"/></td>
+>>>>>>> origin/sanga
 						</tr>
 					</table>
 					<div class="userBtn" align="center">

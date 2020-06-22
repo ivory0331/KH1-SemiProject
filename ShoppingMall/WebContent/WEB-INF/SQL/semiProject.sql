@@ -45,6 +45,7 @@ create table product_category_table
 ,constraint pk_category_num primary key (category_num)
 );
 
+<<<<<<< HEAD
 insert into product_category_table(category_num, category_content) values(1,'채소');
 insert into product_category_table(category_num, category_content) values(2,'과일 견과');
 insert into product_category_table(category_num, category_content) values(3,'수산 해산');
@@ -52,6 +53,8 @@ insert into product_category_table(category_num, category_content) values(4,'정
 insert into product_category_table(category_num, category_content) values(5,'음료 우유');
 
 
+=======
+>>>>>>> origin/sanga
 -- 상품 소분류 카테고리 테이블 생성 --
 create table product_subcategory_table
 (subcategory_num    number  -- 소분류 카테고리 번호 필수+고유
@@ -59,6 +62,7 @@ create table product_subcategory_table
 ,constraint pk_product_subcategory_table primary key (subcategory_num)
 );
 
+<<<<<<< HEAD
 insert into product_subcategory_table(subcategory_num, subcategory_content) values(11,'기본채소');
 insert into product_subcategory_table(subcategory_num, subcategory_content) values(12,'쌈 샐러드');
 insert into product_subcategory_table(subcategory_num, subcategory_content) values(13,'특수채소');
@@ -77,6 +81,9 @@ insert into product_subcategory_table(subcategory_num, subcategory_content) valu
 
 select * from product_category_table;
 select * from product_subcategory_table;
+=======
+
+>>>>>>> origin/sanga
 
 
 -- 상품 테이블 생성 --
@@ -86,11 +93,18 @@ create table product_table
 ,price          number  not null -- 가격 필수
 ,stock          number not null -- 재고 필수
 ,origin         varchar2(50) -- 원산지
+<<<<<<< HEAD
 ,packing        varchar2(80) -- 포장방법
 ,unit           varchar2(50) -- 단위
 ,registerdate   date default sysdate -- 등록날짜
 ,sale           number default 0 -- 세일 상태(0=> 세일x 10=>10%세일)
 ,best_point     number default 0 -- MD best 용도 컬럼
+=======
+,packing      varchar2(80) -- 포장방법
+,unit           varchar2(50) -- 단위
+,registerdate   date default sysdate -- 등록날짜
+,sale           number 
+>>>>>>> origin/sanga
 ,seller         varchar2(50) -- 판매자(관리자 모드시에 사용)
 ,seller_phone   varchar2(80) -- 판매자 번호(관리자 모드시에 사용)
 ,fk_category_num    number not null -- product_category_table에 있는 category_num을 참조하는 컬럼
@@ -101,8 +115,11 @@ create table product_table
 ,constraint fk_product_subcategory_num FOREIGN key(fk_subcategory_num) REFERENCES product_subcategory_table(subcategory_num)
 );
 
+<<<<<<< HEAD
 alter table product_table MODIFY sale number default 0;
 
+=======
+>>>>>>> origin/sanga
 -- 상품 테이블에 사용할 시퀀스 생성 --
 create sequence seq_product_table
 start with 1
@@ -156,9 +173,12 @@ create table order_state_table
 ,constraint pk_order_state  primary key(category_num)
 );
 
+<<<<<<< HEAD
 
 
 
+=======
+>>>>>>> origin/sanga
 -- 주문 정보 테이블 생성 --
 create table order_table
 (order_num  number  not null    -- 주문번호 필수+고유 시퀀스 사용
@@ -308,6 +328,33 @@ nominvalue
 nocycle
 nocache;
 
+<<<<<<< HEAD
+=======
+-- 카테고리 대분류 테이블 생성 -- 
+insert into product_category_table(category_num, category_content) values(1,'채소');
+insert into product_category_table(category_num, category_content) values(2,'과일 견과');
+insert into product_category_table(category_num, category_content) values(3,'수산 해산');
+insert into product_category_table(category_num, category_content) values(4,'정육 계란');
+insert into product_category_table(category_num, category_content) values(5,'음료 우유');
+
+-- 카테고리 소분류 테이블 생성 --
+insert into product_subcategory_table(subcategory_num, subcategory_content) values(11,'기본채소');
+insert into product_subcategory_table(subcategory_num, subcategory_content) values(12,'쌈 샐러드');
+insert into product_subcategory_table(subcategory_num, subcategory_content) values(13,'특수채소');
+insert into product_subcategory_table(subcategory_num, subcategory_content) values(21,'국산과일');
+insert into product_subcategory_table(subcategory_num, subcategory_content) values(22,'수입과일');
+insert into product_subcategory_table(subcategory_num, subcategory_content) values(23,'냉동 건과일');
+insert into product_subcategory_table(subcategory_num, subcategory_content) values(31,'생선류');
+insert into product_subcategory_table(subcategory_num, subcategory_content) values(32,'오징어 낙지 문어');
+insert into product_subcategory_table(subcategory_num, subcategory_content) values(33,'새우 게 랍스타');
+insert into product_subcategory_table(subcategory_num, subcategory_content) values(41,'소고기');
+insert into product_subcategory_table(subcategory_num, subcategory_content) values(42,'돼지고기');
+insert into product_subcategory_table(subcategory_num, subcategory_content) values(43,'닭 오리고기');
+insert into product_subcategory_table(subcategory_num, subcategory_content) values(51,'생수 음료 주스');
+insert into product_subcategory_table(subcategory_num, subcategory_content) values(52,'커피 차');
+insert into product_subcategory_table(subcategory_num, subcategory_content) values(53,'우유 두유 요거트');
+
+>>>>>>> origin/sanga
 
 -- 소고기
 insert into product_table (product_num, product_name, price, stock, origin, packing, unit, seller, seller_phone, fk_category_num, fk_subcategory_num) 
@@ -331,6 +378,39 @@ values(seq_product_table.nextval, '초이스 찜갈비 2kg(냉동)', '58000', '5
 
 commit;
 
+<<<<<<< HEAD
+=======
+select *
+from product_table;
+
+
+update product_table set product_name = '1등급 한우 갈빗살 구이용 200g(냉장)'
+where product_num = 1;
+
+ select P.product_num as PRODUCT_NUM, c.category_content as CATEGORY_CONTENT,
+             S.subcategory_content as SUBCATEGORY_CONTENT, P.product_name as PRODUCT_NAME,
+             P.price as PRICE, P.stock as STOCK, p.sale as sale
+ from product_table P join product_category_table C
+ on P.fk_category_num = C.category_num
+ join product_subcategory_table S
+ on P.fk_subcategory_num = S.subcategory_num
+ where fk_category_num =4 and fk_subcategory_num = 41 ;
+ 
+  select P.product_num AS product_num, c.category_content AS category_content, 
+             S.subcategory_content AS subcategory_content, P.product_name AS product_name,
+             P.price AS price, P.stock AS stock, P.sale AS sale
+ from product_table P JOIN product_category_table C 
+ ON P.fk_category_num = C.category_num 
+ JOIN product_subcategory_table S 
+ on P.fk_subcategory_num = S.subcategory_num 
+ where fk_category_num = 4 and fk_subcategory_num = 41; 
+
+
+update product_table set sale = 10
+where product_num = 1;
+
+
+>>>>>>> origin/sanga
 -- 돼지고기
 insert into product_table (product_num, product_name, price, stock, origin, packing, unit, seller, seller_phone, fk_category_num, fk_subcategory_num) 
 values(seq_product_table.nextval, '국내산 목살 양념구이', '12900', '15', '국내산', '냉동/종이포장', '1팩', '김진하', '01075653393', 4, 42);
@@ -351,7 +431,10 @@ values(seq_product_table.nextval, '연저육찜', '15000', '6', '국내산', '�
 insert into product_table (product_num, product_name, price, stock, origin, packing, unit, seller, seller_phone, fk_category_num, fk_subcategory_num) 
 values(seq_product_table.nextval, '짭쪼름한맛 삼겹살구이 (냉동)', '4900', '15', '돼지고기(브라질산)', '냉동/종이포장', '1팩', '김진하', '01075653393', 4, 42);
 
+<<<<<<< HEAD
 commit;
+=======
+>>>>>>> origin/sanga
 
 -- 닭고기
 insert into product_table (product_num, product_name, price, stock, origin, packing, unit, seller, seller_phone, fk_category_num, fk_subcategory_num) 
@@ -405,12 +488,17 @@ values(seq_product_table.nextval, '문어 슬라이스 120g(냉장)', '9900', '2
 insert into product_table (product_num, product_name, price, stock, origin, packing, unit, seller, seller_phone, fk_category_num, fk_subcategory_num) 
 values(seq_product_table.nextval, '손질 통오징어', '8300', '30', '국산', '냉동/종이포장', '1팩', '김진하', '01075653393', 3, 32);
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> origin/sanga
 -- 수산 새우 게
 insert into product_table (product_num, product_name, price, stock, origin, packing, unit, seller, seller_phone, fk_category_num, fk_subcategory_num) 
 values(seq_product_table.nextval, '갓 잡아올린 신선한 생새우', '18900', '10', '국산', '냉장/종이포장', '1팩', '김진하', '01075653393', 3, 33);
 insert into product_table (product_num, product_name, price, stock, origin, packing, unit, seller, seller_phone, fk_category_num, fk_subcategory_num) 
 values(seq_product_table.nextval, '손질 가을수꽃게 6조각(중 300~400g)(냉동)', '14900', '15', '국산', '냉동/종이포장', '1팩', '김진하', '01075653393', 3, 33);
 insert into product_table (product_num, product_name, price, stock, origin, packing, unit, seller, seller_phone, fk_category_num, fk_subcategory_num) 
+<<<<<<< HEAD
 values(seq_product_table.nextval, '싱싱 흰다리새우(중 220~270g)(냉동)', '10500', '15', '국산', '냉동/종이포장', '1팩', '김진하', '01075653393', 3, 33);
 
 select * from product_table;
@@ -440,3 +528,6 @@ insert into product_detail_table (fk_product_num, representative_image, explain)
 values(3,'1등급 한우 안심 추리 200g(냉장).png','1등급 한우 안심');
 insert into product_detail_table (fk_product_num, representative_image, explain)
 values(4,'1등급 한우 알사태 수육용 500g(냉장).png','1등급 한우 알사태');
+=======
+values(seq_product_table.nextval, '싱싱 흰다리새우(중 220~270g)(냉동)', '10500', '15', '국산', '냉동/종이포장', '1팩', '김진하', '01075653393', 3, 33);
+>>>>>>> origin/sanga

@@ -99,11 +99,6 @@
 		margin: 10px 20px;
 	}
 	
-	#explain{
-		font-size: 18pt;
-		
-	}
-	
 	/* Style the tab */
 	.tab {
 	  overflow: hidden;
@@ -222,12 +217,14 @@
 
 </style>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="/ShoppingMall/js/jquery-3.3.1.min.js"></script>
 <script type="text/javascript" src="/ShoppingMall/util/myutil.js"></script>
 <script type="text/javascript">
 
-	var money = "${product.price}";
+	var money = "1000";
 	var offSet = new Array();
 	
 	
@@ -291,37 +288,11 @@
 	
 	function goTable(num){
 		
-		var top = offSet[num]-Number("90");
+		var top = offSet[num]-Number("81");
 		console.log("top:"+top);
 		$('html, body').animate({scrollTop : top}, 0);
 		
 		
-	}
-	
-	function inBasket(product){
-		console.log(product)
-		if($("#count").val()==0){
-			alert("장바구니에 담을 상품을 선택하세요");
-			return;
-		}
-		
-		$.ajax({
-			 url:"<%=ctxPath%>/inBasket.do",
-	         type:"post",
-	         data:{"product_num":product,
-	        	   "price":$(".numPrice").val(),
-	        	   "count":$("#count").val()
-	        	   },
-	         dataType:"JSON",
-	         success:function(json){
-	        	alert(json.message);
-	        	// $("#basketCnt").html(json.cnt);
-	        	history.go(0);
-	         },
-	         error:function(e){
-	        	 console.log(e);
-	         }
-		});
 	}
 
 </script>
@@ -333,13 +304,13 @@
 			<div class="contents">
 				<div class="info">
 					<div class="goodsImg">
-						<img alt="상품1" src="<%=ctxPath %>/images/${product.representative_img}" />
+						<img alt="상품1" src="include/images/logo.png" />
 					</div>
 					<div class="goodsInfo">
-						<p style="font-size:18pt;">${product.product_name}</p>
+						<p><strong>상품명</strong></p>
 						<dl>
 							<dt>판매단위</dt>
-							<dd>${product.unit}</dd>
+							<dd>1팩</dd>
 						</dl>
 						<dl class="underLine">
 							<dt>중량/용량</dt>
@@ -351,11 +322,11 @@
 						</dl>
 						<dl class="underLine">
 							<dt>원산지</dt>
-							<dd>${product.origin}</dd>
+							<dd>국산</dd>
 						</dl>
 						<dl class="underLine">
 							<dt>포장타입</dt>
-							<dd>${product.packing}</dd>
+							<dd>냉장/종이포장</dd>
 						</dl>
 						<dl class="underLine">
 							<dt>유통기한</dt>
@@ -369,7 +340,7 @@
 							총 상품금액 : <span class="money"></span>원
 							<input type="hidden" class="numPrice" />
 							<br />
-							<span class="basket" onclick = "inBasket('${product.product_num}');">장바구니 담기</span>
+							<span class="basket">장바구니 담기</span>
 						</div>
 					</div>
 				</div>
@@ -382,10 +353,10 @@
 							<button class="tablinks" onclick="goTable('2')" style="border-right:solid 1px black">상품 문의</button>
 						</div>
 						
-						<img alt="상품이미지1" src="<%=ctxPath %>/images/logo.png" class="otherImg">
-						<img alt="상품이미지1" src="<%=ctxPath %>/images/logo.png" class="otherImg">
-						<img alt="상품이미지1" src="<%=ctxPath %>/images/logo.png" class="otherImg">
-						<div id="explain">${product.explain }</div>
+						<img alt="상품이미지1" src="include/images/logo.png" class="otherImg">
+						<img alt="상품이미지1" src="include/images/logo.png" class="otherImg">
+						<img alt="상품이미지1" src="include/images/logo.png" class="otherImg">
+						<div>상품정보(설명)</div>
 					</div>
 				
 					<div class="detailTablePart" id="review">
@@ -513,16 +484,13 @@
 							</tbody>
 						</table>
 						<p align="right">
-							<span class="writeBtn" onclick="location.href='<%=ctxPath %>/productList.do'">목록 보기</span><span class="writeBtn" onclick="location.href='<%=ctxPath %>/productQwrite.do'">문의 쓰기</span>
+							<span class="writeBtn">목록 보기</span><span class="writeBtn" onclick="location.href='productQwrite.jsp'">문의 쓰기</span>
 						</p>
 					</div>
 				</div>
 			</div>
 		</div>
 		<jsp:include page="../include/footer.jsp"></jsp:include>
-	</div>
-	<div class="popupLayer" style="display:none;">
-						클릭했을때 나오는 곳
 	</div>
 </body>
 </html>

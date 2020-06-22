@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<<<<<<< HEAD
 <%@ page import="java.util.List" %>
 <%@ page import="java.util.Map" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
@@ -13,6 +14,10 @@
 	 
 	int n = 0;
 	if(basketNum!=null) n = basketNum.size();
+=======
+<%
+	String ctxPath = request.getContextPath();
+>>>>>>> origin/sanga
 %>
 <!DOCTYPE html>
 <html>
@@ -84,6 +89,7 @@
 	
 	/*로고 이미지가 있는 영역*/
 	.logo{
+<<<<<<< HEAD
 		width: 150px;
 		
 		clear:both;
@@ -94,6 +100,13 @@
 		height: 100px;
 	}
 	
+=======
+		width: 300px;
+		border:solid 1px gray;
+		clear:both;
+	}
+	
+>>>>>>> origin/sanga
 	/*상단에 고정해야 하는 navigation이 있을 영역*/
 	.header-navi{
 		max-width:1700px;
@@ -187,8 +200,12 @@
 		list-style: none;
 		padding:0px;
 		text-align: left;
+<<<<<<< HEAD
 		background-color: #f1f1f1;
 		min-height:150px; 
+=======
+		background-color: #f1f1f1; 
+>>>>>>> origin/sanga
 	}
 	
 	/*하위 navi에 들어가는 li*/
@@ -208,6 +225,7 @@
 	}
 	
 	/*첫번째 하위 navi 안에 있는 li태그에 hover 했을 때 그 li태그의 배경색 변경*/
+<<<<<<< HEAD
 	/*.navi-categori .list:hover{background-color: #f1f1f1;}*/
 	
 	
@@ -229,11 +247,16 @@
 		color:white;
 		cursor: pointer;
 	}
+=======
+	.navi-categori .list:hover{background-color: #f1f1f1;}
+	
+>>>>>>> origin/sanga
 </style>
 
 <script type="text/javascript">
 	$(document).ready(function(){
 		var $list = $(".list"); //하위 navi에 존재하는 li태그들 (배열)
+<<<<<<< HEAD
 		  
 		// 하위 navi에 존재하는 li태그에 hover했을 때 function
 		$(".navi-categori .list").hover(function(){ //마우스를 올렸을 때
@@ -245,6 +268,17 @@
 		},function(){ //마우스를 내렸을 때
 			/* $(".navi-dropdown-content").css("min-width","170px"); //하위 navi가 존재하는 영역의 넓이 150px로 조정
 			$(".navi-categori2").css("display","none"); //navi-categori2(ul)태그의 display none(안보이도록) */
+=======
+		
+		// 하위 navi에 존재하는 li태그에 hover했을 때 function
+		$(".list").hover(function(){ //마우스를 올렸을 때
+			$(".navi-dropdown-content").css("min-width","340px"); //하위 navi가 존재하는 영역의 넓이 300px로 조정
+			$(".navi-categori2").css("display","inline-block"); //navi-categori 옆에 붙을 navi-categori2(ul)태그의 display변경
+			
+		},function(){ //마우스를 내렸을 때
+			$(".navi-dropdown-content").css("min-width","170px"); //하위 navi가 존재하는 영역의 넓이 150px로 조정
+			$(".navi-categori2").css("display","none"); //navi-categori2(ul)태그의 display none(안보이도록)
+>>>>>>> origin/sanga
 		});
 		
 		
@@ -253,7 +287,10 @@
 			$(".navi-dropdown-content").css("display","block"); //하위 navi가 존재하는 영역 display 변경
 		},function(){
 			$(".navi-dropdown-content").css({"display":"none","min-width":"150px"}); //원래 있던대로 display와 width 수정
+<<<<<<< HEAD
 			$(".navi-categori2").css("display","none");
+=======
+>>>>>>> origin/sanga
 		});
 		
 		// 고객센터 span태그에 hover했을 때 function
@@ -292,7 +329,11 @@
 		
 		
 		// 전체 카테고리에서 서브 카테고리 변화주기 //
+<<<<<<< HEAD
 		var $category = $(".navi-categori").find(".listType");
+=======
+		 var $category = $(".navi-categori").find(".listType");
+>>>>>>> origin/sanga
 		$category.each(function(index, item){
 			var sub = ["기본채소,쌈 샐러드,특수채소"
 				      ,"국산과일,수입과일,냉동 건과일"
@@ -301,9 +342,18 @@
 				      ,"생수 음료 주스,커피 차,우유 두유 요거트"];
 				
 			$(item).mouseover(function(){
+<<<<<<< HEAD
 				var subArr = sub[index].split(",");
 				for(var i=0; i<subArr.length; i++){
 						 $(".navi-categori2").find(".listType:eq("+i+")").html(subArr[i]);
+=======
+				$(".navi-categori2").empty();
+				var subArr = sub[index].split(",");
+				for(var i=0; i<subArr.length; i++){
+						// $(".navi-categori2").find(".listType:eq("+i+")").html(subArr[i]);
+						var html="<li class='list'><span class='listType'>"+subArr[i]+"</span></li>";
+						$(".navi-categori2").append(html);
+>>>>>>> origin/sanga
 					} 
 			});
 				
@@ -311,6 +361,7 @@
 		}); 
 		
 	});
+<<<<<<< HEAD
 	
 	function goBasket(){
 		location.href="<%= ctxPath%>/shoppingBasket.do";
@@ -319,12 +370,15 @@
 	function goList(){
 		location.href="<%= ctxPath%>/productList.do";
 	}
+=======
+>>>>>>> origin/sanga
 </script>
 </head>
 <body>
 	
 	<div class="logo_login" align="center">
 		<div class="loginLink"> 
+<<<<<<< HEAD
 			<a href="javascript:location.href='<%=ctxPath%>/member/register.do'">회원가입</a> |
 			 <c:if test="${sessionScope.userid == null }">
 			 	 <a href="javascript:location.href='<%=ctxPath%>/member/login.do'">로그인</a> | 
@@ -332,6 +386,9 @@
 			 <c:if test="${sessionScope.userid != null }">
 			 	회원님 |
 			 </c:if>
+=======
+			<a href="javascript:location.href='<%=ctxPath%>/member/register.do'">회원가입</a> | <a href="javascript:location.href='<%=ctxPath%>/member/login.do'">로그인</a> | 
+>>>>>>> origin/sanga
 			<div class="serviceCenter-dropdown" style="display:inline-block;">
 				<a href="javascript:location.href='<%=ctxPath%>/service.do'">고객센터</a> <span class="underIcon">▼</span>
 				<div class="serviceCenter-dropdown-content" align="left">
@@ -354,6 +411,7 @@
 				<span class="bar">I</span><br/>
 				<div class="navi-dropdown-content" align="left">
 					<ul class="navi-categori">
+<<<<<<< HEAD
 						<li class="list" onclick="goList()"><span class="listType">채소</span></li>
 						<li class="list" onclick="goList()"><span class="listType">과일 견과 쌀</span></li>
 						<li class="list" onclick="goList()"><span class="listType">수산 해산 건어물</span></li>
@@ -383,6 +441,28 @@
 					<%} %>
 				</span>
 			</li>
+=======
+						<li class="list"><span class="listType">채소</span></li>
+						<li class="list"><span class="listType">과일 견과 쌀</span></li>
+						<li class="list"><span class="listType">수산 해산 건어물</span></li>
+						<li class="list"><span class="listType">정육 계란</span></li>
+						<li class="list"><span class="listType">음료 우유 간식</span></li>
+					</ul>
+					<ul class="navi-categori2">
+						<li class="list"><span class="listType">채소6</span></li>
+						<li class="list"><span class="listType">채소7</span></li>
+						<li class="list"><span class="listType">채소8</span></li>
+						<li class="list"><span class="listType">채소9</span></li>
+						<li class="list"><span class="listType">채소10</span></li>
+					</ul>
+				</div>
+			</li>
+			<li><a><span class="listType">알뜰쇼핑</span></a><span class="bar">I</span></li>
+			<li><a><span class="listType">신상품</span></a><span class="bar">I</span></li>
+			<li><a><span class="listType">추천쇼핑</span></a></li>
+			<li><span class="search"><input type="text" placeholder="test"/></span></li>
+			<li><span class="">장바구니 아이콘</span></li>
+>>>>>>> origin/sanga
 		</ul>		
 	</div>
 </body>
