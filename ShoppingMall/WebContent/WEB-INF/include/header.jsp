@@ -2,6 +2,7 @@
     pageEncoding="UTF-8"%>
 <%@ page import="java.util.List" %>
 <%@ page import="java.util.Map" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%
 	String ctxPath = request.getContextPath();
 	Object obj = session.getAttribute("basket");
@@ -324,7 +325,13 @@
 	
 	<div class="logo_login" align="center">
 		<div class="loginLink"> 
-			<a href="javascript:location.href='<%=ctxPath%>/member/register.do'">회원가입</a> | <a href="javascript:location.href='<%=ctxPath%>/member/login.do'">로그인</a> | 
+			<a href="javascript:location.href='<%=ctxPath%>/member/register.do'">회원가입</a> |
+			 <c:if test="${sessionScope.userid == null }">
+			 	 <a href="javascript:location.href='<%=ctxPath%>/member/login.do'">로그인</a> | 
+			 </c:if>
+			 <c:if test="${sessionScope.userid != null }">
+			 	회원님 |
+			 </c:if>
 			<div class="serviceCenter-dropdown" style="display:inline-block;">
 				<a href="javascript:location.href='<%=ctxPath%>/service.do'">고객센터</a> <span class="underIcon">▼</span>
 				<div class="serviceCenter-dropdown-content" align="left">
@@ -366,7 +373,7 @@
 			<li><span class="search"><input type="text" placeholder="test"/></span></li>
 			<li>
 				<span class="navi-basket" style="position:relative; ">
-					<img src="<%=ctxPath %>/images/basket.jpg"/>
+					<img src="<%=ctxPath %>/images/basket.jpg" onclick="goBasket()"/>
 					<% if(n>0){ %>
 					<div id="basketCnt" onclick="goBasket()">
 					
