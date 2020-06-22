@@ -1,6 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<<<<<<< HEAD
 <%@ page import="java.util.List" %>
 <%@ page import="java.util.Map" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
@@ -14,10 +13,7 @@
 	 
 	int n = 0;
 	if(basketNum!=null) n = basketNum.size();
-=======
-<%
-	String ctxPath = request.getContextPath();
->>>>>>> origin/sanga
+
 %>
 <!DOCTYPE html>
 <html>
@@ -411,7 +407,6 @@
 				<span class="bar">I</span><br/>
 				<div class="navi-dropdown-content" align="left">
 					<ul class="navi-categori">
-<<<<<<< HEAD
 						<li class="list" onclick="goList()"><span class="listType">채소</span></li>
 						<li class="list" onclick="goList()"><span class="listType">과일 견과 쌀</span></li>
 						<li class="list" onclick="goList()"><span class="listType">수산 해산 건어물</span></li>
@@ -441,28 +436,6 @@
 					<%} %>
 				</span>
 			</li>
-=======
-						<li class="list"><span class="listType">채소</span></li>
-						<li class="list"><span class="listType">과일 견과 쌀</span></li>
-						<li class="list"><span class="listType">수산 해산 건어물</span></li>
-						<li class="list"><span class="listType">정육 계란</span></li>
-						<li class="list"><span class="listType">음료 우유 간식</span></li>
-					</ul>
-					<ul class="navi-categori2">
-						<li class="list"><span class="listType">채소6</span></li>
-						<li class="list"><span class="listType">채소7</span></li>
-						<li class="list"><span class="listType">채소8</span></li>
-						<li class="list"><span class="listType">채소9</span></li>
-						<li class="list"><span class="listType">채소10</span></li>
-					</ul>
-				</div>
-			</li>
-			<li><a><span class="listType">알뜰쇼핑</span></a><span class="bar">I</span></li>
-			<li><a><span class="listType">신상품</span></a><span class="bar">I</span></li>
-			<li><a><span class="listType">추천쇼핑</span></a></li>
-			<li><span class="search"><input type="text" placeholder="test"/></span></li>
-			<li><span class="">장바구니 아이콘</span></li>
->>>>>>> origin/sanga
 		</ul>		
 	</div>
 </body>
