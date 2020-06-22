@@ -8,27 +8,20 @@
 <link rel="stylesheet" href="<%= ctxPath %>/css/style.css" />
 <title>회원가입</title>
 <style type="text/css">
-<<<<<<< HEAD
 
-<<<<<<< HEAD
  .page_article .fieldhead{
    margin: 0 auto;
    width: 640px;
 }
 
-=======
-=======
 
->>>>>>> hyemin
 .page_article .fieldhead{
    margin: 0 auto;
    width: 640px;
 }
-<<<<<<< HEAD
->>>>>>> origin/sanga
-=======
 
->>>>>>> hyemin
+
+
 .page_article {
    background-color: #f2f2f2;
    margin: 0 auto;
@@ -40,34 +33,17 @@
 #form {
    width: 640px;
    height: 100%;
-<<<<<<< HEAD
    margin: 0 auto;
-<<<<<<< HEAD
+
   /* border: solid 1px hotpink; */
 }
 
-=======
-   /*border: solid 1px hotpink;*/
-}
->>>>>>> origin/sanga
-=======
-   margin: 0 auto;
-  /* border: solid 1px hotpink; */
-}
-
->>>>>>> hyemin
 .tit {
    text-align: center;
    color: #333;
 }
-<<<<<<< HEAD
-<<<<<<< HEAD
 
-=======
->>>>>>> origin/sanga
-=======
 
->>>>>>> hyemin
 .fieldhead_tit{
     padding: 8px 0;
     margin:0;
@@ -91,18 +67,7 @@ fieldset {
    border: none;
    background-color: #fff;
    width: 613px;
-<<<<<<< HEAD
    height: 900px;
-<<<<<<< HEAD
-  /* border : solid 1px navy; */
-=======
-   /*border : solid 1px navy;*/
->>>>>>> origin/sanga
-=======
-   height: 900px;
-  /* border : solid 1px navy; */
-
->>>>>>> hyemin
 }
 
 .contents input {
@@ -116,14 +81,7 @@ input::placeholder {
   color: #ccc;
   padding : 0 5px;
 }
-<<<<<<< HEAD
-<<<<<<< HEAD
 
-=======
->>>>>>> origin/sanga
-=======
-
->>>>>>> hyemin
 input.tel_confirm{
    margin-top: 10px;
 }
@@ -135,19 +93,15 @@ span.btn_tel{
 }
 
 span.btnCheck_tel{
-<<<<<<< HEAD
+
    margin-top: 10px;
-    background-color: #fff;
-<<<<<<< HEAD
+   background-color: #fff;
    /* border: 1px solid #ccc; */
-=======
     border: 1px solid #ccc;
->>>>>>> origin/sanga
-=======
+
     margin-top: 10px;
     background-color: #fff;
    /* border: 1px solid #ccc; */
->>>>>>> hyemin
     color: #ccc;
 }
 

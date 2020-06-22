@@ -98,18 +98,12 @@
 		background-color: #f4f4f4;
 		border-radius: 20px;
 		margin-right: 10px;
-<<<<<<< HEAD
-<<<<<<< HEAD
 		cursor: pointer;
 	}
 	
 	.select_MDbest{
 		background-color: purple !important;
 		color:white;
-=======
->>>>>>> origin/sanga
-=======
->>>>>>> hyemin
 	}
 	
 </style>
