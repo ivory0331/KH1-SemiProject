@@ -349,7 +349,16 @@ $(document).ready(function(){
 			 	 <a href="javascript:location.href='<%=ctxPath%>/member/login.do'">로그인</a> | 
 			 </c:if>
 			 <c:if test="${sessionScope.userid != null }">
-			 	회원님 |
+			 	<div class="mypage-dropdown" style="display:inline-block;">
+				<a href="">${sessionScope.userid}님 로그인</a> <span class="underIcon">▼</span>
+				<div class="mypage-dropdown-content" align="left">
+					<ul class="mypage-categori">
+						<li class="list"><a href="javascript:location.href='<%=ctxPath%>/service/board.do'"><span class="listType">주문내역</span></a></li>
+						<li class="list"><a href="javascript:location.href='<%=ctxPath%>/service/FAQ.do'"><span class="listType">상품 후기</span></a></li>
+						<li class="list"><a href="javascript:location.href='<%=ctxPath%>/service/MyQue.do'"><span class="listType">로그아웃</span></a></li>
+					</ul>
+				</div>
+				</div>
 			 </c:if>
 			<div class="serviceCenter-dropdown" style="display:inline-block;">
 				<a href="javascript:location.href='<%=ctxPath%>/service.do'">고객센터</a> <span class="underIcon">▼</span>

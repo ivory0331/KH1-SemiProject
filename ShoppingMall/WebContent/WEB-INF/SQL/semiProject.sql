@@ -348,24 +348,42 @@ nocache;
 
 
 -- 소고기
-insert into product_table (product_num, product_name, price, stock, origin, packing, unit, seller, seller_phone, fk_category_num, fk_subcategory_num) 
-values(seq_product_table.nextval, '1등급 한우 갈빗살 구이용 200g(냉장)', '31000', '10', '국내산(한우)', '냉장/종이포장', '1팩', '김진하', '01075653393', 4, 41);
-insert into product_table (product_num, product_name, price, stock, origin, packing, unit, seller, seller_phone, fk_category_num, fk_subcategory_num) 
-values(seq_product_table.nextval, '1등급 한우 목심 샤브샤브용 200g(냉장)', '32000', '10', '국내산(한우)', '냉장/종이포장', '1팩', '김진하', '01075653393', 4, 41);
-insert into product_table (product_num, product_name, price, stock, origin, packing, unit, seller, seller_phone, fk_category_num, fk_subcategory_num) 
-values(seq_product_table.nextval, '1등급 한우 안심 추리 200g(냉장)', '35000', '4', '국내산(한우)', '냉장/종이포장', '1팩', '김진하', '01075653393', 4, 41);
-insert into product_table (product_num, product_name, price, stock, origin, packing, unit, seller, seller_phone, fk_category_num, fk_subcategory_num) 
-values(seq_product_table.nextval, '1등급 한우 알사태 수육용 500g(냉장)', '34000', '6', '국내산(한우)', '냉장/종이포장', '1팩', '김진하', '01075653393', 4, 41);
-insert into product_table (product_num, product_name, price, stock, origin, packing, unit, seller, seller_phone, fk_category_num, fk_subcategory_num) 
-values(seq_product_table.nextval, '1등급 한우 채끝 스키야끼용 200g(냉장)', '30000', '10', '국내산(한우)', '냉장/종이포장', '1팩', '김진하', '01075653393', 4, 41);
-insert into product_table (product_num, product_name, price, stock, origin, packing, unit, seller, seller_phone, fk_category_num, fk_subcategory_num) 
-values(seq_product_table.nextval, '1등급 한우 홍두깨 육전용 200g(냉장)', '32000', '10', '국내산(한우)', '냉장/종이포장', '1팩', '김진하', '01075653393', 4, 41);
-insert into product_table (product_num, product_name, price, stock, origin, packing, unit, seller, seller_phone, fk_category_num, fk_subcategory_num) 
-values(seq_product_table.nextval, '와규 MB4+안심 스테이크 200g(냉장)', '33000', '8', '국내산(한우)', '냉장/종이포장', '1팩', '김진하', '01075653393', 4, 41);
-insert into product_table (product_num, product_name, price, stock, origin, packing, unit, seller, seller_phone, fk_category_num, fk_subcategory_num) 
-values(seq_product_table.nextval, '와규 MB4+채끝 스테이크 200g(냉장)', '33000', '10', '국내산(한우)', '냉장/종이포장', '1팩', '김진하', '01075653393', 4, 41);
-insert into product_table (product_num, product_name, price, stock, origin, packing, unit, seller, seller_phone, fk_category_num, fk_subcategory_num) 
-values(seq_product_table.nextval, '초이스 찜갈비 2kg(냉동)', '58000', '5', '국내산(한우)', '냉동/종이포장', '1팩', '김진하', '01075653393', 4, 41);
+insert into product_table (product_num, product_name, price, stock, origin, packing, unit, seller, seller_phone, fk_category_num, fk_subcategory_num,
+representative_img) 
+values(seq_product_table.nextval, '1등급 한우 갈빗살 구이용 200g(냉장)', '31000', '10', '국내산(한우)', '냉장/종이포장', '1팩', '김진하', '01075653393', 4, 41,
+'1등급 한우 갈빗살 구이용 200g(냉장).png');
+insert into product_table (product_num, product_name, price, stock, origin, packing, unit, seller, seller_phone, fk_category_num, fk_subcategory_num,
+representative_img) 
+values(seq_product_table.nextval, '1등급 한우 목심 샤브샤브용 200g(냉장)', '32000', '10', '국내산(한우)', '냉장/종이포장', '1팩', '김진하', '01075653393', 4, 41,
+'1등급 한우 목심 샤브샤브용 200g(냉장).png');
+insert into product_table (product_num, product_name, price, stock, origin, packing, unit, seller, seller_phone, fk_category_num, fk_subcategory_num,
+representative_img) 
+values(seq_product_table.nextval, '1등급 한우 안심 추리 200g(냉장)', '35000', '4', '국내산(한우)', '냉장/종이포장', '1팩', '김진하', '01075653393', 4, 41,
+'1등급 한우 안심 추리 200g(냉장).png');
+insert into product_table (product_num, product_name, price, stock, origin, packing, unit, seller, seller_phone, fk_category_num, fk_subcategory_num,
+representative_img) 
+values(seq_product_table.nextval, '1등급 한우 알사태 수육용 500g(냉장)', '34000', '6', '국내산(한우)', '냉장/종이포장', '1팩', '김진하', '01075653393', 4, 41,
+'1등급 한우 알사태 수육용 500g(냉장).png');
+insert into product_table (product_num, product_name, price, stock, origin, packing, unit, seller, seller_phone, fk_category_num, fk_subcategory_num,
+representative_img) 
+values(seq_product_table.nextval, '1등급 한우 채끝 스키야끼용 200g(냉장)', '30000', '10', '국내산(한우)', '냉장/종이포장', '1팩', '김진하', '01075653393', 4, 41,
+'1등급 한우 채끝 스키야끼용 200g(냉장).png');
+insert into product_table (product_num, product_name, price, stock, origin, packing, unit, seller, seller_phone, fk_category_num, fk_subcategory_num,
+representative_img) 
+values(seq_product_table.nextval, '1등급 한우 홍두깨 육전용 200g(냉장)', '32000', '10', '국내산(한우)', '냉장/종이포장', '1팩', '김진하', '01075653393', 4, 41,
+'1등급 한우 홍두깨 육전용 200g(냉장).png');
+insert into product_table (product_num, product_name, price, stock, origin, packing, unit, seller, seller_phone, fk_category_num, fk_subcategory_num,
+representative_img) 
+values(seq_product_table.nextval, '와규 MB4+안심 스테이크 200g(냉장)', '33000', '8', '국내산(한우)', '냉장/종이포장', '1팩', '김진하', '01075653393', 4, 41,
+'와규 MB4+안심 스테이크 200g(냉장).png');
+insert into product_table (product_num, product_name, price, stock, origin, packing, unit, seller, seller_phone, fk_category_num, fk_subcategory_num,
+representative_img) 
+values(seq_product_table.nextval, '와규 MB4+채끝 스테이크 200g(냉장)', '33000', '10', '국내산(한우)', '냉장/종이포장', '1팩', '김진하', '01075653393', 4, 41,
+'와규 MB4+채끝 스테이크 200g(냉장).png');
+insert into product_table (product_num, product_name, price, stock, origin, packing, unit, seller, seller_phone, fk_category_num, fk_subcategory_num,
+representative_img) 
+values(seq_product_table.nextval, '초이스 찜갈비 2kg(냉동)', '58000', '5', '국내산(한우)', '냉동/종이포장', '1팩', '김진하', '01075653393', 4, 41,
+'초이스 찜갈비 2kg(냉동).png');
 
 commit;
 
@@ -513,6 +531,6 @@ insert into product_detail_table (fk_product_num, representative_image, explain)
 values(3,'1등급 한우 안심 추리 200g(냉장).png','1등급 한우 안심');
 insert into product_detail_table (fk_product_num, representative_image, explain)
 values(4,'1등급 한우 알사태 수육용 500g(냉장).png','1등급 한우 알사태');
-=======
+
 values(seq_product_table.nextval, '싱싱 흰다리새우(중 220~270g)(냉동)', '10500', '15', '국산', '냉동/종이포장', '1팩', '김진하', '01075653393', 3, 33);
 
