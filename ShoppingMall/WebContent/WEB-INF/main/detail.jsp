@@ -224,7 +224,7 @@
 <script type="text/javascript" src="/ShoppingMall/util/myutil.js"></script>
 <script type="text/javascript">
 
-	var money = "1000";
+	var money = "${product.price}";
 	var offSet = new Array();
 	
 	
@@ -294,6 +294,30 @@
 		
 		
 	}
+	
+	function inBasket(){
+		if($("#count").val()==0){
+			alert("장바구니에 담을 물건을 선택하세요");
+			return false;
+		}
+		
+		$.ajax({
+			url:"<%=ctxPath%>/inBasket.do",
+			data:{"product_num":"${product.product_num}"
+				 ,"price":$(".numPrice").val()
+				 ,"count":$("#count").val()},
+			type:"get",
+			dataType:"JSON",
+			success:function(json){
+				console.log(json);
+				alert(json.message);
+				location.reload(true);
+			},
+			error:function(e){
+				alert(e);
+			}
+		});
+	}
 
 </script>
 </head>
@@ -304,33 +328,29 @@
 			<div class="contents">
 				<div class="info">
 					<div class="goodsImg">
-						<img alt="상품1" src="<%=ctxPath %>/images/logo.png" />
+						<img alt="상품1" src="<%=ctxPath %>/images/${product.representative_img}" />
 					</div>
 					<div class="goodsInfo">
-						<p><strong>상품명</strong></p>
+						<h2><strong>${product.product_name}</strong></h2>
+						<dl>
+							<dt>분류</dt>
+							<dd>${product.category_content} / ${product.subcategory_content }</dd>
+						</dl>
 						<dl>
 							<dt>판매단위</dt>
-							<dd>1팩</dd>
-						</dl>
-						<dl class="underLine">
-							<dt>중량/용량</dt>
-							<dd>100g</dd>
+							<dd>${product.unit }</dd>
 						</dl>
 						<dl class="underLine">
 							<dt>배송구분</dt>
-							<dd>샛별배송/택배배송</dd>
+							<dd>택배배송</dd>
 						</dl>
 						<dl class="underLine">
 							<dt>원산지</dt>
-							<dd>국산</dd>
+							<dd>${product.origin}</dd>
 						</dl>
 						<dl class="underLine">
 							<dt>포장타입</dt>
-							<dd>냉장/종이포장</dd>
-						</dl>
-						<dl class="underLine">
-							<dt>유통기한</dt>
-							<dd>농산물임으로 별도 유통기한은 없으나 가급적 빨리 드시기 바랍니다.</dd>
+							<dd>${product.packing}</dd>
 						</dl>
 						<dl class="underLine">
 							<dt>구매수량</dt>
@@ -340,7 +360,7 @@
 							총 상품금액 : <span class="money"></span>원
 							<input type="hidden" class="numPrice" />
 							<br />
-							<span class="basket">장바구니 담기</span>
+							<span class="basket" onclick="inBasket()">장바구니 담기</span>
 						</div>
 					</div>
 				</div>

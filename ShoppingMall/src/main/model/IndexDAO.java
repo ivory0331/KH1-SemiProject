@@ -64,7 +64,7 @@ public class IndexDAO implements InterIndexDAO{
 		try {
 			conn = ds.getConnection();
 			String sql = "";
-			String subSql = " select product_num, product_name, price, stock, to_char(registerdate,'yyyy-mm-dd') as registerdate from product_table ";
+			String subSql = " select product_num, product_name, price, stock, to_char(registerdate,'yyyy-mm-dd') as registerdate, representative_img from product_table ";
 			
 			switch (type) {
 			case "sale":
@@ -84,7 +84,7 @@ public class IndexDAO implements InterIndexDAO{
 				sql= subSql+" where product_num in(?,?,?,?,?,?,?,?) ";
 			}
 			else {
-				sql="select ROM,product_num, product_name, price, stock from (select rownum as ROM, product_num, product_name, price, stock from("+subSql+") )T where T.ROM between 1 and 8 ";
+				sql="select ROM,product_num, product_name, price, stock, representative_img from (select rownum as ROM, product_num, product_name, price, stock, representative_img  from("+subSql+") )T where T.ROM between 1 and 8 ";
 			}
 			
 			pstmt = conn.prepareStatement(sql);
@@ -98,7 +98,7 @@ public class IndexDAO implements InterIndexDAO{
 					pstmt.setString(i+1, numArr[i]);
 				}
 			}
-			
+			System.out.println(sql);
 			rs = pstmt.executeQuery();
 			
 			while(rs.next()) {
@@ -107,6 +107,7 @@ public class IndexDAO implements InterIndexDAO{
 				product.setProduct_name(rs.getString("product_name"));
 				product.setPrice(rs.getInt("price"));
 				product.setStock(rs.getInt("stock"));
+				product.setRepresentative_img(rs.getString("representative_img"));
 				productList.add(product);
 			}
 			
@@ -127,13 +128,11 @@ public class IndexDAO implements InterIndexDAO{
 		
 		try {
 			conn = ds.getConnection();
-			String sql = " select P.product_num, P.product_name, P.price, P.stock, P.origin, P.packing, P.unit, C.category_content , S.subcategory_content" + 
+			String sql = " select P.product_num, P.product_name, P.price, P.stock, P.origin, P.packing, P.unit, P.representative_img, P.explain, C.category_content , S.subcategory_content" + 
 					" from product_table P join product_category_table C \r\n" + 
 					" on P.fk_category_num = C.category_num  " + 
 					" join product_subcategory_table S\r\n" + 
 					" on P.fk_subcategory_num = S.subcategory_num " + 
-					" join product_detail_table D " + 
-					" on P.product_num = D.fk_product_num " +
 					" where P.product_num = ? ";
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, idx);
@@ -148,11 +147,11 @@ public class IndexDAO implements InterIndexDAO{
 				product.setOrigin(rs.getString(5));
 				product.setPacking(rs.getString(6));
 				product.setUnit(rs.getString(7));
-				product.setCategory_content(rs.getString(8));
-				product.setSubcategory_content(rs.getString(9));
-				product.setRepresentative_img(rs.getString(10));
+				product.setRepresentative_img(rs.getString(8));
+				product.setExplain(rs.getString(9));
+				product.setCategory_content(rs.getString(10));
+				product.setSubcategory_content(rs.getString(11));
 				
-				product.setExplain(rs.getString(14));
 			}
 		}
 		finally {

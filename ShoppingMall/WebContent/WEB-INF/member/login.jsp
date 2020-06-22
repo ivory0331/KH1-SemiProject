@@ -30,18 +30,19 @@
     line-height: 35px;
 }
 
-.section_login .tit_login {
+ .tit_login {
     font-weight: 800;
     font-size: 20px;
     line-height: 20px;
     text-align: center;
+    padding: 30px 0;
 }
 
 .section_login * {
     color: #333;
 }
 
-h3 {
+.contents h3 {
     display: block;
     font-weight: bold;
 }
@@ -83,7 +84,7 @@ h3 {
 }
 
 
-.section_login .login_search .bar {
+.login_search .bar {
     float: right;
     width: 1px;
     height: 10px;
@@ -123,7 +124,7 @@ h3 {
 	color: #5f0080;
 	vertical-align: middle;
 	display: inline-block;
-	padding-top:10px;
+	
  	
 }
 
@@ -138,7 +139,7 @@ h3 {
 	<div class="Mycontainer">
 		<jsp:include page="../include/header.jsp"></jsp:include>
 		<div class="section" align="center">
-			<div class="contents">
+			<div class="contents" >
 			<h3 class="tit_login">로그인</h3>
 			<div class="write_form">
 				<form method="post" name="form" id="form" action="#" onsubmit="">

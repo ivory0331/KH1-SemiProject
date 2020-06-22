@@ -241,106 +241,92 @@
 </style>
 
 <script type="text/javascript">
-	$(document).ready(function(){
-		var $list = $(".list"); //하위 navi에 존재하는 li태그들 (배열)
+$(document).ready(function(){
+	var $list = $(".list"); //하위 navi에 존재하는 li태그들 (배열)
 
-		// 하위 navi에 존재하는 li태그에 hover했을 때 function
-		$(".navi-categori .list").hover(function(){ //마우스를 올렸을 때
-			var other = $(this).siblings();
-			$(".navi-dropdown-content").css("min-width","340px"); //하위 navi가 존재하는 영역의 넓이 300px로 조정
-			$(".navi-categori2").css("display","inline-block"); //navi-categori 옆에 붙을 navi-categori2(ul)태그의 display변경
-			$(this).css("background-color","#f1f1f1");
-			other.css("background-color","white");
-		},function(){ //마우스를 내렸을 때
-			/* $(".navi-dropdown-content").css("min-width","170px"); //하위 navi가 존재하는 영역의 넓이 150px로 조정
-			$(".navi-categori2").css("display","none"); //navi-categori2(ul)태그의 display none(안보이도록) */
-
-		
-		// 하위 navi에 존재하는 li태그에 hover했을 때 function
-		$(".list").hover(function(){ //마우스를 올렸을 때
-			$(".navi-dropdown-content").css("min-width","340px"); //하위 navi가 존재하는 영역의 넓이 300px로 조정
-			$(".navi-categori2").css("display","inline-block"); //navi-categori 옆에 붙을 navi-categori2(ul)태그의 display변경
-			
-		},function(){ //마우스를 내렸을 때
-			$(".navi-dropdown-content").css("min-width","170px"); //하위 navi가 존재하는 영역의 넓이 150px로 조정
-			$(".navi-categori2").css("display","none"); //navi-categori2(ul)태그의 display none(안보이도록)
-
-		});
-		
-		
-		// 전체카테고리 li태그에 hover했을 때 function
-		$(".navi-dropdown").hover(function(){
-			$(".navi-dropdown-content").css("display","block"); //하위 navi가 존재하는 영역 display 변경
-		},function(){
-			$(".navi-dropdown-content").css({"display":"none","min-width":"150px"}); //원래 있던대로 display와 width 수정
-			$(".navi-categori2").css("display","none");
-
-
-		});
-		
-		// 고객센터 span태그에 hover했을 때 function
-		$(".serviceCenter-dropdown").hover(function(){
-			$(".serviceCenter-dropdown-content").css("display","block"); //하위 navi가 존재하는 영역 display 변경
-		},function(){
-			$(".serviceCenter-dropdown-content").css({"display":"none"}); //원래 있던대로 display와 width 수정
-		});
-		
-		
-		// === 상단 navi 스크롤 사용 시와 브라우저 가로 길이 변경했을 때 고정하도록 하는 내용 === //
-		
-		var naviPosition = $(".header-navi").offset(); //문서가 로딩 되었을 때 상단 navi가 위치하는 위치값을 변수에 대입
-		
-		//스크롤 이동할 때 실행되는 function
-		$(window).scroll(function(){ 
-			var width = $(".header-navi").css("width"); //스크롤을 움직였을 때 상단 navi의 width값 변수에 대입
-			
-			if($(document).scrollTop()>naviPosition.top){ //스크롤을 움직여 나온 top의 값이 실제 상단 navi의 top값 보다 클 경우(상단 navi가 화면에서 안보여질 때)
-				$(".header-navi").addClass("scroll_fixed"); //상단 navi에 fix기능을 하는 css를 갖는 class(scroll_fixed) 를 추가
-				$(".scroll_fixed").css("width",width); //기존에 있던 width그대로 고정
-				
-			}
-			else{ //반대인 경우(상단 navi가 화면에 보여질 때)
-				$(".header-navi").removeClass("scroll_fixed"); //fix기능을 하는 css를 갖는 class(scroll_fixed)제거
-				$(".header-navi").removeAttr('style'); //고정으로 주고 있었던 css를 리셋
-				
-			}
-		});
-		
-		// 브라우저의 가로길이에 변화가 있을 때 실행되는 function
-		$(window).resize(function(){
-			var width = $(".header").css("width"); //header(로고+링크)영역의 width값 변수에 대입
-			$(".scroll_fixed").css("width",width); //해당 width값을 scroll_fixed(상단navi)클래스에 적용하는 css에 추가
-		});
-		
-		
-		// 전체 카테고리에서 서브 카테고리 변화주기 //
-		var $category = $(".navi-categori").find(".listType");
-
-		$category.each(function(index, item){
-			var sub = ["기본채소,쌈 샐러드,특수채소"
-				      ,"국산과일,수입과일,냉동 건과일"
-				      ,"생선류,오징어 낙지 문어,새우 게 랍스타"
-				      ,"소고기,돼지고기,닭 오리고기"
-				      ,"생수 음료 주스,커피 차,우유 두유 요거트"];
-				
-			$(item).mouseover(function(){
-				var subArr = sub[index].split(",");
-				for(var i=0; i<subArr.length; i++){
-						 $(".navi-categori2").find(".listType:eq("+i+")").html(subArr[i]);
-
-				$(".navi-categori2").empty();
-				var subArr = sub[index].split(",");
-				for(var i=0; i<subArr.length; i++){
-						// $(".navi-categori2").find(".listType:eq("+i+")").html(subArr[i]);
-						var html="<li class='list'><span class='listType'>"+subArr[i]+"</span></li>";
-						$(".navi-categori2").append(html); 
-			});
-				
-			
-		}); 
-		
+	// 하위 navi에 존재하는 li태그에 hover했을 때 function
+	$(".navi-categori .list").hover(function(){ //마우스를 올렸을 때
+		var other = $(this).siblings();
+		$(".navi-dropdown-content").css("min-width","340px"); //하위 navi가 존재하는 영역의 넓이 300px로 조정
+		$(".navi-categori2").css("display","inline-block"); //navi-categori 옆에 붙을 navi-categori2(ul)태그의 display변경
+		$(this).css("background-color","#f1f1f1");
+		other.css("background-color","white");
+	},function(){ //마우스를 내렸을 때
+		// $(".navi-dropdown-content").css("min-width","170px"); //하위 navi가 존재하는 영역의 넓이 150px로 조정
+		// $(".navi-categori2").css("display","none"); //navi-categori2(ul)태그의 display none(안보이도록) 
 	});
+	
+	
+	// 전체카테고리 li태그에 hover했을 때 function
+	$(".navi-dropdown").hover(function(){
+		$(".navi-dropdown-content").css("display","block"); //하위 navi가 존재하는 영역 display 변경
+	},function(){
+		 $(".navi-dropdown-content").css({"display":"none","min-width":"150px"}); //원래 있던대로 display와 width 수정
+		 $(".navi-categori2").css("display","none");
+	});
+	
+	
+	// 고객센터 span태그에 hover했을 때 function
+	$(".serviceCenter-dropdown").hover(function(){
+		$(".serviceCenter-dropdown-content").css("display","block"); //하위 navi가 존재하는 영역 display 변경
+	},function(){
+		$(".serviceCenter-dropdown-content").css({"display":"none"}); //원래 있던대로 display와 width 수정
+	});
+	
+	
+	// === 상단 navi 스크롤 사용 시와 브라우저 가로 길이 변경했을 때 고정하도록 하는 내용 === //
+	
+	var naviPosition = $(".header-navi").offset(); //문서가 로딩 되었을 때 상단 navi가 위치하는 위치값을 변수에 대입
+	
+	//스크롤 이동할 때 실행되는 function
+	$(window).scroll(function(){ 
+		var width = $(".header-navi").css("width"); //스크롤을 움직였을 때 상단 navi의 width값 변수에 대입
+		
+		if($(document).scrollTop()>naviPosition.top){ //스크롤을 움직여 나온 top의 값이 실제 상단 navi의 top값 보다 클 경우(상단 navi가 화면에서 안보여질 때)
+			$(".header-navi").addClass("scroll_fixed"); //상단 navi에 fix기능을 하는 css를 갖는 class(scroll_fixed) 를 추가
+			$(".scroll_fixed").css("width",width); //기존에 있던 width그대로 고정
+			
+		}
+		else{ //반대인 경우(상단 navi가 화면에 보여질 때)
+			$(".header-navi").removeClass("scroll_fixed"); //fix기능을 하는 css를 갖는 class(scroll_fixed)제거
+			$(".header-navi").removeAttr('style'); //고정으로 주고 있었던 css를 리셋
+			
+		}
+	});
+	
+	// 브라우저의 가로길이에 변화가 있을 때 실행되는 function
+	$(window).resize(function(){
+		var width = $(".header").css("width"); //header(로고+링크)영역의 width값 변수에 대입
+		$(".scroll_fixed").css("width",width); //해당 width값을 scroll_fixed(상단navi)클래스에 적용하는 css에 추가
+	});
+	
+	
+	// 전체 카테고리에서 서브 카테고리 변화주기 //
+	var $category = $(".navi-categori").find(".listType");
+	$category.each(function(index, item){
+		var sub = ["기본채소,쌈 샐러드,특수채소"
+			      ,"국산과일,수입과일,냉동 건과일"
+			      ,"생선류,오징어 낙지 문어,새우 게 랍스타"
+			      ,"소고기,돼지고기,닭 오리고기"
+			      ,"생수 음료 주스,커피 차,우유 두유 요거트"];
+			
+		$(item).mouseover(function(){
+			var subArr = sub[index].split(",");
+			for(var i=0; i<subArr.length; i++){
+					 $(".navi-categori2").find(".listType:eq("+i+")").html(subArr[i]);
 
+			$(".navi-categori2").empty();
+			var subArr = sub[index].split(",");
+			for(var i=0; i<subArr.length; i++){
+					// $(".navi-categori2").find(".listType:eq("+i+")").html(subArr[i]);
+					var html="<li class='list'><span class='listType'>"+subArr[i]+"</span></li>";
+					$(".navi-categori2").append(html); 
+			}
+			}	
+		});
+	
+	});
+});
 	
 	function goBasket(){
 		location.href="<%= ctxPath%>/shoppingBasket.do";
@@ -357,8 +343,9 @@
 	<div class="logo_login" align="center">
 		<div class="loginLink"> 
 
-			<a href="javascript:location.href='<%=ctxPath%>/member/register.do'">회원가입</a> |
+			
 			 <c:if test="${sessionScope.userid == null }">
+			 	 <a href="javascript:location.href='<%=ctxPath%>/member/register.do'">회원가입</a> |
 			 	 <a href="javascript:location.href='<%=ctxPath%>/member/login.do'">로그인</a> | 
 			 </c:if>
 			 <c:if test="${sessionScope.userid != null }">
@@ -415,8 +402,6 @@
 					<%} %>
 				</span>
 			</li>
-			<li><span class="navi-basket"><img src="<%=ctxPath %>/images/basket.jpg" onclick="goBasket()"/></span></li>
-
 		</ul>		
 	</div>
 </body>
