@@ -1,6 +1,22 @@
 show user;
 -- USER이(가) "SEMIORAUSER1"입니다.
 
+drop table review_table;
+drop table order_product_table;
+drop table one_inquiry_table;
+drop table one_category_table;
+drop table order_table;
+drop table order_state_table;
+drop table product_inquiry_table;
+drop table product_detail_table;
+drop table product_table;
+drop table product_category_table;
+drop table product_subcategory_table;
+drop table notice_table;
+drop table FAQ_table;
+drop table inquiry_category_table;
+drop table member_table;
+
 -- 회원 테이블 --
 create table member_table
 (member_num number  not null -- 회원번호 필수입력 + 유일한 값(primary) + 시퀀스 사용
@@ -8,25 +24,23 @@ create table member_table
 ,userid     varchar2(50) not null -- 유저id 필수입력 + 유일한 값
 ,pwd        varchar2(300) not null -- 암호 필수입력 (SHA-256 암호화 대상)
 ,email      varchar2(300) not null -- 이메일(암호화) 필수입력 + 유일한 값
-,hp1        varchar2(30) not null -- 핸드폰 번호 앞자리(010) 필수입력
-,hp2        varchar2(300) not null -- 핸드폰 번호 중간자리 필수입력 (AES-256 암호화/복호화 대상) 
-,hp3        varchar2(300) not null -- 핸드폰 번호 뒷자리 필수입력 (AES-256 암호화/복호화 대상)
+,mobile       varchar2(30) not null -- 핸드폰 번호 (암호화)
 ,postcode   varchar2(100) -- 우편번호
-,address    varchar2(100) -- 주소
+,address    varchar2(200) -- 주소
 ,detailAddress  varchar2(100) -- 상세주소
-,extraAddress   varchar2(100) -- 추가주소
 ,gender     number(1) -- 성별
-,birthyear  varchar2(20) -- 생년
-,birthmonth varchar2(10) -- 생월
-,birthday   varchar2(20) -- 생일
-,pwd_change_date date -- 암호 수정한 날짜 
-,status     number(1) default 1 -- 회원상태(일반회원, 관리자, 탈퇴자)
+,birthday   varchar2(8) -- 생년월일
+,registerdate date default sysdate -- 가입날짜
+,pwd_change_date date default sysdate -- 암호 수정한 날짜 
+,last_login_date date default sysdate -- 마지막 로그인 날짜
+,status     number(1) default 1 -- 회원상태(일반회원, 관리자, 휴면상태)
 ,constraint pk_member_table PRIMARY KEY (member_num)
 ,constraint uq_member_table_userid UNIQUE(userid)
 ,constraint uq_member_table_email unique(email)
-,constraint ck_member_table_gender CHECK (gender in (1,2))
-,constraint ck_member_table_status CHECK (status in(1,2,3))
+,constraint ck_member_table_gender CHECK (gender in (0,1,2))
+,constraint ck_member_table_status CHECK (status in(0,1,2))
 );
+
 
 -- 회원테이블에 사용할 시퀀스 생성 --
 create sequence seq_member_table
@@ -45,16 +59,15 @@ create table product_category_table
 ,constraint pk_category_num primary key (category_num)
 );
 
-<<<<<<< HEAD
+
 insert into product_category_table(category_num, category_content) values(1,'채소');
 insert into product_category_table(category_num, category_content) values(2,'과일 견과');
 insert into product_category_table(category_num, category_content) values(3,'수산 해산');
-insert into product_category_table(category_num, category_content) values(4,'정육 계란');
+insert into product_category_table(category_num, category_content) values(4,'정육');
 insert into product_category_table(category_num, category_content) values(5,'음료 우유');
 
 
-=======
->>>>>>> origin/sanga
+
 -- 상품 소분류 카테고리 테이블 생성 --
 create table product_subcategory_table
 (subcategory_num    number  -- 소분류 카테고리 번호 필수+고유
@@ -62,7 +75,7 @@ create table product_subcategory_table
 ,constraint pk_product_subcategory_table primary key (subcategory_num)
 );
 
-<<<<<<< HEAD
+
 insert into product_subcategory_table(subcategory_num, subcategory_content) values(11,'기본채소');
 insert into product_subcategory_table(subcategory_num, subcategory_content) values(12,'쌈 샐러드');
 insert into product_subcategory_table(subcategory_num, subcategory_content) values(13,'특수채소');
@@ -81,9 +94,6 @@ insert into product_subcategory_table(subcategory_num, subcategory_content) valu
 
 select * from product_category_table;
 select * from product_subcategory_table;
-=======
-
->>>>>>> origin/sanga
 
 
 -- 상품 테이블 생성 --
@@ -93,20 +103,15 @@ create table product_table
 ,price          number  not null -- 가격 필수
 ,stock          number not null -- 재고 필수
 ,origin         varchar2(50) -- 원산지
-<<<<<<< HEAD
-,packing        varchar2(80) -- 포장방법
-,unit           varchar2(50) -- 단위
-,registerdate   date default sysdate -- 등록날짜
-,sale           number default 0 -- 세일 상태(0=> 세일x 10=>10%세일)
-,best_point     number default 0 -- MD best 용도 컬럼
-=======
 ,packing      varchar2(80) -- 포장방법
 ,unit           varchar2(50) -- 단위
 ,registerdate   date default sysdate -- 등록날짜
-,sale           number 
->>>>>>> origin/sanga
+,sale           number default 0 -- 세일 %값
+,best_point     number -- 관리자가 추천하는 수 (MD추천)
 ,seller         varchar2(50) -- 판매자(관리자 모드시에 사용)
 ,seller_phone   varchar2(80) -- 판매자 번호(관리자 모드시에 사용)
+,explain    varchar2(4000) -- 상품설명
+,representative_img varchar2(100) not null
 ,fk_category_num    number not null -- product_category_table에 있는 category_num을 참조하는 컬럼
 ,fk_subcategory_num number not null -- product_subcategory_table에 있는 subcategory_num을 참조하는 컬럼
 ,constraint pk_product_table primary key (product_num)
@@ -115,11 +120,8 @@ create table product_table
 ,constraint fk_product_subcategory_num FOREIGN key(fk_subcategory_num) REFERENCES product_subcategory_table(subcategory_num)
 );
 
-<<<<<<< HEAD
-alter table product_table MODIFY sale number default 0;
 
-=======
->>>>>>> origin/sanga
+
 -- 상품 테이블에 사용할 시퀀스 생성 --
 create sequence seq_product_table
 start with 1
@@ -130,15 +132,10 @@ nocycle
 nocache;
 
 -- 상품 이미지와 설명 테이블 생성 --
-create table product_detail_table
+create table product_image_table
 (fk_product_num number not null -- 상품테이블에 있는 상품번호를 참조받는 컬럼
-,representative_img varchar2(100) not null -- 상품을 대표하는 이미지(리스트 및 상세에서 사용)
-,image1 varchar2(100) -- 상품설명에 사용할 이미지1
-,image2 varchar2(100) -- 상품설명에 사용할 이미지2
-,image3 varchar2(100) -- 상품설명에 사용할 이미지3
-,explain    varchar2(4000) -- 상품설명
+,image  varchar2(100)
 ,constraint fk_prodcut_detail_num FOREIGN key (fk_product_num) REFERENCES product_table(product_num) on DELETE CASCADE
-,constraint pk_product_detail_num primary key (fk_product_num)
 );
 
 
@@ -151,9 +148,22 @@ create table product_inquiry_table
 ,answer     varchar2(4000)          -- 관리자의 답변(문의가 들어오면 바로 답변을 받는 것이 아니기에 null허용)
 ,fk_member_num  number not null     -- 회원테이블의 회원번호를 참조받는 컬럼 필수(참조하는 값이 삭제되면 따라서 삭제됨)
 ,fk_product_num number not null     -- 상품테이블의 회원번호를 참조받는 컬럼 필수(참조하는 값이 삭제되면 따라서 삭제됨)
+,emailFlag      number(1) default 0 -- 이메일로 답변 받고자 하는지 판단하는 컬럼
+,smsFlag        number(1) default 0 -- 문자로 답변 받고자 하는지 판단하는 컬럼
+,secretFlag     number(1) default 0 -- 비밀글로 하고자 하는지 판단하는 컬럼
 ,constraint pk_product_inquiry primary key(inquiry_num)
 ,constraint fk_inquiry_member FOREIGN key(fk_member_num) REFERENCES member_table(member_num)on delete CASCADE
 ,constraint fk_inquiry_product foreign key(fk_product_num) REFERENCES product_table(product_num)on delete cascade
+,constraint ck_emailFlag check (emailFlag in(0,1))
+,constraint ck_smsFlag check (smsFlag in(0,1))
+,constraint ck_secretFlag check (secretFlag in(0,1))
+);
+
+-- 상품문의 이미지 테이블 --
+create table product_inquiry_image_table
+(fk_inquiry_num number not null
+,image varchar2(100)
+,constraint fk_inquiry_image FOREIGN key (fk_inquiry_num) REFERENCES product_inquiry_table(inquiry_num)
 );
 
 -- 상품문의 테이블에 사용할 시퀀스 생성 --
@@ -173,12 +183,7 @@ create table order_state_table
 ,constraint pk_order_state  primary key(category_num)
 );
 
-<<<<<<< HEAD
 
-
-
-=======
->>>>>>> origin/sanga
 -- 주문 정보 테이블 생성 --
 create table order_table
 (order_num  number  not null    -- 주문번호 필수+고유 시퀀스 사용
@@ -188,7 +193,6 @@ create table order_table
 ,recipient_postcode varchar2(100) not null  -- 받는 사람의 우편번호
 ,recipient_address  varchar2(100) not null  -- 받는 사람의 주소
 ,recipient_detailaddress varchar2(100) not null -- 받는 사람의 상세주소
-,recipient_extraaddress varchar2(100) not null -- 받는 사람의 추가주소
 ,price  number  not null    -- 주문금액 필수
 ,memo   varchar2(200)       -- 요청사항
 ,fk_member_num  number  not null    -- 회원테이블의 회원번호를 참조하는 컬럼
@@ -213,8 +217,11 @@ create table order_product_table
 (product_count  number not null -- 주문한 상품의 갯수 필수
 ,fk_order_num   number not null -- 주문정보 테이블의 주문번호를 참조하는 컬럼
 ,fk_product_num number not null -- 상품테이블의 상품번호를 참조하는 컬럼
+,price          number not null -- 주문상품의 가격
+,reviewFlag     number(1) default 0
 ,constraint fk_order FOREIGN key (fk_order_num) REFERENCES order_table(order_num)
 ,constraint fk_product FOREIGN key (fk_product_num ) REFERENCES product_table(product_num)
+,constraint ck_reviewFlag check (reviewFlag in (0,1))
 );
 
 
@@ -224,7 +231,8 @@ create table review_table
 ,subject    varchar2(50) not null -- 후기 제목  필수
 ,content    varchar2(4000) not null -- 후기 내용 필수
 ,write_date date default sysdate -- 작성 날짜
-,image      varchar2(4000) -- 내용에 들어가는 이미지
+,hit        number default 0 -- 조회수
+,favorite   number default 0 -- 좋아요 수
 ,fk_product_num number not null -- 상품테이블에서 상품번호를 참조하는 컬럼 -- 두 개의 컬럼을 복합해서 유니크 키로 제약 
 ,fk_order_num   number not null -- 주문테이블에서 주문번호를 참조하는 컬럼 --
 ,fk_member_num  number not null -- 회원테이블에서 회원번호를 참조하는 컬림
@@ -235,7 +243,12 @@ create table review_table
 ,constraint uq_review_orderProduct UNIQUE (fk_product_num, fk_order_num)
 );
 
-
+-- 후기테이블용 이미지 테이블 생성 --
+create table review_image_table
+(fk_review_num number not null
+,image varchar2(100)
+,constraint fk_review_image FOREIGN key (fk_review_num) REFERENCES review_table(review_num)
+);
 
 -- 리뷰테이블에 사용할 시퀀스 생성 --
 create sequence seq_review_table
@@ -261,13 +274,17 @@ create table one_inquiry_table
 ,content    varchar2(4000) not null -- 문의 내용 필수
 ,write_date date default sysdate    -- 작성날짜
 ,answer     varchar2(4000)          -- 관리자가 작성하는 답변
+,emailFlag  number default 0
+,smsFlag    number default 0
 ,fk_member_num  number not null     -- 회원테이블에서 회원번호를 참조하는 컬럼
-,fk_order_num   number not null     -- 주문테이블에서 주문번호를 참조하는 컬럼
+,fk_order_num   number     -- 주문테이블에서 주문번호를 참조하는 컬럼
 ,fk_category_num number not null    -- 1:1문의 카테고리 테이블에서 카테고리번호를 참조하는 컬럼
 ,constraint pk_one_inquiry primary key (one_inquiry_num)
 ,constraint fk_one_member FOREIGN key (fk_member_num) REFERENCES member_table(member_num) on delete CASCADE
 ,constraint fk_one_order FOREIGN key (fk_order_num) REFERENCES order_table(order_num)
 ,constraint fk_one_category FOREIGN key (fk_category_num) REFERENCES one_category_table(category_num)
+,constraint ck_one_emailCheck   check (emailFlag in(0,1))
+,constraint ck_one_smsCheck check (smsFlag in (0,1))
 );
 
 -- 1:1문의 테이블에서 사용할 시퀀스 생성 --
@@ -328,33 +345,7 @@ nominvalue
 nocycle
 nocache;
 
-<<<<<<< HEAD
-=======
--- 카테고리 대분류 테이블 생성 -- 
-insert into product_category_table(category_num, category_content) values(1,'채소');
-insert into product_category_table(category_num, category_content) values(2,'과일 견과');
-insert into product_category_table(category_num, category_content) values(3,'수산 해산');
-insert into product_category_table(category_num, category_content) values(4,'정육 계란');
-insert into product_category_table(category_num, category_content) values(5,'음료 우유');
 
--- 카테고리 소분류 테이블 생성 --
-insert into product_subcategory_table(subcategory_num, subcategory_content) values(11,'기본채소');
-insert into product_subcategory_table(subcategory_num, subcategory_content) values(12,'쌈 샐러드');
-insert into product_subcategory_table(subcategory_num, subcategory_content) values(13,'특수채소');
-insert into product_subcategory_table(subcategory_num, subcategory_content) values(21,'국산과일');
-insert into product_subcategory_table(subcategory_num, subcategory_content) values(22,'수입과일');
-insert into product_subcategory_table(subcategory_num, subcategory_content) values(23,'냉동 건과일');
-insert into product_subcategory_table(subcategory_num, subcategory_content) values(31,'생선류');
-insert into product_subcategory_table(subcategory_num, subcategory_content) values(32,'오징어 낙지 문어');
-insert into product_subcategory_table(subcategory_num, subcategory_content) values(33,'새우 게 랍스타');
-insert into product_subcategory_table(subcategory_num, subcategory_content) values(41,'소고기');
-insert into product_subcategory_table(subcategory_num, subcategory_content) values(42,'돼지고기');
-insert into product_subcategory_table(subcategory_num, subcategory_content) values(43,'닭 오리고기');
-insert into product_subcategory_table(subcategory_num, subcategory_content) values(51,'생수 음료 주스');
-insert into product_subcategory_table(subcategory_num, subcategory_content) values(52,'커피 차');
-insert into product_subcategory_table(subcategory_num, subcategory_content) values(53,'우유 두유 요거트');
-
->>>>>>> origin/sanga
 
 -- 소고기
 insert into product_table (product_num, product_name, price, stock, origin, packing, unit, seller, seller_phone, fk_category_num, fk_subcategory_num) 
@@ -378,8 +369,6 @@ values(seq_product_table.nextval, '초이스 찜갈비 2kg(냉동)', '58000', '5
 
 commit;
 
-<<<<<<< HEAD
-=======
 select *
 from product_table;
 
@@ -410,7 +399,7 @@ update product_table set sale = 10
 where product_num = 1;
 
 
->>>>>>> origin/sanga
+
 -- 돼지고기
 insert into product_table (product_num, product_name, price, stock, origin, packing, unit, seller, seller_phone, fk_category_num, fk_subcategory_num) 
 values(seq_product_table.nextval, '국내산 목살 양념구이', '12900', '15', '국내산', '냉동/종이포장', '1팩', '김진하', '01075653393', 4, 42);
@@ -431,10 +420,9 @@ values(seq_product_table.nextval, '연저육찜', '15000', '6', '국내산', '�
 insert into product_table (product_num, product_name, price, stock, origin, packing, unit, seller, seller_phone, fk_category_num, fk_subcategory_num) 
 values(seq_product_table.nextval, '짭쪼름한맛 삼겹살구이 (냉동)', '4900', '15', '돼지고기(브라질산)', '냉동/종이포장', '1팩', '김진하', '01075653393', 4, 42);
 
-<<<<<<< HEAD
+
 commit;
-=======
->>>>>>> origin/sanga
+
 
 -- 닭고기
 insert into product_table (product_num, product_name, price, stock, origin, packing, unit, seller, seller_phone, fk_category_num, fk_subcategory_num) 
@@ -488,17 +476,14 @@ values(seq_product_table.nextval, '문어 슬라이스 120g(냉장)', '9900', '2
 insert into product_table (product_num, product_name, price, stock, origin, packing, unit, seller, seller_phone, fk_category_num, fk_subcategory_num) 
 values(seq_product_table.nextval, '손질 통오징어', '8300', '30', '국산', '냉동/종이포장', '1팩', '김진하', '01075653393', 3, 32);
 
-<<<<<<< HEAD
-=======
 
->>>>>>> origin/sanga
 -- 수산 새우 게
 insert into product_table (product_num, product_name, price, stock, origin, packing, unit, seller, seller_phone, fk_category_num, fk_subcategory_num) 
 values(seq_product_table.nextval, '갓 잡아올린 신선한 생새우', '18900', '10', '국산', '냉장/종이포장', '1팩', '김진하', '01075653393', 3, 33);
 insert into product_table (product_num, product_name, price, stock, origin, packing, unit, seller, seller_phone, fk_category_num, fk_subcategory_num) 
 values(seq_product_table.nextval, '손질 가을수꽃게 6조각(중 300~400g)(냉동)', '14900', '15', '국산', '냉동/종이포장', '1팩', '김진하', '01075653393', 3, 33);
 insert into product_table (product_num, product_name, price, stock, origin, packing, unit, seller, seller_phone, fk_category_num, fk_subcategory_num) 
-<<<<<<< HEAD
+
 values(seq_product_table.nextval, '싱싱 흰다리새우(중 220~270g)(냉동)', '10500', '15', '국산', '냉동/종이포장', '1팩', '김진하', '01075653393', 3, 33);
 
 select * from product_table;
@@ -530,4 +515,4 @@ insert into product_detail_table (fk_product_num, representative_image, explain)
 values(4,'1등급 한우 알사태 수육용 500g(냉장).png','1등급 한우 알사태');
 =======
 values(seq_product_table.nextval, '싱싱 흰다리새우(중 220~270g)(냉동)', '10500', '15', '국산', '냉동/종이포장', '1팩', '김진하', '01075653393', 3, 33);
->>>>>>> origin/sanga
+
