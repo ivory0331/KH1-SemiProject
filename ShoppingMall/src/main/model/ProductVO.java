@@ -1,5 +1,7 @@
 package main.model;
 
+import java.util.List;
+
 public class ProductVO {
 	// 상품VO
 	private int product_num; // 상품 고유 번호
@@ -11,15 +13,14 @@ public class ProductVO {
 	private String unit; // 상품 단위
 	private String registerdate; // 상품 등록날짜
 	private int sale; // 상품 세일(0=>세일x , 10=> 10%세일)
+	private int best_point; //MD추천용 변수
 	private String seller; // 쇼핑몰로 상품을 판매한 판매자 정보(관리자에서 사용)
 	private String seller_phone; // 판매자 번호
 	private int fk_category_num; // 상품 카테고리 번호
 	private int fk_subcategory_num; // 상품 카테고리 번호2
 	private String representative_img; // 대표 이미지
-	private String image1; //상품이미지1
-	private String image2; //상품이미지2
-	private String image3; //상품이미지3
 	private String explain; //상품 설명
+	private List<String> imageList; // 상품 상세정보페이지에서 사용할 이미지 파일들
 	
 	
 	//상품과 관련된 카테고리 내용
@@ -27,7 +28,37 @@ public class ProductVO {
 	private String subcategory_content; // 상품 카테고리명2
 	
 	
-	// product_num //
+	
+	public ProductVO() {}
+	
+	
+	public ProductVO(int product_num, String product_name, int price, int stock, String origin, String packing,
+			String unit, String registerdate, int sale, int best_point, String seller, String seller_phone,
+			int fk_category_num, int fk_subcategory_num, String representative_img, String explain,
+			List<String> imageList, String category_content, String subcategory_content) {
+		
+		this.product_num = product_num;
+		this.product_name = product_name;
+		this.price = price;
+		this.stock = stock;
+		this.origin = origin;
+		this.packing = packing;
+		this.unit = unit;
+		this.registerdate = registerdate;
+		this.sale = sale;
+		this.best_point = best_point;
+		this.seller = seller;
+		this.seller_phone = seller_phone;
+		this.fk_category_num = fk_category_num;
+		this.fk_subcategory_num = fk_subcategory_num;
+		this.representative_img = representative_img;
+		this.explain = explain;
+		this.imageList = imageList;
+		this.category_content = category_content;
+		this.subcategory_content = subcategory_content;
+	}
+	
+	
 	public int getProduct_num() {
 		return product_num;
 	}
@@ -35,7 +66,7 @@ public class ProductVO {
 		this.product_num = product_num;
 	}
 	
-	// product_name //
+	
 	public String getProduct_name() {
 		return product_name;
 	}
@@ -43,7 +74,7 @@ public class ProductVO {
 		this.product_name = product_name;
 	}
 	
-	// price //
+	
 	public int getPrice() {
 		return price;
 	}
@@ -51,7 +82,7 @@ public class ProductVO {
 		this.price = price;
 	}
 	
-	// stock //
+	
 	public int getStock() {
 		return stock;
 	}
@@ -59,7 +90,7 @@ public class ProductVO {
 		this.stock = stock;
 	}
 	
-	// origin //
+	
 	public String getOrigin() {
 		return origin;
 	}
@@ -67,7 +98,7 @@ public class ProductVO {
 		this.origin = origin;
 	}
 	
-	// packing //
+	
 	public String getPacking() {
 		return packing;
 	}
@@ -75,7 +106,7 @@ public class ProductVO {
 		this.packing = packing;
 	}
 	
-	// unit //
+	
 	public String getUnit() {
 		return unit;
 	}
@@ -83,7 +114,7 @@ public class ProductVO {
 		this.unit = unit;
 	}
 	
-	// registerdate //
+	
 	public String getRegisterdate() {
 		return registerdate;
 	}
@@ -91,7 +122,7 @@ public class ProductVO {
 		this.registerdate = registerdate;
 	}
 	
-	// sale //
+	
 	public int getSale() {
 		return sale;
 	}
@@ -99,7 +130,15 @@ public class ProductVO {
 		this.sale = sale;
 	}
 	
-	// seller //
+	
+	public int getBest_point() {
+		return best_point;
+	}
+	public void setBest_point(int best_point) {
+		this.best_point = best_point;
+	}
+	
+	
 	public String getSeller() {
 		return seller;
 	}
@@ -107,7 +146,7 @@ public class ProductVO {
 		this.seller = seller;
 	}
 	
-	// seller_phone //
+	
 	public String getSeller_phone() {
 		return seller_phone;
 	}
@@ -115,7 +154,7 @@ public class ProductVO {
 		this.seller_phone = seller_phone;
 	}
 	
-	// fk_category_num //
+	
 	public int getFk_category_num() {
 		return fk_category_num;
 	}
@@ -123,7 +162,7 @@ public class ProductVO {
 		this.fk_category_num = fk_category_num;
 	}
 	
-	// fk_subcategory_num //
+	
 	public int getFk_subcategory_num() {
 		return fk_subcategory_num;
 	}
@@ -131,23 +170,7 @@ public class ProductVO {
 		this.fk_subcategory_num = fk_subcategory_num;
 	}
 	
-	// category_content //
-	public String getCategory_content() {
-		return category_content;
-	}
-	public void setCategory_content(String category_content) {
-		this.category_content = category_content;
-	}
 	
-	// subcategory_content //
-	public String getSubcategory_content() {
-		return subcategory_content;
-	}
-	public void setSubcategory_content(String subcategory_content) {
-		this.subcategory_content = subcategory_content;
-	}
-	
-	// representativ_img //
 	public String getRepresentative_img() {
 		return representative_img;
 	}
@@ -155,37 +178,38 @@ public class ProductVO {
 		this.representative_img = representative_img;
 	}
 	
-	// image1 //
-	public String getImage1() {
-		return image1;
-	}
-	public void setImage1(String image1) {
-		this.image1 = image1;
-	}
 	
-	// image2 //
-	public String getImage2() {
-		return image2;
-	}
-	public void setImage2(String image2) {
-		this.image2 = image2;
-	}
-	
-	// image3 //
-	public String getImage3() {
-		return image3;
-	}
-	public void setImage3(String image3) {
-		this.image3 = image3;
-	}
-	
-	// explain //
 	public String getExplain() {
 		return explain;
 	}
 	public void setExplain(String explain) {
 		this.explain = explain;
 	}
+	
+	
+	public List<String> getImageList() {
+		return imageList;
+	}
+	public void setImageList(List<String> imageList) {
+		this.imageList = imageList;
+	}
+	
+	
+	public String getCategory_content() {
+		return category_content;
+	}
+	public void setCategory_content(String category_content) {
+		this.category_content = category_content;
+	}
+	
+	
+	public String getSubcategory_content() {
+		return subcategory_content;
+	}
+	public void setSubcategory_content(String subcategory_content) {
+		this.subcategory_content = subcategory_content;
+	}
+	
 	
 	
 	

@@ -127,7 +127,7 @@ public class IndexDAO implements InterIndexDAO{
 		
 		try {
 			conn = ds.getConnection();
-			String sql = " select P.product_num, P.product_name, P.price, P.stock, P.origin, P.packing, P.unit, C.category_content , S.subcategory_content, D.representative_img, D.image1, D.image2, D.image3, D.explain" + 
+			String sql = " select P.product_num, P.product_name, P.price, P.stock, P.origin, P.packing, P.unit, C.category_content , S.subcategory_content" + 
 					" from product_table P join product_category_table C \r\n" + 
 					" on P.fk_category_num = C.category_num  " + 
 					" join product_subcategory_table S\r\n" + 
@@ -151,9 +151,7 @@ public class IndexDAO implements InterIndexDAO{
 				product.setCategory_content(rs.getString(8));
 				product.setSubcategory_content(rs.getString(9));
 				product.setRepresentative_img(rs.getString(10));
-				product.setImage1(rs.getString(11));
-				product.setImage2(rs.getString(12));
-				product.setImage3(rs.getString(13));
+				
 				product.setExplain(rs.getString(14));
 			}
 		}
