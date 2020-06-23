@@ -15,8 +15,9 @@ import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.sql.DataSource;
 
-import main.model.EncryptMyKey;
-import project.util.security.AES256;
+import member.model.EncryptMyKey;
+import util.security.AES256;
+
 
 public class IndexDAO implements InterIndexDAO{
 
