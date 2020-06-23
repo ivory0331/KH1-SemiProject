@@ -1,6 +1,6 @@
 package main.model;
 
-import hyemin.model.MemberVO;
+import member.model.MemberVO;
 
 public class OrderVO {
 	private int order_num;

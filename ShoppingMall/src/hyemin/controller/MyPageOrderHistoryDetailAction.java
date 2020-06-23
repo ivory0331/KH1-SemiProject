@@ -7,8 +7,8 @@ import javax.servlet.http.HttpSession;
 import common.controller.AbstractController;
 import hyemin.model.InterOrderDAO;
 import hyemin.model.OrderDAO;
-import main.model.MemberVO;
 import main.model.OrderVO;
+import member.model.MemberVO;
 
 
 public class MyPageOrderHistoryDetailAction extends AbstractController {

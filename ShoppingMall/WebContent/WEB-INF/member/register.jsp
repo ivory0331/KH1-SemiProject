@@ -371,9 +371,9 @@ div.check_event{
            return;
         }$.ajax({
             url:"<%=ctxPath%>/member/idDuplicateCheck.do",
-            type:"post",
+            type:"get",
             data:{"userid":$("#userid").val()},
-            dataType:"json",
+            dataType:"JSON",
             success:function(json){
                if(json.isUse) {
                     alert("사용 가능한 ID입니다.");
@@ -751,7 +751,7 @@ div.check_event{
 		frm.method = "POST";
 		frm.action = "register.do";
 		frm.submit();
-		alert("가입되었습니다")
+		alert("가입되었습니다");
 
 	}// end of function goRegister(event)----------
 </script>
