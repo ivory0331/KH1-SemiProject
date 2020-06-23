@@ -430,7 +430,7 @@ $(document).ready(function(){
 			 </c:if>
 			 <c:if test="${sessionScope.loginuser != null }">
 			 	<div class="mypage-dropdown" style="display:inline-block;">
-				<a href="">${sessionScope.loginuser.name}님 로그인</a> <span class="underIcon">▼</span>
+				<a href="">${sessionScope.loginuser.name}님 환영합니다.</a> <span class="underIcon">▼</span>
 				<div class="mypage-dropdown-content" align="left">
 					<ul class="mypage-categori">
 						<c:if test="${sessionScope.loginuser.status=='2'}">
@@ -449,9 +449,6 @@ $(document).ready(function(){
 				</div>
 				</div>
 			 </c:if>
-
-			<a href="javascript:location.href='<%=ctxPath%>/member/register.do'">회원가입</a> | <a href="javascript:location.href='<%=ctxPath%>/member/login.do'">로그인</a> | 
-
 			<div class="serviceCenter-dropdown" style="display:inline-block;">
 				<a href="javascript:location.href='<%=ctxPath%>/service.do'">고객센터</a> <span class="underIcon">▼</span>
 				<div class="serviceCenter-dropdown-content" align="left">

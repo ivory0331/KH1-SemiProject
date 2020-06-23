@@ -17,6 +17,8 @@ public class DetailAction extends AbstractController {
 		String idx = request.getParameter("product_num");
 		InterIndexDAO idao = new IndexDAO();
 		ProductVO pvo = idao.productDetail(idx);
+		
+		
 		if(pvo!=null) {
 			request.setAttribute("product", pvo);
 			super.setViewPage("/WEB-INF/main/detail.jsp");
