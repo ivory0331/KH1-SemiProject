@@ -27,7 +27,6 @@
 		font-size: 10pt;
 		font-weight: bold;
 		width: 200px;
-		
 	}
 	
 	.frmTitle ~ td{
@@ -60,11 +59,9 @@
 		
 	}
 	
-
 	#txt_area{
 		overflow-y: scroll;
 	}
-	
 	
 	#imgAdd{
 		display: inline-block;
@@ -88,6 +85,7 @@
 		padding : 0  5px;
 	}
 	
+
 </style>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -98,7 +96,6 @@
 
 	var cnt=1;
 	$(document).ready(function(){
-		
 		$("#imgFile").change(function(){
 			if(this.files && this.files[0]) {
 				var fileName = this.files[0].name;
@@ -119,11 +116,7 @@
 				$("#imgFile").replaceWith( $("#imgFile").clone(true) );
 				$("#imgFile").val(""); 
 			}
-			
-
-		
 		});
-
 	});
 	
 	function divCheck(){

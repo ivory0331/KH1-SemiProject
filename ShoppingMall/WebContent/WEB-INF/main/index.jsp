@@ -117,11 +117,8 @@
 	$(document).ready(function(){
 		// 각각의 div에 해당하는 리스트 호출 //
 		func_randomItemCall();
-		
 		func_saleItemCall();
-		
 		func_newItemCall();
-		
 		func_MDItemCall(1);
 		
 		// MD추천에서 해당 분류버튼을 클릭하면 리스트 호출 //
@@ -132,7 +129,6 @@
 			func_MDItemCall(index);
 		});
 	}); // end of $(document).ready(function()) ----------------------------------
-
 
 	// 왼쪽 버튼을 클릭하면 실행되는 function //
 	function func_slideL(type){ //type = 각각의 배너의 class명의 앞부분ex)best, sale
@@ -149,7 +145,6 @@
 
 	} //end of func_slideL(type) ---------------------------------------------
 
-	
 	// 오른쪽 버튼을 클릭하면 실행되는 function //
 	function func_slideR(type){
 		console.log(type);
@@ -161,7 +156,6 @@
 													 $("#"+type+"_slideR").hide();
 										          });
 		}	
-
 	} //end of func_slideR(type)------------------------------------------------
 
 	
@@ -266,7 +260,6 @@
 	         }
 	   });
 	} // end of reqServer(url, data) --------------------------------------------
-
 </script>
 </head>
 <body>
@@ -426,7 +419,6 @@
 						<h3>MD의 추천</h3>
 						<div id="category_menu">
 							<ul id="list_category">
-
 								<li class="select_MDbest">채소</li>
 								<li>과일</li>
 								<li>수산</li>

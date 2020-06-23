@@ -31,5 +31,4 @@ public interface InterIndexDAO {
 
 	// 로그인하면 기존에 남은 장바구니의 상품 수 조회
 	int basketCnt(int i) throws SQLException;
-
 }

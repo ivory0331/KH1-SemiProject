@@ -531,7 +531,6 @@ div.check_event {
 		</div>
 
 		<div style="clear: both;"></div>
-
 		<jsp:include page="../include/footer.jsp"></jsp:include>
 	</div>
 </body>

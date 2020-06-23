@@ -45,8 +45,7 @@ public class ProductQwriteAction extends AbstractController {
 		else {
 			super.setViewPage("/WEB-INF/main/productQwrite.jsp");
 		}
-		
-		
+			
 	}
 
 }

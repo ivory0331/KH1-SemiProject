@@ -5,14 +5,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%
 	String ctxPath = request.getContextPath();
-	Object obj = session.getAttribute("basket");
-	List<Map<String,String>> basketNum = null;
-	if(obj!=null){
-		basketNum = (List<Map<String,String>>)obj;
-	}
-	 
-	int n = 0;
-	if(basketNum!=null) n = basketNum.size();
 %>
 <!DOCTYPE html>
 <html>
@@ -84,7 +76,6 @@
 	
 	/*로고 이미지가 있는 영역*/
 	.logo{
-
 		width: 150px;		
 		clear:both;
 	}
@@ -94,10 +85,6 @@
 		height: 100px;
 	}
 	
-
-		
-
-
 	/*상단에 고정해야 하는 navigation이 있을 영역*/
 	.header-navi{
 		max-width:1700px;
@@ -191,7 +178,6 @@
 		list-style: none;
 		padding:0px;
 		text-align: left;
-
 		background-color: #f1f1f1;
 		min-height:150px; 
 	}
@@ -221,7 +207,6 @@
 		heigth:40px;
 		cursor: pointer;
 	}
-
 	
 	#basketCnt{
 		position: absolute;
@@ -351,6 +336,7 @@ $(document).ready(function(){
 		location.href="<%= ctxPath%>/shoppingBasket.do";
 	}
 	
+	
 	function goList(num){
 		var category=0;
 		if(num>10){
@@ -429,14 +415,15 @@ $(document).ready(function(){
 		});
 	}
 
+	function goList(){
+		location.href="<%= ctxPath%>/productList.do";
+	}
+
 </script>
 </head>
 <body>
-	
 	<div class="logo_login" align="center">
-		<div class="loginLink"> 
-
-			
+		<div class="loginLink">
 			 <c:if test="${sessionScope.loginuser == null }">
 			 	 <a href="javascript:location.href='<%=ctxPath%>/member/register.do'">회원가입</a> |
 			 	 <a href="javascript:location.href='<%=ctxPath%>/member/login.do'">로그인</a> | 
@@ -462,6 +449,9 @@ $(document).ready(function(){
 				</div>
 				</div>
 			 </c:if>
+
+			<a href="javascript:location.href='<%=ctxPath%>/member/register.do'">회원가입</a> | <a href="javascript:location.href='<%=ctxPath%>/member/login.do'">로그인</a> | 
+
 			<div class="serviceCenter-dropdown" style="display:inline-block;">
 				<a href="javascript:location.href='<%=ctxPath%>/service.do'">고객센터</a> <span class="underIcon">▼</span>
 				<div class="serviceCenter-dropdown-content" align="left">

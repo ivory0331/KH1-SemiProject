@@ -222,7 +222,6 @@
 <script type="text/javascript" src="/ShoppingMall/js/jquery-3.3.1.min.js"></script>
 <script type="text/javascript" src="/ShoppingMall/util/myutil.js"></script>
 <script type="text/javascript">
-
 	var money = "${product.price}";
 	var offSet = new Array();
 	
@@ -254,7 +253,6 @@
 		
 		func_reviewCall();
 		func_productQCall();
-		
 	});
 	
 	function cntPlus(){
@@ -451,8 +449,6 @@
 	function goWriteQ(num){
 		location.href="<%=ctxPath %>/productQwrite.do?product_num="+num;
 	}
-	
-	
 
 </script>
 </head>
@@ -507,7 +503,6 @@
 							<button class="tablinks" onclick="goTable('1')">고객 후기</button>
 							<button class="tablinks" onclick="goTable('2')" style="border-right:solid 1px black">상품 문의</button>
 						</div>
-						
 						<img alt="상품이미지1" src="<%=ctxPath %>/images/logo.png" class="otherImg">
 						<img alt="상품이미지1" src="<%=ctxPath %>/images/logo.png" class="otherImg">
 						<img alt="상품이미지1" src="<%=ctxPath %>/images/logo.png" class="otherImg">

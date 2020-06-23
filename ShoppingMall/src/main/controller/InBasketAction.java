@@ -30,8 +30,7 @@ public class InBasketAction extends AbstractController {
 		String message="";
 		
 		MemberVO loginuser = (MemberVO) session.getAttribute("loginuser");
-		
-		
+
 		Map<String, String> orderMap = new HashMap<String, String>();
 		orderMap.put("product_num", request.getParameter("product_num"));
 		orderMap.put("price", request.getParameter("price"));

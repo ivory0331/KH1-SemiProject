@@ -1,11 +1,10 @@
-
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
-<title>market kurly login page</title>
+<title>market kurly Password search</title>
 <style type="text/css">
 #content{
 	font-family : noto sans, sans-serif, malgun gothic;
@@ -32,7 +31,7 @@
 .section_login .tit_login {
     font-weight: 800;
     font-size: 20px;
-    line-height: 20px;
+    line-height: 10px;
     text-align: center;
 }
 
@@ -43,6 +42,8 @@
 h3 {
     display: block;
     font-weight: bold;
+    padding: 0;
+    margin: 0;
 }
 
 
@@ -61,14 +62,9 @@ input {
     border-radius: 3px;
     background-color: #fff;
     font-size: 14px;
-    margin: 5px;
+    margin: 0px;
 }
 
-.login_search {
-    line-height: 40px;
-    text-align: right;
-   
-}
 
 input::placeholder {
   color: #ccc;
@@ -82,7 +78,7 @@ a {
 }
 
 
-.section_login .login_search .bar {
+.section_login .bar  {
     float: right;
     width: 1px;
     height: 10px;
@@ -98,21 +94,16 @@ a {
     border-radius: 3px;
     background-color: #fff;
     font-size: 14px;
-    margin: 5px;
     cursor:pointer;
 }
 .btn_type1{
-	margin-top: 20px;
+	margin-top: 30px;
 	padding: 0 40px;
 	border : solid 1px #5f0080;
 	background-color: #5f0080;
 	font-style: normal;
 }	
 
-.btn_type2{
-	border : solid 1px #5f0080;
-	
-}
 .txt_type{
 	font-weight: 500;
 	font-size: 16px;
@@ -121,9 +112,18 @@ a {
 .text_type_btn{
 	color: #5f0080;
 	vertical-align: middle;
-	display: inline-block;
-	padding-top:10px;
- 	
+}
+.txt_type_form{
+	float:left;
+	font-weight: 600;
+	font-size: 12px;
+	margin: 0;
+	padding: 11px 0 5px 10px;
+    display: block;
+    font-size: 12px;
+    line-height: 20px;
+    text-align: left;
+
 }
 
 </style>
@@ -131,26 +131,22 @@ a {
 <body>
 	<div id="content">
 		<div class = "section_login">
-			<h3 class="tit_login">로그인</h3>
+			<h3 class="tit_login">비밀번호 찾기</h3>
 			<div class="write_form">
 				<form method="post" name="form" id="form" action="#" onsubmit="">
-					<input type="text" name="id" size="20" tabindex="1" value="" placeholder="아이디를 입력해주세요" required /><br/>
-					<input type="password" name="password" size="20" tabindex="2" placeholder="비밀번호를 입력해주세요" required />
+					<span class="txt_type_form">이름</span>
+					<input type="text" name="name" size="20" tabindex="1" value=""required /><br/>
 					
-					<div class="login_searh">
-						<a href="#id찾기페이지 " class="link">아이디 찾기  |  </a>
-						<span class="bar"></span>
-						<a href="#비밀번호 찾기페이지" class="link">비밀번호 찾기 </a>
-					</div>
+					<span class="txt_type_form">아이디 </span>
+					<input type="text" name="id" size="20" tabindex="2" value=""  required /><br/>
+					
+					<span class="txt_type_form">이메일 </span>
+					<input type="email" name="password" size="20" tabindex="3" required />
+					
 					<button type="submit" class="btn_type1 btn_member">
-						<span class="txt_type">로그인</span>
+						<span class="txt_type">찾기 </span>
 					</button>
 				</form>
-				
-				<a href="#회원가입사이트" class="btn_type2 btn_member">
-					<span class="txt_type text_type_btn">회원가입</span>
-				</a>
-				
 			</div>
 		</div>
 	</div>

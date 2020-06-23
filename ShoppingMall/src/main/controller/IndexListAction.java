@@ -54,8 +54,7 @@ public class IndexListAction extends AbstractController {
 				}
 				else {
 					check = true;
-				}
-				
+				}	
 			}
 			String random = String.join(",", randomArr);
 			paraMap.put("random",random);

@@ -6,6 +6,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -17,7 +18,6 @@ import javax.sql.DataSource;
 
 import member.model.EncryptMyKey;
 import util.security.AES256;
-
 
 public class IndexDAO implements InterIndexDAO{
 
@@ -87,6 +87,7 @@ public class IndexDAO implements InterIndexDAO{
 			}
 			else {
 				sql="select ROM,product_num, product_name, price, stock, representative_img from (select rownum as ROM, product_num, product_name, price, stock, representative_img  from("+subSql+") )T where T.ROM between 1 and 8 ";
+
 			}
 			
 			pstmt = conn.prepareStatement(sql);
@@ -100,7 +101,7 @@ public class IndexDAO implements InterIndexDAO{
 					pstmt.setString(i+1, numArr[i]);
 				}
 			}
-			System.out.println(sql);
+			
 			rs = pstmt.executeQuery();
 			
 			while(rs.next()) {
@@ -131,6 +132,7 @@ public class IndexDAO implements InterIndexDAO{
 		try {
 			conn = ds.getConnection();
 			String sql = " select P.product_num, P.product_name, P.price, P.stock, P.origin, P.packing, P.unit, P.representative_img, P.explain, C.category_content , S.subcategory_content" + 
+
 					" from product_table P join product_category_table C \r\n" + 
 					" on P.fk_category_num = C.category_num  " + 
 					" join product_subcategory_table S\r\n" + 
@@ -149,11 +151,11 @@ public class IndexDAO implements InterIndexDAO{
 				product.setOrigin(rs.getString(5));
 				product.setPacking(rs.getString(6));
 				product.setUnit(rs.getString(7));
+
 				product.setRepresentative_img(rs.getString(8));
 				product.setExplain(rs.getString(9));
 				product.setCategory_content(rs.getString(10));
 				product.setSubcategory_content(rs.getString(11));
-				
 			}
 		}
 		finally {

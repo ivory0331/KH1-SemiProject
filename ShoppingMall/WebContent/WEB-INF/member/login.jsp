@@ -30,6 +30,7 @@
     line-height: 35px;
 }
 
+
  .tit_login {
     font-weight: 800;
     font-size: 20px;
@@ -41,6 +42,7 @@
 .section_login * {
     color: #333;
 }
+
 
 .contents h3 {
     display: block;
@@ -84,6 +86,7 @@
 }
 
 
+
 .login_search .bar {
     float: right;
     width: 1px;
@@ -124,7 +127,6 @@
 	color: #5f0080;
 	vertical-align: middle;
 	display: inline-block;
-	
  	
 }
 
@@ -199,7 +201,6 @@
 						<span class="txt_type">로그인</span>
 					</button>
 				</form>
-				
 				<button onclick="javascript:location.href='/member/register.do'" class="btn_type2 btn_member">
 					<span class="txt_type text_type_btn">회원가입</span>
 				</button>
@@ -207,7 +208,6 @@
 			</div>
 		</div>
 		<jsp:include page="../include/footer.jsp"></jsp:include>
-		
 	</div>
 </body>
 </html>

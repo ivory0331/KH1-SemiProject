@@ -9,7 +9,6 @@ import main.model.IndexDAO;
 import main.model.InterIndexDAO;
 import main.model.ProductVO;
 
-
 public class DetailAction extends AbstractController {
 
 	@Override
@@ -30,7 +29,6 @@ public class DetailAction extends AbstractController {
 			
 			super.setViewPage("/WEB-INF/msg.jsp");
 		}
-		
 		
 	}
 
