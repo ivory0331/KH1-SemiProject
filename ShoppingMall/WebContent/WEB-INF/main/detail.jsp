@@ -301,12 +301,6 @@
 			return false;
 		}
 		
-		if(${sessionScope.loginuser == null}){
-			alert("로그인을 하셔야 합니다.");
-			location.href="<%=ctxPath%>/member/login.do";
-			return false;
-		}
-		
 		$.ajax({
 			url:"<%=ctxPath%>/inBasket.do",
 			data:{"product_num":"${product.product_num}"

@@ -1,8 +1,6 @@
 package main.controller;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -25,9 +23,17 @@ public class InBasketAction extends AbstractController {
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		HttpSession session = request.getSession();
 		System.out.println(request.getParameter("product_num")+"/"+ request.getParameter("price")+"/"+request.getParameter("count"));
-		List<Map<String, String>> basketNum = null;
 		boolean check = true;
 		String message="";
+		
+		boolean loginFlag = super.checkLogin(request);
+		if(!loginFlag) {
+			String goBackURL = request.getContextPath()+"/detail.do?product_num="+request.getParameter("product_num");
+			session.setAttribute("goBackURL", goBackURL);
+			super.setRedirect(true);
+			super.setViewPage(request.getContextPath()+"/member/login.do");
+			return; 
+		}
 		
 		MemberVO loginuser = (MemberVO) session.getAttribute("loginuser");
 
