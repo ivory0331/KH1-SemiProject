@@ -190,7 +190,6 @@
 				<form method="post" name="loginFrm" id="loginFrm" onsubmit="">
 					<input type="text" id="loginUserid" name="userid" size="20" tabindex="1" value="" placeholder="아이디를 입력해주세요" required /><br/>
 					<input type="password" id="loginPwd" name="pwd" size="20" tabindex="2" placeholder="비밀번호를 입력해주세요" required />
-					
 					<div class="login_searh">
 						<a href="/login/idFind.do" class="link">아이디 찾기  |  </a>
 						<span class="bar"></span>

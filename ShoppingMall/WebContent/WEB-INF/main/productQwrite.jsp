@@ -176,19 +176,19 @@
 					<table class="writeTable">
 						<tr>
 							<td class="frmTitle">작성자</td>
-							<td><input type="text" value="test" disabled name="userName"/></td>
+							<td><input type="text" value="${sessionScope.loginuser.name}" disabled name="userName"/></td>
 						</tr>
 						<tr>
 							<td class="frmTitle">이메일</td>
 							<td>
-								<input type="email" value="test@test.com" disabled name="userEmail"/>
+								<input type="email" value="${sessionScope.loginuser.email}" disabled name="userEmail"/>
 								<input type="checkbox" value="1" id="emailComment" name="emailComment"/><label for="emailComment">이메일로 답변을 받겠습니다.</label>
 							</td>
 						</tr>
 						<tr>
 							<td class="frmTitle">핸드폰</td>
 							<td>
-								<input type="text" value="010-0000-0000" disabled name="userMobile"/>
+								<input type="text" value="${sessionScope.loginuser.mobile}" disabled name="userMobile"/>
 								<input type="checkbox" value="1" id="mobileComment" name="mobileComment"/><label for="mobileComment">문자로 답변을 받겠습니다.</label>
 							</td>
 						</tr>

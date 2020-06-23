@@ -312,5 +312,78 @@ public class IndexDAO implements InterIndexDAO{
 		}
 		return categoryList;
 	}
+
+	// 장바구니 조회
+	@Override
+	public boolean basketSelect(Map<String, String> orderMap) throws SQLException {
+		boolean check = false;
+		String product_num = orderMap.get("product_num");
+		String member_num = orderMap.get("member_num");
+		try {
+			conn = ds.getConnection();
+			String sql = " select * from basket_table where fk_member_num = ? and fk_product_num = ? ";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, member_num);
+			pstmt.setString(2, product_num);
+			
+			rs = pstmt.executeQuery();
+			check = !rs.next();
+		}
+		finally {
+			close();
+		}
+		return check;
+	}
+
+	// 선택한 상품 장바구니에 추가
+	@Override
+	public int basketInsert(Map<String, String> orderMap) throws SQLException {
+		int result = 0;
+		String product_num = orderMap.get("product_num");
+		String member_num = orderMap.get("member_num");
+		String count = orderMap.get("count");
+		String price = orderMap.get("price");
+		
+		
+		try {
+			conn = ds.getConnection();
+			String sql = " insert into basket_table(basket_num, product_count, fk_member_num, fk_product_num, price)"
+					   + " values(seq_basket_table.nextval, ?, ?, ?, ?) ";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, count);
+			pstmt.setString(2, member_num);
+			pstmt.setString(3, product_num);
+			pstmt.setString(4, price);
+			
+			result = pstmt.executeUpdate();
+			
+		}
+		finally {
+			close();
+		}
+		return result;
+	}
+
+	// 장바구니 상품 수 조회
+	@Override
+	public int basketCnt(int member_num) throws SQLException {
+		int count = 0;
+		try {
+			conn = ds.getConnection();
+			String sql = " select count(*) from basket_table where fk_member_num = ? ";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, member_num);
+			rs = pstmt.executeQuery();
+			if(rs.next()) {
+				count=rs.getInt(1);
+			}
+			
+		}
+		finally {
+			close();
+		}
+		
+		return count;
+	}
 	
 }

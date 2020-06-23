@@ -22,4 +22,14 @@ public interface InterIndexDAO {
 
 	// 상품의 대분류, 소분류 카테고리 정보 조회
 	List<Map<String, String>> categoryCall() throws SQLException;
+
+	// 상품 선택했을 때 기존의 장바구니에 있는 상품을 조회
+	boolean basketSelect(Map<String, String> orderMap) throws SQLException;
+
+	// 선택한 상품 장바구니에 추가
+	int basketInsert(Map<String, String> orderMap) throws SQLException;
+
+	// 로그인하면 기존에 남은 장바구니의 상품 수 조회
+	int basketCnt(int i) throws SQLException;
+
 }

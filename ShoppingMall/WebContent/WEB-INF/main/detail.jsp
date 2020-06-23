@@ -297,15 +297,22 @@
 	}
 	
 	function inBasket(){
+		
 		if($("#count").val()==0){
 			alert("장바구니에 담을 물건을 선택하세요");
+			return false;
+		}
+		
+		if(${sessionScope.loginuser == null}){
+			alert("로그인을 하셔야 합니다.");
+			location.href="<%=ctxPath%>/member/login.do";
 			return false;
 		}
 		
 		$.ajax({
 			url:"<%=ctxPath%>/inBasket.do",
 			data:{"product_num":"${product.product_num}"
-				 ,"price":$(".numPrice").val()
+				 ,"price":"${product.price}"
 				 ,"count":$("#count").val()},
 			type:"get",
 			dataType:"JSON",

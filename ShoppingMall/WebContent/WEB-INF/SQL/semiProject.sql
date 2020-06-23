@@ -347,6 +347,28 @@ nocache;
 
 
 
+-- 장바구니 테이블 --
+create table basket_table
+(basket_num     number not null
+,product_count  number not null -- 주문한 상품의 갯수 필수
+,fk_member_num  number not null -- 해당 장바구니에 상품을 담은 회원
+,fk_product_num number not null -- 상품테이블의 상품번호를 참조하는 컬럼
+,price          number not null -- 주문상품의 가격(1개 단가? 아니면 해당 상품의 총 구매 가격)
+,constraint fk_basket_product FOREIGN key (fk_product_num ) REFERENCES product_table(product_num)
+,constraint fk_basket_member FOREIGN key (fk_member_num) REFERENCES member_table (member_num)
+,constraint pk_basket_num primary key (basket_num)
+);
+
+-- 장바구니 테이블에 사용할 시퀀스 생성 --
+create sequence seq_basket_table
+start with 1
+increment by 1
+nomaxvalue
+nominvalue
+nocycle
+nocache;
+
+
 -- 소고기
 insert into product_table (product_num, product_name, price, stock, origin, packing, unit, seller, seller_phone, fk_category_num, fk_subcategory_num,
 representative_img) 
@@ -533,3 +555,20 @@ insert into product_detail_table (fk_product_num, representative_image, explain)
 values(4,'1등급 한우 알사태 수육용 500g(냉장).png','1등급 한우 알사태');
 
 values(seq_product_table.nextval, '싱싱 흰다리새우(중 220~270g)(냉동)', '10500', '15', '국산', '냉동/종이포장', '1팩', '김진하', '01075653393', 3, 33);
+
+
+select * from product_category_table union select * from product_subcategory_table;
+
+insert into member_table (member_num, name, userid, pwd, email, mobile) 
+values (seq_member_table.nextval, '관리자', 'admin', 'qwer1234$','2wnaud@naver.com','010-9101-8698');
+
+commit;
+
+
+select * from member_table;
+update member_table set status=2;
+commit;
+
+delete from member_table;
+
+select count(*) from basket_table where fk_member_num = ;

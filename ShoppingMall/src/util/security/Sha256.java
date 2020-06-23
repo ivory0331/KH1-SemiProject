@@ -1,4 +1,4 @@
-package project.util.security;
+package util.security;
 
 import java.security.MessageDigest;
 

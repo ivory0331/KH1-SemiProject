@@ -7,8 +7,8 @@ import java.sql.*;
 import javax.naming.*;
 import javax.sql.DataSource;
 
-import project.util.security.AES256;
-import project.util.security.Sha256;
+import util.security.AES256;
+import util.security.Sha256;
 
 public class ReviewDAO implements InterReviewDAO {
 	

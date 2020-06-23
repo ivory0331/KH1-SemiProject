@@ -46,7 +46,7 @@
 	}
 	
 	/*고객센터 영역*/
-	.serviceCenter{
+	.serviceCenter, .mypage{
 		position: relative;
 	}
 	
@@ -56,7 +56,7 @@
 	}
 	
 	/*고객센터 하위의 메뉴영역*/
-	.serviceCenter-dropdown-content{
+	.serviceCenter-dropdown-content, .mypage-dropdown-content{
 		display:none;
 		position: absolute;
 		z-index: 5;
@@ -66,7 +66,7 @@
 	}
 	
 	/*고객센터 하위의 메뉴가 되는 ul*/
-	.serviceCenter-categori{
+	.serviceCenter-categori, .mypage-categori{
 		display:inline-block;
 		list-style: none;
 		padding: 0px;
@@ -75,7 +75,7 @@
 		float:left;
 	}
 	
-	.serviceCenter-categori .listType{
+	.serviceCenter-categori .listType, .mypage-categori .listType{
 		display: block;
 		margin: 0px 10px;
 		color:black;
@@ -234,6 +234,7 @@
 		background-color: purple;
 		color:white;
 		cursor: pointer;
+		display: none;
 	}
 
 	.navi-categori .list:hover{background-color: #f1f1f1;}
@@ -276,6 +277,13 @@ $(document).ready(function(){
 		$(".serviceCenter-dropdown-content").css("display","block"); //하위 navi가 존재하는 영역 display 변경
 	},function(){
 		$(".serviceCenter-dropdown-content").css({"display":"none"}); //원래 있던대로 display와 width 수정
+	});
+	
+	// 회원된 span태그에 hover했을 때 function
+	$(".mypage-dropdown").hover(function(){
+		$(".mypage-dropdown-content").css("display","block"); //하위 navi가 존재하는 영역 display 변경
+	},function(){
+		$(".mypage-dropdown-content").css({"display":"none"}); //원래 있던대로 display와 width 수정
 	});
 	
 	
@@ -330,6 +338,13 @@ $(document).ready(function(){
 		});
 	
 	});
+	
+	
+	if(${sessionScope.loginuser!=null}){
+		console.log("장바구니 물건 카운트 시작");
+		func_basketCnt();
+	}
+	
 });
 	
 	function goBasket(){
@@ -346,6 +361,18 @@ $(document).ready(function(){
 		}
 		alert(num);
 	}
+	
+	
+	function che(){
+		$("input:checkbox").each(function(index, item){
+			
+			if($(item).prop("checked")){
+				html+=$(item).val()+","	
+			}
+		})
+	}
+	
+	
 	
 	function printNavi(){
 		$.ajax({
@@ -365,6 +392,42 @@ $(document).ready(function(){
 			}
 		});
 	}
+	
+	function func_basketCnt(){
+		$.ajax({
+			url:"<%=ctxPath%>/basketCnt.do",
+			dataType:"JSON",
+			success:function(json){
+				console.log("ajax:"+json.basketCnt);
+				if(json.basketCnt>0){
+					$("#basketCnt").show();
+					$("#basketCnt").text(json.basketCnt);
+				}
+				
+			},
+			error:function(e){
+				console.log(e);
+			}
+		});
+	}
+	
+	function logout(){
+		$.ajax({
+			url:"<%=ctxPath%>/member/logout.do",
+			dataType:"JSON",
+			success:function(json){
+				if(json.check=="true"){
+					location.reload(true);
+				}
+				else{
+					alert("로그아웃에 실패했습니다.");
+				}
+			},
+			error:function(e){
+				console.log(e);
+			}
+		});
+	}
 
 </script>
 </head>
@@ -374,18 +437,27 @@ $(document).ready(function(){
 		<div class="loginLink"> 
 
 			
-			 <c:if test="${sessionScope.userid == null }">
+			 <c:if test="${sessionScope.loginuser == null }">
 			 	 <a href="javascript:location.href='<%=ctxPath%>/member/register.do'">회원가입</a> |
 			 	 <a href="javascript:location.href='<%=ctxPath%>/member/login.do'">로그인</a> | 
 			 </c:if>
-			 <c:if test="${sessionScope.userid != null }">
+			 <c:if test="${sessionScope.loginuser != null }">
 			 	<div class="mypage-dropdown" style="display:inline-block;">
-				<a href="">${sessionScope.userid}님 로그인</a> <span class="underIcon">▼</span>
+				<a href="">${sessionScope.loginuser.name}님 로그인</a> <span class="underIcon">▼</span>
 				<div class="mypage-dropdown-content" align="left">
 					<ul class="mypage-categori">
-						<li class="list"><a href="javascript:location.href='<%=ctxPath%>/service/board.do'"><span class="listType">주문내역</span></a></li>
-						<li class="list"><a href="javascript:location.href='<%=ctxPath%>/service/FAQ.do'"><span class="listType">상품 후기</span></a></li>
-						<li class="list"><a href="javascript:location.href='<%=ctxPath%>/service/MyQue.do'"><span class="listType">로그아웃</span></a></li>
+						<c:if test="${sessionScope.loginuser.status=='2'}">
+							<li class="list"><a href="javascript:location.href='<%=ctxPath%>/service/board.do'"><span class="listType">매출관리</span></a></li>
+							<li class="list"><a href="javascript:location.href='<%=ctxPath%>/service/FAQ.do'"><span class="listType">회원관리</span></a></li>
+							<li class="list"><a href="javascript:location.href='<%=ctxPath%>/service/MyQue.do'"><span class="listType">상품관리</span></a></li>
+							<li class="list"><a href="javascript:location.href='<%=ctxPath%>/service/MyQue.do'"><span class="listType">주문관리</span></a></li>
+							<li class="list"><a href="javascript:logout()"><span class="listType">로그아웃</span></a></li>
+						</c:if>
+						<c:if test="${sessionScope.loginuser.status=='1'}">
+							<li class="list"><a href="javascript:location.href='<%=ctxPath%>/service/board.do'"><span class="listType">주문내역</span></a></li>
+							<li class="list"><a href="javascript:location.href='<%=ctxPath%>/service/FAQ.do'"><span class="listType">상품 후기</span></a></li>
+							<li class="list"><a href="javascript:logout()"><span class="listType">로그아웃</span></a></li>
+						</c:if>
 					</ul>
 				</div>
 				</div>
@@ -432,13 +504,12 @@ $(document).ready(function(){
 			<li>
 				<span class="navi-basket" style="position:relative; ">
 					<img src="<%=ctxPath %>/images/basket.jpg" onclick="goBasket()"/>
-					<% if(n>0){ %>
+					
 					<div id="basketCnt" onclick="goBasket()">
 					
-						<%=n %>
-					
+						
 					</div>
-					<%} %>
+					
 				</span>
 			</li>
 		</ul>		
