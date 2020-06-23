@@ -17,6 +17,8 @@ drop table FAQ_table;
 drop table inquiry_category_table;
 drop table member_table;
 
+drop sequence seq_member_table;
+
 -- 회원 테이블 --
 create table member_table
 (member_num number  not null -- 회원번호 필수입력 + 유일한 값(primary) + 시퀀스 사용
@@ -41,6 +43,10 @@ create table member_table
 ,constraint ck_member_table_status CHECK (status in(0,1,2))
 );
 
+select *
+from member_table;
+
+commit;
 
 -- 회원테이블에 사용할 시퀀스 생성 --
 create sequence seq_member_table

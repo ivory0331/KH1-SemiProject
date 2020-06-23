@@ -192,9 +192,9 @@
                <input type="password" id="loginPwd" name="pwd" size="20" tabindex="2" placeholder="비밀번호를 입력해주세요" required />
                
                <div class="login_searh">
-                  <a href="/login/idFind.do" class="link">아이디 찾기  |  </a>
+                  <a href="<%=request.getContextPath()%>/login/idFind.do" class="link">아이디 찾기  |  </a>
                   <span class="bar"></span>
-                  <a href="/login/pwdFind.do" class="link">비밀번호 찾기 </a>
+                  <a href="<%=request.getContextPath()%>/login/pwdFind.do" class="link">비밀번호 찾기 </a>
                </div>
                <button type="submit" class="btn_type1 btn_member" id="btnSubmit">
                   <span class="txt_type">로그인</span>
