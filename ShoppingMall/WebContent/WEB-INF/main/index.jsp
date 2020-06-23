@@ -195,9 +195,9 @@
 	
 	
 	// 상세보기 url 이동
-	function goDetail(idx){
-		console.log(idx);
-		location.href="<%=ctxPath%>/detail.do?idx="+idx;
+	function goDetail(product_num){
+		console.log(product_num);
+		location.href="<%=ctxPath%>/detail.do?product_num="+product_num;
 	} // end of goDetail(idx)----------------------------------------------------
 	
 	

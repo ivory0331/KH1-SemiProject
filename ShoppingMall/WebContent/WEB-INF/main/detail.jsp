@@ -149,7 +149,6 @@
 	} 
 	
 	.content-title{
-		width:50%;
 		text-align: left;
 	}
 	
@@ -253,6 +252,8 @@
 			  });
 			}
 		
+		func_reviewCall();
+		func_productQCall();
 		
 	});
 	
@@ -318,6 +319,133 @@
 			}
 		});
 	}
+	
+	function func_reviewCall(){
+		var url = "/reviewCall.do";
+		var data = {"product_num":"${product.product_num}"};
+		reqServer(url, data);
+	}
+	
+	function printReview(json){
+		if(json.length > 0){
+			for(var i=0; i<json.length; i++){
+				var html = "<tr class='accordion'>"
+				         + "<td>"+json[i].getReview_num()+"</td>"
+				         + "<td class='content-title'>"+json[i].getSubject()+"</td>"
+				         + "<td>"+json[i].getName()+"</td>"
+				         + "<td>"+json[i].getWrite_date()+"</td>"
+				         + "<td>"+json[i].getHit()+"</td>"
+				         + "</tr>"
+				         + "<tr class='panel panel-none'>"
+				         + "<td colspan='5' class='review_content'>"+json[i].getContent();
+				for(var j=0; j<json[i].getImageList().length; j++){
+					var imageFileName = decodeURIComponent(json[i].getImageList.get(j));
+					var imageFile = "<%=ctxPath%>/images/"+imageFileName;
+					html+="<img src='"+imageFile+"' />";	
+				}
+				
+				if(json[i].getMember_name() == "${sessionScope.user.name}"){
+					html+=" <div class='userBtn' align='right'>"
+					     +" <span>수정</span><span>삭제</span> "
+					     +" </div> ";
+				}
+				else{
+					html+=" <div class='userBtn' align='right'>"
+					     +" <span>좋아요♡</span> "
+					     +" </div> ";
+				}
+				
+				html += "</td>"
+			         + "</tr>";
+			}
+			$("#review tbody").html(html);
+		}
+		else{
+			var html = "<td colspan='5'><div class='' align='center'><h3>작성된 후기가 없습니다.</h3></div></td>";
+			$("#review tbody").html("<tr>"+html+"</tr>");
+			$(".review").css("border-bottom","none");
+			
+		}
+	}
+	
+	
+	function func_productQCall(){
+		var url = "/productQCall.do";
+		var data = {"product_num":"${product.product_num}"};
+		reqServer(url, data);
+	}
+	
+	function printProductInquiry(json){
+		if(json.length > 0){
+			<%-- for(var i=0; i<json.length; i++){
+				var html = "<tr class='accordion'>"
+				         + "<td>"+json[i].getReview_num()+"</td>"
+				         + "<td class='content-title'>"+json[i].getSubject()+"</td>"
+				         + "<td>"+json[i].getName()+"</td>"
+				         + "<td>"+json[i].getWrite_date()+"</td>"
+				         + "<td>"+json[i].getHit()+"</td>"
+				         + "</tr>"
+				         + "<tr class='panel panel-none'>"
+				         + "<td colspan='5' class='review_content'>"+json[i].getContent();
+				for(var j=0; j<json[i].getImageList().length; j++){
+					var imageFileName = decodeURIComponent(json[i].getImageList.get(j));
+					var imageFile = "<%=ctxPath%>/images/"+imageFileName;
+					html+="<img src='"+imageFile+"' />";	
+				}
+				
+				if(json[i].getMember_name() == "${sessionScope.user.name}"){
+					html+=" <div class='userBtn' align='right'>"
+					     +" <span>수정</span><span>삭제</span> "
+					     +" </div> ";
+				}
+				else{
+					html+=" <div class='userBtn' align='right'>"
+					     +" <span>좋아요♡</span> "
+					     +" </div> ";
+				}
+				
+				html += "</td>"
+			         + "</tr>";
+			}
+			$("#review tbody").html(html); --%>
+		}
+		else{
+			var html = "<td colspan='5'><div class='' align='center'><h3>작성된 상품문의가 없습니다.</h3></div></td>";
+			$("#question tbody").html("<tr>"+html+"</tr>");
+			$(".goodsQ").css("border-bottom","none");
+			
+		}
+	}
+	
+	
+	
+	function reqServer(url, data){
+		$.ajax({
+			url:"<%=ctxPath%>"+url,
+			data:data,
+			type:"POST",
+			dataType:"JSON",
+			success:function(json){
+				console.log(json);
+				if(url=="/reviewCall.do"){
+					printReview(json);
+				}
+				else if(url=="/productQCall.do"){
+					printProductInquiry(json);
+				}
+			},
+			error:function(e){
+				console.log(e);
+			}
+		});
+	}
+	
+ 
+	function goWriteQ(num){
+		location.href="<%=ctxPath %>/productQwrite.do?product_num="+num;
+	}
+	
+	
 
 </script>
 </head>
@@ -376,7 +504,7 @@
 						<img alt="상품이미지1" src="<%=ctxPath %>/images/logo.png" class="otherImg">
 						<img alt="상품이미지1" src="<%=ctxPath %>/images/logo.png" class="otherImg">
 						<img alt="상품이미지1" src="<%=ctxPath %>/images/logo.png" class="otherImg">
-						<div>상품정보(설명)</div>
+						<div>${product.explain}</div>
 					</div>
 				
 					<div class="detailTablePart" id="review">
@@ -392,7 +520,7 @@
 								</tr>
 								<tr>
 									<td>글 번호</td>
-									<td>제목</td>
+									<td style="width:50%;">제목</td>
 									<td>작성자</td>
 									<td>작성날짜</td>
 									<td>조회 수</td>
@@ -457,7 +585,7 @@
 								</tr>
 								<tr>
 									<td>글 번호</td>
-									<td>제목</td>
+									<td style="width:50%;">제목</td>
 									<td>작성자</td>
 									<td>작성날짜</td>
 									<td>조회 수</td>
@@ -504,7 +632,7 @@
 							</tbody>
 						</table>
 						<p align="right">
-							<span class="writeBtn" onclick="location.href='<%=ctxPath %>/productList.do'">목록 보기</span><span class="writeBtn" onclick="location.href='<%=ctxPath %>/productQwrite.do'">문의 쓰기</span>
+							<span class="writeBtn" onclick="location.href='<%=ctxPath %>/productList.do'">목록 보기</span><span class="writeBtn" onclick="goWriteQ('${product.product_num}')">문의 쓰기</span>
 						</p>
 					</div>
 				</div>

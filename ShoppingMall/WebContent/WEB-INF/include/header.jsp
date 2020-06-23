@@ -241,7 +241,10 @@
 </style>
 
 <script type="text/javascript">
+
+
 $(document).ready(function(){
+	printNavi();
 	var $list = $(".list"); //하위 navi에 존재하는 li태그들 (배열)
 
 	// 하위 navi에 존재하는 li태그에 hover했을 때 function
@@ -254,12 +257,14 @@ $(document).ready(function(){
 	},function(){ //마우스를 내렸을 때
 		// $(".navi-dropdown-content").css("min-width","170px"); //하위 navi가 존재하는 영역의 넓이 150px로 조정
 		// $(".navi-categori2").css("display","none"); //navi-categori2(ul)태그의 display none(안보이도록) 
+		
 	});
 	
 	
 	// 전체카테고리 li태그에 hover했을 때 function
 	$(".navi-dropdown").hover(function(){
 		$(".navi-dropdown-content").css("display","block"); //하위 navi가 존재하는 영역 display 변경
+		$(".navi-category .lit").css("background-color","white");	
 	},function(){
 		 $(".navi-dropdown-content").css({"display":"none","min-width":"150px"}); //원래 있던대로 display와 width 수정
 		 $(".navi-categori2").css("display","none");
@@ -302,26 +307,25 @@ $(document).ready(function(){
 	
 	
 	// 전체 카테고리에서 서브 카테고리 변화주기 //
-	var $category = $(".navi-categori").find(".listType");
+	var $category = $(".navi-categori").find(".list");
 	$category.each(function(index, item){
-		var sub = ["기본채소,쌈 샐러드,특수채소"
-			      ,"국산과일,수입과일,냉동 건과일"
-			      ,"생선류,오징어 낙지 문어,새우 게 랍스타"
-			      ,"소고기,돼지고기,닭 오리고기"
-			      ,"생수 음료 주스,커피 차,우유 두유 요거트"];
-			
+		var idx = index	
 		$(item).mouseover(function(){
-			var subArr = sub[index].split(",");
-			for(var i=0; i<subArr.length; i++){
-					 $(".navi-categori2").find(".listType:eq("+i+")").html(subArr[i]);
+			console.log(idx);
+			subArr = [{"num":11,"content":"기본채소"},{"num":12,"content":"쌈 샐러드"},{"num":13,"content":"특수채소"},
+				      {"num":21,"content":"국산과일"},{"num":21,"content":"수입과일"},{"num":21,"content":"냉동 건과일"},
+				      {"num":31,"content":"생선류"},{"num":32,"content":"오징어 낙지 문어"},{"num":33,"content":"새우 게 랍스타"},
+				      {"num":41,"content":"소고기"},{"num":42,"content":"돼지고기"},{"num":43,"content":"닭 오리고기"},
+				      {"num":51,"content":"생수 음료 주스"},{"num":52,"content":"커피 차"},{"num":53,"content":"우유 두유 요거트"}];
 
 			$(".navi-categori2").empty();
-			var subArr = sub[index].split(",");
+			
 			for(var i=0; i<subArr.length; i++){
+				if(parseInt(subArr[i].num/10)==(idx+1)){
 					// $(".navi-categori2").find(".listType:eq("+i+")").html(subArr[i]);
-					var html="<li class='list'><span class='listType'>"+subArr[i]+"</span></li>";
+					var html="<li class='list'><span class='listType' onclick='goList("+subArr[i].num+")'>"+subArr[i].content+"</span></li>";
 					$(".navi-categori2").append(html); 
-			}
+				}	
 			}	
 		});
 	
@@ -332,8 +336,34 @@ $(document).ready(function(){
 		location.href="<%= ctxPath%>/shoppingBasket.do";
 	}
 	
-	function goList(){
-		location.href="<%= ctxPath%>/productList.do";
+	function goList(num){
+		var category=0;
+		if(num>10){
+			category = parseInt(num/10);
+		}
+		else {
+			category = num;
+		}
+		alert(num);
+	}
+	
+	function printNavi(){
+		$.ajax({
+			url:"<%=ctxPath%>/naviCategoryCall.do",
+			dataType:"JSON",
+			success:function(json){
+				console.log(json);
+				
+				var cnt=0;
+				 for(var i=0; i<5; i++){
+					$(".categoryValue:eq("+i+")").html("<span class='listType' onclick='goList("+json[i].num+")'>"+json[i].content+"</span>");
+				 }
+				 
+			},
+			error:function(e){
+				console.log(e);
+			}
+		});
 	}
 
 </script>
@@ -382,16 +412,16 @@ $(document).ready(function(){
 				<span class="bar">I</span><br/>
 				<div class="navi-dropdown-content" align="left">
 					<ul class="navi-categori">
-						<li class="list" onclick="goList()"><span class="listType">채소</span></li>
-						<li class="list" onclick="goList()"><span class="listType">과일 견과 쌀</span></li>
-						<li class="list" onclick="goList()"><span class="listType">수산 해산 건어물</span></li>
-						<li class="list" onclick="goList()"><span class="listType">정육 계란</span></li>
-						<li class="list" onclick="goList()"><span class="listType">음료 우유 간식</span></li>
+						<li class="list categoryValue" ><span class="listType">채소</span></li>
+						<li class="list categoryValue" ><span class="listType">과일 견과 쌀</span></li>
+						<li class="list categoryValue" ><span class="listType">수산 해산 건어물</span></li>
+						<li class="list categoryValue" ><span class="listType">정육 계란</span></li>
+						<li class="list categoryValue" ><span class="listType">음료 우유 간식</span></li>
 					</ul>
 					<ul class="navi-categori2">
-						<li class="list" onclick="goList()"><span class="listType"></span></li>
-						<li class="list" onclick="goList()"><span class="listType"></span></li>
-						<li class="list" onclick="goList()"><span class="listType"></span></li>
+						<li class="list categoryValue" onclick="goList()"><span class="listType"></span></li>
+						<li class="list categoryValue" onclick="goList()"><span class="listType"></span></li>
+						<li class="list categoryValue" onclick="goList()"><span class="listType"></span></li>
 					</ul> 
 				</div>
 			</li>

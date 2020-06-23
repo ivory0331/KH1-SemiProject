@@ -6,7 +6,7 @@ import java.sql.*;
 import javax.naming.*;
 import javax.sql.DataSource;
 
-import util.security.AES256;
+import project.util.security.AES256;
 
 public class MemberDAO implements InterMemberDAO {
 	

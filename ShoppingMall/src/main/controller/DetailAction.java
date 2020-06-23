@@ -15,7 +15,7 @@ public class DetailAction extends AbstractController {
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
 
-		String idx = request.getParameter("idx");
+		String idx = request.getParameter("product_num");
 		InterIndexDAO idao = new IndexDAO();
 		ProductVO pvo = idao.productDetail(idx);
 		if(pvo!=null) {

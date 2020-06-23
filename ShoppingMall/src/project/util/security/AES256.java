@@ -1,4 +1,4 @@
-package util.security;
+package project.util.security;
 
 import java.io.UnsupportedEncodingException;
 import java.security.GeneralSecurityException;

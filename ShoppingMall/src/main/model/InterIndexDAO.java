@@ -13,4 +13,13 @@ public interface InterIndexDAO {
 
 	// 모든 상품번호를 조회
 	List<String> product_numFind() throws SQLException;
+
+	// 특정 상품의 후기 조회
+	List<ReviewVO> reviewCall(String product_num) throws SQLException;
+
+	// 특정 상품의 상품문의 조회
+	List<ProductInquiryVO> productQCall(String product_num) throws SQLException;
+
+	// 상품의 대분류, 소분류 카테고리 정보 조회
+	List<Map<String, String>> categoryCall() throws SQLException;
 }

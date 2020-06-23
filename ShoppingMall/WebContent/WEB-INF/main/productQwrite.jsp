@@ -26,6 +26,7 @@
 		padding: 10px 0 10px 10px;
 		font-size: 10pt;
 		font-weight: bold;
+		width: 200px;
 		
 	}
 	
@@ -53,31 +54,18 @@
 		cursor: pointer;
 		margin-right:10px;
 	}
-<<<<<<< HEAD
-	
-<<<<<<< HEAD
-	input[name='imgFile']{
-		display: inline-block;
+
+	.imgInput{
+		width: 80%;
+		
 	}
 	
-=======
->>>>>>> origin/sanga
-	#txt_area{
-		overflow-y: scroll;
-	}
-	
-<<<<<<< HEAD
-=======
-	
-	input[name='imgFile']{
-		display: inline-block;
-	}
 
 	#txt_area{
 		overflow-y: scroll;
 	}
 	
->>>>>>> hyemin
+	
 	#imgAdd{
 		display: inline-block;
 		width: 80px;
@@ -87,12 +75,19 @@
 		cursor: pointer;
 		color:white;
 	}
-<<<<<<< HEAD
-=======
->>>>>>> origin/sanga
-=======
-
->>>>>>> hyemin
+	
+	.imgInput, .closeInput{
+		display: inline-block;
+	}
+	
+	.closeInput{
+		cursor: pointer;
+		background-color: red;
+		font-size: 12pt;
+		font-weight: bold;
+		padding : 0  5px;
+	}
+	
 </style>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -100,16 +95,10 @@
 <script type="text/javascript" src="/ShoppingMall/js/jquery-3.3.1.min.js"></script>
 <script type="text/javascript" src="/ShoppingMall/util/myutil.js"></script>
 <script type="text/javascript">
-<<<<<<< HEAD
-<<<<<<< HEAD
+
 	var cnt=1;
 	$(document).ready(function(){
 		
-=======
-=======
-
->>>>>>> hyemin
-	$(document).ready(function(){
 		$("#imgFile").change(function(){
 			if(this.files && this.files[0]) {
 				var fileName = this.files[0].name;
@@ -131,36 +120,47 @@
 				$("#imgFile").val(""); 
 			}
 			
-<<<<<<< HEAD
+
+		
 		});
->>>>>>> origin/sanga
-=======
-		});
->>>>>>> hyemin
+
 	});
 	
 	function divCheck(){
 		console.log($("#txt_area").html());
 		console.log($("#txt_area").text());
 	}
-<<<<<<< HEAD
-	
-<<<<<<< HEAD
-=======
-	
->>>>>>> hyemin
+
 	function func_addArea(){
-		var html="<input type='file' name=imgFile id='imgFile"+cnt+"' accept='.gif, .jpg, .png' style='margin-top:10px;'/>";
+		var html="<div class='imgInput' id='imgFile"+cnt+"'>"
+		        +"<input type='file' name='imgFile'  accept='.gif, .jpg, .png' style='margin-bottom:10px;'/>"
+			    +"</div>"
+			    +"<div class='closeInput' id='close"+cnt+"' onclick = 'func_closeImg("+cnt+")' align='right'>X"
+			    +"</div>";
+		if($(".imgInput").length>7){
+			alert("이미지는 최대 8장 만 입력할 수 있습니다.");
+			return;
+		}
 		$(".productQ-img").append(html);
 		cnt++;
 	}
-<<<<<<< HEAD
 	
-=======
->>>>>>> origin/sanga
-=======
+	function func_closeImg(num){
+		$(".imgInput:eq("+num+")").remove();
+		$(".closeInput:eq("+num+")").remove();
+	}
 	
->>>>>>> hyemin
+	
+	function goBack(){
+		alert("작성된 내용은 저장되지 않습니다.");
+		history.back();
+		
+	}
+	
+	function divCheck(){
+		console.log(${param.product_num});
+	}
+
 </script>
 </head>
 <body>
@@ -170,7 +170,7 @@
 			<div class="contents">
 				<div class="boardInfo">
 					<h3 style="display:inline-block">상품문의 작성</h3>
-					<span style="margin-left:10px; font-size:8pt; font-weight: bold;"></span>
+					<span style="margin-left:10px; font-size:8pt; font-weight: bold;">tes</span>
 				</div>
 				<form name="questionWriteFrm">
 					<table class="writeTable">
@@ -207,33 +207,23 @@
 								<div contenteditable="true" style="border:solid 1px black; margin-top:10px; height: 600px;" id="txt_area"></div>
 								<input type="hidden" name="contents"/>
 							</td>
-<<<<<<< HEAD
-						</tr>
-<<<<<<< HEAD
-						<tr >
-=======
+
 						</tr>
 						<tr>
->>>>>>> hyemin
-							<td style="vertical-align: top;">
+							<td style="vertical-align: top;" >
 								<span id="imgAdd" onclick="func_addArea()">추가 업로드</span>
-								<label for="imgFile0">이미지 추가</label>
+								<label for="imgFile0">이미지 파일</label>
+							</td>
+							<td class='productQ-img'>
+								<div class="imgInput" id='imgFile0'>
+									<input type='file' name="imgFile"  accept='.gif, .jpg, .png' style="margin-bottom:10px;"/>
+								</div>
+								<div class="closeInput" id="close0" onclick = "func_closeImg(0)" align="right">X</div>
 								
 							</td>
-<<<<<<< HEAD
-							<td class="productQ-img"><input type="file" name=imgFile id="imgFile0" accept=".gif, .jpg, .png"/> </td>
-=======
-						<tr>
-							<td><label for="imgFile">이미지 추가</label></td>
-							<td><input type="file" id="imgFile" accept=".gif, .jpg, .png"/></td>
->>>>>>> origin/sanga
-=======
-							<td class="productQ-img"><input type="file" name=imgFile id="imgFile0" accept=".gif, .jpg, .png"/> </td>
->>>>>>> hyemin
-						</tr>
 					</table>
 					<div class="userBtn" align="center">
-						<span>취소</span> <span style="background-color:purple; color:white;" onclick="divCheck()">등록</span>
+						<span onclick="goBack()">취소</span> <span style="background-color:purple; color:white;" onclick="divCheck()">등록</span>
 					</div>
 				</form>
 			</div>
