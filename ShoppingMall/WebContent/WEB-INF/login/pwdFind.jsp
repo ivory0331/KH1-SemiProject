@@ -46,8 +46,6 @@ h3 {
     margin: 0;
 }
 
-
-
 .section_login .write_form {
     padding-top: 36px;
 }

@@ -22,5 +22,8 @@ public interface InterMemberDAO {
 	
 	//아이디찾기(이름, 핸드폰번호) 
 	String findUserid(HashMap<String, String> paraMap) throws SQLException;
+	
+	//비밀번호 찾기
+	boolean isUserExist(HashMap<String, String> paraMap);
 
 }
