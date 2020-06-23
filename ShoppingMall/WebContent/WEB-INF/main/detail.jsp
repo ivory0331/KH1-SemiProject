@@ -256,6 +256,9 @@
 			  });
 			}
 		
+		func_reviewCall();
+		func_productQcall();
+		
 		
 	});
 	
@@ -322,6 +325,10 @@
 	        	 console.log(e);
 	         }
 		});
+	}
+	
+	function func_rivewCall(){
+		
 	}
 
 </script>
