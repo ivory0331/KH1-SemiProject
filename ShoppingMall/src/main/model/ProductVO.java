@@ -28,7 +28,6 @@ public class ProductVO {
 	private String subcategory_content; // 상품 카테고리명2
 	
 	
-	
 	public ProductVO() {}
 	
 	
