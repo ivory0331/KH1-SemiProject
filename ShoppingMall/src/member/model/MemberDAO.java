@@ -191,7 +191,7 @@ public class MemberDAO implements InterMemberDAO {
 			    else {
 
 				    //마지막으로 로그인 한 날짜시간 기록하기
-				    sql = "update member_num set last_login_date = sysdate "
+				    sql = "update member_table set last_login_date = sysdate "
 				    	+ "where userid = ? ";
 				    pstmt = conn.prepareStatement(sql);
 				    
