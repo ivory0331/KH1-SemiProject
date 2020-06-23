@@ -111,7 +111,7 @@ create table product_table
 ,seller         varchar2(50) -- 판매자(관리자 모드시에 사용)
 ,seller_phone   varchar2(80) -- 판매자 번호(관리자 모드시에 사용)
 ,explain    varchar2(4000) -- 상품설명
-,representative_img varchar2(100) not null
+,representative_img varchar2(100) not null  -- 대표이미지
 ,fk_category_num    number not null -- product_category_table에 있는 category_num을 참조하는 컬럼
 ,fk_subcategory_num number not null -- product_subcategory_table에 있는 subcategory_num을 참조하는 컬럼
 ,constraint pk_product_table primary key (product_num)
@@ -557,6 +557,7 @@ values(4,'1등급 한우 알사태 수육용 500g(냉장).png','1등급 한우 �
 values(seq_product_table.nextval, '싱싱 흰다리새우(중 220~270g)(냉동)', '10500', '15', '국산', '냉동/종이포장', '1팩', '김진하', '01075653393', 3, 33);
 
 
+
 select * from product_category_table union select * from product_subcategory_table;
 
 insert into member_table (member_num, name, userid, pwd, email, mobile) 
@@ -572,3 +573,21 @@ commit;
 delete from member_table;
 
 select count(*) from basket_table where fk_member_num = ;
+
+
+select O.order_num
+     , O.to_char(order_date,'yyyy.mm.dd hh24:mi:ss')
+     , O.price
+     , OP.fk_product_num
+     , P.product_name
+     , P.representative_img
+     , OS.order_state 
+from order_table O join order_product_table OP 
+on O.order_num = OP.fk_order_num join order_state_table OS 
+on O.fk_category_num = OS.category_num join product_table P 
+on OP.fk_product_num = P.product_num
+where O.fk_member_num = ?
++
+select count(*) from order_product_table where fk_order_num = ?
+
+
