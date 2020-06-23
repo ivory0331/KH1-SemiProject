@@ -9,7 +9,7 @@ import javax.servlet.http.HttpSession;
 import common.controller.AbstractController;
 import hyemin.model.InterOrderDAO;
 import hyemin.model.OrderDAO;
-import main.model.MemberVO;
+import member.model.MemberVO;
 import main.model.OrderHistoryVO;
 
 
