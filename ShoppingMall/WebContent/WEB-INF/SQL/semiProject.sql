@@ -99,7 +99,7 @@ select * from product_subcategory_table;
 -- 상품 테이블 생성 --
 create table product_table
 (product_num    number not null -- 상품번호 필수+고유 시퀀스 사용
-,product_name   varchar2(50) not null -- 상품이름 필수+고유
+,product_name   varchar2(200) not null -- 상품이름 필수+고유
 ,price          number  not null -- 가격 필수
 ,stock          number not null -- 재고 필수
 ,origin         varchar2(50) -- 원산지
@@ -120,7 +120,7 @@ create table product_table
 ,constraint fk_product_subcategory_num FOREIGN key(fk_subcategory_num) REFERENCES product_subcategory_table(subcategory_num)
 );
 
-
+alter table product_table modify (product_name varchar2(200)) ;
 
 -- 상품 테이블에 사용할 시퀀스 생성 --
 create sequence seq_product_table
@@ -345,54 +345,31 @@ nominvalue
 nocycle
 nocache;
 
-
-
--- 소고기
-insert into product_table (product_num, product_name, price, stock, origin, packing, unit, seller, seller_phone, fk_category_num, fk_subcategory_num,
-representative_img) 
-values(seq_product_table.nextval, '1등급 한우 갈빗살 구이용 200g(냉장)', '31000', '10', '국내산(한우)', '냉장/종이포장', '1팩', '김진하', '01075653393', 4, 41,
-'1등급 한우 갈빗살 구이용 200g(냉장).png');
-insert into product_table (product_num, product_name, price, stock, origin, packing, unit, seller, seller_phone, fk_category_num, fk_subcategory_num,
-representative_img) 
-values(seq_product_table.nextval, '1등급 한우 목심 샤브샤브용 200g(냉장)', '32000', '10', '국내산(한우)', '냉장/종이포장', '1팩', '김진하', '01075653393', 4, 41,
-'1등급 한우 목심 샤브샤브용 200g(냉장).png');
-insert into product_table (product_num, product_name, price, stock, origin, packing, unit, seller, seller_phone, fk_category_num, fk_subcategory_num,
-representative_img) 
-values(seq_product_table.nextval, '1등급 한우 안심 추리 200g(냉장)', '35000', '4', '국내산(한우)', '냉장/종이포장', '1팩', '김진하', '01075653393', 4, 41,
-'1등급 한우 안심 추리 200g(냉장).png');
-insert into product_table (product_num, product_name, price, stock, origin, packing, unit, seller, seller_phone, fk_category_num, fk_subcategory_num,
-representative_img) 
-values(seq_product_table.nextval, '1등급 한우 알사태 수육용 500g(냉장)', '34000', '6', '국내산(한우)', '냉장/종이포장', '1팩', '김진하', '01075653393', 4, 41,
-'1등급 한우 알사태 수육용 500g(냉장).png');
-insert into product_table (product_num, product_name, price, stock, origin, packing, unit, seller, seller_phone, fk_category_num, fk_subcategory_num,
-representative_img) 
-values(seq_product_table.nextval, '1등급 한우 채끝 스키야끼용 200g(냉장)', '30000', '10', '국내산(한우)', '냉장/종이포장', '1팩', '김진하', '01075653393', 4, 41,
-'1등급 한우 채끝 스키야끼용 200g(냉장).png');
-insert into product_table (product_num, product_name, price, stock, origin, packing, unit, seller, seller_phone, fk_category_num, fk_subcategory_num,
-representative_img) 
-values(seq_product_table.nextval, '1등급 한우 홍두깨 육전용 200g(냉장)', '32000', '10', '국내산(한우)', '냉장/종이포장', '1팩', '김진하', '01075653393', 4, 41,
-'1등급 한우 홍두깨 육전용 200g(냉장).png');
-insert into product_table (product_num, product_name, price, stock, origin, packing, unit, seller, seller_phone, fk_category_num, fk_subcategory_num,
-representative_img) 
-values(seq_product_table.nextval, '와규 MB4+안심 스테이크 200g(냉장)', '33000', '8', '국내산(한우)', '냉장/종이포장', '1팩', '김진하', '01075653393', 4, 41,
-'와규 MB4+안심 스테이크 200g(냉장).png');
-insert into product_table (product_num, product_name, price, stock, origin, packing, unit, seller, seller_phone, fk_category_num, fk_subcategory_num,
-representative_img) 
-values(seq_product_table.nextval, '와규 MB4+채끝 스테이크 200g(냉장)', '33000', '10', '국내산(한우)', '냉장/종이포장', '1팩', '김진하', '01075653393', 4, 41,
-'와규 MB4+채끝 스테이크 200g(냉장).png');
-insert into product_table (product_num, product_name, price, stock, origin, packing, unit, seller, seller_phone, fk_category_num, fk_subcategory_num,
-representative_img) 
-values(seq_product_table.nextval, '초이스 찜갈비 2kg(냉동)', '58000', '5', '국내산(한우)', '냉동/종이포장', '1팩', '김진하', '01075653393', 4, 41,
-'초이스 찜갈비 2kg(냉동).png');
-
+delete from product_table;
 commit;
 
-select *
-from product_table;
+select* from product_table;
 
+-- 소고기
+insert into product_table (product_num, product_name, price, stock, origin, packing, unit, sale, seller, seller_phone, fk_category_num, fk_subcategory_num, representative_img) 
+values(seq_product_table.nextval, '1등급 한우 갈빗살 구이용 200g(냉장)', '31000', '10', '국내산(한우)', '냉장/종이포장', '1팩', '10', '김진하', '01075653393', 4, 41, '1등급 한우 갈빗살 구이용 200g(냉장).png');
+insert into product_table (product_num, product_name, price, stock, origin, packing, unit, sale, seller, seller_phone, fk_category_num, fk_subcategory_num, representative_img) 
+values(seq_product_table.nextval, '1등급 한우 목심 샤브샤브용 200g(냉장)', '32000', '10', '국내산(한우)', '냉장/종이포장', '1팩', '0', '김진하', '01075653393', 4, 41, '1등급 한우 목심 샤브샤브용 200g(냉장).png');
+insert into product_table (product_num, product_name, price, stock, origin, packing, unit, sale, seller, seller_phone, fk_category_num, fk_subcategory_num, representative_img) 
+values(seq_product_table.nextval, '1등급 한우 안심 추리 200g(냉장)', '35000', '4', '국내산(한우)', '냉장/종이포장', '1팩', '0', '김진하', '01075653393', 4, 41, '1등급 한우 안심 추리 200g(냉장).png');
+insert into product_table (product_num, product_name, price, stock, origin, packing, unit, sale, seller, seller_phone, fk_category_num, fk_subcategory_num, representative_img) 
+values(seq_product_table.nextval, '1등급 한우 알사태 수육용 500g(냉장)', '34000', '6', '국내산(한우)', '냉장/종이포장', '1팩', '20', '김진하', '01075653393', 4, 41, '1등급 한우 알사태 수육용 500g(냉장).png');
+insert into product_table (product_num, product_name, price, stock, origin, packing, unit, sale, seller, seller_phone, fk_category_num, fk_subcategory_num, representative_img) 
+values(seq_product_table.nextval, '1등급 한우 채끝 스키야끼용 200g(냉장)', '30000', '10', '국내산(한우)', '냉장/종이포장', '1팩', '0', '김진하', '01075653393', 4, 41, '1등급 한우 채끝 스키야끼용 200g(냉장).png');
+insert into product_table (product_num, product_name, price, stock, origin, packing, unit, sale, seller, seller_phone, fk_category_num, fk_subcategory_num, representative_img) 
+values(seq_product_table.nextval, '1등급 한우 홍두깨 육전용 200g(냉장)', '32000', '10', '국내산(한우)', '냉장/종이포장', '1팩', '0', '김진하', '01075653393', 4, 41, '1등급 한우 홍두깨 육전용 200g(냉장).png');
+insert into product_table (product_num, product_name, price, stock, origin, packing, unit, sale, seller, seller_phone, fk_category_num, fk_subcategory_num, representative_img) 
+values(seq_product_table.nextval, '와규 MB4+안심 스테이크 200g(냉장)', '33000', '8', '국내산(한우)', '냉장/종이포장', '1팩', '10', '김진하', '01075653393', 4, 41, '와규 MB4+안심 스테이크 200g(냉장).png');
+insert into product_table (product_num, product_name, price, stock, origin, packing, unit, sale, seller, seller_phone, fk_category_num, fk_subcategory_num, representative_img) 
+values(seq_product_table.nextval, '와규 MB4+채끝 스테이크 200g(냉장)', '33000', '10', '국내산(한우)', '냉장/종이포장', '1팩', '30', '김진하', '01075653393', 4, 41, '와규 MB4+채끝 스테이크 200g(냉장).png');
+insert into product_table (product_num, product_name, price, stock, origin, packing, unit, sale, seller, seller_phone, fk_category_num, fk_subcategory_num, representative_img) 
+values(seq_product_table.nextval, '초이스 찜갈비 2kg(냉동)', '58000', '5', '국내산(한우)', '냉동/종이포장', '1팩', '0', '김진하', '01075653393', 4, 41, '초이스 찜갈비 2kg(냉동).png');
 
-update product_table set product_name = '1등급 한우 갈빗살 구이용 200g(냉장)'
-where product_num = 1;
 
  select P.product_num as PRODUCT_NUM, c.category_content as CATEGORY_CONTENT,
              S.subcategory_content as SUBCATEGORY_CONTENT, P.product_name as PRODUCT_NAME,
@@ -413,96 +390,224 @@ where product_num = 1;
  where fk_category_num = 4 and fk_subcategory_num = 41; 
 
 
-update product_table set sale = 10
-where product_num = 1;
-
-
 
 -- 돼지고기
-insert into product_table (product_num, product_name, price, stock, origin, packing, unit, seller, seller_phone, fk_category_num, fk_subcategory_num) 
-values(seq_product_table.nextval, '국내산 목살 양념구이', '12900', '15', '국내산', '냉동/종이포장', '1팩', '김진하', '01075653393', 4, 42);
-insert into product_table (product_num, product_name, price, stock, origin, packing, unit, seller, seller_phone, fk_category_num, fk_subcategory_num) 
-values(seq_product_table.nextval, '매콤한맛 삼겹살구이 (냉동)', '4900', '10', '돼지고기(브라질산)', '냉동/종이포장', '1팩', '김진하', '01075653393', 4, 42);
-insert into product_table (product_num, product_name, price, stock, origin, packing, unit, seller, seller_phone, fk_category_num, fk_subcategory_num) 
-values(seq_product_table.nextval, '무한생제 1등급 한동 다짐육 300g(냉장)', '58000', '5', '국내산', '냉장/종이포장', '1팩', '김진하', '01075653393', 4, 42);
-insert into product_table (product_num, product_name, price, stock, origin, packing, unit, seller, seller_phone, fk_category_num, fk_subcategory_num) 
-values(seq_product_table.nextval, '바베큐맛 삼겹살구이 (냉동)', '4900', '12', '돼지고기(브라질산)', '냉동/종이포장', '1팩', '김진하', '01075653393', 4, 42);
-insert into product_table (product_num, product_name, price, stock, origin, packing, unit, seller, seller_phone, fk_category_num, fk_subcategory_num) 
-values(seq_product_table.nextval, '베요타 프레사 구이용 200g(냉동)', '18000', '14', '스페인산', '냉동/종이포장', '1팩', '김진하', '01075653393', 4, 42);
-insert into product_table (product_num, product_name, price, stock, origin, packing, unit, seller, seller_phone, fk_category_num, fk_subcategory_num) 
-values(seq_product_table.nextval, '베요타 플루마 구이용 200g(냉동)', '18500', '10', '스페인산', '냉동/종이포장', '1팩', '김진하', '01075653393', 4, 42);
-insert into product_table (product_num, product_name, price, stock, origin, packing, unit, seller, seller_phone, fk_category_num, fk_subcategory_num) 
-values(seq_product_table.nextval, '세보데깜뽀 플루마 구이용 200g(냉동)', '16500', '10', '스페인산', '냉동/종이포장', '1팩', '김진하', '01075653393', 4, 42);
-insert into product_table (product_num, product_name, price, stock, origin, packing, unit, seller, seller_phone, fk_category_num, fk_subcategory_num) 
-values(seq_product_table.nextval, '연저육찜', '15000', '6', '국내산', '냉장/종이포장', '1팩', '김진하', '01075653393', 4, 42);
-insert into product_table (product_num, product_name, price, stock, origin, packing, unit, seller, seller_phone, fk_category_num, fk_subcategory_num) 
-values(seq_product_table.nextval, '짭쪼름한맛 삼겹살구이 (냉동)', '4900', '15', '돼지고기(브라질산)', '냉동/종이포장', '1팩', '김진하', '01075653393', 4, 42);
+insert into product_table (product_num, product_name, price, stock, origin, packing, unit, sale, seller, seller_phone, fk_category_num, fk_subcategory_num, representative_img) 
+values(seq_product_table.nextval, '국내산 목살 양념구이', '12900', '15', '국내산', '냉동/종이포장', '1팩', '10', '김진하', '01075653393', 4, 42, '국내산 목살 양념구이.png');
+insert into product_table (product_num, product_name, price, stock, origin, packing, unit, sale, seller, seller_phone, fk_category_num, fk_subcategory_num, representative_img) 
+values(seq_product_table.nextval, '매콤한맛 삼겹살구이 (냉동)', '4900', '10', '돼지고기(브라질산)', '냉동/종이포장', '1팩', '10', '김진하', '01075653393', 4, 42, '매콤한맛 삼겹살구이 (냉동).png');
+insert into product_table (product_num, product_name, price, stock, origin, packing, unit, sale, seller, seller_phone, fk_category_num, fk_subcategory_num, representative_img) 
+values(seq_product_table.nextval, '무한생제 1등급 한동 다짐육 300g(냉장)', '58000', '5', '국내산', '냉장/종이포장', '1팩', '0', '김진하', '01075653393', 4, 42,  '무한생제 1등급 한동 다짐육 300g(냉장).png');
+insert into product_table (product_num, product_name, price, stock, origin, packing, unit, sale, seller, seller_phone, fk_category_num, fk_subcategory_num, representative_img) 
+values(seq_product_table.nextval, '바베큐맛 삼겹살구이 (냉동)', '4900', '12', '돼지고기(브라질산)', '냉동/종이포장', '1팩', '0', '김진하', '01075653393', 4, 42, '바베큐맛 삼겹살구이 (냉동).png');
+insert into product_table (product_num, product_name, price, stock, origin, packing, unit, sale, seller, seller_phone, fk_category_num, fk_subcategory_num, representative_img) 
+values(seq_product_table.nextval, '베요타 프레사 구이용 200g(냉동)', '18000', '14', '스페인산', '냉동/종이포장', '1팩', '20', '김진하', '01075653393', 4, 42, '베요타 프레사 구이용 200g(냉동).png');
+insert into product_table (product_num, product_name, price, stock, origin, packing, unit, sale, seller, seller_phone, fk_category_num, fk_subcategory_num, representative_img) 
+values(seq_product_table.nextval, '베요타 플루마 구이용 200g(냉동)', '18500', '10', '스페인산', '냉동/종이포장', '1팩', '0', '김진하', '01075653393', 4, 42, '베요타 플루마 구이용 200g(냉동).png');
+insert into product_table (product_num, product_name, price, stock, origin, packing, unit, sale, seller, seller_phone, fk_category_num, fk_subcategory_num, representative_img) 
+values(seq_product_table.nextval, '세보데깜뽀 플루마 구이용 200g(냉동)', '16500', '10', '스페인산', '냉동/종이포장', '1팩', '10', '김진하', '01075653393', 4, 42, '세보데깜뽀 플루마 구이용 200g(냉동).png');
+insert into product_table (product_num, product_name, price, stock, origin, packing, unit, sale, seller, seller_phone, fk_category_num, fk_subcategory_num, representative_img) 
+values(seq_product_table.nextval, '연저육찜', '15000', '6', '국내산', '냉장/종이포장', '1팩', '0', '김진하', '01075653393', 4, 42, '연저육찜.png');
+insert into product_table (product_num, product_name, price, stock, origin, packing, unit, sale, seller, seller_phone, fk_category_num, fk_subcategory_num, representative_img) 
+values(seq_product_table.nextval, '짭쪼름한맛 삼겹살구이 (냉동)', '4900', '15', '돼지고기(브라질산)', '냉동/종이포장', '1팩', '30', '김진하', '01075653393', 4, 42, '짭쪼름한맛 삼겹살구이 (냉동).png');
 
-
-commit;
 
 
 -- 닭고기
-insert into product_table (product_num, product_name, price, stock, origin, packing, unit, seller, seller_phone, fk_category_num, fk_subcategory_num) 
-values(seq_product_table.nextval, 'BIG BITE 오키더키 2종', '5900', '10', '국내산', '냉장/종이포장', '1팩', '김진하', '01075653393', 4, 43);
-insert into product_table (product_num, product_name, price, stock, origin, packing, unit, seller, seller_phone, fk_category_num, fk_subcategory_num) 
-values(seq_product_table.nextval, '골든치킨 봉', '7900', '10', '국내산', '냉동/종이포장', '1팩', '김진하', '01075653393', 4, 43);
-insert into product_table (product_num, product_name, price, stock, origin, packing, unit, seller, seller_phone, fk_category_num, fk_subcategory_num) 
-values(seq_product_table.nextval, '골든치킨 텐더스틱', '7400', '15', '국내산', '냉동/종이포장', '1팩', '김진하', '01075653393', 4, 43);
-insert into product_table (product_num, product_name, price, stock, origin, packing, unit, seller, seller_phone, fk_category_num, fk_subcategory_num) 
-values(seq_product_table.nextval, '닭가슴살 큐브 스테이크 500g', '7900', '10', '국내산', '냉동/종이포장', '1팩', '김진하', '01075653393', 4, 43);
-insert into product_table (product_num, product_name, price, stock, origin, packing, unit, seller, seller_phone, fk_category_num, fk_subcategory_num) 
-values(seq_product_table.nextval, '닭한마리 칼국수 밀키트', '12000', '4', '국내산', '냉장/종이포장', '1팩', '김진하', '01075653393', 4, 43);
-insert into product_table (product_num, product_name, price, stock, origin, packing, unit, seller, seller_phone, fk_category_num, fk_subcategory_num) 
-values(seq_product_table.nextval, '동물복지 닭가슴살 큐브 스테이크 갈릭500g(냉동)', '7900', '10', '국내산', '냉동/종이포장', '1팩', '김진하', '01075653393', 4, 43);
-insert into product_table (product_num, product_name, price, stock, origin, packing, unit, seller, seller_phone, fk_category_num, fk_subcategory_num) 
-values(seq_product_table.nextval, '버팔로 치킨 봉 스파이시', '11000', '10', '국내산', '냉동/종이포장', '1팩', '김진하', '01075653393', 4, 43);
-insert into product_table (product_num, product_name, price, stock, origin, packing, unit, seller, seller_phone, fk_category_num, fk_subcategory_num) 
-values(seq_product_table.nextval, '사리듬뿍 순살 닭갈비 대용량', '16700', '10', '국내산', '냉장/종이포장', '1팩', '김진하', '01075653393', 4, 43);
-insert into product_table (product_num, product_name, price, stock, origin, packing, unit, seller, seller_phone, fk_category_num, fk_subcategory_num) 
-values(seq_product_table.nextval, '유기농 치킨 커틀렛 300g', '4900', '15', '국내산', '냉동/종이포장', '1팩', '김진하', '01075653393', 4, 43);
-insert into product_table (product_num, product_name, price, stock, origin, packing, unit, seller, seller_phone, fk_category_num, fk_subcategory_num) 
-values(seq_product_table.nextval, '초계 닭무침', '4300', '10', '국내산', '냉장/종이포장', '1팩', '김진하', '01075653393', 4, 43);
-insert into product_table (product_num, product_name, price, stock, origin, packing, unit, seller, seller_phone, fk_category_num, fk_subcategory_num) 
-values(seq_product_table.nextval, '춘천식 닭갈비 밀키트', '13000', '11', '국내산', '냉장/종이포장', '1팩', '김진하', '01075653393', 4, 43);
-insert into product_table (product_num, product_name, price, stock, origin, packing, unit, seller, seller_phone, fk_category_num, fk_subcategory_num) 
-values(seq_product_table.nextval, '태양초 닭볶음탕 밀키트', '11000', '15', '국내산', '냉장/종이포장', '1팩', '김진하', '01075653393', 4, 43);
+insert into product_table (product_num, product_name, price, stock, origin, packing, unit, sale, seller, seller_phone, fk_category_num, fk_subcategory_num,  representative_img) 
+values(seq_product_table.nextval, 'BIG BITE 오키더키 2종', '5900', '10', '국내산', '냉장/종이포장', '1팩', '30', '김진하', '01075653393', 4, 43,  'BIG BITE 오키더키 2종.png');
+insert into product_table (product_num, product_name, price, stock, origin, packing, unit, sale, seller, seller_phone, fk_category_num, fk_subcategory_num,  representative_img) 
+values(seq_product_table.nextval, '골든치킨 봉', '7900', '10', '국내산', '냉동/종이포장', '1팩', '0', '김진하', '01075653393', 4, 43, '골든치킨 봉.png');
+insert into product_table (product_num, product_name, price, stock, origin, packing, unit, sale, seller, seller_phone, fk_category_num, fk_subcategory_num,  representative_img) 
+values(seq_product_table.nextval, '골든치킨 텐더스틱', '7400', '15', '국내산', '냉동/종이포장', '1팩', '20', '김진하',  '01075653393', 4, 43, '골든치킨 텐더스틱.png');
+insert into product_table (product_num, product_name, price, stock, origin, packing, unit, sale, seller, seller_phone, fk_category_num, fk_subcategory_num,  representative_img) 
+values(seq_product_table.nextval, '닭가슴살 큐브 스테이크 500g', '7900', '10', '국내산', '냉동/종이포장', '1팩', '0', '김진하', '01075653393', 4, 43, '닭가슴살 큐브 스테이크 500g.png');
+insert into product_table (product_num, product_name, price, stock, origin, packing, unit, sale, seller, seller_phone, fk_category_num, fk_subcategory_num,  representative_img) 
+values(seq_product_table.nextval, '닭한마리 칼국수 밀키트', '12000', '4', '국내산', '냉장/종이포장', '1팩', '20', '김진하',  '01075653393', 4, 43, '닭한마리 칼국수 밀키트.png');
+insert into product_table (product_num, product_name, price, stock, origin, packing, unit, sale, seller, seller_phone, fk_category_num, fk_subcategory_num,  representative_img) 
+values(seq_product_table.nextval, '동물복지 닭가슴살 큐브 스테이크 갈릭500g(냉동)', '7900', '10', '국내산', '냉동/종이포장', '1팩', '0', '김진하', '01075653393', 4, 43, '동물복지 닭가슴살 큐브 스테이크 갈릭500g(냉동).png' );
+insert into product_table (product_num, product_name, price, stock, origin, packing, unit, sale, seller, seller_phone, fk_category_num, fk_subcategory_num,  representative_img) 
+values(seq_product_table.nextval, '버팔로 치킨 봉 스파이시', '11000', '10', '국내산', '냉동/종이포장', '1팩', '20', '김진하', '01075653393', 4, 43, '버팔로 치킨 봉 스파이시.png');
+insert into product_table (product_num, product_name, price, stock, origin, packing, unit, sale, seller, seller_phone, fk_category_num, fk_subcategory_num,  representative_img) 
+values(seq_product_table.nextval, '사리듬뿍 순살 닭갈비 대용량', '16700', '10', '국내산', '냉장/종이포장', '1팩', '0', '김진하', '01075653393', 4, 43 , '사리듬뿍 순살 닭갈비 대용량.png');
+insert into product_table (product_num, product_name, price, stock, origin, packing, unit, sale, seller, seller_phone, fk_category_num, fk_subcategory_num,  representative_img) 
+values(seq_product_table.nextval, '유기농 치킨 커틀렛 300g', '4900', '15', '국내산', '냉동/종이포장', '1팩', '10', '김진하',  '01075653393', 4, 43, '유기농 치킨 커틀렛 300g.png');
+insert into product_table (product_num, product_name, price, stock, origin, packing, unit, sale, seller, seller_phone, fk_category_num, fk_subcategory_num,  representative_img) 
+values(seq_product_table.nextval, '초계 닭무침', '4300', '10', '국내산', '냉장/종이포장', '1팩', '0', '김진하', '01075653393', 4, 43, '초계 닭무침.png');
+insert into product_table (product_num, product_name, price, stock, origin, packing, unit, sale, seller, seller_phone, fk_category_num, fk_subcategory_num,  representative_img) 
+values(seq_product_table.nextval, '춘천식 닭갈비 밀키트', '13000', '11', '국내산', '냉장/종이포장', '1팩', '10', '김진하', '01075653393', 4, 43,  '춘천식 닭갈비 밀키트.png');
+insert into product_table (product_num, product_name, price, stock, origin, packing, unit, sale, seller, seller_phone, fk_category_num, fk_subcategory_num,  representative_img) 
+values(seq_product_table.nextval, '태양초 닭볶음탕 밀키트', '11000', '15', '국내산', '냉장/종이포장', '1팩', '30', '김진하', '01075653393', 4, 43,  '태양초 닭볶음탕 밀키트.png');
 
+commit;
 
 -- 수산 생선류
-insert into product_table (product_num, product_name, price, stock, origin, packing, unit, seller, seller_phone, fk_category_num, fk_subcategory_num) 
-values(seq_product_table.nextval, '고추장굴비 200g(냉동)', '15900', '50', '국산', '냉동/종이포장', '1통', '김진하', '01075653393', 3, 31);
-insert into product_table (product_num, product_name, price, stock, origin, packing, unit, seller, seller_phone, fk_category_num, fk_subcategory_num) 
-values(seq_product_table.nextval, '동해손질가자미 350g(냉동)', '7900', '10', '국산', '냉동/종이포장', '1팩', '김진하', '01075653393', 3, 31);
-insert into product_table (product_num, product_name, price, stock, origin, packing, unit, seller, seller_phone, fk_category_num, fk_subcategory_num) 
-values(seq_product_table.nextval, '맘 아픈 굴비 1.4kg(20마리)(냉동)', '26500', '15', '국산', '냉동/종이포장', '1팩', '김진하', '01075653393', 3, 31);
-insert into product_table (product_num, product_name, price, stock, origin, packing, unit, seller, seller_phone, fk_category_num, fk_subcategory_num) 
-values(seq_product_table.nextval, '민물장어 2마리 450g내외(생물)', '45500', '20', '국산', '냉장/종이포장', '1팩', '김진하', '01075653393', 3, 31);
-insert into product_table (product_num, product_name, price, stock, origin, packing, unit, seller, seller_phone, fk_category_num, fk_subcategory_num) 
-values(seq_product_table.nextval, '바다장어 2마리 450g내외(생물)', '24900', '10', '국산', '냉장/종이포장', '1팩', '김진하', '01075653393', 3, 31);
+insert into product_table (product_num, product_name, price, stock, origin, packing, unit, sale, seller, seller_phone, fk_category_num, fk_subcategory_num,  representative_img) 
+values(seq_product_table.nextval, '고추장굴비 200g(냉동)', '15900', '50', '국산', '냉동/종이포장', '1통', '0', '김진하', '01075653393', 3, 31, '고추장굴비 200g(냉동).png' );
+insert into product_table (product_num, product_name, price, stock, origin, packing, unit, sale, seller, seller_phone, fk_category_num, fk_subcategory_num,  representative_img) 
+values(seq_product_table.nextval, '동해손질가자미 350g(냉동)', '7900', '10', '국산', '냉동/종이포장', '1팩', '10', '김진하', '01075653393', 3, 31, '동해손질가자미 350g(냉동).png');
+insert into product_table (product_num, product_name, price, stock, origin, packing, unit, sale, seller, seller_phone, fk_category_num, fk_subcategory_num,  representative_img) 
+values(seq_product_table.nextval, '맘 아픈 굴비 1.4kg(20마리)(냉동)', '26500', '15', '국산', '냉동/종이포장', '1팩', '20', '김진하', '01075653393', 3, 31,  '맘 아픈 굴비 1.4kg(20마리)(냉동).png');
+insert into product_table (product_num, product_name, price, stock, origin, packing, unit, sale, seller, seller_phone, fk_category_num, fk_subcategory_num,  representative_img) 
+values(seq_product_table.nextval, '민물장어 2마리 450g내외(생물)', '45500', '20', '국산', '냉장/종이포장', '1팩', '0', '김진하', '01075653393', 3, 31, '민물장어 2마리 450g내외(생물).png');
+insert into product_table (product_num, product_name, price, stock, origin, packing, unit, sale, seller, seller_phone, fk_category_num, fk_subcategory_num,  representative_img) 
+values(seq_product_table.nextval, '바다장어 2마리 450g내외(생물)', '24900', '10', '국산', '냉장/종이포장', '1팩', '30', '김진하', '01075653393', 3, 31, '바다장어 2마리 450g내외(생물).png');
 
+commit;
 
 -- 수산 오징어
-insert into product_table (product_num, product_name, price, stock, origin, packing, unit, seller, seller_phone, fk_category_num, fk_subcategory_num) 
-values(seq_product_table.nextval, '깨끗하게 손질된 오징어 두마리(생물)', '14900', '15', '국내산', '냉장/종이포장', '1팩', '김진하', '01075653393', 3, 32);
-insert into product_table (product_num, product_name, price, stock, origin, packing, unit, seller, seller_phone, fk_category_num, fk_subcategory_num) 
-values(seq_product_table.nextval, '동해안 찜용 오징어 330g(냉동)', '11900', '22', '국내산', '냉장/종이포장', '1팩', '김진하', '01075653393', 3, 32);
-insert into product_table (product_num, product_name, price, stock, origin, packing, unit, seller, seller_phone, fk_category_num, fk_subcategory_num) 
-values(seq_product_table.nextval, '모리타니산 자숙문어 한마리(냉동)', '27000', '33', '모리타니산', '냉동/종이포장', '1마리', '김진하', '01075653393', 3, 32);
-insert into product_table (product_num, product_name, price, stock, origin, packing, unit, seller, seller_phone, fk_category_num, fk_subcategory_num) 
-values(seq_product_table.nextval, '문어 슬라이스 120g(냉장)', '9900', '26', '모리타니산', '냉장/종이포장', '1팩', '김진하', '01075653393', 3, 32);
-insert into product_table (product_num, product_name, price, stock, origin, packing, unit, seller, seller_phone, fk_category_num, fk_subcategory_num) 
-values(seq_product_table.nextval, '손질 통오징어', '8300', '30', '국산', '냉동/종이포장', '1팩', '김진하', '01075653393', 3, 32);
+insert into product_table (product_num, product_name, price, stock, origin, packing, unit, sale, seller, seller_phone, fk_category_num, fk_subcategory_num,  representative_img) 
+values(seq_product_table.nextval, '깨끗하게 손질된 오징어 두마리(생물)', '14900', '15', '국내산', '냉장/종이포장', '1팩', '30', '김진하', '01075653393', 3, 32, '깨끗하게 손질된 오징어 두마리(생물).png');
+insert into product_table (product_num, product_name, price, stock, origin, packing, unit, sale, seller, seller_phone, fk_category_num, fk_subcategory_num,  representative_img) 
+values(seq_product_table.nextval, '동해안 찜용 오징어 330g(냉동)', '11900', '22', '국내산', '냉장/종이포장', '1팩', '0', '김진하', '01075653393', 3, 32, '동해안 찜용 오징어 330g(냉동).png');
+insert into product_table (product_num, product_name, price, stock, origin, packing, unit, sale, seller, seller_phone, fk_category_num, fk_subcategory_num,  representative_img) 
+values(seq_product_table.nextval, '모리타니산 자숙문어 한마리(냉동)', '27000', '33', '모리타니산', '냉동/종이포장', '1마리', '20', '김진하', '01075653393', 3, 32, '모리타니산 자숙문어 한마리(냉동).png');
+insert into product_table (product_num, product_name, price, stock, origin, packing, unit, sale, seller, seller_phone, fk_category_num, fk_subcategory_num,  representative_img) 
+values(seq_product_table.nextval, '문어 슬라이스 120g(냉장)', '9900', '26', '모리타니산', '냉장/종이포장', '1팩', '0', '김진하', '01075653393', 3, 32, '문어 슬라이스 120g(냉장).png');
+insert into product_table (product_num, product_name, price, stock, origin, packing, unit, sale, seller, seller_phone, fk_category_num, fk_subcategory_num,  representative_img) 
+values(seq_product_table.nextval, '손질 통오징어', '8300', '30', '국산', '냉동/종이포장', '1팩', '10', '김진하', '01075653393', 3, 32, '손질 통오징어.png');
 
 
 -- 수산 새우 게
-insert into product_table (product_num, product_name, price, stock, origin, packing, unit, seller, seller_phone, fk_category_num, fk_subcategory_num) 
-values(seq_product_table.nextval, '갓 잡아올린 신선한 생새우', '18900', '10', '국산', '냉장/종이포장', '1팩', '김진하', '01075653393', 3, 33);
-insert into product_table (product_num, product_name, price, stock, origin, packing, unit, seller, seller_phone, fk_category_num, fk_subcategory_num) 
-values(seq_product_table.nextval, '손질 가을수꽃게 6조각(중 300~400g)(냉동)', '14900', '15', '국산', '냉동/종이포장', '1팩', '김진하', '01075653393', 3, 33);
-insert into product_table (product_num, product_name, price, stock, origin, packing, unit, seller, seller_phone, fk_category_num, fk_subcategory_num) 
+insert into product_table (product_num, product_name, price, stock, origin, packing, unit, sale, seller, seller_phone, fk_category_num, fk_subcategory_num,  representative_img)
+values(seq_product_table.nextval, '갓 잡아올린 신선한 생새우', '18900', '10', '국산', '냉장/종이포장', '1팩', '0', '김진하', '01075653393', 3, 33,  '갓 잡아올린 신선한 생새우.png');
+insert into product_table (product_num, product_name, price, stock, origin, packing, unit, sale, seller, seller_phone, fk_category_num, fk_subcategory_num,  representative_img)
+values(seq_product_table.nextval, '손질 가을수꽃게 6조각(중 300~400g)(냉동)', '14900', '15', '국산', '냉동/종이포장', '1팩', '30', '김진하', '01075653393', 3, 33, '손질 가을수꽃게 6조각(중 300~400g)(냉동).png' );
+insert into product_table (product_num, product_name, price, stock, origin, packing, unit, sale, seller, seller_phone, fk_category_num, fk_subcategory_num,  representative_img)
+values(seq_product_table.nextval, '싱싱 흰다리새우(중 220~270g)(냉동)', '10500', '15', '국산', '냉동/종이포장', '1팩', '20', '김진하', '01075653393', 3, 33, '싱싱 흰다리새우(중 220~270g)(냉동).png');
 
-values(seq_product_table.nextval, '싱싱 흰다리새우(중 220~270g)(냉동)', '10500', '15', '국산', '냉동/종이포장', '1팩', '김진하', '01075653393', 3, 33);
+commit;
+
+-- 채소 기본채소
+insert into product_table (product_num, product_name, price, stock, origin, packing, unit, seller, seller_phone, fk_category_num, fk_subcategory_num) 
+values(seq_product_table.nextval, '친환경 미니 밤호박 (보짱) 1개', '4300', '10', '국산', '냉장/종이포장', '1개', '김은혜', '01012345678', 1, 11);
+
+insert into product_table (product_num, product_name, price, stock, origin, packing, unit, seller, seller_phone, fk_category_num, fk_subcategory_num) 
+values(seq_product_table.nextval, '피클오이(러스보이) 6입', '4300', '10', '국산', '냉장/종이포장', '1팩', '김은혜', '01012345678', 1, 11);
+
+insert into product_table (product_num, product_name, price, stock, origin, packing, unit, seller, seller_phone, fk_category_num, fk_subcategory_num) 
+values(seq_product_table.nextval, '통마늘 1kg', '7500', '20', '국산', '냉장/종이포장', '1망', '김은혜', '01012345678', 1, 11);
+
+insert into product_table (product_num, product_name, price, stock, origin, packing, unit, seller, seller_phone, fk_category_num, fk_subcategory_num) 
+values(seq_product_table.nextval, '초당 옥수수 5입', '10900', '30', '국산', '냉장/종이포장', '1망', '김은혜', '01012345678', 1, 11);
+
+insert into product_table (product_num, product_name, price, stock, origin, packing, unit, seller, seller_phone, fk_category_num, fk_subcategory_num) 
+values(seq_product_table.nextval, '찰 옥수수 5입 망', '7990', '30', '국산', '냉장/종이포장', '1망', '김은혜', '01012345678', 1, 11);
+
+
+-- 채소 쌈 샐러드
+insert into product_table (product_num, product_name, price, stock, origin, packing, unit, seller, seller_phone, fk_category_num, fk_subcategory_num) 
+values(seq_product_table.nextval, '[간편 샐러드] 손질 치커리 40g', '1850', '20', '국산', '냉장/종이포장', '1팩', '김은혜', '01012345678', 1, 12);
+
+insert into product_table (product_num, product_name, price, stock, origin, packing, unit, seller, seller_phone, fk_category_num, fk_subcategory_num) 
+values(seq_product_table.nextval, '[소중한식사] 닭 스프링롤 키트', '8900', '20', '국산', '냉장/종이포장', '1팩', '김은혜', '01012345678', 1, 12);
+
+insert into product_table (product_num, product_name, price, stock, origin, packing, unit, seller, seller_phone, fk_category_num, fk_subcategory_num) 
+values(seq_product_table.nextval, '[소중한식사] 새우 스프링롤 키트', '8900', '10', '국산', '냉장/종이포장', '1팩', '김은혜', '01012345678', 1, 12);
+
+insert into product_table (product_num, product_name, price, stock, origin, packing, unit, seller, seller_phone, fk_category_num, fk_subcategory_num) 
+values(seq_product_table.nextval, '[소중한식사] 스프링롤 키트', '7900', '10', '국산', '냉장/종이포장', '1팩', '김은혜', '01012345678', 1, 12);
+
+insert into product_table (product_num, product_name, price, stock, origin, packing, unit, seller, seller_phone, fk_category_num, fk_subcategory_num) 
+values(seq_product_table.nextval, '무농약 롤로비온다 80g', '4200', '10', '국산', '냉장/종이포장', '1팩', '김은혜', '01012345678', 1, 12);
+
+
+-- 채소 특수채소
+insert into product_table (product_num, product_name, price, stock, origin, packing, unit, seller, seller_phone, fk_category_num, fk_subcategory_num) 
+values(seq_product_table.nextval, '고수 30g', '1590', '25', '국산', '냉장/종이포장', '1팩', '김은혜', '01012345678', 1, 13);
+
+insert into product_table (product_num, product_name, price, stock, origin, packing, unit, seller, seller_phone, fk_category_num, fk_subcategory_num) 
+values(seq_product_table.nextval, '딜 10g', '1590', '16', '국산', '냉장/종이포장', '1팩', '김은혜', '01012345678', 1, 13);
+
+insert into product_table (product_num, product_name, price, stock, origin, packing, unit, seller, seller_phone, fk_category_num, fk_subcategory_num) 
+values(seq_product_table.nextval, '애플민트 10g', '1450', '17', '국산', '냉장/종이포장', '1팩', '김은혜', '01012345678', 1, 13);
+
+insert into product_table (product_num, product_name, price, stock, origin, packing, unit, seller, seller_phone, fk_category_num, fk_subcategory_num) 
+values(seq_product_table.nextval, '로즈마리 10g', '1400', '10', '국산', '냉장/종이포장', '1팩', '김은혜', '01012345678', 1, 13);
+
+insert into product_table (product_num, product_name, price, stock, origin, packing, unit, seller, seller_phone, fk_category_num, fk_subcategory_num) 
+values(seq_product_table.nextval, '이탈리안 파슬리 15g', '1350', '18', '국산', '냉장/종이포장', '1팩', '김은혜', '01012345678', 1, 13);
+
+insert into product_table (product_num, product_name, price, stock, origin, packing, unit, seller, seller_phone, fk_category_num, fk_subcategory_num) 
+values(seq_product_table.nextval, '화이트 아스파라거스 200g', '8900', '18', '페루산', '냉장/종이포장', '1팩', '김은혜', '01012345678', 1, 13);
+
+---- 과일 견과 국산
+insert into product_table (product_num, product_name, price, stock, origin, packing, unit, seller, seller_phone, fk_category_num, fk_subcategory_num) 
+values(seq_product_table.nextval, '유기농 블루베리 2종', '4900', '15', '국산', '냉장/종이포장', '1팩', '이주명', '01056785678', 2, 21);
+insert into product_table (product_num, product_name, price, stock, origin, packing, unit, seller, seller_phone, fk_category_num, fk_subcategory_num) 
+values(seq_product_table.nextval, '[네떼] 시원할수박에 700g', '8900', '15', '국산', '냉장/종이포장', '1팩', '이주명', '01056785678', 2, 21);
+insert into product_table (product_num, product_name, price, stock, origin, packing, unit, seller, seller_phone, fk_category_num, fk_subcategory_num) 
+values(seq_product_table.nextval, 'GAP 거봉포도 1팩', '12500', '20', '국산', '냉장/종이포장', '1팩', '이주명', '01056785678', 2, 21);
+insert into product_table (product_num, product_name, price, stock, origin, packing, unit, seller, seller_phone, fk_category_num, fk_subcategory_num) 
+values(seq_product_table.nextval, 'GAP 천도복숭아 950g', '11950', '20', '국산', '냉장/종이포장', '1팩', '이주명', '01056785678', 2, 21);
+insert into product_table (product_num, product_name, price, stock, origin, packing, unit, seller, seller_phone, fk_category_num, fk_subcategory_num) 
+values(seq_product_table.nextval, '고당도 흑미 수박 7kg', '23800', '20', '국산', '냉장/종이포장', '1통', '이주명', '01056785678', 2, 21);
+
+-- 과일 수입과일
+insert into product_table (product_num, product_name, price, stock, origin, packing, unit, seller, seller_phone, fk_category_num, fk_subcategory_num) 
+values(seq_product_table.nextval, '[Dole] 그린 파파야 1개', '4400', '15', '필리핀', '냉장/종이포장', '1개', '이주명', '01056785678', 2, 22);
+insert into product_table (product_num, product_name, price, stock, origin, packing, unit, seller, seller_phone, fk_category_num, fk_subcategory_num) 
+values(seq_product_table.nextval, '[Dole] 스위티오 파인애플 스틱 80g', '1650', '15', '파인애플:필리핀산/제조국:대한민국', '냉장/종이포장', '1봉', '이주명', '01056785678', 2, 22);
+insert into product_table (product_num, product_name, price, stock, origin, packing, unit, seller, seller_phone, fk_category_num, fk_subcategory_num) 
+values(seq_product_table.nextval, '[Dole] 스위티오 파인애플 슬라이스 540g', '6900', '15', '파인애플:필리핀산/제조국:대한민국', '냉장/종이포장', '1팩', '이주명', '01056785678', 2, 22);
+insert into product_table (product_num, product_name, price, stock, origin, packing, unit, seller, seller_phone, fk_category_num, fk_subcategory_num) 
+values(seq_product_table.nextval, '[Dole] 파파야 1개', '4400', '15', '필리핀', '냉장/종이포장', '1개', '이주명', '01056785678', 2, 22);
+insert into product_table (product_num, product_name, price, stock, origin, packing, unit, seller, seller_phone, fk_category_num, fk_subcategory_num) 
+values(seq_product_table.nextval, '[KF365] 아보카도 1개', '3300', '15', '미국산', '냉장/종이포장', '1개', '이주명', '01056785678', 2, 22);
+
+
+-- 과일 냉동 건과일
+insert into product_table (product_num, product_name, price, stock, origin, packing, unit, seller, seller_phone, fk_category_num, fk_subcategory_num) 
+values(seq_product_table.nextval, '[델루츠] 소포장 냉동과일 3종', '1980', '15', '제품 별도표기', '냉동/종이포장', '1봉', '이주명', '01056785678', 2, 23);
+insert into product_table (product_num, product_name, price, stock, origin, packing, unit, seller, seller_phone, fk_category_num, fk_subcategory_num) 
+values(seq_product_table.nextval, '[선물세트] 곶감 세트', '75000', '10', '국산', '기타', '1박스', '이주명', '01056785678', 2, 23);
+insert into product_table (product_num, product_name, price, stock, origin, packing, unit, seller, seller_phone, fk_category_num, fk_subcategory_num) 
+values(seq_product_table.nextval, '[아르도] 냉동과일 퓨레1kg 2종', '16500', '15', '제품 별도표기', '냉동/종이포장', '1봉', '이주명', '01056785678', 2, 23);
+insert into product_table (product_num, product_name, price, stock, origin, packing, unit, seller, seller_phone, fk_category_num, fk_subcategory_num) 
+values(seq_product_table.nextval, '[유가원] 베리베리 믹스 140g', '8800', '10', '제품 별도표기', '냉동/종이포장', '1통', '이주명', '01056785678', 2, 23);
+insert into product_table (product_num, product_name, price, stock, origin, packing, unit, seller, seller_phone, fk_category_num, fk_subcategory_num) 
+values(seq_product_table.nextval, '[인비바] 과일칩 4종', '3200', '10', '제품 별도표기', '상온/종이포장', '1팩', '이주명', '01056785678', 2, 23);
+
+
+-- 음료 생수 음료 주스(원산지x)
+insert into product_table (product_num, product_name, price, stock, packing, unit, seller, seller_phone, fk_category_num, fk_subcategory_num) 
+values(seq_product_table.nextval, '[그래미] 여명 808', '8450', '20', '상온/종이포장', '1박스', '이주명', '01056785678', 3, 31);
+insert into product_table (product_num, product_name, price, stock, packing, unit, seller, seller_phone, fk_category_num, fk_subcategory_num) 
+values(seq_product_table.nextval, '[바로이즙] ABC 착즙주스 2종', '11000', '20', '상온/종이포장', '1박스', '이주명', '01056785678', 3, 31);
+insert into product_table (product_num, product_name, price, stock, packing, unit, seller, seller_phone, fk_category_num, fk_subcategory_num) 
+values(seq_product_table.nextval, '[산타니올] 스페인 클래식 탄산수 750ml 1박스 (6개입)', '19980', '10', '상온/종이포장', '1박스', '이주명', '01056785678', 3, 31);
+insert into product_table (product_num, product_name, price, stock, packing, unit, seller, seller_phone, fk_category_num, fk_subcategory_num) 
+values(seq_product_table.nextval, '[산토리니] 스파클링 4종 (묶음)', '11900', '10', '상온/종이포장', '1박스', '이주명', '01056785678', 3, 31);
+insert into product_table (product_num, product_name, price, stock, packing, unit, seller, seller_phone, fk_category_num, fk_subcategory_num) 
+values(seq_product_table.nextval, '[오늘의 일상] 에이드 베이스 4종', '16000', '10', '냉장/종이포장', '1병', '이주명', '01056785678', 3, 31);
+
+-- 음료 커피 차
+insert into product_table (product_num, product_name, price, stock, packing, unit, seller, seller_phone, fk_category_num, fk_subcategory_num) 
+values(seq_product_table.nextval, '[모모스커피] RTD 콜드브루 (에스 쇼콜라)', '4500', '20', '냉장/종이포장', '1캔', '이주명', '01056785678', 3, 32);
+insert into product_table (product_num, product_name, price, stock, packing, unit, seller, seller_phone, fk_category_num, fk_subcategory_num) 
+values(seq_product_table.nextval, '[모모스커피] RTD 콜드브루 (에티오피아)', '4500', '20', '냉장/종이포장', '1캔', '이주명', '01056785678', 3, 32);
+insert into product_table (product_num, product_name, price, stock, packing, unit, seller, seller_phone, fk_category_num, fk_subcategory_num) 
+values(seq_product_table.nextval, '[모모스커피] RTD 콜드브루 (파나마 펄시 게샤)', '4500', '20', '냉장/종이포장', '1캔', '이주명', '01056785678', 3, 32);
+insert into product_table (product_num, product_name, price, stock, packing, unit, seller, seller_phone, fk_category_num, fk_subcategory_num) 
+values(seq_product_table.nextval, '[연경재] 냉침커피 트로픽가드너(Tropic Gardener)', '4000', '10', '냉장/종이포장', '1캔', '이주명', '01056785678', 3, 32);
+insert into product_table (product_num, product_name, price, stock, origin, packing, unit, seller, seller_phone, fk_category_num, fk_subcategory_num) 
+values(seq_product_table.nextval, '[연경재] 커피원두 젤리빈(Jelly Bean)', '25000', '10', '콜롬비아', '상온/종이포장', '1캔', '이주명', '01056785678', 3, 32); -- 원산지 있음
+
+
+-- 음료 우유 두유 요거트
+insert into product_table (product_num, product_name, price, stock, origin, packing, unit, seller, seller_phone, fk_category_num, fk_subcategory_num) 
+values(seq_product_table.nextval, '[Kurlys] 동물복지 우유 900ml', '2650', '10', '국내산', '냉장/종이포장', '1팩', '이주명', '01056785678', 3, 33);
+insert into product_table (product_num, product_name, price, stock, packing, unit, seller, seller_phone, fk_category_num, fk_subcategory_num) 
+values(seq_product_table.nextval, '[매일] 바이오 플레인 요거트 2종', '2980', '10', '냉장/종이포장', '1통', '이주명', '01056785678', 3, 33);
+insert into product_table (product_num, product_name, price, stock, packing, unit, seller, seller_phone, fk_category_num, fk_subcategory_num) 
+values(seq_product_table.nextval, '[매일] 오리지널 우유 1.5L', '3980', '5', '냉장/종이포장', '1통', '이주명', '01056785678', 3, 33);
+insert into product_table (product_num, product_name, price, stock, packing, unit, seller, seller_phone, fk_category_num, fk_subcategory_num) 
+values(seq_product_table.nextval, '[매일] 저지방 우유 1.5L', '3980', '5', '냉장/종이포장', '1통', '이주명', '01056785678', 3, 33);
+insert into product_table (product_num, product_name, price, stock, packing, unit, seller, seller_phone, fk_category_num, fk_subcategory_num) 
+values(seq_product_table.nextval, '[베지밀] 건강맘 두유', '14000', '10', '상온/종이포장', '1박스', '이주명', '01056785678', 3, 33);
+
+
+
 
 select * from product_table;
 
@@ -533,3 +638,5 @@ insert into product_detail_table (fk_product_num, representative_image, explain)
 values(4,'1등급 한우 알사태 수육용 500g(냉장).png','1등급 한우 알사태');
 
 values(seq_product_table.nextval, '싱싱 흰다리새우(중 220~270g)(냉동)', '10500', '15', '국산', '냉동/종이포장', '1팩', '김진하', '01075653393', 3, 33);
+
+

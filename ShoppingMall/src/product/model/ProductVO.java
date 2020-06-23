@@ -1,5 +1,7 @@
 package product.model;
 
+import java.util.List;
+
 public class ProductVO {
 	
 	private int product_num;
@@ -17,6 +19,7 @@ public class ProductVO {
 	private String category_content;
 	private int subcategory_num;
 	private String subcategory_content;
+	private List<String> imageList; // 상품 상세정보페이지에서 사용할 이미지 파일들
 	
 	public ProductVO() { }
 	
@@ -144,6 +147,14 @@ public class ProductVO {
 
 	public void setSubcategory_num(int subcategory_num) {
 		this.subcategory_num = subcategory_num;
+	}
+
+	public List<String> getImageList() {
+		return imageList;
+	}
+
+	public void setImageList(List<String> imageList) {
+		this.imageList = imageList;
 	}
 	
 	
