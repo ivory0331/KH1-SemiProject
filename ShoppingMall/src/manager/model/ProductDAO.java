@@ -335,6 +335,32 @@ public class ProductDAO implements InterProductDAO {
 	}
 
 
+	// 상품명 중복 확인
+	@Override
+	public boolean productNameDuplicateCheck(String productName) throws SQLException {
+		boolean isUse;
+		
+		try {
+			conn = ds.getConnection();
+			
+			String sql = " select product_name from product_table where product_name = ?";
+			
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, productName);
+			
+			rs = pstmt.executeQuery();
+			
+			isUse = !rs.next();
+			
+		} finally {
+			close();
+		}
+		
+		return isUse;	
+	
+	}
+
+
 
 	
 	

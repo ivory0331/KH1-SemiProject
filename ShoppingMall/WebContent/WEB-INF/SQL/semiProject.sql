@@ -335,6 +335,7 @@ create table inquiry_category_table
 ,constraint pk_inquiry_category primary key (category_num)
 );
 
+
 -- 자주하는 질문 테이블 생성 --
 create table FAQ_table
 (FAQ_num number not null

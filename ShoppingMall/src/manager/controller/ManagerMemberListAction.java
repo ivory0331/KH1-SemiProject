@@ -54,9 +54,12 @@ public class ManagerMemberListAction extends AbstractController {
     	 }
     	 
 	//     List<MemberVO> memberList = memberdao.selectAllMember(); //전체 회원 
+    	 List<MemberVO> memberAllList = memberdao.selectAllMember(); //전체 회원 
+
 	     List<MemberVO> memberList = memberdao.selectPagingMember(paraMap);
+	     
     	 
-    	 
+    	 request.setAttribute("all", memberAllList.size());
     	 request.setAttribute("memberList", memberList);
     	 request.setAttribute("sizePerPage", sizePerPage);     	    	 
     	 

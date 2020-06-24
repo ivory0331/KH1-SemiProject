@@ -18,6 +18,9 @@ public interface InterProductDAO {
 	// 상품 삭제
 	int productDelete(String product_num) throws SQLException;
 
+	// 상품명 중복 확인
+	boolean productNameDuplicateCheck(String productName) throws SQLException;
+
 
 
 }

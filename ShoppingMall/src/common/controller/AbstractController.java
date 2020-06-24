@@ -8,7 +8,7 @@ import javax.servlet.http.HttpSession;
 
 import member.model.MemberVO;
 
-public abstract class AbstractController implements InterCommand {
+public abstract class AbstractController implements InterCommand { 
 
 	/*
 	    === 다음의 나오는 것은 우리끼리한 약속이다. ===
