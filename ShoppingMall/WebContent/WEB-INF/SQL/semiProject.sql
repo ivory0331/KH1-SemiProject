@@ -1,6 +1,7 @@
 show user;
 -- USER이(가) "SEMIORAUSER1"입니다.
 
+select * FROM tab;
 
 drop table review_table;
 drop table order_product_table;
@@ -677,3 +678,7 @@ select member_num, name, userid, address
 from member_table 
 order by member_num desc;
 
+select * from member_table where email='28b68acc3cb16bb4484f15c844477637c2f615e6e0b874cb1bbc87490160a50f';
+select email from member_table;
+
+commit;
