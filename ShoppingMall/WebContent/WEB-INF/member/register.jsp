@@ -1,9 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <% String ctxPath = request.getContextPath(); %>
-
-<%-- @author Eunhye --%> 
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -12,13 +9,16 @@
 <title>회원가입</title>
 <style type="text/css">
 
+
 body {
    background-color: #f2f2f2;
 }
+
 .page_article .fieldhead{
    margin: 0 auto;
    width: 640px;
 }
+
 .page_article {
    background-color: #f2f2f2;
    margin: 0 auto;
@@ -32,6 +32,8 @@ body {
    margin: 0 auto;
    /*border: solid 1px hotpink;*/
 }
+
+
 .tit {
    text-align: center;
    color: #333;
@@ -59,8 +61,12 @@ fieldset {
    text-align: left;
    border: none;
    background-color: #fff;
-   width: 640px;
-   /*border : solid 1px navy;*/
+  /*  width: 640px; */
+   width: 613px;
+   height: 900px;
+
+  /* border : solid 1px navy; */
+
 }
 
 .contents input {
@@ -74,6 +80,7 @@ input::placeholder {
   color: #ccc;
   padding : 0 5px;
 }
+
 input.tel_confirm{
    margin-top: 10px;
 }
@@ -83,7 +90,6 @@ span.btn_tel{
    border: 1px solid #ddd;
     color: #fff;
 }
-
 span.btn_tel_correct{
     width: 130px;
     height: 40px;
@@ -112,6 +118,7 @@ span.btnCheck_tel{
    width: 410px;
    height: 40px;
    margin-top: 5px;
+
 }
 
 input.gender{
@@ -120,6 +127,7 @@ input.gender{
    border: solid 1px #ccc;
    margin : 10px 5px;
 }
+
 label.text_position {
     padding: 0px 15px 0px 2px;
     margin:0;
@@ -133,6 +141,7 @@ button.btn_address{
    float:none;
    margin-bottom : 3px;
    width : 200px;
+
 }
 
 .birth_day {
@@ -142,6 +151,7 @@ button.btn_address{
    border: solid 1px #ccc;
    border-radius: 5px;  
 }
+
 .birth_day input[type=text] {
     float: left;
     width: 80px;
@@ -177,8 +187,9 @@ button.btn_address{
     border-radius: 3px;  
 }
 
+
 .bthCheck_tel{
-   cursor: ;
+   cursor: pointer;
 }
 
 
@@ -204,13 +215,14 @@ button.btn_address{
     vertical-align: top;
 }
 
+
 .memberCols2 {
-    padding: 10px 0 ;
-    border-top: 0;
-    font-size: 10pt;
-    vertical-align: top;
-    text-align: left;
-    width: 461px;
+   padding: 10px 0 ;
+   border-top: 0;
+   font-size: 10pt;
+   vertical-align: top;
+   text-align: left;
+   width: 461px;
    height: 20px;
    /*border: solid 1px skyblue;*/
    border-radius: 5px;  
@@ -250,11 +262,13 @@ div.reg_agree {
     line-height: 17px;
     letter-spacing: 0;
     text-decoration: none;
+
 }
 
 .contents a {
    cursor: pointer;
    text-decoration: none;
+
 }
 #head_tit_agree{
    /*border : solid 1px pink;*/
@@ -279,6 +293,7 @@ div#submit {
    justify-content : center;
    /*border: solid 1px black;*/
 }
+
 button.btn_submit{
    width: 340px;
    height: 54px;

@@ -1,6 +1,7 @@
 show user;
 -- USER이(가) "SEMIORAUSER1"입니다.
 
+
 drop table review_table;
 drop table order_product_table;
 drop table one_inquiry_table;
@@ -16,6 +17,7 @@ drop table notice_table;
 drop table FAQ_table;
 drop table inquiry_category_table;
 drop table member_table;
+
 
 -- 회원 테이블 --
 create table member_table
@@ -42,6 +44,8 @@ create table member_table
 );
 
 
+
+
 -- 회원테이블에 사용할 시퀀스 생성 --
 create sequence seq_member_table
 start with 1
@@ -60,12 +64,13 @@ create table product_category_table
 );
 
 
+
+
 insert into product_category_table(category_num, category_content) values(1,'채소');
 insert into product_category_table(category_num, category_content) values(2,'과일 견과');
 insert into product_category_table(category_num, category_content) values(3,'수산 해산');
-insert into product_category_table(category_num, category_content) values(4,'정육');
+insert into product_category_table(category_num, category_content) values(4,'정육 계란');
 insert into product_category_table(category_num, category_content) values(5,'음료 우유');
-
 
 
 -- 상품 소분류 카테고리 테이블 생성 --
@@ -96,6 +101,7 @@ select * from product_category_table;
 select * from product_subcategory_table;
 
 
+
 -- 상품 테이블 생성 --
 create table product_table
 (product_num    number not null -- 상품번호 필수+고유 시퀀스 사용
@@ -107,11 +113,11 @@ create table product_table
 ,unit           varchar2(50) -- 단위
 ,registerdate   date default sysdate -- 등록날짜
 ,sale           number default 0 -- 세일 %값
-,best_point     number -- 관리자가 추천하는 수 (MD추천)
+,best_point     number default 0 -- 관리자가 추천하는 수 (MD추천)
 ,seller         varchar2(50) -- 판매자(관리자 모드시에 사용)
 ,seller_phone   varchar2(80) -- 판매자 번호(관리자 모드시에 사용)
 ,explain    varchar2(4000) -- 상품설명
-,representative_img varchar2(100) not null  -- 대표이미지
+,representative_img varchar2(200) not null
 ,fk_category_num    number not null -- product_category_table에 있는 category_num을 참조하는 컬럼
 ,fk_subcategory_num number not null -- product_subcategory_table에 있는 subcategory_num을 참조하는 컬럼
 ,constraint pk_product_table primary key (product_num)
@@ -120,6 +126,8 @@ create table product_table
 ,constraint fk_product_subcategory_num FOREIGN key(fk_subcategory_num) REFERENCES product_subcategory_table(subcategory_num)
 );
 
+
+alter table product_table MODIFY sale number default 0;
 
 
 -- 상품 테이블에 사용할 시퀀스 생성 --
@@ -132,6 +140,7 @@ nocycle
 nocache;
 
 -- 상품 이미지와 설명 테이블 생성 --
+
 create table product_image_table
 (fk_product_num number not null -- 상품테이블에 있는 상품번호를 참조받는 컬럼
 ,image  varchar2(100)
@@ -142,7 +151,7 @@ create table product_image_table
 -- 상품문의 테이블 생성 --
 create table product_inquiry_table
 (inquiry_num    number not null     -- 상품문의 번호 필수+고유 시퀀스 사용
-,subject    varchar2(50) not null   -- 제목 필수
+,subject    varchar2(100) not null   -- 제목 필수
 ,content    varchar2(4000) not null -- 내용 필수
 ,write_date date default sysdate    -- 작성날짜 
 ,answer     varchar2(4000)          -- 관리자의 답변(문의가 들어오면 바로 답변을 받는 것이 아니기에 null허용)
@@ -191,8 +200,8 @@ create table order_table
 ,recipient  varchar2(50) not null   -- 받는 사람 필수
 ,recipient_mobile   varchar2(100) not null  -- 받는 사람의 연락처 필수
 ,recipient_postcode varchar2(100) not null  -- 받는 사람의 우편번호
-,recipient_address  varchar2(100) not null  -- 받는 사람의 주소
-,recipient_detailaddress varchar2(100) not null -- 받는 사람의 상세주소
+,recipient_address  varchar2(200) not null  -- 받는 사람의 주소
+,recipient_detailaddress varchar2(200) not null -- 받는 사람의 상세주소
 ,price  number  not null    -- 주문금액 필수
 ,memo   varchar2(200)       -- 요청사항
 ,fk_member_num  number  not null    -- 회원테이블의 회원번호를 참조하는 컬럼
@@ -228,7 +237,7 @@ create table order_product_table
 -- 고객 후기 테이블 --
 create table review_table
 (review_num number not null -- 후기 번호 필수+고유 시퀀스 사용
-,subject    varchar2(50) not null -- 후기 제목  필수
+,subject    varchar2(100) not null -- 후기 제목  필수
 ,content    varchar2(4000) not null -- 후기 내용 필수
 ,write_date date default sysdate -- 작성 날짜
 ,hit        number default 0 -- 조회수
@@ -243,12 +252,14 @@ create table review_table
 ,constraint uq_review_orderProduct UNIQUE (fk_product_num, fk_order_num)
 );
 
+
 -- 후기테이블용 이미지 테이블 생성 --
 create table review_image_table
 (fk_review_num number not null
 ,image varchar2(100)
 ,constraint fk_review_image FOREIGN key (fk_review_num) REFERENCES review_table(review_num)
 );
+
 
 -- 리뷰테이블에 사용할 시퀀스 생성 --
 create sequence seq_review_table
@@ -285,6 +296,7 @@ create table one_inquiry_table
 ,constraint fk_one_category FOREIGN key (fk_category_num) REFERENCES one_category_table(category_num)
 ,constraint ck_one_emailCheck   check (emailFlag in(0,1))
 ,constraint ck_one_smsCheck check (smsFlag in (0,1))
+
 );
 
 -- 1:1문의 테이블에서 사용할 시퀀스 생성 --
@@ -346,6 +358,27 @@ nocycle
 nocache;
 
 
+-- 장바구니 테이블 --
+create table basket_table
+(basket_num     number not null
+,product_count  number not null -- 주문한 상품의 갯수 필수
+,fk_member_num  number not null -- 해당 장바구니에 상품을 담은 회원
+,fk_product_num number not null -- 상품테이블의 상품번호를 참조하는 컬럼
+,price          number not null -- 주문상품의 가격(1개 단가? 아니면 해당 상품의 총 구매 가격)
+,constraint fk_basket_product FOREIGN key (fk_product_num ) REFERENCES product_table(product_num)
+,constraint fk_basket_member FOREIGN key (fk_member_num) REFERENCES member_table (member_num)
+,constraint pk_basket_num primary key (basket_num)
+);
+
+-- 장바구니 테이블에 사용할 시퀀스 생성 --
+create sequence seq_basket_table
+start with 1
+increment by 1
+nomaxvalue
+nominvalue
+nocycle
+nocache;
+
 
 -- 소고기
 insert into product_table (product_num, product_name, price, stock, origin, packing, unit, seller, seller_phone, fk_category_num, fk_subcategory_num,
@@ -384,6 +417,20 @@ insert into product_table (product_num, product_name, price, stock, origin, pack
 representative_img) 
 values(seq_product_table.nextval, '초이스 찜갈비 2kg(냉동)', '58000', '5', '국내산(한우)', '냉동/종이포장', '1팩', '김진하', '01075653393', 4, 41,
 '초이스 찜갈비 2kg(냉동).png');
+
+commit;
+
+
+select*
+from product_category_table;
+
+select*
+from product_subcategory_table;
+
+select*
+from product_subcategory_table
+where subcategory_num like '4_';
+
 
 commit;
 
@@ -440,6 +487,7 @@ values(seq_product_table.nextval, '짭쪼름한맛 삼겹살구이 (냉동)', '4
 
 
 commit;
+
 
 
 -- 닭고기
@@ -501,10 +549,10 @@ values(seq_product_table.nextval, '갓 잡아올린 신선한 생새우', '18900
 insert into product_table (product_num, product_name, price, stock, origin, packing, unit, seller, seller_phone, fk_category_num, fk_subcategory_num) 
 values(seq_product_table.nextval, '손질 가을수꽃게 6조각(중 300~400g)(냉동)', '14900', '15', '국산', '냉동/종이포장', '1팩', '김진하', '01075653393', 3, 33);
 insert into product_table (product_num, product_name, price, stock, origin, packing, unit, seller, seller_phone, fk_category_num, fk_subcategory_num) 
-
 values(seq_product_table.nextval, '싱싱 흰다리새우(중 220~270g)(냉동)', '10500', '15', '국산', '냉동/종이포장', '1팩', '김진하', '01075653393', 3, 33);
 
-select * from product_table;
+commit;
+
 
 select RON, product_name, sale from
 (select rownum as RON, product_name, sale from
@@ -532,8 +580,24 @@ values(3,'1등급 한우 안심 추리 200g(냉장).png','1등급 한우 안심'
 insert into product_detail_table (fk_product_num, representative_image, explain)
 values(4,'1등급 한우 알사태 수육용 500g(냉장).png','1등급 한우 알사태');
 
-values(seq_product_table.nextval, '싱싱 흰다리새우(중 220~270g)(냉동)', '10500', '15', '국산', '냉동/종이포장', '1팩', '김진하', '01075653393', 3, 33);
 
+
+
+select * from product_category_table union select * from product_subcategory_table;
+
+insert into member_table (member_num, name, userid, pwd, email, mobile) 
+values (seq_member_table.nextval, '관리자', 'admin', 'qwer1234$','2wnaud@naver.com','010-9101-8698');
+
+commit;
+
+
+select * from member_table;
+update member_table set status=2;
+commit;
+
+delete from member_table;
+
+select count(*) from basket_table where fk_member_num = ;
 
 
 select O.order_num
@@ -551,7 +615,65 @@ where O.fk_member_num = ?
 +
 select count(*) from order_product_table where fk_order_num = ?
 
-리스트로 그려야 할 것 =  주문번호, 주문날짜, 총 결제금액, 대표상품명, 대표 상품이미지, 배송상태
-+
-1개 주문 = 대표 상품 외 몇 건
+
+
+
+
+select  RNO, PRODUCT_NUM, CATEGORY_CONTENT, SUBCATEGORY_CONTENT, PRODUCT_NAME, PRICE, STOCK 
+from 
+    ( select rownum AS RNO,PRODUCT_NUM, CATEGORY_CONTENT, SUBCATEGORY_CONTENT, PRODUCT_NAME, PRICE, STOCK
+        from 
+          ( select P.PRODUCT_NUM, c.category_content as CATEGORY_CONTENT, 
+                    S.subcategory_content as SUBCATEGORY_CONTENT, P.PRODUCT_NAME,
+                    P.PRICE, P.STOCK
+            from ( select product_num as PRODUCT_NUM, fk_category_num, fk_subcategory_num, product_name as PRODUCT_NAME, price as PRICE, stock as STOCK
+                    from product_table
+                    where fk_category_num = 3 and product_name like '%'||''||'%')
+            P join product_category_table C
+            on P.fk_category_num = C.category_num 
+            join product_subcategory_table S
+            on P.fk_subcategory_num = S.subcategory_num
+            order by PRODUCT_NUM desc
+            )V
+		)T;
+where T.RNO between 1 and 10;
+
+
+
+
+
+select ceil(count(*)/10) as totalPage
+from product_table
+where FK_CATEGORY_NUM = 3 and product_name like '%'||'오징어'||'%';
+                        
+
+
+
+
+insert into member_table(member_num, name, userid, address, pwd, email, hp1, hp2, hp3) values (seq_member_table.nextval, '미미','mimi','인천 남동구 구월동','qwer1234!','abcd@naver.com','010','1234','5678');
+insert into member_table(member_num, name, userid, address, pwd, email, hp1, hp2, hp3) values (seq_member_table.nextval, '미미미','mimimi','서울 남동구 구월동','qwer1234!','mimimi@naver.com','010','1234','5678');
+insert into member_table(member_num, name, userid, address, pwd, email, hp1, hp2, hp3) values (seq_member_table.nextval, '미미미미','mimimimi','인천 구월1동','qwer1234!','mimimimi@naver.com','010','1234','5678');
+insert into member_table(member_num, name, userid, address, pwd, email, hp1, hp2, hp3) values (seq_member_table.nextval, '나나','nana','서울 강남구','qwer1234!','nana@naver.com','010','1234','5678');
+insert into member_table(member_num, name, userid, address, pwd, email, hp1, hp2, hp3) values (seq_member_table.nextval, '나나나','nanana','부산광역시 동래구 사직로 77 ','qwer1234!','nanana@naver.com','010','1234','5678');
+insert into member_table(member_num, name, userid, address, pwd, email, hp1, hp2, hp3) values (seq_member_table.nextval, '라라','rara','인천광역시','qwer1234!','rara@naver.com','010','1234','5678');
+insert into member_table(member_num, name, userid, address, pwd, email, hp1, hp2, hp3) values (seq_member_table.nextval, '라라라','rarara','서울','qwer1234!','rarara@naver.com','010','1234','5678');
+insert into member_table(member_num, name, userid, address, pwd, email, hp1, hp2, hp3) values (seq_member_table.nextval, '김웅앵','kim','우리동네','qwer1234!','kim@naver.com','010','1234','5678');
+insert into member_table(member_num, name, userid, address, pwd, email, hp1, hp2, hp3) values (seq_member_table.nextval, '이웅앵','lee','너네동네','qwer1234!','lee@naver.com','010','1234','5678');
+insert into member_table(member_num, name, userid, address, pwd, email, hp1, hp2, hp3) values (seq_member_table.nextval, '야야','yaya','','qwer1234!','yaya@naver.com','010','1234','5678');
+insert into member_table(member_num, name, userid, pwd, email, hp1, hp2, hp3) values (seq_member_table.nextval, '김라라','kimrara','qwer1234','kimraraabcd@naver.com','010','1234','5678');
+
+commit;
+
+select*
+from member_table;
+
+
+select ceil(count(*)/10) as totalPage
+from member_table
+where userid like '%'||'mimi'||'%' ;
+
+
+select member_num, name, userid, address				
+from member_table 
+order by member_num desc;
 

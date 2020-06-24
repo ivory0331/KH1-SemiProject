@@ -54,8 +54,7 @@ public class IndexListAction extends AbstractController {
 				}
 				else {
 					check = true;
-				}
-				System.out.println((i+1)+"번째 item번호:"+randomArr[i]+"/난수 num="+num);
+				}	
 			}
 			String random = String.join(",", randomArr);
 			paraMap.put("random",random);

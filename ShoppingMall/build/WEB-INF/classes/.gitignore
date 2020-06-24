@@ -1,10 +1,12 @@
-
-/main/
-/product/
+/DAO/
+/common/
 /hyemin/
+/main/
+/my/
+/product/
+/project/
 /service/
 /util/
 /member/
-/my/
-/common/
+/manager/
 
