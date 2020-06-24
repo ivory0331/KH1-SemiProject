@@ -4,7 +4,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import member.model.MemberVO;
+import javax.servlet.http.HttpSession;
 
+import member.model.MemberVO;
 
 public abstract class AbstractController implements InterCommand {
 
@@ -44,7 +46,6 @@ public abstract class AbstractController implements InterCommand {
 	public void setViewPage(String viewPage) {
 		this.viewPage = viewPage;
 	}
-
 	
 	/////////////////////////////////////////////////
 	// 로그인 유무를 검사해서 로그인 했으면 true 를 리턴해주고
@@ -59,5 +60,4 @@ public abstract class AbstractController implements InterCommand {
 		else
 			return false;		
 	}
-
 }

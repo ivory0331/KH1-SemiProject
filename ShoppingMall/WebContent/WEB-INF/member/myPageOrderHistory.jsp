@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>    
+
 <% String ctxPath = request.getContextPath(); %>
 <!DOCTYPE html>
 <html>
@@ -169,7 +170,6 @@
 <script type="text/javascript" src="/ShoppingMall/util/myutil.js"></script>
 
 <script type="text/javascript">
-
 	$(document).ready(function(){
 		
 		$(".myOrder_Name").click(function(){
@@ -179,7 +179,6 @@
 		});
 		
 	});// end of $(document).ready()---------------------
-
 </script>
 
 </head>
@@ -259,7 +258,6 @@
 						</c:choose>						
 					</div>	
 					</c:forEach>
-								
 				</div>	
 				<div style="border-bottom:solid 1px black; text-align:center;">페이징 처리</div>			
 			</div>						
@@ -270,25 +268,3 @@
 	</div>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

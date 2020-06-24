@@ -13,6 +13,7 @@ public class ProductInquiryVO {
 	private int emailFlag;
 	private int smsFlag;
 	private int secretFlag;
+	private String name;
 	private List<String> imageList;
 	
 	
@@ -22,7 +23,7 @@ public class ProductInquiryVO {
 	
 	
 	public ProductInquiryVO(int inquiry_num, String subject, String content, String write_date, String answer,
-			int fk_member_num, int fk_product_num, int emailFlag, int smsFlag, int secretFlag, List<String> imageList) {
+			int fk_member_num, int fk_product_num, int emailFlag, int smsFlag, int secretFlag, String name, List<String> imageList) {
 		
 		this.inquiry_num = inquiry_num;
 		this.subject = subject;
@@ -34,6 +35,7 @@ public class ProductInquiryVO {
 		this.emailFlag = emailFlag;
 		this.smsFlag = smsFlag;
 		this.secretFlag = secretFlag;
+		this.name = name;
 		this.imageList = imageList;
 	}
 	
@@ -118,6 +120,14 @@ public class ProductInquiryVO {
 	}
 	
 	
+	public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name = name;
+	}
+
+
 	public List<String> getImageList() {
 		return imageList;
 	}

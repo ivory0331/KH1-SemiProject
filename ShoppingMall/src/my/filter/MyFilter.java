@@ -20,7 +20,8 @@ import javax.servlet.ServletResponse;
 	2. /WEB-INF/web.xml 에 filter 엘리먼트를 사용하여 필터 클래스를 등록한다. 
 */
 
-public class MyFilter implements Filter {  
+public class MyFilter implements Filter {      
+
 
 	@Override
 	public void destroy() {

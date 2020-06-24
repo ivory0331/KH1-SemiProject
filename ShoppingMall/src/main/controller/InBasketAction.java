@@ -15,6 +15,9 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
 import common.controller.AbstractController;
+import main.model.IndexDAO;
+import main.model.InterIndexDAO;
+import member.model.MemberVO;
 
 public class InBasketAction extends AbstractController {
 
@@ -25,35 +28,28 @@ public class InBasketAction extends AbstractController {
 		List<Map<String, String>> basketNum = null;
 		boolean check = true;
 		String message="";
+		
+		MemberVO loginuser = (MemberVO) session.getAttribute("loginuser");
+
 		Map<String, String> orderMap = new HashMap<String, String>();
 		orderMap.put("product_num", request.getParameter("product_num"));
 		orderMap.put("price", request.getParameter("price"));
 		orderMap.put("count", request.getParameter("count"));
+		orderMap.put("member_num",String.valueOf(loginuser.getMember_num()));
 		
-		if(session.getAttribute("basket")==null) {
-			basketNum = new ArrayList<Map<String, String>>();
-		}
-		else {
-			basketNum = (List<Map<String, String>>) session.getAttribute("basket");
-			for(int i=0; i<basketNum.size(); i++) {
-				if(request.getParameter("product_num").equals(basketNum.get(i).get("product_num"))) {
-					check = false;
-					break;
-				}
-			}
-		}
+		InterIndexDAO dao = new IndexDAO();
+		check = dao.basketSelect(orderMap);
 		
 		if(check) {
-			basketNum.add(orderMap);
-			session.setAttribute("basket", basketNum);
-			message="상품을 장바구니에 담았습니다.";
+			int n = dao.basketInsert(orderMap);
+			if(n==1) message="상품을 장바구니에 담았습니다.";
+			else message="상품을 장바구니에 담는 도중 오류가 발생했습니다.";
 		}else {
 			message="이미 동일한 상품이 장바구니에 담아져 있습니다.";
 		}
 		
 		JSONObject jobj = new JSONObject();
 		jobj.put("message", message);
-		jobj.put("cnt", String.valueOf(basketNum.size()));
 		String json = jobj.toString();
 		
 		request.setAttribute("json", json);

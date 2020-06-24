@@ -9,15 +9,16 @@ import main.model.IndexDAO;
 import main.model.InterIndexDAO;
 import main.model.ProductVO;
 
-
 public class DetailAction extends AbstractController {
 
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
 
-		String idx = request.getParameter("idx");
+		String idx = request.getParameter("product_num");
 		InterIndexDAO idao = new IndexDAO();
 		ProductVO pvo = idao.productDetail(idx);
+		
+		
 		if(pvo!=null) {
 			request.setAttribute("product", pvo);
 			super.setViewPage("/WEB-INF/main/detail.jsp");
@@ -30,7 +31,6 @@ public class DetailAction extends AbstractController {
 			
 			super.setViewPage("/WEB-INF/msg.jsp");
 		}
-		
 		
 	}
 

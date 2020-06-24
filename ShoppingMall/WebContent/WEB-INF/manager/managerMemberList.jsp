@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <% String ctxPath = request.getContextPath(); %>
 <!DOCTYPE html>
 <html>
@@ -63,16 +64,76 @@
 <script type="text/javascript" src="/ShoppingMall/util/myutil.js"></script>
 <script type="text/javascript">
 	$(document).ready(function(){
+		// 검색 상황 유지
+	    if("${searchWord}" != "") {
+		 	  $("#searchType").val("${searchType}");
+	   		  $("#searchWord").val("${searchWord}");
+	    }
+		     
 		
+		// 검색 타입 바꿀 시에 검색어 비우기
+		$("#searchType").bind("change", function(){
+		  	  $("#searchWord").val("");  	  
+		});
+		     
+		  
+		// 페이지처리
+		$("#sizePerPage").val("${sizePerPage}");	  
+		  
+		$("#sizePerPage").bind("change", function(){ // select 태그 이벤트는 click 아니고 change
+		   	  
+			  var frm = document.memberFrm;
+			  
+			  frm.method = "GET";
+			  frm.action = "<%= ctxPath%>/manager/managerMemberList.do";
+		 	  frm.submit();
+		});
+				  
+		
+		$("#searchWord").bind("keydown", function(event){
+			  if(event.keyCode == 13) { //엔터
+				  goSearch();
+			  }
+		});
 		
 	});
 	
+	
+	<%-- 
 	function func_pop(){
 		window.name="parentFrm";
-		sessionStorage.setItem("recieve","이주명");
+		var emailArr = "";
+		$("input:checkbox").each(function(index, item){
+			if() //체크된 것을 if구분
+			{
+				emailArr+=","
+			}
+		})
+		sessionStorage.setItem("recieve",emailArr);
 		console.log(sessionStorage.getItem("recieve"));
-		var win = window.open("include/popup.jsp","childFrm","left=100px, top=100px, width=400px, height=350px");
-	}
+		var win = window.open("<%=ctxPath%>/manager/popup.do","childFrm","left=100px, top=100px, width=400px, height=350px");
+	} --%>
+
+	
+	 // 검색
+	 function goSearch() {		  
+		  var frm = document.memberFrm;
+		  frm.method = "GET";
+		  frm.action = "managerMemberList.do";
+		  frm.submit(); 
+	  }
+	 
+	 //삭제
+	 function member_delete(){
+		if (confirm("해당 회원을 삭제하시겠습니까?") == true){ //확인 누르면 전송
+			var frm = document.manager_memberTableFrm;
+			frm.method = "POST";
+			frm.action = "managerMemberDelete.do";
+			frm.submit();		
+		}else{   //취소
+		    return;
+		}
+	 } 
 	
 </script>
 </head>
@@ -87,36 +148,64 @@
 				<div class="memberList" align="left">
 					<div class="member-search">
 						<h4>회원관리</h4>
-						검색 : <input type="text" />
-						<select>
-							<option>유저명</option>
-							<option>id</option>
-							<option>주소</option>
-						</select>
-						<span class="member-count">전체 회원 수 : </span>
+						<form name="memberFrm">
+							<select id="searchType" name="searchType">
+								<option value="name">회원명</option>
+								<option value="userid">id</option>
+								<option value="address">주소</option>
+							</select>
+							<input type="text" id="searchWord" name="searchWord" />
+							<button type="button" onclick="goSearch();" style="margin-right: 30px;">검색</button>
+							
+							<span style="color: red; font-weight: bold; font-size: 12pt;">페이지당 회원명수-</span>
+							<select id="sizePerPage" name="sizePerPage">
+								<option value="10">10</option>
+								<option value="5">5</option>
+								<option value="3">3</option>
+							</select>
+						</form>
+						<span class="member-count">전체 회원 수 : ${memberList}</span>
 					</div>
-					<table class="table member-table" style="border-top:solid 2px purple;">
-						<tr>
-							<th>선택</th>
-							<th>No.</th>
-							<th>유저명</th>
-							<th>id</th>
-							<th class="board-title">주소</th>
-							<th>모바일</th>
-						</tr>
-						<tr>
-							<td><input type="checkbox" /></td>
-							<td>No.</td>
-							<td>유저명</td>
-							<td>id</td>
-							<td class="board-title">주소</td>
-							<td>모바일</td>
-						</tr>
-					</table>
+					<form name="manager_memberTableFrm">
+						<table class="table member-table" style="border-top:solid 2px purple;">
+							<thead>
+								<tr>
+									<th>선택</th>
+									<th>No.</th>
+									<th>회원명</th>
+									<th>id</th>
+									<th class="board-title">주소</th>
+									<th>모바일</th>
+								</tr>
+							</thead>
+							<tbody>
+								<c:if test="${empty memberList}">	
+										<tr>
+											<td colspan="6"> 검색 설정에 맞는 회원이 없습니다. </td>
+										</tr>	
+								</c:if>
+								<c:if test="${not empty memberList}">		
+									<c:forEach var="mvo" items="${memberList}">
+										<tr>
+											<td><input type="checkbox" name="member_num" value="${mvo.member_num}" /></td>
+											<td>${mvo.member_num}</td>
+											<td>${mvo.name}</td>
+											<td>${mvo.userid}</td>
+											<td class="board-title">${mvo.address}</td>
+											<td>핸드폰번호</td>
+										</tr>
+									</c:forEach>	
+								</c:if>
+							</tbody>
+						</table>
+					</form>
+					
+					${pageBar}
+					
 				</div>
 				<div style="clear:both;"></div>
 				<div class="managerBtn" align="right">
-					<span class="type" onclick="func_pop()">선택 탈퇴</span> <span class="type" onclick="func_pop()">선택 경고</span>
+					<span class="type" onclick="member_delete()">선택 탈퇴</span>
 				</div>
 				<div class="paging">
 					

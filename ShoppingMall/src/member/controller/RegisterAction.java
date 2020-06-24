@@ -14,7 +14,6 @@ public class RegisterAction extends AbstractController {
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		
-		
 		String method = request.getMethod();
 		
 		if("GET".equalsIgnoreCase(method)) {
@@ -76,6 +75,4 @@ public class RegisterAction extends AbstractController {
 		
 		
 	}
-		
-
 }
