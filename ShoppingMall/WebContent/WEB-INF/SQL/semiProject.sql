@@ -172,8 +172,13 @@ create table product_inquiry_table
 create table product_inquiry_image_table
 (fk_inquiry_num number not null
 ,image varchar2(100)
-,constraint fk_inquiry_image FOREIGN key (fk_inquiry_num) REFERENCES product_inquiry_table(inquiry_num)
+,constraint fk_inquiry_image FOREIGN key (fk_inquiry_num) REFERENCES product_inquiry_table(inquiry_num) on delete CASCADE
 );
+select * from product_inquiry_image_table;
+select * from product_inquiry_table;
+
+SELECT LAST_NUMBER 
+FROM  USER_SEQUENCES WHERE  SEQUENCE_NAME = 'SEQ_PRODUCT_INQUIRY';
 
 -- 상품문의 테이블에 사용할 시퀀스 생성 --
 create sequence seq_product_inquiry
@@ -677,3 +682,4 @@ select member_num, name, userid, address
 from member_table 
 order by member_num desc;
 
+select * from member_table;

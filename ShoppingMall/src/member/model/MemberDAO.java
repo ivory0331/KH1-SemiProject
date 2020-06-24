@@ -96,12 +96,17 @@ public class MemberDAO implements InterMemberDAO {
          conn = ds.getConnection();
          String sql = " select email " + " from member_table " + " where email = ? ";
          pstmt = conn.prepareStatement(sql);
-         pstmt.setString(1, Sha256.encrypt(email));
+         pstmt.setString(1, aes.encrypt(email));
 
          rs = pstmt.executeQuery();
          isEmail = !rs.next(); // 행이 존재하면 F를 리턴
 
-      } finally {
+      } 
+      catch (UnsupportedEncodingException | GeneralSecurityException e) {
+          e.printStackTrace();
+
+       }
+      finally {
          close();
       }
       return isEmail;

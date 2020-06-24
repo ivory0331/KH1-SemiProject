@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <% String ctxPath = request.getContextPath(); %>
+<% String product_num = request.getParameter("product_num"); %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -61,7 +62,14 @@
 	
 	#txt_area{
 		overflow-y: scroll;
+		border:solid 1px black; 
+		margin-top:10px; 
+		height: 600px;
+		width: 100%;
+		resize: none;
+		
 	}
+	
 	
 	#imgAdd{
 		display: inline-block;
@@ -94,53 +102,107 @@
 <script type="text/javascript" src="/ShoppingMall/util/myutil.js"></script>
 <script type="text/javascript">
 
-	var cnt=1;
+	var cnt=0;
 	$(document).ready(function(){
-		$("#imgFile").change(function(){
-			if(this.files && this.files[0]) {
-				var fileName = this.files[0].name;
-				var index = fileName.indexOf(".");
-				var fileType = fileName.substr(index);
-				if(fileType==".png"||fileType==".jpg"||fileType==".png"){
-					var reader = new FileReader;
-					reader.onload = function(data) {
-						var html = "<img src='"+data.target.result+"' />";
-						$("#txt_area").append(html);
-					}
-					 reader.readAsDataURL(this.files[0]);
-				}
-				else{
-					alert("이미지만 올릴 수 있습니다.");
-				}
-				// input[type='file'] 초기화 //
-				$("#imgFile").replaceWith( $("#imgFile").clone(true) );
-				$("#imgFile").val(""); 
-			}
+		$(document).on('change','.imgFile',function(){
+				console.log("이미지 로딩");
+				var idx = $(this).prop("id").substring(7)
+				fileView(this);
+				func_printImg(idx, this);
 		});
+		
 	});
 	
 	function divCheck(){
-		console.log($("#txt_area").html());
-		console.log($("#txt_area").text());
+		
+		if($("input[name='title']").val().trim()==""){
+			alert("제목을 입력해주세요");
+			return;
+		}
+		
+		if(content == ""){
+			alert("내용을 입력해주세요");
+			return;
+		}
+		for(var i=0; i<$(".imgInput").length; i++){
+			var idx = $(".imgInput:eq("+i+")").prop("id").substring(8);
+			console.log(idx);
+			var imageFile = decodeURIComponent($("#fileName"+idx).val());
+			$("#image"+idx).prop("src","<%=ctxPath%>/Upload/"+imageFile);
+			
+		}
+		var content = $("#txt_area").html().trim();
+		console.log(content);
+		$("#txt_content").val(content);
+		var Frm = document.questionWriteFrm;
+		Frm.action = "<%=ctxPath%>/productQwrite.do"
+		Frm.submit();
+		
 	}
 
 	function func_addArea(){
-		var html="<div class='imgInput' id='imgFile"+cnt+"'>"
-		        +"<input type='file' name='imgFile'  accept='.gif, .jpg, .png' style='margin-bottom:10px;'/>"
-			    +"</div>"
-			    +"<div class='closeInput' id='close"+cnt+"' onclick = 'func_closeImg("+cnt+")' align='right'>X"
+		var html="<div class='imgInput' id='imgInput"+cnt+"'>"
+		        +"<input type='file' name='imgFile' class='imgFile' id='imgFile"+cnt+"'  accept='.gif, .jpg, .png' style='margin-bottom:10px;'/>"
+			    +"<input id='fileName"+cnt+"' type='hidden' name='fileName'/>"
+		        +"</div>"
+			    +"<div class='closeInput' id='close"+cnt+"' onclick='func_deleteImg(this)' align='right'>X"
 			    +"</div>";
 		if($(".imgInput").length>7){
 			alert("이미지는 최대 8장 만 입력할 수 있습니다.");
 			return;
 		}
-		$(".productQ-img").append(html);
+		$(".productQ-imgTable").append(html);
 		cnt++;
 	}
 	
-	function func_closeImg(num){
-		$(".imgInput:eq("+num+")").remove();
-		$(".closeInput:eq("+num+")").remove();
+	function func_printImg(idx, item){
+		console.log(item);
+		if(item.files && item.files[0]) {
+			var fileName = item.files[0].name;
+			var index = fileName.indexOf(".");
+			var fileType = fileName.substr(index);
+			if(fileType==".png"||fileType==".jpg"||fileType==".png"){
+				var reader = new FileReader;
+				reader.onload = function(data) {
+					var check = $("#productQ-img"+idx).find("img").length;
+					console.log(check);
+					if(check==0){
+						var html = "<div id='productQ-img"+idx+"'><img src='"+data.target.result+"' class='image' id='image"+idx+"' /></div><br><div></div>";
+						$("#txt_area").append(html);
+					}
+					else{
+						$("#productQ-img"+idx).find("img").prop("src",data.target.result);
+					}
+					
+				}
+				 reader.readAsDataURL(item.files[0]);
+			}
+			else{
+				alert("이미지만 올릴 수 있습니다.");
+			}
+		}
+	}
+	
+	function fileView(elem){
+		console.log(elem);
+		console.log(elem.value);
+		var idx = $(elem).prop("id").substring(7);
+		console.log(idx);
+		var fullPath = elem.value;
+		fileName = fullPath.substring(12);
+		console.log(fileName);
+		$("#fileName"+idx).val(fileName);
+	}
+	
+	
+	function func_deleteImg(item){
+		console.log(item);
+		var idx = $(item).prop("id").substring(5); 
+		console.log(idx);
+		$("#imgInput"+idx).remove();
+		$("#close"+idx).remove();
+		$("#productQ-img"+idx).remove();
+		$("#fileName"+idx).remove();
 	}
 	
 	
@@ -148,10 +210,6 @@
 		alert("작성된 내용은 저장되지 않습니다.");
 		history.back();
 		
-	}
-	
-	function divCheck(){
-		console.log(${param.product_num});
 	}
 
 </script>
@@ -163,13 +221,16 @@
 			<div class="contents">
 				<div class="boardInfo">
 					<h3 style="display:inline-block">상품문의 작성</h3>
-					<span style="margin-left:10px; font-size:8pt; font-weight: bold;">tes</span>
+					<span style="margin-left:10px; font-size:8pt; font-weight: bold;"></span>
 				</div>
-				<form name="questionWriteFrm">
+				<form name="questionWriteFrm" enctype="multipart/form-data" method="post">
+					<input type="hidden" name="product_num" value="<%=product_num %>" />
 					<table class="writeTable">
 						<tr>
 							<td class="frmTitle">작성자</td>
-							<td><input type="text" value="${sessionScope.loginuser.name}" disabled name="userName"/></td>
+							<td><input type="text" value="${sessionScope.loginuser.name}" disabled name="userName"/>
+								
+							</td>
 						</tr>
 						<tr>
 							<td class="frmTitle">이메일</td>
@@ -188,7 +249,7 @@
 						<tr>
 							<td class="frmTitle">비밀글</td>
 							<td>
-								<input type="checkbox" value="1" id="secretCheck" /><label for="secretCheck">비밀글</label>
+								<input type="checkbox" value="1" id="secretCheck" name="secretFlag" /><label for="secretCheck">비밀글</label>
 							</td>
 						</tr>
 						<tr>
@@ -197,8 +258,8 @@
 						</tr>
 						<tr>
 							<td class="txt_field" colspan="2">
-								<div contenteditable="true" style="border:solid 1px black; margin-top:10px; height: 600px;" id="txt_area"></div>
-								<input type="hidden" name="contents"/>
+								<div id="txt_area" contenteditable="true"></div>
+								<input type="hidden" name="contents" id="txt_content"/>
 							</td>
 
 						</tr>
@@ -207,12 +268,12 @@
 								<span id="imgAdd" onclick="func_addArea()">추가 업로드</span>
 								<label for="imgFile0">이미지 파일</label>
 							</td>
-							<td class='productQ-img'>
-								<div class="imgInput" id='imgFile0'>
-									<input type='file' name="imgFile"  accept='.gif, .jpg, .png' style="margin-bottom:10px;"/>
+							<td class='productQ-imgTable'>
+								<!-- <div class="imgInput" id='imgInput0'>
+									<input type='file' name="imgFile" class="imgFile" id='imgFile0' accept='.gif, .jpg, .png' style="margin-bottom:10px;"/>
 								</div>
-								<div class="closeInput" id="close0" onclick = "func_closeImg(0)" align="right">X</div>
-								
+								<div class="closeInput" id="close0" align="right" onclick="func_deleteImg(this)">X</div>
+								 -->
 							</td>
 					</table>
 					<div class="userBtn" align="center">

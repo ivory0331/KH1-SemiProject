@@ -1,6 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <% String ctxPath = request.getContextPath(); %>
+<% ServletContext context = request.getSession().getServletContext(); 
+   String realPath = context.getRealPath("Upload");
+%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -237,19 +240,16 @@
 		
 		
 		var acc = document.getElementsByClassName("accordion");
-
-		for (i = 0; i < acc.length; i++) {
-			  acc[i].addEventListener("click", function(event) {
-				var $target = $(this).next();
-				var $other = $target.siblings();
-				$other.each(function(index, item){
-					if($(item).hasClass("panel")){
-						$(item).addClass("panel-none");	
-					}
-				});
-				$target.toggleClass("panel-none");
-			  });
-			}
+		$(document).on("click",".accordion",function(){
+			var $target = $(this).next();
+			var $other = $target.siblings();
+			$other.each(function(index, item){
+				if($(item).hasClass("panel")){
+				   $(item).addClass("panel-none");	
+				}
+			});
+			$target.toggleClass("panel-none");
+		});
 		
 		func_reviewCall();
 		func_productQCall();
@@ -311,7 +311,13 @@
 			success:function(json){
 				console.log(json);
 				alert(json.message);
-				location.reload(true);
+				if(json.flag!="-1"){
+					 location.reload(true);
+				}
+				else{
+					 location.href="<%=ctxPath%>/member/login.do";
+				}
+				
 			},
 			error:function(e){
 				alert(e);
@@ -340,7 +346,7 @@
 				for(var j=0; j<json[i].getImageList().length; j++){
 					var imageFileName = decodeURIComponent(json[i].getImageList.get(j));
 					var imageFile = "<%=ctxPath%>/images/"+imageFileName;
-					html+="<img src='"+imageFile+"' />";	
+					html+="<img src='"+imageFile+"' style='display:block;'/>";	
 				}
 				
 				if(json[i].getMember_name() == "${sessionScope.user.name}"){
@@ -376,25 +382,20 @@
 	
 	function printProductInquiry(json){
 		if(json.length > 0){
-			<%-- for(var i=0; i<json.length; i++){
-				var html = "<tr class='accordion'>"
-				         + "<td>"+json[i].getReview_num()+"</td>"
-				         + "<td class='content-title'>"+json[i].getSubject()+"</td>"
-				         + "<td>"+json[i].getName()+"</td>"
-				         + "<td>"+json[i].getWrite_date()+"</td>"
-				         + "<td>"+json[i].getHit()+"</td>"
+			var html="";
+			 for(var i=0; i<json.length; i++){
+				html += "<tr class='accordion'>"
+				         + "<td>"+json[i].inquiry_num+"</td>"
+				         + "<td class='content-title'>"+json[i].subject+"</td>"
+				         + "<td>"+json[i].name+"</td>"
+				         + "<td>"+json[i].write_date+"</td>"
 				         + "</tr>"
 				         + "<tr class='panel panel-none'>"
-				         + "<td colspan='5' class='review_content'>"+json[i].getContent();
-				for(var j=0; j<json[i].getImageList().length; j++){
-					var imageFileName = decodeURIComponent(json[i].getImageList.get(j));
-					var imageFile = "<%=ctxPath%>/images/"+imageFileName;
-					html+="<img src='"+imageFile+"' />";	
-				}
+				         + "<td colspan='5' class='review_content'>"+json[i].content;
 				
-				if(json[i].getMember_name() == "${sessionScope.user.name}"){
+				if(json[i].name == "${sessionScope.loginuser.name}"){
 					html+=" <div class='userBtn' align='right'>"
-					     +" <span>수정</span><span>삭제</span> "
+					     +" <span onclick='goInquiryUpdate("+json[i].inquiry_num+","+json[i].fk_member_num+")'>수정</span><span onclick ='goInquiryDelete("+json[i].inquiry_num+")'>삭제</span> "
 					     +" </div> ";
 				}
 				else{
@@ -406,7 +407,7 @@
 				html += "</td>"
 			         + "</tr>";
 			}
-			$("#review tbody").html(html); --%>
+			$("#question tbody").html(html); 
 		}
 		else{
 			var html = "<td colspan='5'><div class='' align='center'><h3>작성된 상품문의가 없습니다.</h3></div></td>";
@@ -416,6 +417,16 @@
 		}
 	}
 	
+	function goInquiryDelete(num){
+		var url="/inquiryDel.do";
+		var data={"inquiry_num":num};
+		reqServer(url, data);
+	}
+	
+	function goInquiryUpdate(num, idx){
+		alert(num+"/"+idx)
+		location.href="<%=ctxPath%>/inquiryUp.do?inquiry_num="+num+"&member_num="+idx;
+	}
 	
 	
 	function reqServer(url, data){
@@ -431,6 +442,10 @@
 				}
 				else if(url=="/productQCall.do"){
 					printProductInquiry(json);
+				}
+				else if(url=="/inquiryDel.do"){
+					alert(json.message);
+					location.reload(true);
 				}
 			},
 			error:function(e){
@@ -584,7 +599,6 @@
 									<td style="width:50%;">제목</td>
 									<td>작성자</td>
 									<td>작성날짜</td>
-									<td>조회 수</td>
 								</tr>
 							</thead>
 							<tbody>
