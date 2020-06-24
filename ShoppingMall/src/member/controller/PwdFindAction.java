@@ -22,12 +22,14 @@ public class PwdFindAction extends AbstractController {
 		if("POST".equalsIgnoreCase(method)) {
 			//비밀번호 찾기 모달창에서 찾기 버튼을 클릭했을 경우 
 			
+			String name = request.getParameter("name");
 			String userid = request.getParameter("userid");
 			String email = request.getParameter("email");
 			
 			InterMemberDAO memberdao = new MemberDAO();
 			
 			HashMap<String,String> paraMap = new HashMap< >();
+			paraMap.put("name", name);
 			paraMap.put("userid", userid);
 			paraMap.put("email", email);
 			
@@ -92,6 +94,7 @@ public class PwdFindAction extends AbstractController {
 			}//end of else ----- 
 			
 			request.setAttribute("n", n);
+			request.setAttribute("name", name);
 			request.setAttribute("userid", userid);
 			request.setAttribute("email", email);
 			

@@ -163,6 +163,13 @@ a {
 			}
 		});
 		
+		$("#btn_login").click(function(){
+			
+			goLogin();
+		});
+		
+		
+		
 	});// end of $(document).ready()------------------
 
 	function goCheck() {
@@ -194,6 +201,13 @@ a {
 		frm.submit();
 	}
 	
+	function goLogin() {
+		
+		var frm = document.loginForm;	
+		frm.action = "<%=ctxPath%>/member/login.do";
+		frm.submit();
+	}
+	
 	   
 </script>
 
@@ -211,18 +225,18 @@ a {
 					<span class="txt_type_form">이메일 </span>
 					<input type="email" name="email" id="email" size="20" tabindex="2" placeholder= "가입 시 등록하신 이메일 주소를 입력해주세요" required />
 					
-					<button type="submit" id="btnSubmit"class="btn_type1 btn_member" onclick="javascript:goCheck();">
+					<button type="submit" id="btnSubmit"class="btn_type1 btn_member">
 						<span class="txt_type">확인 </span>
 					</button>
 				</form>
 			</c:if>
 			 <%-- *** 아이디 찾기 확인 된 화면 *** --%>
 		   	 <c:if test="${userid != null}">
-		        <form method="post" name="idSearchForm" id="idSearchForm">
+		        <form method="post" name="loginForm" id="loginForm">
 					<img class="thumb" src="https://res.kurly.com/pc/service/member/1908/img_id_find_succsess_v2.png" alt="아이디찾기완료">
 					<div class="loginCheck" >고객님의 <br/> 아이디 찾기가 완료되었습니다 </div>			
 					<h6 class="tit_login" style="font-size:12pt; color:gray">아이디 : ${userid}</h6>
-					<button type="submit" id="btnSubmit"class="btn_type1 btn_member" onclick="<%=request.getContextPath()%>/member/login.do">
+					<button type="button" id="btn_login"class="btn_type1 btn_member" >
 						<span class="txt_type">로그인 하기 </span>
 					</button>
 				</form>

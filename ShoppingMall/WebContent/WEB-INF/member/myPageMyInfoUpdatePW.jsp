@@ -90,7 +90,9 @@
 					<h5>회원님의 정보를 안전하게 보호하기 위해 비밀번호를 다시 한번 확인해주세요.</h5>
 					<div id="myInfoUpdate_PWcheck">
 						<div>아이디</div>
+						
 						<span id="userid"></span>
+
 						<div>비밀번호</div>
 						<input type="password" name="passwd" id="passwd" />
 					</div>

@@ -31,7 +31,7 @@ public class IdFindAction extends AbstractController {
 			String userid = memberdao.findUserid(paraMap);
 		
 			if(userid != null ) {
-				//아이디가 존재할 때 				
+				//아이디가 존재할 때 (글자몇자수 이상이면 *** sql문 처리) 
 				
 	            request.setAttribute("userid", userid);
 				request.setAttribute("name", name); 

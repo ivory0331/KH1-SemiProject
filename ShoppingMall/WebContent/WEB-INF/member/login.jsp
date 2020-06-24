@@ -2,33 +2,34 @@
     pageEncoding="UTF-8"%>
 <% String ctxPath = request.getContextPath(); %>
 <!DOCTYPE html>
-<html>
+<html> 
 <head>
 <meta charset="UTF-8">
 <link rel="stylesheet" href="<%= ctxPath %>/css/style.css" />
 <title>market kurly login page</title>
 <style type="text/css">
 #content{
-   font-family : noto sans, sans-serif, malgun gothic;
-   min-width : 1080px;
-   height: 612px;
-   background-color: #fafafa;
-   padding : 0;
-   margin : 0 auto;
-   text-align: center;   
+	font-family : noto sans, sans-serif, malgun gothic;
+	min-width : 1080px;
+	height: 612px;
+	background-color: #fafafa;
+	padding : 0;
+	margin : 0 auto;
+	text-align: center;	
 }
 
 .section_login{
-   width: 340px;
-   margin: 0 auto;
-   padding-top : 90px;
-   letter-spacint : 6px;
-   diplay : block;
-   color : #4c4c4c;
-   font-size: 12px;
-   max-width: 100%;
+	width: 340px;
+	margin: 0 auto;
+	padding-top : 90px;
+	letter-spacint : 6px;
+	diplay : block;
+	color : #4c4c4c;
+	font-size: 12px;
+	max-width: 100%;
     line-height: 35px;
 }
+
 
  .tit_login {
     font-weight: 800;
@@ -41,6 +42,7 @@
 .section_login * {
     color: #333;
 }
+
 
 .contents h3 {
     display: block;
@@ -84,6 +86,7 @@
 }
 
 
+
 .login_search .bar {
     float: right;
     width: 1px;
@@ -93,7 +96,7 @@
 }
 
 .btn_member{
-   display: inline-block;
+	display: inline-block;
     width: 320px;
     height: 54px;
     border: 1px solid #ccc;
@@ -104,28 +107,27 @@
     cursor:pointer;
 }
 .btn_type1{
-   margin-top: 20px;
-   padding: 0 40px;
-   border : solid 1px #5f0080;
-   background-color: #5f0080;
-   font-style: normal;
-}   
+	margin-top: 20px;
+	padding: 0 40px;
+	border : solid 1px #5f0080;
+	background-color: #5f0080;
+	font-style: normal;
+}	
 
 .btn_type2{
-   border : solid 1px #5f0080;
-   
+	border : solid 1px #5f0080;
+	
 }
 .txt_type{
-   font-weight: 500;
-   font-size: 16px;
-   color: #fff;
+	font-weight: 500;
+	font-size: 16px;
+	color: #fff;
 }
 .text_type_btn{
-   color: #5f0080;
-   vertical-align: middle;
-   display: inline-block;
-   
-    
+	color: #5f0080;
+	vertical-align: middle;
+	display: inline-block;
+ 	
 }
 
 </style>
@@ -210,5 +212,6 @@
       <jsp:include page="../include/footer.jsp"></jsp:include>
       
    </div>
+
 </body>
 </html>

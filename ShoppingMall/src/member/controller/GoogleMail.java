@@ -46,7 +46,7 @@ public class GoogleMail {
 	    	MimeMessage msg = new MimeMessage(ses);
 
 	    	// 제목 설정
-	    	String subject = "localhost:8080/MyMVC/index.up 회원님의 비밀번호를 찾기위한 인증코드 발송";
+	    	String subject = "[마켓컬리] 비밀번호 인증번호를 안내 드립니다";
 	    	msg.setSubject(subject);
 	    	        
 	    	// 보내는 사람의 메일주소
@@ -59,7 +59,8 @@ public class GoogleMail {
 	    	msg.addRecipient(Message.RecipientType.TO, toAddr);
 	    	        
 	    	// 메시지 본문의 내용과 형식, 캐릭터 셋 설정
-	    	msg.setContent("발송된 인증코드 : <span style='font-size:14pt; color:red;'>"+certificationCode+"</span>", "text/html;charset=UTF-8");
+	    	msg.setContent(" 안녕하세요. 마켓컬리입니다.<br/> 회원님의 요청하신 비밀번호 찾기 인증번호를 안내 드립니다. <br/> 아래번호를 인증번호 입력란에 입력해주세요<br/><br/>"
+	    			+ " <span style='font-size:12pt; color:purple; font-weight:bold;'>인증번호 : "+certificationCode+"</span>", "text/html;charset=UTF-8");
 	    	        
 	    	// 메일 발송하기
 	    	Transport.send(msg);

@@ -17,6 +17,7 @@ public class LoginAction extends AbstractController {
    public void execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
       String method = request.getMethod();
       if("get".equalsIgnoreCase(method)) {
+    	 super.setRedirect(false);
          super.setViewPage("/WEB-INF/member/login.jsp");
       }
       else {
@@ -38,9 +39,10 @@ public class LoginAction extends AbstractController {
 
             HttpSession session = request.getSession();
             session.setAttribute("loginuser", loginuser);
-
+            
             String goBackURL = request.getContextPath() + "/index.do";
-
+           
+            
             if (loginuser.isRequirePwdChange() == true) {
                String message = "비밀번호를 변경하신지 3개월이 지났습니다. 암호를 변경하세요!";
                String loc = request.getContextPath() + "/index.do";

@@ -263,6 +263,63 @@ public class MemberDAO implements InterMemberDAO {
       return userid;
       
    }
-   
-   
+
+
+    //비밀번호 찾기(이름,아이디, 이메일 번호를 입력받아 해당 사용자가 존재하는지 유무를 알려준다.)
+ 	@Override
+ 	public boolean isUserExist(HashMap<String, String> paraMap) throws SQLException {
+ 		
+ 		boolean isUserExist = false;
+ 		
+ 		try {
+ 			conn = ds.getConnection();
+ 			
+ 			String sql = " select userid "
+ 	                   +" from member_table "
+ 	                   +" where status = 1 and name = ? and userid = ? and email = ?";
+ 			
+ 			pstmt = conn.prepareStatement(sql);
+ 			pstmt.setString(1, paraMap.get("name"));
+ 			pstmt.setString(2, paraMap.get("userid"));
+ 			pstmt.setString(3, aes.encrypt(paraMap.get("email")));
+ 			
+ 			rs = pstmt.executeQuery();
+ 			
+ 			//존재 유무만 알려줌(행이 있는지 없는지 T/F로)
+ 			isUserExist = rs.next();
+ 			
+ 			
+ 		} catch (UnsupportedEncodingException | GeneralSecurityException e) {
+ 			
+ 			e.printStackTrace();
+ 		} finally {
+ 			close();
+ 			
+ 		}
+ 		return isUserExist;
+ 	}
+
+ 	// 암호 변경하기 
+ 	@Override
+ 	public int pwdUpdate(String pwd, String userid) throws SQLException {
+ 		int result = 0 ;
+ 		
+ 		try {
+ 			conn = ds.getConnection();
+ 			
+ 			String sql = " update member_table set pwd = ? " + 
+ 						 " where userid = ? ";
+ 			
+ 			pstmt = conn.prepareStatement(sql);
+ 			pstmt.setString(1, Sha256.encrypt(pwd)); //암호를 SHA256알고리즘으로 단방향 암호화 시킨다.
+ 			pstmt.setString(2, userid);
+ 			
+ 			result = pstmt.executeUpdate();
+ 			
+ 		} finally {
+ 			close();
+ 		}
+ 		
+ 		return result;
+ 	}
 }

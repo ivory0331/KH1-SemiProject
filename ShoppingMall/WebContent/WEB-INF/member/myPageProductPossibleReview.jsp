@@ -117,6 +117,13 @@
 		font-size: 9pt;
 	}
 	
+
+	/* td.delivery {
+		width: 160px;
+		text-align: center;
+		font-size: 10pt;
+	}	 */
+
 	a.link_review {
 		border: solid 1px #5f0080;
 		display: inline-block; 
@@ -163,6 +170,7 @@
 			<div id="myPage_Contents">		
 				<div id="myProductReview_Header">
 					<h2 id="myProductReview_Title">상품후기</h2>
+
 					
 					<div style="clear:both; height:20px;"></div>
 					
@@ -198,6 +206,10 @@
 												<span class="count">1개 구매</span>
 											</div>											
 										</td>		
+										<!-- <td class="delivery">
+											<span>00월00일 배송완료</span>
+										</td> -->
+
 										<td class="link">
 											<a class="link_review">후기 작성</a>
 										</td>																	
@@ -215,6 +227,8 @@
 												<span class="count">1개 구매</span>
 											</div>											
 										</td>		
+
+
 										<td class="link">
 											<a class="link_review">후기 작성</a>
 										</td>																	
@@ -243,6 +257,7 @@
 												<span class="count">1개 구매</span>
 											</div>											
 										</td>		
+
 										<td class="link">
 											<a class="link_review">후기 작성</a>
 										</td>																	
@@ -263,25 +278,3 @@
 	</div>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
