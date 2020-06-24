@@ -5,14 +5,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%
 	String ctxPath = request.getContextPath();
-	Object obj = session.getAttribute("basket");
-	List<Map<String,String>> basketNum = null;
-	if(obj!=null){
-		basketNum = (List<Map<String,String>>)obj;
-	}
-	 
-	int n = 0;
-	if(basketNum!=null) n = basketNum.size();
 %>
 <!DOCTYPE html>
 <html>
@@ -46,7 +38,7 @@
 	}
 	
 	/*고객센터 영역*/
-	.serviceCenter{
+	.serviceCenter, .mypage{
 		position: relative;
 	}
 	
@@ -56,7 +48,7 @@
 	}
 	
 	/*고객센터 하위의 메뉴영역*/
-	.serviceCenter-dropdown-content{
+	.serviceCenter-dropdown-content, .mypage-dropdown-content{
 		display:none;
 		position: absolute;
 		z-index: 5;
@@ -66,7 +58,7 @@
 	}
 	
 	/*고객센터 하위의 메뉴가 되는 ul*/
-	.serviceCenter-categori{
+	.serviceCenter-categori, .mypage-categori{
 		display:inline-block;
 		list-style: none;
 		padding: 0px;
@@ -75,7 +67,7 @@
 		float:left;
 	}
 	
-	.serviceCenter-categori .listType{
+	.serviceCenter-categori .listType, .mypage-categori .listType{
 		display: block;
 		margin: 0px 10px;
 		color:black;
@@ -84,7 +76,6 @@
 	
 	/*로고 이미지가 있는 영역*/
 	.logo{
-
 		width: 150px;		
 		clear:both;
 	}
@@ -94,10 +85,6 @@
 		height: 100px;
 	}
 	
-
-		
-
-
 	/*상단에 고정해야 하는 navigation이 있을 영역*/
 	.header-navi{
 		max-width:1700px;
@@ -191,7 +178,6 @@
 		list-style: none;
 		padding:0px;
 		text-align: left;
-
 		background-color: #f1f1f1;
 		min-height:150px; 
 	}
@@ -221,7 +207,6 @@
 		heigth:40px;
 		cursor: pointer;
 	}
-
 	
 	#basketCnt{
 		position: absolute;
@@ -234,6 +219,7 @@
 		background-color: purple;
 		color:white;
 		cursor: pointer;
+		display: none;
 	}
 
 	.navi-categori .list:hover{background-color: #f1f1f1;}
@@ -241,7 +227,10 @@
 </style>
 
 <script type="text/javascript">
+
+
 $(document).ready(function(){
+	printNavi();
 	var $list = $(".list"); //하위 navi에 존재하는 li태그들 (배열)
 
 	// 하위 navi에 존재하는 li태그에 hover했을 때 function
@@ -254,12 +243,14 @@ $(document).ready(function(){
 	},function(){ //마우스를 내렸을 때
 		// $(".navi-dropdown-content").css("min-width","170px"); //하위 navi가 존재하는 영역의 넓이 150px로 조정
 		// $(".navi-categori2").css("display","none"); //navi-categori2(ul)태그의 display none(안보이도록) 
+		
 	});
 	
 	
 	// 전체카테고리 li태그에 hover했을 때 function
 	$(".navi-dropdown").hover(function(){
 		$(".navi-dropdown-content").css("display","block"); //하위 navi가 존재하는 영역 display 변경
+		$(".navi-category .lit").css("background-color","white");	
 	},function(){
 		 $(".navi-dropdown-content").css({"display":"none","min-width":"150px"}); //원래 있던대로 display와 width 수정
 		 $(".navi-categori2").css("display","none");
@@ -271,6 +262,13 @@ $(document).ready(function(){
 		$(".serviceCenter-dropdown-content").css("display","block"); //하위 navi가 존재하는 영역 display 변경
 	},function(){
 		$(".serviceCenter-dropdown-content").css({"display":"none"}); //원래 있던대로 display와 width 수정
+	});
+	
+	// 회원된 span태그에 hover했을 때 function
+	$(".mypage-dropdown").hover(function(){
+		$(".mypage-dropdown-content").css("display","block"); //하위 navi가 존재하는 영역 display 변경
+	},function(){
+		$(".mypage-dropdown-content").css({"display":"none"}); //원래 있던대로 display와 width 수정
 	});
 	
 	
@@ -302,36 +300,121 @@ $(document).ready(function(){
 	
 	
 	// 전체 카테고리에서 서브 카테고리 변화주기 //
-	var $category = $(".navi-categori").find(".listType");
+	var $category = $(".navi-categori").find(".list");
 	$category.each(function(index, item){
-		var sub = ["기본채소,쌈 샐러드,특수채소"
-			      ,"국산과일,수입과일,냉동 건과일"
-			      ,"생선류,오징어 낙지 문어,새우 게 랍스타"
-			      ,"소고기,돼지고기,닭 오리고기"
-			      ,"생수 음료 주스,커피 차,우유 두유 요거트"];
-			
+		var idx = index	
 		$(item).mouseover(function(){
-			var subArr = sub[index].split(",");
-			for(var i=0; i<subArr.length; i++){
-					 $(".navi-categori2").find(".listType:eq("+i+")").html(subArr[i]);
+			console.log(idx);
+			subArr = [{"num":11,"content":"기본채소"},{"num":12,"content":"쌈 샐러드"},{"num":13,"content":"특수채소"},
+				      {"num":21,"content":"국산과일"},{"num":21,"content":"수입과일"},{"num":21,"content":"냉동 건과일"},
+				      {"num":31,"content":"생선류"},{"num":32,"content":"오징어 낙지 문어"},{"num":33,"content":"새우 게 랍스타"},
+				      {"num":41,"content":"소고기"},{"num":42,"content":"돼지고기"},{"num":43,"content":"닭 오리고기"},
+				      {"num":51,"content":"생수 음료 주스"},{"num":52,"content":"커피 차"},{"num":53,"content":"우유 두유 요거트"}];
 
 			$(".navi-categori2").empty();
-			var subArr = sub[index].split(",");
+			
 			for(var i=0; i<subArr.length; i++){
+				if(parseInt(subArr[i].num/10)==(idx+1)){
 					// $(".navi-categori2").find(".listType:eq("+i+")").html(subArr[i]);
-					var html="<li class='list'><span class='listType'>"+subArr[i]+"</span></li>";
+					var html="<li class='list'><span class='listType' onclick='goList("+subArr[i].num+")'>"+subArr[i].content+"</span></li>";
 					$(".navi-categori2").append(html); 
-			}
+				}	
 			}	
 		});
 	
 	});
+	
+	
+	if(${sessionScope.loginuser!=null}){
+		console.log("장바구니 물건 카운트 시작");
+		func_basketCnt();
+	}
+	
 });
 	
 	function goBasket(){
 		location.href="<%= ctxPath%>/shoppingBasket.do";
 	}
 	
+	
+	function goList(num){
+		var category=0;
+		if(num>10){
+			category = parseInt(num/10);
+		}
+		else {
+			category = num;
+		}
+		alert(num);
+	}
+	
+	
+	function che(){
+		$("input:checkbox").each(function(index, item){
+			
+			if($(item).prop("checked")){
+				html+=$(item).val()+","	
+			}
+		})
+	}
+	
+	
+	
+	function printNavi(){
+		$.ajax({
+			url:"<%=ctxPath%>/naviCategoryCall.do",
+			dataType:"JSON",
+			success:function(json){
+				console.log(json);
+				
+				var cnt=0;
+				 for(var i=0; i<5; i++){
+					$(".categoryValue:eq("+i+")").html("<span class='listType' onclick='goList("+json[i].num+")'>"+json[i].content+"</span>");
+				 }
+				 
+			},
+			error:function(e){
+				console.log(e);
+			}
+		});
+	}
+	
+	function func_basketCnt(){
+		$.ajax({
+			url:"<%=ctxPath%>/basketCnt.do",
+			dataType:"JSON",
+			success:function(json){
+				console.log("ajax:"+json.basketCnt);
+				if(json.basketCnt>0){
+					$("#basketCnt").show();
+					$("#basketCnt").text(json.basketCnt);
+				}
+				
+			},
+			error:function(e){
+				console.log(e);
+			}
+		});
+	}
+	
+	function logout(){
+		$.ajax({
+			url:"<%=ctxPath%>/member/logout.do",
+			dataType:"JSON",
+			success:function(json){
+				if(json.check=="true"){
+					location.reload(true);
+				}
+				else{
+					alert("로그아웃에 실패했습니다.");
+				}
+			},
+			error:function(e){
+				console.log(e);
+			}
+		});
+	}
+
 	function goList(){
 		location.href="<%= ctxPath%>/productList.do";
 	}
@@ -339,23 +422,29 @@ $(document).ready(function(){
 </script>
 </head>
 <body>
-	
 	<div class="logo_login" align="center">
-		<div class="loginLink"> 
-
-			
-			 <c:if test="${sessionScope.userid == null }">
+		<div class="loginLink">
+			 <c:if test="${sessionScope.loginuser == null }">
 			 	 <a href="javascript:location.href='<%=ctxPath%>/member/register.do'">회원가입</a> |
 			 	 <a href="javascript:location.href='<%=ctxPath%>/member/login.do'">로그인</a> | 
 			 </c:if>
-			 <c:if test="${sessionScope.userid != null }">
+			 <c:if test="${sessionScope.loginuser != null }">
 			 	<div class="mypage-dropdown" style="display:inline-block;">
-				<a href="">${sessionScope.userid}님 로그인</a> <span class="underIcon">▼</span>
+				<a href="">${sessionScope.loginuser.name}님 환영합니다.</a> <span class="underIcon">▼</span>
 				<div class="mypage-dropdown-content" align="left">
 					<ul class="mypage-categori">
-						<li class="list"><a href="javascript:location.href='<%=ctxPath%>/service/board.do'"><span class="listType">주문내역</span></a></li>
-						<li class="list"><a href="javascript:location.href='<%=ctxPath%>/service/FAQ.do'"><span class="listType">상품 후기</span></a></li>
-						<li class="list"><a href="javascript:location.href='<%=ctxPath%>/service/MyQue.do'"><span class="listType">로그아웃</span></a></li>
+						<c:if test="${sessionScope.loginuser.status=='2'}">
+							<li class="list"><a href="javascript:location.href='<%=ctxPath%>/service/board.do'"><span class="listType">매출관리</span></a></li>
+							<li class="list"><a href="javascript:location.href='<%=ctxPath%>/service/FAQ.do'"><span class="listType">회원관리</span></a></li>
+							<li class="list"><a href="javascript:location.href='<%=ctxPath%>/service/MyQue.do'"><span class="listType">상품관리</span></a></li>
+							<li class="list"><a href="javascript:location.href='<%=ctxPath%>/service/MyQue.do'"><span class="listType">주문관리</span></a></li>
+							<li class="list"><a href="javascript:logout()"><span class="listType">로그아웃</span></a></li>
+						</c:if>
+						<c:if test="${sessionScope.loginuser.status=='1'}">
+							<li class="list"><a href="javascript:location.href='<%=ctxPath%>/service/board.do'"><span class="listType">주문내역</span></a></li>
+							<li class="list"><a href="javascript:location.href='<%=ctxPath%>/service/FAQ.do'"><span class="listType">상품 후기</span></a></li>
+							<li class="list"><a href="javascript:logout()"><span class="listType">로그아웃</span></a></li>
+						</c:if>
 					</ul>
 				</div>
 				</div>
@@ -382,16 +471,16 @@ $(document).ready(function(){
 				<span class="bar">I</span><br/>
 				<div class="navi-dropdown-content" align="left">
 					<ul class="navi-categori">
-						<li class="list" onclick="goList()"><span class="listType">채소</span></li>
-						<li class="list" onclick="goList()"><span class="listType">과일 견과 쌀</span></li>
-						<li class="list" onclick="goList()"><span class="listType">수산 해산 건어물</span></li>
-						<li class="list" onclick="goList()"><span class="listType">정육 계란</span></li>
-						<li class="list" onclick="goList()"><span class="listType">음료 우유 간식</span></li>
+						<li class="list categoryValue" ><span class="listType">채소</span></li>
+						<li class="list categoryValue" ><span class="listType">과일 견과 쌀</span></li>
+						<li class="list categoryValue" ><span class="listType">수산 해산 건어물</span></li>
+						<li class="list categoryValue" ><span class="listType">정육 계란</span></li>
+						<li class="list categoryValue" ><span class="listType">음료 우유 간식</span></li>
 					</ul>
 					<ul class="navi-categori2">
-						<li class="list" onclick="goList()"><span class="listType"></span></li>
-						<li class="list" onclick="goList()"><span class="listType"></span></li>
-						<li class="list" onclick="goList()"><span class="listType"></span></li>
+						<li class="list categoryValue" onclick="goList()"><span class="listType"></span></li>
+						<li class="list categoryValue" onclick="goList()"><span class="listType"></span></li>
+						<li class="list categoryValue" onclick="goList()"><span class="listType"></span></li>
 					</ul> 
 				</div>
 			</li>
@@ -402,13 +491,12 @@ $(document).ready(function(){
 			<li>
 				<span class="navi-basket" style="position:relative; ">
 					<img src="<%=ctxPath %>/images/basket.jpg" onclick="goBasket()"/>
-					<% if(n>0){ %>
+					
 					<div id="basketCnt" onclick="goBasket()">
 					
-						<%=n %>
-					
+						
 					</div>
-					<%} %>
+					
 				</span>
 			</li>
 		</ul>		

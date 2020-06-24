@@ -30,6 +30,7 @@
     line-height: 35px;
 }
 
+
  .tit_login {
     font-weight: 800;
     font-size: 20px;
@@ -41,6 +42,7 @@
 .section_login * {
     color: #333;
 }
+
 
 .contents h3 {
     display: block;
@@ -84,6 +86,7 @@
 }
 
 
+
 .login_search .bar {
     float: right;
     width: 1px;
@@ -124,7 +127,6 @@
 	color: #5f0080;
 	vertical-align: middle;
 	display: inline-block;
-	
  	
 }
 
@@ -134,6 +136,51 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 <script type="text/javascript" src="/ShoppingMall/js/jquery-3.3.1.min.js"></script>
 <script type="text/javascript" src="/ShoppingMall/util/myutil.js"></script>
+<script type="text/javascript">
+   $(document).ready(function(){
+      
+      $("#btnSubmit").click(function(){
+         goLogin(); // 로그인 시도한다.
+      });
+      
+      
+      $("#loginPwd").keydown(function(event){
+         if(event.keyCode == 13) { // 암호입력란에 엔터를 했을 경우 
+            goLogin(); // 로그인 시도한다.
+         } 
+      });
+      
+      
+   });// end of $(document).ready()----------------------------
+   
+   
+   /* === 로그인 처리 함수 === */
+   function goLogin() {
+   
+      var loginUserid = $("#loginUserid").val().trim();
+      var loginPwd = $("#loginPwd").val().trim();
+      
+      if(loginUserid == "") {
+         alert("아이디를 입력하세요!!");
+         $("#loginUserid").val("");
+         $("#loginUserid").focus();
+         return; 
+      }
+      
+      if(loginPwd == "") {
+         alert("암호를 입력하세요!!");
+         $("#loginPwd").val("");
+         $("#loginPwd").focus();
+         return;  
+      }
+      var frm = document.loginFrm;
+      frm.method = "post";
+      frm.action = "<%=request.getContextPath()%>/member/login.do";
+      frm.submit();
+      
+   }// end of function goLogin()-------------------------------
+   
+</script>
 </head>
 <body>
 	<div class="Mycontainer">
@@ -142,28 +189,25 @@
 			<div class="contents" >
 			<h3 class="tit_login">로그인</h3>
 			<div class="write_form">
-				<form method="post" name="form" id="form" action="#" onsubmit="">
-					<input type="text" name="id" size="20" tabindex="1" value="" placeholder="아이디를 입력해주세요" required /><br/>
-					<input type="password" name="password" size="20" tabindex="2" placeholder="비밀번호를 입력해주세요" required />
-					
+				<form method="post" name="loginFrm" id="loginFrm" onsubmit="">
+					<input type="text" id="loginUserid" name="userid" size="20" tabindex="1" value="" placeholder="아이디를 입력해주세요" required /><br/>
+					<input type="password" id="loginPwd" name="pwd" size="20" tabindex="2" placeholder="비밀번호를 입력해주세요" required />
 					<div class="login_searh">
-						<a href="#id찾기페이지 " class="link">아이디 찾기  |  </a>
+						<a href="/login/idFind.do" class="link">아이디 찾기  |  </a>
 						<span class="bar"></span>
-						<a href="#비밀번호 찾기페이지" class="link">비밀번호 찾기 </a>
+						<a href="/login/pwdFind.do" class="link">비밀번호 찾기 </a>
 					</div>
-					<button type="submit" class="btn_type1 btn_member">
+					<button type="submit" class="btn_type1 btn_member" id="btnSubmit">
 						<span class="txt_type">로그인</span>
 					</button>
 				</form>
-				
-				<a href="#회원가입사이트" class="btn_type2 btn_member">
+				<button onclick="javascript:location.href='/member/register.do'" class="btn_type2 btn_member">
 					<span class="txt_type text_type_btn">회원가입</span>
-				</a>
+				</button>
 			</div>
 			</div>
 		</div>
 		<jsp:include page="../include/footer.jsp"></jsp:include>
-		
 	</div>
 </body>
 </html>

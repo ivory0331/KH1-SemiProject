@@ -89,6 +89,7 @@
 		padding: 10px;
 	}
 	
+
 	#subject {
 		width: 100%;
 	}
@@ -116,9 +117,7 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 <script type="text/javascript" src="/ShoppingMall/js/jquery-3.3.1.min.js"></script>
 <script type="text/javascript" src="/ShoppingMall/util/myutil.js"></script>
-
 <script type="text/javascript">
-
 	$(document).ready(function(){
 		
 		$("#btnSubmit").click(function(){
@@ -198,7 +197,6 @@
 						</table>	
 					</div>	
 				</div>				
-				
 				<div class="review">
 				<form name="reviewFrm">	
 					<table class="write">
@@ -226,12 +224,8 @@
 					</table>
 				</form>					
 				</div>				
-				
-				<button type="button" id="btnSubmit" class="button">등록하기</button>
-					
-			</div>
-				
-								
+				<button type="button" id="btnSubmit" class="button">등록하기</button>	
+			</div>				
 			</div>
 			<div style="clear:both;"></div>
 		</div>	
@@ -239,25 +233,3 @@
 	</div>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

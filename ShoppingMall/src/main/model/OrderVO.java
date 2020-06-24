@@ -1,5 +1,7 @@
 package main.model;
 
+import member.model.MemberVO;
+
 public class OrderVO {
 	private int order_num;
 	private String order_date;
