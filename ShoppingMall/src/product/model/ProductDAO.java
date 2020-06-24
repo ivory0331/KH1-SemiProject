@@ -275,6 +275,103 @@ public class ProductDAO implements InterProductDAO {
 		
 		return totalpage;
 	}
+
+	
+	// 로그인한 사용자의 장바구니 목록을 조회하기
+	@Override
+	public List<CartVO> selectProductCart(int member_num) throws SQLException {
+		
+		List<CartVO> cartList = null;
+		
+		try {
+			
+			conn = ds.getConnection();
+			
+			String sql= " select A.basket_num, A.fk_product_num, A.fk_member_num, B.product_name, B.representative_img, B.price, B.sale, A.product_count" + 
+						" from basket_table A join product_table B " + 
+						" on A.fk_product_num = B.product_num " + 
+						" where A.fk_member_num = ? " + 
+						" order by A.basket_num desc";
+			
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, member_num);
+			
+			rs = pstmt.executeQuery();
+			
+			int cnt = 0;
+			while(rs.next()) {
+				cnt++;
+				
+				if(cnt==1) {
+					cartList = new ArrayList<>();
+				}
+				
+				int basket_num = rs.getInt("basket_num");
+				int fk_product_num = rs.getInt("fk_product_num");
+				int fk_member_num = rs.getInt("fk_member_num");
+				String product_name = rs.getString("product_name");
+				String representative_img = rs.getString("representative_img");
+				int price = rs.getInt("price");
+				int sale = rs.getInt("sale");
+				int product_count = rs.getInt("product_count");
+				
+				ProductVO prod = new ProductVO();
+				prod.setProduct_num(fk_product_num);
+				prod.setProduct_name(product_name);
+				prod.setRepresentative_img(representative_img);
+				prod.setPrice(price);
+				prod.setPrice(sale);
+				prod.setTotalPrice(product_count);
+				
+				CartVO cvo = new CartVO();
+				cvo.setBasket_num(basket_num);
+				cvo.setMember_num(fk_member_num);
+				cvo.setProduct_num(fk_product_num);
+				cvo.setProduct_count(product_count);
+				
+				cartList.add(cvo);
+				
+			} // end of while------------------------------------------------------
+			
+			
+		} finally {
+			close();
+		}
+		
+		
+		
+		return cartList;
+	}
+
+	
+	// 로그인한 사용자의 장바구니에 담긴 주문총액합계
+	@Override
+	public HashMap<String, String> selectSumCartPricePoint(int member_num) throws SQLException {
+		
+		HashMap<String, String> sumMap = new HashMap<>();
+		
+		try {
+			conn = ds.getConnection();
+			
+			String sql = " select nvl(sum(A.product_count *  (B.price - B.price * (B.sale/100) ) ), 0 ) AS SUMTOTALPRICE " + 
+						 " from basket_table A join product_table B " + 
+						 " on A.fk_product_num = B.product_num " + 
+						 " where A.fk_member_num = ? ";
+			
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, member_num);
+			
+			rs = pstmt.executeQuery();
+			rs.next();
+			
+			sumMap.put("SUMTOTALPRICE", rs.getString("SUMTOTALPRICE"));
+			
+		} finally {
+			close();
+		}
+		
+		return sumMap;
+	}
 	
 	
 	

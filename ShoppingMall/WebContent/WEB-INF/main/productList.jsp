@@ -109,13 +109,13 @@
 					<tr>
 						<c:forEach var="pvo" items="${productList}" varStatus="status">
 							<td>
-								<a href='/MyMVC/ShoppingMall/detail.do?product_num=${pvo.product_num}'>
+								<a href='/ShoppingMall/detail.do?product_num=${pvo.product_num}'>
 									<img width="300px;" height="400px;" src="/ShoppingMall/images/${pvo.product_name}.png" />
 								</a>
 								<br/>${pvo.product_name}
 								<c:if test="${pvo.sale != 0}">
 									<br/><span style="text-decoration: line-through;"><fmt:formatNumber value="${pvo.price}" pattern="###,###"/> 원</span>
-									&nbsp;=>&nbsp;<fmt:formatNumber value="${pvo.salePrice}" pattern="###,###" /> 원
+									&nbsp;=>&nbsp;<fmt:formatNumber value="${pvo.finalPrice}" pattern="###,###" /> 원
 								</c:if>
 								<c:if test="${pvo.sale == 0}">
 									<br/><fmt:formatNumber value="${pvo.price}" pattern="###,###"/> 원

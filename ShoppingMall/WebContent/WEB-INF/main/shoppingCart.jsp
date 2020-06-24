@@ -1,6 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <% String ctxPath = request.getContextPath(); %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %> 
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -231,7 +234,10 @@ img.imgsmall {
 						<input type="checkbox" class="allCheck"/><label class="j">전체 선택</label>
 					</td>
 					<td>
-						상품정보
+						제품이미지
+					</td>
+					<td>
+						제품정보
 					</td>
 					<td>
 						수량
@@ -239,10 +245,52 @@ img.imgsmall {
 					<td>
 						상품금액
 					</td>
+					<td>
+						삭제
+					</td>
 				</tr>
 				
-				<tbody id="basket">
-					
+				<tbody>
+					<c:if test="${empty cartList}">
+						<tr>
+							<td colsapn="6">
+								<span style="color: red; font-weight: bold;">
+									장바구니에 담긴 상품이 없습니다.
+								</span>
+							</td>
+						</tr>
+					</c:if>
+					<c:if test="${not empty cartList}">
+						
+						<c:forEach var="cartvo" items="${cartList}" varStatus="status">
+						<tr>
+							<td> <%--체크박스 및 제품번호 --%>
+							 	<input type="checkbox" name="product_num" class="chkboxnum" id="product_num${status.index}" value="${cartvo.product_num}" /> &nbsp;<label for="product_num${status.index}">${cartvo.product_num}</label>
+							</td>
+							<td align="center"> <%-- 제품이미지 --%>
+								<a href='/ShoppingMall/detail.do?product_num=${cartvo.product_num}'>
+									<img src="/ShoppingMall/images/${cartvo.representative_img}" width="130px" height="100px" />
+								</a>
+							</td>
+							<td align="center"> <%-- 제품정보 --%>
+								<span>${cartvo.prod.product_name}</span>
+							</td>
+							<td align="center"> <%-- 수량 --%>
+								<input name="product_count" value="${cartvo.product_count}">개
+							</td>
+							<td> <%--총 제품가격 --%>
+							<span id="totalPrice">
+								<fmt:formatNumber value="${cartvo.prod.totalPrice}" pattern="###,###" />
+							</span> 원
+							<input class="totalPrice" type="hidden" value="${cartvo.prod.totalPrice}" />
+							</td>
+							<td align="center"> <%-- 장바구니에서 해당 제품 삭제하기 --%>
+								<span class="del" style="cursor: pointer;" onClick="">X</span>
+							</td>
+						</tr>
+						</c:forEach>
+						
+					</c:if>
 				</tbody>
 				
 				<tr>
@@ -268,7 +316,7 @@ img.imgsmall {
 					</tr>
 					<tr align="center">
 						<td id="price" class="t d">
-							<label>0원</label>
+							<span style="color: red; font-weight: bold;"><fmt:formatNumber value="${sumMap.SUMTOTALPRICE}" pattern="###,###" /> 원</span>
 						</td>
 						<td id="delivery" class="t d">
 							<label>0원</label>
