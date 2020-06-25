@@ -470,7 +470,7 @@ div.check_event{
            //console.log($(this).val().length);
            //console.log(keycode);
          
-         if( !((48 <= keycode && keycode<=57) || (96<=keycode && keycode<=105))){
+         if( !((48 <= keycode && keycode<=57) || (96<=keycode && keycode<=105) || (keycode == 8))){
             var word = $(this).val().length;
             var keyValue = $(this).val().substring(0,word-1);
             $(this).val(keyValue);

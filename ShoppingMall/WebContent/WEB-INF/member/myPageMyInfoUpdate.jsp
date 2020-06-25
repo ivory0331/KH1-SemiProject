@@ -19,20 +19,20 @@
 	background-color: #eee;
 }
 
-#myOrderHistoryDetail_Header {
-	border: solid 0px pink;
-	margin-top: 5px;
-}
-
-#myOrderHistory_List {
-	border: solid 0px navy;
-}
-
-#myOrderHistoryDetail_Title {
+#update_Title {
 	border: solid 0px blue;
 	font-size: 14pt;
 	display: inline-block;
+	padding-top: 20px;
 	float: left;
+}
+
+.msg {
+	border: solid 0px red;
+	display: inline-block;
+	font-size: 9pt;
+	margin-top: 45px;
+	float: right;
 }
 
 #line {
@@ -53,7 +53,7 @@ h3#title {
 	font-size: 14pt;
 }
 
-#line {
+.line {
 	border-top: solid 2px #5f0080;
 	height: 20px;
 }
@@ -76,9 +76,13 @@ body {
 }
 
 #form {
-	width: 640px;
+	width: 100%;
 	margin: 0 auto;
-	/*border: solid 1px hotpink;*/
+}
+
+table.tb {
+	width: 100%;
+	border: solid 0px green;
 }
 
 .tit {
@@ -106,10 +110,10 @@ body {
 
 fieldset {
 	text-align: left;
+	margin: 0;
 	border: none;
 	background-color: #fff;
-	width: 640px;
-	/*border : solid 1px navy;*/
+	border : solid 1px navy;
 }
 
 .contents input {
@@ -129,6 +133,12 @@ input.tel_confirm {
 }
 
 span.btn_tel {
+	background-color: #ddd;
+	border: 1px solid #ddd;
+	color: #fff;
+}
+
+span.btn_email {
 	background-color: #ddd;
 	border: 1px solid #ddd;
 	color: #fff;
@@ -180,12 +190,6 @@ label.text_position {
 	flex-direction: row;
 }
 
-button.btn_address {
-	float: none;
-	margin-bottom: 3px;
-	width: 200px;
-}
-
 .birth_day {
 	overflow: hidden;
 	width: 300px;
@@ -226,7 +230,9 @@ button.btn_address {
 	font-size: 14px;
 	float: right;
 	margin-left: 2px;
+	margin-right: 150px;
 	border-radius: 3px;
+	padding-top: 5px;
 }
 
 .bthCheck_tel {
@@ -248,14 +254,14 @@ button.btn_address {
 	font-size: 14px;
 	font-weight: 500;
 	/*border: solid 1px pink;*/
-	padding: 20px 0 20px 15px;
+	padding: 20px 0 20px 60px;
 	color: #333;
 	line-height: 20px;
 	vertical-align: top;
 }
 
 .memberCols2 {
-	padding: 10px 0;
+	padding: 10px 0 10px 50px;
 	border-top: 0;
 	font-size: 10pt;
 	vertical-align: top;
@@ -389,18 +395,12 @@ div.check_event {
 input#userid:focus {outline:none;}
 
 </style>
-
-<link rel="stylesheet"
-	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-<link rel="stylesheet" href="css/style.css" />
-<script
-	src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<script
-	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-<script type="text/javascript"
-	src="/ShoppingMall/js/jquery-3.3.1.min.js"></script>
-<script type="text/javascript" src="/ShoppingMall/util/myutil.js"></script>
-
+<script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script> 
+<script type="text/javascript" src="<%= ctxPath%>/js/jquery-3.3.1.min.js"></script>
+<script type="text/javascript" src="<%= ctxPath%>/util/myutil.js"></script>
 <script type="text/javascript">
 	var bPwValidateCheck = true; //비밀번호 유효성  체크 
 	var bPwChValidateCheck = true; //비밀번호 확인 체크 
@@ -457,29 +457,7 @@ input#userid:focus {outline:none;}
 	           bPwChValidateCheck = true;
 	         }
 	      });// end of $("#passwdCk").blur()--------------
-		
 	      
-	    //== 이메일 버튼 활성화 ==   
-	      var myEmail = null;
-	     
-	      $("#email").click(function(){
-	    	  myEmail = $("#email").val();
-	    	  console.log(myEmail);
-	      });
-	    
-	      $("#email").blur(function(){
-	    	  console.log($("#email").val().trim());
-	    	  if($("#email").val().trim() == myEmail) { // 내 이메일일 때는 a태그 클릭 안되게 
-	    		  console.log("비활성화");  
-	    		  bEmailButtonCheck = false;
-	    		//  $(".email_error")
-	    	  }
-	    	  else { // 내 이메일이 아닐 때는 a태그 클릭 되게 
-	    		  console.log("활성화"); 
-	    		  bEmailButtonCheck = true;
-	    	  }	    	  
-	      });
-
 	      
 	    //== 휴대폰 유효성 검사 == 
 	      // 1) 숫자만 입력(숫자이외의 글자를 치면 아예 못치게 차단) 2)유효성검사에 맞으면 인증번호받기 클릭가능 3)버튼 누르면 메세지 전송
@@ -492,7 +470,7 @@ input#userid:focus {outline:none;}
 	           //console.log($(this).val().length);
 	           //console.log(keycode);
 	         
-	         if( !((48 <= keycode && keycode<=57) || (96<=keycode && keycode<=105))){
+	         if( !((48 <= keycode && keycode<=57) || (96<=keycode && keycode<=105) || (keycode == 8))){
 	            var word = $(this).val().length;
 	            var keyValue = $(this).val().substring(0,word-1);
 	            $(this).val(keyValue);
@@ -591,7 +569,7 @@ input#userid:focus {outline:none;}
 			},
 			dataType : "json",
 			success : function(json) {
-				if (json.isEmail) {
+				if (json.isEmail || $("#email").val().trim() == "${(sessionScope.loginuser).email}") {
 					alert("사용이 가능한 이메일입니다.");
 					bEmailDuplicateCheck = true;
 				} 
@@ -701,7 +679,7 @@ input#userid:focus {outline:none;}
 
 </head>
 <body>
-	<div class="container">
+	<div class="Mycontainer">
 		<jsp:include page="../include/header.jsp"></jsp:include>
 		<div class="section" align="center">
 			<div class="contents">
@@ -712,17 +690,20 @@ input#userid:focus {outline:none;}
 
 					<div id="myInfoUpdate_Header">
 						<h2 id="myInfoUpdate_Title">개인 정보 수정</h2>
+						<div style="clear:both; "></div>	
 					</div>
 
 					<div class="member_update">
 						<form id="form" name="updateFrm">
-							<fieldset>					
 							
-							 <table>
+							<fieldset id="fs">					
+							
+							 <table class="tb">
 							 	<tr>
 							 		<td colspan="2">
-										<h2 id="myOrderHistoryDetail_Title">기본정보</h2>	
-										<div id="line" style="clear:both;"></div>				
+										<h2 id="update_Title">기본정보</h2>	
+										<p class="msg">*필수입력사항<p>
+										<div class="line" style="clear:both; "></div>				
 							 		</td>
 							 	</tr>
 							 
@@ -784,12 +765,12 @@ input#userid:focus {outline:none;}
 			                     </tr>
 							 </table>	
 							 
-							 <table>
+							 <table class="tb">
 							 
 							 	<tr>
 							 		<td colspan="2">
-										<h2 id="myOrderHistoryDetail_Title">추가정보</h2>	
-										<div id="line" style="clear:both;"></div>				
+										<h2 id="update_Title">추가정보</h2>	
+										<div class="line" style="clear:both;"></div>				
 							 		</td>
 							 	</tr>							 
 							 
@@ -825,11 +806,12 @@ input#userid:focus {outline:none;}
 							 
 							 </table>							
 							
-							 <table>							 	
+							 <table class="tb">							 	
 							 	<tr>
 							 		<td colspan="2">
-										<h2 id="myOrderHistoryDetail_Title">이용약관동의*</h2>	
-										<div id="line" style="clear:both;"></div>				
+										<h2 id="update_Title">이용약관동의*</h2>	
+										<p class="msg">선택항목에 동의하지 않은 경우도 회원가입 및 일반적인 서비스를 이용할 수 있습니다.<p>
+										<div class="line" style="clear:both;"></div>				
 							 		</td>
 							 	</tr>
 							 						 
@@ -883,6 +865,7 @@ input#userid:focus {outline:none;}
 						</form>
 					</div>
 				</div>
+				<div style="clear: both;"></div>
 			</div>
 
 		</div>
