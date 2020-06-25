@@ -1,6 +1,7 @@
 package main.model;
 
 import java.io.UnsupportedEncodingException;
+import java.security.GeneralSecurityException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -17,6 +18,7 @@ import javax.naming.NamingException;
 import javax.sql.DataSource;
 
 import member.model.EncryptMyKey;
+import member.model.MemberVO;
 import util.security.AES256;
 
 public class IndexDAO implements InterIndexDAO{
@@ -386,6 +388,151 @@ public class IndexDAO implements InterIndexDAO{
 		}
 		
 		return count;
+	}
+
+	// 상품문의 글 작성
+	@Override
+	public int productQwrite(Map<String, String> paraMap) throws SQLException {
+		int result = 0;
+		String seq_num="";
+		
+		try {
+			conn = ds.getConnection();
+			conn.setAutoCommit(false);
+			
+			// 시퀀스 값 얻기
+			String sql = " select last_number from user_sequences where SEQUENCE_NAME = 'SEQ_PRODUCT_INQUIRY' ";
+			pstmt = conn.prepareStatement(sql);
+			rs = pstmt.executeQuery();
+			if(rs.next()) {
+				seq_num = rs.getString(1);
+				System.out.println("시퀀스 현재값 : "+seq_num);
+			}
+			rs.close();
+			
+			// 상품문의 테이블 정보 insert
+			sql = " insert into product_inquiry_table (inquiry_num, subject, content, fk_member_num, fk_product_num, emailFlag, smsFlag, secretFlag) "
+			    + " values(seq_product_inquiry.nextval, ?, ?, ?, ?, ?, ?, ?) ";
+			
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, paraMap.get("subject"));
+			pstmt.setString(2, paraMap.get("content"));
+			pstmt.setString(3, paraMap.get("member_num"));
+			pstmt.setString(4, paraMap.get("product_num"));
+			pstmt.setString(5, paraMap.get("emailFlag"));
+			pstmt.setString(6, paraMap.get("smsFlag"));
+			pstmt.setString(7, paraMap.get("secretFlag"));
+			
+			result += pstmt.executeUpdate();
+			
+			if(result==0) {
+				conn.rollback();
+				return 0;
+			}
+			if(paraMap.get("fileName")!= null) {
+				String[] fileNameArr = paraMap.get("fileName").split(",");
+				sql = " insert into product_inquiry_image_table (fk_inquiry_num, image) "
+				    + " values (?,?)";
+				pstmt = conn.prepareStatement(sql);
+				for(int i=0; i<fileNameArr.length; i++) {
+					pstmt.setString(1, seq_num);
+					pstmt.setString(2, fileNameArr[i]);
+					result+=pstmt.executeUpdate();
+				}
+				if(result < (fileNameArr.length+1)) {
+					conn.rollback();
+					return 0;
+				}
+			}
+			
+			conn.commit();
+			
+			
+		}
+		finally {
+			close();
+		}
+		
+		
+		return result;
+	}
+
+	// 상품문의 삭제
+	@Override
+	public int inquiryDel(String inquiry_num) throws SQLException {
+		int result = 0;
+		try {
+			conn = ds.getConnection();
+			String sql = " delete from product_inquiry_table where inquiry_num = ? ";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1,inquiry_num);
+			result = pstmt.executeUpdate();
+		}
+		finally {
+			close();
+		}
+		
+		return result;
+	}
+
+	// 특정 상품문의 글 조회
+	@Override
+	public ProductInquiryVO inquiryOneSelect(String inquiry_num) throws SQLException {
+		ProductInquiryVO pivo = null;
+		List<String> imageList = new ArrayList<String>();
+		try {
+				conn = ds.getConnection();
+				String sql = " select PI.inquiry_num, PI.subject, PI.content, to_char(PI.write_date,'yyyy-mm-dd') as write_date,"
+						   + " PI.fk_member_num, PI.fk_product_num, PI.emailFlag, PI.smsFlag, PI.secretFlag,"
+						   + " M.name, M.userid, M.email, M.mobile "
+						   + " from product_inquiry_table PI join member_table M on PI.fk_member_num = M.member_num where PI.inquiry_num = ? ";
+				pstmt = conn.prepareStatement(sql);
+				pstmt.setString(1, inquiry_num);
+				rs = pstmt.executeQuery();
+				if(rs.next()) {
+					pivo = new ProductInquiryVO();
+					MemberVO mvo = new MemberVO();
+					pivo.setInquiry_num(rs.getInt(1));
+					pivo.setSubject(rs.getString(2));
+					pivo.setContent(rs.getString(3));
+					pivo.setWrite_date(rs.getString(4));
+					pivo.setFk_member_num(rs.getInt(5));
+					pivo.setFk_product_num(rs.getInt(6));
+					pivo.setEmailFlag(rs.getInt(7));
+					pivo.setSmsFlag(rs.getInt(8));
+					pivo.setSecretFlag(rs.getInt(9));
+					mvo.setName(rs.getString(10));
+					mvo.setUserid(rs.getString(11));
+					mvo.setEmail(aes.decrypt(rs.getString(12)));
+					mvo.setMobile(aes.decrypt(rs.getString(13)));
+					pivo.setMember(mvo);
+				}
+			rs.close();
+				
+			sql = " select image from product_inquiry_image_table where fk_inquiry_num = ? ";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, inquiry_num);
+			rs = pstmt.executeQuery();
+			
+			
+			while(rs.next()) {
+				String image = rs.getString(1);
+				System.out.println("imageList요소:"+image);
+				imageList.add(image);
+			}
+			
+			pivo.setImageList(imageList);
+				
+		}
+		catch(UnsupportedEncodingException | GeneralSecurityException e) {
+			e.printStackTrace();
+	         
+	    }
+		finally {
+			close();
+		}
+		
+		return pivo;
 	}
 	
 }

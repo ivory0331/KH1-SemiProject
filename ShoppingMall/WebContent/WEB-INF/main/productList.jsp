@@ -1,6 +1,13 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<% String ctxPath = request.getContextPath(); %>
+    
+<% 
+	String ctxPath = request.getContextPath(); 
+%>
+
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -14,27 +21,14 @@
 		display: inline-block;
 		margin: 30px;
 	}
-	.contents li {
-		border: solid 1px gray;
-		display: inline-block;
-		cursor: pointer;
-	}
-	.contents li:hover {
-		border: solid 3px purple;
-	}
-	.contents li>img {
-		width: 300px;
-		height: 400px;
-	}
 	.contents h3{
 		margin-left: 30px;
 	}
-	.contents h4 {
-		border-bottom: solid 2px purple;
-		width: 100px;
-		margin-left: 30px;
+	.sub {
+		font-size: 15pt;
+		padding: 0px 15px;
 		cursor: pointer;
-	}
+	} 
 	#smallT {
 		float: left;
 	}
@@ -43,6 +37,11 @@
 		margin-top: 80px;
 		float: right;
 	}
+	tr, td {
+		border: solid 0px red;
+		display: inline-block;
+		padding: 30px;
+	}
 </style>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -50,20 +49,24 @@
 <script type="text/javascript" src="/ShoppingMall/js/jquery-3.3.1.min.js"></script>
 <script type="text/javascript" src="/ShoppingMall/util/myutil.js"></script>
 <script type="text/javascript">
-	
+
 	$(document).ready(function(){
 		
-		$("li").click(function(){
-			
-			alert("상품을 선택하셨습니다");
+		$(".sub").hover(function(){
+			var selectcate = $(this).index();
+			console.log(selectcate); 
+			// 2 3 4
+			$(this).css('color','purple');
+		},function(){
+			$(".sub").css('color','black');
+		});
+		
+		$(".sub").click(function(){
+			$(".sub").css('border-bottom','solid 0px purple');
+			$(this).css('border-bottom','solid 2px purple');
 			
 		});
 		
-		$("h4").click(function(){
-			
-			alert("전체보기를 선택하셨습니다");
-			
-		});
 		
 	});
 	
@@ -75,8 +78,13 @@
 			<div class="contents">
 			
 				<div id="smallT">
-					<h3>상품 리스트</h3>
-					<h4>전체보기</h4>
+					<h3>${categoryInfo}</h3>
+					
+						<a href='/ShoppingMall/product/productList.do?fk_category_num=${fk_category_num}'><span class="sub">전체보기</span></a>
+					<c:forEach var="cate" items="${categoryList}" varStatus="status">
+						<a href='/ShoppingMall/product/productList.do?fk_category_num=${fk_category_num}&fk_subcategory_num=${cate.subcategory_num}'><span class="sub">${cate.subcategory_content}</span></a>
+						
+					</c:forEach>
 				</div>
 				<div id="list">
 					<select>
@@ -87,60 +95,48 @@
 					</select>
 				</div>
 				
-				<div class="productList" align="center">
-					<div>
-						<li class="product" id="product1">
-							<img alt="상품1" src="images/iscream.png"><br/>
-							루비 싱글 바<br/>
-							<span>3,600 원</span>
-						</li>
-						<li class="product" id="product2">
-							<img alt="상품2" src="images/salad.png"><br/>
-							병 샐러드<br/>
-							<span>6,200 원</span>
-						</li>	
-						<li class="product" id="product3">
-							<img alt="상품3" src="images/milk.png"><br/>
-							동물복지 우유<br/>
-							<span>2,650 원</span>
-						</li>
-					</div>
-					<div>
-						<li class="product" id="product4">
-							<img alt="상품1" src="images/iscream.png"><br/>
-							루비 싱글 바<br/>
-							<span>3,600 원</span>
-						</li>
-						<li class="product" id="product5">
-							<img alt="상품2" src="images/salad.png"><br/>
-							병 샐러드<br/>
-							<span>6,200 원</span>
-						</li>	
-						<li class="product" id="product6">
-							<img alt="상품3" src="images/milk.png"><br/>
-							동물복지 우유<br/>
-							<span>2,650 원</span>
-						</li>
-					</div>
-					<div>
-						<li class="product" id="product7">
-							<img alt="상품1" src="images/iscream.png"><br/>
-							루비 싱글 바<br/>
-							<span>3,600 원</span>
-						</li>
-						<li class="product" id="product8">
-							<img alt="상품2" src="images/salad.png"><br/>
-							병 샐러드<br/>
-							<span>6,200 원</span>
-						</li>	
-						<li class="product" id="product9">
-							<img alt="상품3" src="images/milk.png"><br/>
-							동물복지 우유<br/>
-							<span>2,650 원</span>
-						</li>
-					</div>
+		<div class="productList" align="center">
+		<table>
+	        <tbody id="pList">
+				<%-- 일단은 페이징처리를 안한 관리자를 제외한 모든 회원정보를 조회하도록 한다. --%>
+				<c:if test="${empty productList}">
+					<tr> 
+						<td colspan = "3">현재 상품 준비중...</td>
+					</tr>
+				</c:if>
+				
+				<c:if test="${not empty productList}">
+					<tr>
+						<c:forEach var="pvo" items="${productList}" varStatus="status">
+							<td>
+								<a href='/ShoppingMall/detail.do?product_num=${pvo.product_num}'>
+									<img width="300px;" height="400px;" src="/ShoppingMall/images/${pvo.product_name}.png" />
+								</a>
+								<br/>${pvo.product_name}
+								<c:if test="${pvo.sale != 0}">
+									<br/><span style="text-decoration: line-through;"><fmt:formatNumber value="${pvo.price}" pattern="###,###"/> 원</span>
+									&nbsp;=>&nbsp;<fmt:formatNumber value="${pvo.finalPrice}" pattern="###,###" /> 원
+								</c:if>
+								<c:if test="${pvo.sale == 0}">
+									<br/><fmt:formatNumber value="${pvo.price}" pattern="###,###"/> 원
+								</c:if>
+							</td> 
+						<c:if test="${(status.count)%3 == 0 }">
+							</tr>
+							<tr>
+						</c:if>
+						
+						</c:forEach>
+					</tr>
+				</c:if>
+			</tbody>
+		</table>
+		
+	    <div>
+	    	${pageBar}
+	    </div>	
+				</div>
 			</div>
-		</div>
 		
 		<jsp:include page="../include/footer.jsp"></jsp:include>
 		

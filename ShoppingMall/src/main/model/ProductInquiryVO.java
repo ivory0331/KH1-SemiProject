@@ -2,6 +2,8 @@ package main.model;
 
 import java.util.List;
 
+import member.model.MemberVO;
+
 public class ProductInquiryVO {
 	private int inquiry_num;
 	private String subject;
@@ -15,6 +17,7 @@ public class ProductInquiryVO {
 	private int secretFlag;
 	private String name;
 	private List<String> imageList;
+	private MemberVO member;
 	
 	
 	
@@ -23,7 +26,7 @@ public class ProductInquiryVO {
 	
 	
 	public ProductInquiryVO(int inquiry_num, String subject, String content, String write_date, String answer,
-			int fk_member_num, int fk_product_num, int emailFlag, int smsFlag, int secretFlag, String name, List<String> imageList) {
+			int fk_member_num, int fk_product_num, int emailFlag, int smsFlag, int secretFlag, String name, List<String> imageList, MemberVO member) {
 		
 		this.inquiry_num = inquiry_num;
 		this.subject = subject;
@@ -37,9 +40,20 @@ public class ProductInquiryVO {
 		this.secretFlag = secretFlag;
 		this.name = name;
 		this.imageList = imageList;
+		this.member = member;
 	}
 	
 	
+	
+	public MemberVO getMember() {
+		return member;
+	}
+	public void setMember(MemberVO member) {
+		this.member = member;
+	}
+
+
+
 	public int getInquiry_num() {
 		return inquiry_num;
 	}
