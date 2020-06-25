@@ -333,8 +333,8 @@ $(document).ready(function(){
 });
 	
 	function goBasket(){
-		location.href="<%= ctxPath%>/shoppingBasket.do";
-	}
+    	location.href="<%= ctxPath%>/product/basketList.do";
+ 	}
 	
 	
 	function goList(num){

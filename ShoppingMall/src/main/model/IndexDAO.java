@@ -351,13 +351,12 @@ public class IndexDAO implements InterIndexDAO{
 		
 		try {
 			conn = ds.getConnection();
-			String sql = " insert into basket_table(basket_num, product_count, fk_member_num, fk_product_num, price)"
-					   + " values(seq_basket_table.nextval, ?, ?, ?, ?) ";
+			String sql = " insert into basket_table(basket_num, product_count, fk_member_num, fk_product_num)"
+					   + " values(seq_basket_table.nextval, ?, ?, ?) ";
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, count);
 			pstmt.setString(2, member_num);
 			pstmt.setString(3, product_num);
-			pstmt.setString(4, price);
 			
 			result = pstmt.executeUpdate();
 			

@@ -29,6 +29,9 @@ public interface InterProductDAO {
 	// 로그인한 사용자의 장바구니에 담긴 주문총액합계
 	HashMap<String, String> selectSumCartPricePoint(int member_num) throws SQLException;
 
+	// 장바구니 테이블에서 특정제품을 장바구니에서 비우기  
+	int delCart(String cartno) throws SQLException;
+
 	
 	
 	

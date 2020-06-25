@@ -176,13 +176,13 @@ public class ProductDAO implements InterProductDAO {
 		try {
 			conn = ds.getConnection();
 			
-			sql = " select RNO, product_num, product_name, price, sale " + 
+			sql = " select RNO, product_num, product_name, price, sale, representative_img " + 
 				  " from " + 
 				  " ( " + 
-				  "    select rownum AS RNO, product_num, product_name, price, sale " + 
+				  "    select rownum AS RNO, product_num, product_name, price, sale, representative_img " + 
 				  "    from " + 
 				  "     ( " + 
-				  "        select  product_num, product_name, price , sale, fk_category_num " + 
+				  "        select  product_num, product_name, price , sale, representative_img, fk_category_num " + 
 				  "        from product_table "+ 
 				  "        where fk_category_num = ? "; 
 
@@ -222,6 +222,7 @@ public class ProductDAO implements InterProductDAO {
 					pvo.setProduct_name(rs.getString("product_name"));
 					pvo.setPrice(rs.getInt("price"));
 					pvo.setSale(rs.getInt("sale"));
+					pvo.setRepresentative_img(rs.getString("representative_img"));
 					
 					productList.add(pvo);
 				}
@@ -320,14 +321,15 @@ public class ProductDAO implements InterProductDAO {
 				prod.setProduct_name(product_name);
 				prod.setRepresentative_img(representative_img);
 				prod.setPrice(price);
-				prod.setPrice(sale);
-				prod.setTotalPrice(product_count);
+				prod.setSale(sale);
+				prod.setTotalPrice(price,sale,product_count);
 				
 				CartVO cvo = new CartVO();
 				cvo.setBasket_num(basket_num);
 				cvo.setMember_num(fk_member_num);
 				cvo.setProduct_num(fk_product_num);
 				cvo.setProduct_count(product_count);
+				cvo.setProd(prod);
 				
 				cartList.add(cvo);
 				
@@ -371,6 +373,30 @@ public class ProductDAO implements InterProductDAO {
 		}
 		
 		return sumMap;
+	}
+
+	
+	// 장바구니 테이블에서 특정제품을 장바구니에서 비우기  
+	@Override
+	public int delCart(String cartno) throws SQLException {
+		int n = 0;
+		
+		try {
+			conn = ds.getConnection();
+			
+			String sql = " delete from basket_table " + 
+						 " where basket_num = ? ";
+					   
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, cartno);
+			
+			n = pstmt.executeUpdate();
+			
+		} finally {
+			close();
+		}
+		
+		return n;
 	}
 	
 	
