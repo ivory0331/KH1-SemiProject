@@ -203,7 +203,7 @@
                </button>
             </form>
             
-            <button onclick="javascript:location.href='/member/register.do'" class="btn_type2 btn_member">
+            <button onclick="javascript:location.href='<%=request.getContextPath()%>/member/register.do'" class="btn_type2 btn_member">
                <span class="txt_type text_type_btn">회원가입</span>
             </button>
          </div>

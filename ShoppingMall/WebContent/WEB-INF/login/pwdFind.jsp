@@ -223,7 +223,7 @@ div.loginCheck {
 			<h3 class="tit_login">비밀번호 찾기</h3>
 			<div class="write_form">
 			 <c:if test="${userid == null}">
-				<form method="post" name="pwdSearchForm" id="form" method="post">
+				<form method="post" name="pwdSearchForm" id="form">
 					<span class="txt_type_form">이름</span>
 					<input type="text" name="name" size="20" tabindex="1" value=""required /><br/>
 					
@@ -239,8 +239,9 @@ div.loginCheck {
 				</form>
 				</c:if>
 				<%-- *** 비밀번호 찾기 확인 된 화면 *** --%>
-		   		 <c:if test="${userid != null}">
+		   		 <c:if test="${n == 1}">
 		        	<form method="post" name="loginForm" id="idSearchForm">
+		        		<input type="hidden" name="email" id="email" value="${email}" size="20" tabindex="3" required />
 						<img class="thumb" src="https://res.kurly.com/pc/service/member/1908/img_id_find_succsess_v2.png" alt="아이디찾기완료">
 						<div class="pwdCheck" >이메일로 인증 완료후 <br/> 비밀번호를 재발급 받으세요!</div>			
 						<h6 class="tit_login" style="font-size:9pt; color:gray">입력하신 ${email}으로 인증번호가 발송됩니다</h6>
@@ -250,6 +251,19 @@ div.loginCheck {
 				</form>
 		        
    			 </c:if>
+   			 <%-- <c:if test="${n != 1 && userid != null}">
+		        	<form method="post" name="loginForm" id="idSearchForm">
+		        		<input type="hidden" name="email" id="email" value="${email}" size="20" tabindex="3" required />
+						<img class="thumb" src="https://res.kurly.com/pc/service/member/1908/img_id_find_succsess_v2.png" alt="아이디찾기완료">
+						<div class="pwdCheck" >이메일로 인증 완료후 <br/> 비밀번호를 재발급 받으세요!</div>			
+						<h6 class="tit_login" style="font-size:9pt; color:gray">입력하신 ${email}으로 인증번호가 발송됩니다</h6>
+						<button type="button" id="btnSubmit"class="btn_type1 btn_member" onclick="javascript:goCheckMailCode();">
+						<span class="txt_type">인증번호 받기</span>
+					</button>
+				</form>
+				<h1>회원찾기 실패</h1>
+		        
+   			 </c:if> --%>
 				
 			</div>
 		</div>

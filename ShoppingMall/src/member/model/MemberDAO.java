@@ -2,6 +2,7 @@ package member.model;
 
 import java.io.UnsupportedEncodingException;
 import java.security.GeneralSecurityException;
+import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -96,10 +97,13 @@ public class MemberDAO implements InterMemberDAO {
          conn = ds.getConnection();
          String sql = " select email " + " from member_table " + " where email = ? ";
          pstmt = conn.prepareStatement(sql);
-         pstmt.setString(1, Sha256.encrypt(email));
+         pstmt.setString(1, aes.encrypt(email));
 
          rs = pstmt.executeQuery();
          isEmail = !rs.next(); // 행이 존재하면 F를 리턴
+
+      } catch (UnsupportedEncodingException | GeneralSecurityException e) {
+          e.printStackTrace();
 
       } finally {
          close();
@@ -147,6 +151,13 @@ public class MemberDAO implements InterMemberDAO {
    @Override
    public MemberVO selectOneMember(HashMap<String, String> paraMap) throws SQLException {
       MemberVO mvo = null;
+      
+      String userid = paraMap.get("userid");
+      String pwd = paraMap.get("pwd");
+      
+      if(userid == null || pwd == null) {
+    	  return null;
+      }
       
       try {
          conn = ds.getConnection();
@@ -236,6 +247,14 @@ public class MemberDAO implements InterMemberDAO {
          
       String userid = null; 
       
+      String name = paraMap.get("name");
+      String email = paraMap.get("email");
+      
+      if(name == null || email == null) {
+    	  return null;
+      }
+
+      
       try {
          conn = ds.getConnection();
          
@@ -271,6 +290,14 @@ public class MemberDAO implements InterMemberDAO {
  		
  		boolean isUserExist = false;
  		
+ 		String name = paraMap.get("name");
+ 		String userid = paraMap.get("userid");
+ 	    String email = paraMap.get("email");
+ 	      
+       if(name == null || userid == null || email == null) {
+    	  return false;
+       }
+
  		try {
  			conn = ds.getConnection();
  			

@@ -154,7 +154,12 @@ div.loginCheck {
 }
 
 </style>
-
+<script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script> 
+<script type="text/javascript" src="<%= ctxPath%>/js/jquery-3.3.1.min.js"></script>
+<script type="text/javascript" src="<%= ctxPath%>/util/myutil.js"></script>
 <script type="text/javascript">
 	
 	$(document).ready(function(){
@@ -163,11 +168,10 @@ div.loginCheck {
 			
 			var pwd = $("#pwd").val();
 			var pwd2 = $("#pwd2").val();
-			
-			 var regExp = new RegExp(/^.*(?=^.{8,15}$)(?=.*\d)(?=.*[a-zA-Z])(?=.*[^a-zA-Z0-9]).*$/g);  
+			var regExp = /^.*(?=^.{8,15}$)(?=.*\d)(?=.*[a-zA-Z])(?=.*[^a-zA-Z0-9]).*$/g;			
 			/* 암호는 숫자,영문자,특수문자가 포함된 형태의 8~15글자 이하만 허락해주는 정규표현식 객체 생성 */
 			
-			var bool = regexp_passwd.test(pwd);
+			var bool = regExp.test(pwd);
 			/* 암호 정규표현식 검사를 하는 것 
 			      정규표현식에 만족하면 리턴값은 true,
 			      정규표현식에 틀리면 리턴값은 false */
@@ -185,9 +189,9 @@ div.loginCheck {
 				return;
 			}
 			else {
-				var frm = document.pwdUpdateEndFrm;
-				frm.method = "POST";
-				frm.action = "<%= ctxPath%>/login/pwdUpdateEnd.up";
+				var frm = document.pwdSearchForm;
+				
+				frm.action = "<%= ctxPath%>/login/pwdUpdateEnd.do";
 				frm.submit();	
 			}
 		});		
@@ -202,19 +206,19 @@ div.loginCheck {
 			<h3 class="tit_login">비밀번호 찾기</h3>
 			<div class="write_form">			
 				<form method="post" name="pwdSearchForm" id="form" method="post">
-					<span class="txt_type_form">새 비밀번호 등록</span>
-					<input type="password" name="pwd" size="20" tabindex="1" value="" placeholder="새 비밀번호를 입력해주세요" required /><br/>
+				<span class="txt_type_form">새 비밀번호 등록</span>
+					<input type="password" name="pwd" id="pwd" size="20" tabindex="1" value="" placeholder="새 비밀번호를 입력해주세요" required /><br/>
 					
 					<div class="passwd_error">8~15자리 이내의 암호입력 <br/>영문/숫자/특수문자(공백 제외)만 허용</div>
 					
 					<span class="txt_type_form">새 비밀번호 확인 </span>
-					<input type="password" name="pwd2" size="20" tabindex="2" value="" placeholder="새 비밀번호를  한번 더 입력해주세요" required /><br/>
+					<input type="password" name="pwd2" id="pwd2" size="20" tabindex="2" value="" placeholder="새 비밀번호를  한번 더 입력해주세요" required /><br/>
 										
-					<button type="button" id="btn_login" class="btn_type1 btn_member" id="btnUpdate" onclick="<%= ctxPath%>/login/pwdUpdateEnd.up" >
+					<button type="button" class="btn_type1 btn_member" id="btnUpdate" >
 						<span class="txt_type" id="btnSubmit">확인 </span>
 					</button>
 					
-					<input type="hidden" name="userid" id="userid" value="${userid}" />
+					<input type="hidden" name="userid" id="userid" value="${sessionScope.userid}" />
 				</form>
 				
 			</div>

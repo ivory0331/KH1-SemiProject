@@ -1,8 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<% String ctxPath = request.getContextPath(); %>
 <%@ taglib prefix="c"   uri="http://java.sun.com/jsp/jstl/core" %> 
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<% String ctxPath = request.getContextPath(); %>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -155,11 +156,11 @@ div.loginCheck {
 	
 	$(document).ready(function() {
 
-		$("#btnSubmit").click(function() {
+		$("#btnConfirmCode").click(function() {
 				goCheck(); // 로그인 시도한다.
 		});
 
-		$("#btnSubmit").keydown(function(event) {
+		$("#btnConfirmCode").keydown(function(event) {
 			if (event.keyCode == 13) { // 암호입력란에 엔터를 했을 경우 
 				goCheck(); // 로그인 시도한다.
 			}
@@ -169,14 +170,14 @@ div.loginCheck {
 
 	function goCheck() {
 		
-		var frm = document.pwdSearchForm;
-
-		//리턴이 안되어야만 도달한다			
-		var frm = document.pwdSearchForm;
-		frm.action = "<%=ctxPath%>/login/pwdFindEmailCodeCheck.do";
+		var frm = document.verifyCertificationFrm;
+		//frm.userid.value = $("#userid").val();
+		frm.userCertificationCode.value = $("#input_confirmCode").val();
+		
+		frm.action = "<%= ctxPath%>/login/verifyCertification.do";
+		frm.method = "POST";
 		frm.submit();
 	}
-	
 	
 	   
 	
@@ -188,13 +189,18 @@ div.loginCheck {
 			<h3 class="tit_login">비밀번호 찾기</h3>
 			<div class="write_form">
 			
-				<form method="post" name="pwdSearchForm" id="form" method="post">
+				<form name="pwdSearchForm" id="form" method="post">
 					<span class="txt_type_form">이메일 주소 인증</span>
-					<input type="text" name="name" size="20" tabindex="1" value=""required /><br/>
+					<input type="text" name="input_confirmCode" id="input_confirmCode" size="20" tabindex="1" value=""required /><br/>
 										
-					<button type="submit" id="btnSubmit" class="btn_type1 btn_member" >
+					<button type="button" id="btnConfirmCode"class="btn_type1 btn_member" >
 						<span class="txt_type" >확인 </span>
 					</button>
+				</form>
+				
+				<form name="verifyCertificationFrm">
+					<input type="hidden" name="userid" />
+					<input type="hidden" name="userCertificationCode" />
 				</form>
 				
 			</div>

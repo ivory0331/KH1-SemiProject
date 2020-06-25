@@ -1,4 +1,4 @@
-show user;
+'09'show user;
 -- USER이(가) "SEMIORAUSER1"입니다.
 
 
