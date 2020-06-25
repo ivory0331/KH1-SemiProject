@@ -8,7 +8,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import common.controller.AbstractController;
-import manager.model.*;
+import product.model.*;
 
 
 // 진하
@@ -40,6 +40,8 @@ public class ManagerProductListAction extends AbstractController {
 	   	String fk_subcategory_num = request.getParameter("fk_subcategory_num");
 	   	String searchWord = request.getParameter("searchWord");
 	   	
+	   	
+	   	
 	   	if(fk_category_num ==null) {
 	   		fk_category_num = "0";
 	    }
@@ -56,6 +58,11 @@ public class ManagerProductListAction extends AbstractController {
 	    if(searchWord !=null && !searchWord.trim().isEmpty()) {
 		    paraMap.put("searchWord", searchWord);
 	    }
+	    
+	    System.out.println(fk_category_num);
+	   	System.out.println(fk_subcategory_num);
+	   	System.out.println(searchWord);
+
 	    
 	    List<ProductVO> productList = productDAO.selectPagingProduct(paraMap);
 		
