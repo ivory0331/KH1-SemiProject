@@ -18,7 +18,7 @@ public interface InterIndexDAO {
 	List<ReviewVO> reviewCall(String product_num) throws SQLException;
 
 	// 특정 상품의 상품문의 조회
-	List<ProductInquiryVO> productQCall(String product_num) throws SQLException;
+	List<ProductInquiryVO> productQCall(Map<String, Integer> paraMap) throws SQLException;
 
 	// 상품의 대분류, 소분류 카테고리 정보 조회
 	List<Map<String, String>> categoryCall() throws SQLException;
@@ -40,4 +40,19 @@ public interface InterIndexDAO {
 
 	// 특정 상품문의 글 조회
 	ProductInquiryVO inquiryOneSelect(String inquiry_num)throws SQLException;
+
+	// answer컬럼이 있는 테이블에서 answer컬럼이 null이 아닌 행의 갯수를 조회
+	int answerCall(Map<String, Integer> paraMap)throws SQLException;
+
+	// answer컬럼이 있는 테이블의 총 행의 갯수(질문 글 + 답변 글)
+	int totalPage(Map<String, Integer> paraMap)throws SQLException;
+
+	// 해당 상품이 로그인 한 회원의 후기작성이 가능한 상품인지 조회
+	OrderProductVO productReviewFind(Map<String, String> paraMap)throws SQLException;
+
+	
+
+	
+
+	
 }

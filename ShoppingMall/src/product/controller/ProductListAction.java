@@ -16,7 +16,7 @@ public class ProductListAction extends AbstractController {
 	
 		InterProductDAO productdao = new ProductDAO();
 		
-	//	String fk_category_num = request.getParameter("fk_category_num");
+		String fk_category_num = request.getParameter("fk_category_num");
 		String fk_subcategory_num = request.getParameter("fk_subcategory_num");
 		
 		
@@ -24,7 +24,7 @@ public class ProductListAction extends AbstractController {
 		if(currentShowPageNo == null)
 			currentShowPageNo = "1";
 		
-		String fk_category_num = "4";
+	//	String fk_category_num = "4";
 	//	String fk_subcategory_num = "41";
 		
 		HashMap<String,String> paraMap = new HashMap<>();

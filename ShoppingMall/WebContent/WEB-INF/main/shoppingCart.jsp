@@ -54,7 +54,6 @@ img.imgsmall {
 }
 </style>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-<link rel="stylesheet" href="css/style.css" />
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 <script type="text/javascript" src="/ShoppingMall/js/jquery-3.3.1.min.js"></script>
@@ -158,11 +157,11 @@ img.imgsmall {
 		
 		for(var i=0; i<arrFood.length; i++) {
 			
-			var bChecked = document.getElementById('food'+[i]+'').checked;
+			/*  var bChecked = document.getElementById('food'+[i]+'').checked;
 			
 			if(bChecked) {
 				totalSum += Number( arrCost[i].innerText );
-			}
+			}  */
 			
 		}
 		
@@ -175,11 +174,11 @@ img.imgsmall {
 		var totalSum = 0;
 		
 		for(var i=0; i<arrFood.length; i++) {
-			var bChecked = document.getElementById('food'+[i]+'').checked;
+			/* var bChecked = document.getElementById('food'+[i]+'').checked; */
 			
-			if(bChecked) {
+			/* if(bChecked) {
 				totalSum += Number( arrCost[i].innerText );
-			}
+			} */
 			
 		}
 		if(totalSum != 0) {
@@ -269,7 +268,7 @@ img.imgsmall {
 							</td>
 							<td align="center"> <%-- 제품이미지 --%>
 								<a href='/ShoppingMall/detail.do?product_num=${cartvo.product_num}'>
-									<img src="/ShoppingMall/images/${cartvo.representative_img}" width="130px" height="100px" />
+									<img src="<%=ctxPath%>/images/${cartvo.prod.product_name}" width="130px" height="100px" />
 								</a>
 							</td>
 							<td align="center"> <%-- 제품정보 --%>
