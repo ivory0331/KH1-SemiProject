@@ -9,6 +9,7 @@ import javax.servlet.http.HttpSession;
 
 import common.controller.AbstractController;
 import member.model.MemberVO;
+import my.util.MyUtil;
 import product.model.*;
 
 public class BasketListAction extends AbstractController {
@@ -42,6 +43,8 @@ public class BasketListAction extends AbstractController {
 			
 			request.setAttribute("cartList", cartList);
 			request.setAttribute("sumMap", sumMap);
+			
+			request.setAttribute("goBackURL", MyUtil.getCurrentURL(request));
 			
 		//	super.setRedirect(false);
 			super.setViewPage("/WEB-INF/main/shoppingCart.jsp");
