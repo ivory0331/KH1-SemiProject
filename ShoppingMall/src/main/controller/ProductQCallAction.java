@@ -1,24 +1,15 @@
 package main.controller;
 
-<<<<<<< HEAD
-import java.util.List;
-=======
+
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
->>>>>>> 7071bca5fc7ada42f6267a1c97b9b4b2490bd4e7
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-<<<<<<< HEAD
-=======
 import org.json.JSONArray;
 import org.json.JSONObject;
-
->>>>>>> 7071bca5fc7ada42f6267a1c97b9b4b2490bd4e7
 import com.google.gson.Gson;
-
 import common.controller.AbstractController;
 import main.model.IndexDAO;
 import main.model.InterIndexDAO;
@@ -30,15 +21,7 @@ public class ProductQCallAction extends AbstractController {
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		String product_num = request.getParameter("product_num");
-<<<<<<< HEAD
-		System.out.println("확인용=>product_num : "+product_num);
-		InterIndexDAO dao = new IndexDAO();
-		List<ProductInquiryVO> productQList = dao.productQCall(product_num);
-		
-		Gson gson = new Gson();
-		String json = gson.toJson(productQList);
-		
-=======
+
 		
 		//페이징 처리
 		int currentPage = Integer.parseInt(request.getParameter("currentPage"));
@@ -124,7 +107,6 @@ public class ProductQCallAction extends AbstractController {
 		
 		String json = jobj.toString(); 
 		System.out.println(json);
->>>>>>> 7071bca5fc7ada42f6267a1c97b9b4b2490bd4e7
 		request.setAttribute("json", json);
 		super.setViewPage("/WEB-INF/jsonview.jsp");
 		

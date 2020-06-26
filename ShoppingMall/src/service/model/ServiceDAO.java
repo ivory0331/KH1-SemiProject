@@ -1,9 +1,5 @@
 package service.model;
 
-<<<<<<< HEAD
-public class ServiceDAO implements InterServiceDAO {
-
-=======
 import java.io.UnsupportedEncodingException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -221,5 +217,5 @@ public class ServiceDAO implements InterServiceDAO {
 		return totalPage;
 	}
 
->>>>>>> 7071bca5fc7ada42f6267a1c97b9b4b2490bd4e7
+
 }

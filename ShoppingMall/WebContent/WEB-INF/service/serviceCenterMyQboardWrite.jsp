@@ -20,7 +20,7 @@
 	width: 780px;
 	margin-left: 90px;
 	text-align: left;
-	border: solid 1px red;
+	/* border: solid 1px red; */
 }
 
 .board-title {
@@ -125,55 +125,27 @@ input[type=text]{
 <script type="text/javascript" src="/ShoppingMall/util/myutil.js"></script>
 <script type="text/javascript">
 	
-	var bSubjectCheck = false; //아이디 유효성 체크 
-	var bContentsCheck = false; //비밀번호 유효성  체크 
 	
 	
 	$(document).ready(function(){
-            
-	   $(".txt_guide").hide();     
-	   $(".txt_guide_address").show();
-	    //== 아이디 유효성검사 ==   
-	   $("input#userid").focus(function(){
-	      $(".txt_guide:eq(0)").show();
-	   });
-	       
-	    
-	    $("input#userid").keyup(function(event){
-	      //== 정규표현식 객체 만들기 ==
-	      // 5자 이상 10글자 이하의 영문과 숫자를 조합
-	      var regExp = /^[A-Za-z0-9]{5,10}$/;
-	      
-	      // 생성된 정규표현식 객체속에 데이터를 넣어서 검사하기
-	      var bool = regExp.test($(this).val()); 
-	      
-	      if(!bool){                  
-	         $(".userid_error:eq(0)").addClass('wrong');
-	         $(".userid_error:eq(0)").removeClass('correct');
-	         bIdValidateCheck = false;
-	      }
-	      else{ //아이디를 올바르게 입력했으면, 에러문자 지워지고 다음 탭 쓸수있게 한다
-	         $(".userid_error:eq(0)").addClass('correct');
-	         $(".userid_error:eq(0)").removeClass('wrong');
-	         bIdValidateCheck = true;
-	      }
-	   });//end of $("input#userid").keyup(function(){});-----------------
-	});
-        
+				
+		
+		
+	   
+	});//end of $(document).ready(function(){})------------------------
+        	
 	
 	
-	
-	
-	//== submit 가입하기 클릭시  ==
+	//== 저장 클릭시 필수값 입력 검사후 제출  ==
 	function goRegister() {
 	
 		//제목 입력 
-		if (!bSubjectCheck) {
+		if($("#subject").val().trim()==""){
 			alert("제목을 입력해주세요");
 			return;
 		}
 		
-		if (!bContentsCheck) {
+		if($("#text_content").val().trim()==""){
 			alert("내용을 입력해주세요");
 			return;
 		}
@@ -237,7 +209,7 @@ input[type=text]{
 									</tr>
 									<tr>
 										<th class="input_txt">이메일</th>
-										<td><input type="text" name="email" value="${sessionScope.loginuser.email}" size="26" readonly="readonly" class="read_only" style = "text-align:left; color:gray;"> 
+										<td><input type="text" name="email" value="${sessionScope.loginuser.email}" size="26" readonly="readonly" class="read_only" style = "padding-left:5px; color:#949296;"> 
 										<span class="noline smalle" style="padding-left: 10px">
 										<input type="checkbox" name="mailling" value="1"><span style="font-size: 8pt; padding-left: 5px">답변수신을 이메일로 받겠습니다.</span></span></td>
 										
@@ -245,7 +217,7 @@ input[type=text]{
 									
 									<tr>
 										<th class="input_txt">문자메시지</th>
-										<td><input type="text" name="mobile" value="${sessionScope.loginuser.mobile}" readonly="readonly" class="read_only">
+										<td><input type="text" name="mobile" value="${sessionScope.loginuser.mobile}" readonly="readonly" class="read_only" style = "padding-left:5px; color:#949296;">
 										<span class="noline smalle" style="padding-left: 10px">
 										<input type="checkbox" name="sms" value="2"><span style="font-size: 8pt; padding-left: 5px">답변수신을 문자메시지로 받겠습니다.</span></span></td>
 									</tr>
@@ -282,13 +254,13 @@ input[type=text]{
 													</dd>
 												</dl>
 											</div>
-										<textarea name="contents" style="width: 100%; height: 474px;" class="editing_area" required > </textarea>
+										<textarea name="content" id="text_content" style="width: 100%; height: 474px; border:solid 1px #ccc" class="editing_area" required > </textarea>
 									</td>
 								</tr>
 								
 								<tbody>
 								<tr> 
-								<td colspan="2" style= "border:none" id="submit" align="right"; >
+								<td colspan="2" style= "border:none" id="submit" align="right" >
 									<input type="submit" class="bhs_button" value="저장" onclick="goRegister();">
 								</td>
 								</tr>

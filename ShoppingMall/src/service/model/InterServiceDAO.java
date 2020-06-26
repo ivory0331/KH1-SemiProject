@@ -1,9 +1,6 @@
 package service.model;
 
-<<<<<<< HEAD
-public interface InterServiceDAO {
 
-=======
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
@@ -18,5 +15,5 @@ public interface InterServiceDAO {
 	// 공지사항 총 게시글 수 조회
 	int getTotalPage(HashMap<String, String> paraMap) throws SQLException;
 
->>>>>>> 7071bca5fc7ada42f6267a1c97b9b4b2490bd4e7
+
 }
