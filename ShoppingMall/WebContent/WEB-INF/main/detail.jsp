@@ -227,7 +227,10 @@
 <script type="text/javascript">
 	var money = "${product.price}";
 	var offSet = new Array();
-	
+	var productQ_currentPage = 1;
+	var productQ_totalPage = 1;
+	var reivew_currentPage = 1;
+	var rivew_totalPage = 1;
 	
 	$(document).ready(function(){
 		
@@ -248,11 +251,13 @@
 				   $(item).addClass("panel-none");	
 				}
 			});
+			
 			$target.toggleClass("panel-none");
+			offSet[2] = $(".detailTablePart")[2].offsetTop;
 		});
 		
 		func_reviewCall();
-		func_productQCall();
+		func_productQCall(productQ_currentPage);
 	});
 	
 	function cntPlus(){
@@ -290,9 +295,8 @@
 		var top = offSet[num]-Number("90");
 		console.log("top:"+top);
 		$('html, body').animate({scrollTop : top}, 0);
-		
-		
 	}
+	
 	
 	function inBasket(){
 		
@@ -374,28 +378,36 @@
 	}
 	
 	
-	function func_productQCall(){
+	function func_productQCall(currentPage){
 		var url = "/productQCall.do";
-		var data = {"product_num":"${product.product_num}"};
+		var data = {"product_num":"${product.product_num}",
+				   	"pagePerNum":"5",
+				   	"currentPage":currentPage,
+				   	"totalPage":productQ_totalPage
+		           };
 		reqServer(url, data);
 	}
 	
 	function printProductInquiry(json){
-		if(json.length > 0){
+		if(json[Object.keys(json)[0]].length > 0){
 			var html="";
-			 for(var i=0; i<json.length; i++){
+			 for(var i=0; i<json[Object.keys(json)[0]].length; i++){
 				html += "<tr class='accordion'>"
-				         + "<td>"+json[i].inquiry_num+"</td>"
-				         + "<td class='content-title'>"+json[i].subject+"</td>"
-				         + "<td>"+json[i].name+"</td>"
-				         + "<td>"+json[i].write_date+"</td>"
+				         + "<td>"+json[Object.keys(json)[0]][i].inquiry_num+"</td>"
+				         + "<td class='content-title'>"+json[Object.keys(json)[0]][i].subject+"</td>"
+				         + "<td>"+json[Object.keys(json)[0]][i].name+"</td>"
+				         + "<td>"+json[Object.keys(json)[0]][i].write_date+"</td>"
 				         + "</tr>"
 				         + "<tr class='panel panel-none'>"
-				         + "<td colspan='5' class='review_content'>"+json[i].content;
-				
-				if(json[i].name == "${sessionScope.loginuser.name}"){
+				         + "<td colspan='5' class='review_content'>"+json[Object.keys(json)[0]][i].content;
+						 if(json[Object.keys(json)[0]][i].imageList.length>0){
+							 for(var j=0; j<json[Object.keys(json)[0]][i].imageList.length; j++){
+								 html+="<div><img src='<%=ctxPath%>/Upload/"+json[Object.keys(json)[0]][i].imageList[j]+"' / style='margin-bottom:10px;'></div>";
+							 }
+						 }
+					if(json[Object.keys(json)[0]][i].name == "${sessionScope.loginuser.name}"){
 					html+=" <div class='userBtn' align='right'>"
-					     +" <span onclick='goInquiryUpdate("+json[i].inquiry_num+","+json[i].fk_member_num+")'>수정</span><span onclick ='goInquiryDelete("+json[i].inquiry_num+")'>삭제</span> "
+					     +" <span onclick='goInquiryUpdate("+json[Object.keys(json)[0]][i].inquiry_num+","+json[Object.keys(json)[0]][i].fk_member_num+")'>수정</span><span onclick ='goInquiryDelete("+json[Object.keys(json)[0]][i].inquiry_num+")'>삭제</span> "
 					     +" </div> ";
 				}
 				else{
@@ -406,8 +418,20 @@
 				
 				html += "</td>"
 			         + "</tr>";
+			    if(json[Object.keys(json)[0]][i].answer != null){
+			    	html += "<tr class='accordion'>"
+			    	      + "<td>Re</td>"
+			    	      + "<td class='content-title'>안녕하세요, 마켓컬리입니다.</td>"
+			    	      + "<td>MarketKurly</td>"
+			    	      + "<td>"+json[Object.keys(json)[0]][i].write_date+"</td>"
+			    	      + "</tr>"
+					      + "<tr class='panel panel-none'>"
+					      + "<td colspan='5' class='review_content' >"+json[Object.keys(json)[0]][i].answer+"</td>"
+					      + "</tr>";
+			    }
 			}
 			$("#question tbody").html(html); 
+			$("#inqueruyPageBar").html(json[Object.keys(json)[1]]);
 		}
 		else{
 			var html = "<td colspan='5'><div class='' align='center'><h3>작성된 상품문의가 없습니다.</h3></div></td>";
@@ -436,6 +460,7 @@
 			type:"POST",
 			dataType:"JSON",
 			success:function(json){
+				console.log("ajax확인");
 				console.log(json);
 				if(url=="/reviewCall.do"){
 					printReview(json);
@@ -457,6 +482,10 @@
  
 	function goWriteQ(num){
 		location.href="<%=ctxPath %>/productQwrite.do?product_num="+num;
+	}
+	
+	function goReview(num){
+		location.href="<%=ctxPath %>/member/myPageReviewWrite.do?product_num="+num;
 	}
 
 </script>
@@ -578,7 +607,7 @@
 							</tbody>
 						</table>
 						<p align="right">
-							<span class="writeBtn">후기 쓰기</span>
+							<span class="writeBtn" onclick="goReview('${product.product_num}')">후기 쓰기</span>
 						</p>
 					</div>
 				
@@ -641,6 +670,7 @@
 								</tr>
 							</tbody>
 						</table>
+						<div id="inqueruyPageBar"></div>
 						<p align="right">
 							<span class="writeBtn" onclick="location.href='<%=ctxPath %>/productList.do'">목록 보기</span><span class="writeBtn" onclick="goWriteQ('${product.product_num}')">문의 쓰기</span>
 						</p>

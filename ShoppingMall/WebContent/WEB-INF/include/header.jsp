@@ -326,7 +326,6 @@ $(document).ready(function(){
 	
 	
 	if(${sessionScope.loginuser!=null}){
-		console.log("장바구니 물건 카운트 시작");
 		func_basketCnt();
 	}
 	
@@ -336,17 +335,6 @@ $(document).ready(function(){
     	location.href="<%= ctxPath%>/product/basketList.do";
  	}
 	
-	
-	function goList(num){
-		var category=0;
-		if(num>10){
-			category = parseInt(num/10);
-		}
-		else {
-			category = num;
-		}
-		alert(num);
-	}
 	
 	
 	function che(){
@@ -415,8 +403,20 @@ $(document).ready(function(){
 		});
 	}
 
-	function goList(){
-		location.href="<%= ctxPath%>/productList.do";
+	function goList(num){
+		var category = 0;
+		var subcategory = 0;
+		if(num>10){
+			category = parseInt(Number(num)/10);
+			subcategory = Number(num);
+			location.href="<%= ctxPath%>/product/productList.do?fk_category_num="+category+"&fk_subcategory_num="+subcategory;
+			
+		}
+		else{
+			category = Number(num);
+			location.href="<%= ctxPath%>/product/productList.do?fk_category_num="+category;
+		}
+		
 	}
 
 </script>
@@ -441,8 +441,9 @@ $(document).ready(function(){
 							<li class="list"><a href="javascript:logout()"><span class="listType">로그아웃</span></a></li>
 						</c:if>
 						<c:if test="${sessionScope.loginuser.status=='1'}">
-							<li class="list"><a href="javascript:location.href='<%=ctxPath%>/service/board.do'"><span class="listType">주문내역</span></a></li>
-							<li class="list"><a href="javascript:location.href='<%=ctxPath%>/service/FAQ.do'"><span class="listType">상품 후기</span></a></li>
+							<li class="list"><a href="javascript:location.href='<%=ctxPath%>/member/myPageOrderHistory.do?member_num=${sessionScope.loginuser.member_num}'"><span class="listType">주문내역</span></a></li>
+							<li class="list"><a href="javascript:location.href='<%=ctxPath%>/member/myPageProductPossibleReview.do'"><span class="listType">상품 후기</span></a></li>
+							<li class="list"><a href="javascript:location.href='<%=ctxPath%>/member/myPageMyInfoUpdatePW.do'"><span class="listType">개인정보 수정</span></a></li>
 							<li class="list"><a href="javascript:logout()"><span class="listType">로그아웃</span></a></li>
 						</c:if>
 					</ul>
@@ -478,9 +479,9 @@ $(document).ready(function(){
 						<li class="list categoryValue" ><span class="listType">음료 우유 간식</span></li>
 					</ul>
 					<ul class="navi-categori2">
-						<li class="list categoryValue" onclick="goList()"><span class="listType"></span></li>
-						<li class="list categoryValue" onclick="goList()"><span class="listType"></span></li>
-						<li class="list categoryValue" onclick="goList()"><span class="listType"></span></li>
+						<li class="list categoryValue" ><span class="listType"></span></li>
+						<li class="list categoryValue" ><span class="listType"></span></li>
+						<li class="list categoryValue" ><span class="listType"></span></li>
 					</ul> 
 				</div>
 			</li>
