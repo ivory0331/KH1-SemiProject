@@ -16,8 +16,6 @@ public interface InterProductDAO {
 	String categoryInfo(String fk_category_num) throws SQLException;
 
 	// 소분류 불러오기
-	List<ProductVO> categoryList(String fk_category_num) throws SQLException;	
-
 	List<ProductVO> subcategoryList(String fk_category_num) throws SQLException;
 
 	// 페이징 처리를 한 제품목록 불러오기

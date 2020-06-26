@@ -7,9 +7,12 @@ import javax.naming.*;
 import javax.sql.DataSource;
 
 
+
 public class ProductDAO implements InterProductDAO {
 
-	private DataSource ds; 	
+	private DataSource ds; 
+	// DataSource ds 는 아파치톰캣이 제공하는 DBCP(DB Connection Pool)이다. 
+	
 	private Connection conn;
 	private PreparedStatement pstmt;
 	private ResultSet rs;
@@ -19,7 +22,7 @@ public class ProductDAO implements InterProductDAO {
 	// 생성자 
 	public ProductDAO() {
 		// 암호화/복호화 키 (양방향암호화) ==> 이메일,휴대폰의 암호화/복호화
-		//	String key = EncryptMyKey.KEY;
+	//	String key = EncryptMyKey.KEY;
 		
 		try {
 		    Context initContext = new InitialContext();
@@ -104,10 +107,6 @@ public class ProductDAO implements InterProductDAO {
 	
 	// 대분류와 소분류 불러오기
 	@Override
-	public List<ProductVO> categoryList(String fk_category_num) throws SQLException {
-		
-		List<ProductVO> categoryList = new ArrayList<>();
-		
 	public List<ProductVO> subcategoryList(String fk_category_num) throws SQLException {
 		List<ProductVO> subcategoryList = new ArrayList<>();
 
@@ -139,8 +138,6 @@ public class ProductDAO implements InterProductDAO {
 		return subcategoryList;
 	}
 
-	
-	
 	// 소분류 불러오기
 	@Override
 	public String categoryInfo(String fk_category_num) throws SQLException {
@@ -170,8 +167,6 @@ public class ProductDAO implements InterProductDAO {
 		return categoryInfo;
 	}
 
-	
-		
 	// 페이징 처리를 한 제품목록 불러오기
 	@Override
 	public List<ProductVO> selectPagingProduct(HashMap<String, String> paraMap) throws SQLException {
@@ -180,7 +175,7 @@ public class ProductDAO implements InterProductDAO {
 		
 		try {
 			conn = ds.getConnection();
-				
+			
 			sql = " select RNO, product_num, product_name, price, sale, representative_img " + 
 				  " from " + 
 				  " ( " + 
@@ -239,18 +234,12 @@ public class ProductDAO implements InterProductDAO {
 			close();
 		}
 		
-		
-		return null;
+		return productList;
 	}
-	
-	
-	
 
 	// 페이징 처리를 위한 제품목록 페이지갯수 알아오기
 	@Override
 	public int getTotalpage(HashMap<String, String> paraMap) throws SQLException {
-		List<ProductVO> productList = new ArrayList<>();
-
 		int totalpage = 0;
 		String sql = "";
 		
@@ -277,20 +266,6 @@ public class ProductDAO implements InterProductDAO {
 			
 			rs = pstmt.executeQuery();
 			
-			while(rs.next()) {
-				ProductVO pvo = new ProductVO();
-				pvo.setProduct_num(rs.getInt("PRODUCT_NUM"));
-				pvo.setCategory_content(rs.getString("CATEGORY_CONTENT"));
-				pvo.setSubcategory_content(rs.getString("SUBCATEGORY_CONTENT"));
-				pvo.setProduct_name(rs.getString("PRODUCT_NAME"));
-				pvo.setPrice(rs.getInt("PRICE"));
-				pvo.setStock(rs.getInt("STOCK"));	
-				
-				productList.add(pvo);
-			}		
-			
-		} catch(Exception e){
-			e.printStackTrace();
 			rs.next();
 			
 			totalpage = rs.getInt("totalPage");
@@ -301,8 +276,7 @@ public class ProductDAO implements InterProductDAO {
 		
 		return totalpage;
 	}
-	
-	
+
 	
 	// 로그인한 사용자의 장바구니 목록을 조회하기
 	@Override
@@ -367,9 +341,9 @@ public class ProductDAO implements InterProductDAO {
 		}
 		
 		
+		
 		return cartList;
 	}
-
 
 	
 	// 로그인한 사용자의 장바구니에 담긴 주문총액합계
@@ -380,7 +354,6 @@ public class ProductDAO implements InterProductDAO {
 		
 		try {
 			conn = ds.getConnection();
-			
 			
 			String sql = " select nvl(sum(A.product_count *  (B.price - B.price * (B.sale/100) ) ), 0 ) AS SUMTOTALPRICE " + 
 						 " from basket_table A join product_table B " + 
@@ -399,12 +372,8 @@ public class ProductDAO implements InterProductDAO {
 			close();
 		}
 		
-		return sumMap;	
-	
+		return sumMap;
 	}
-
-	
-	
 
 	
 	// 장바구니 테이블에서 특정제품을 장바구니에서 비우기  
