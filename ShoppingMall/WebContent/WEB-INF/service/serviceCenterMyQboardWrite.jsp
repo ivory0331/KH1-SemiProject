@@ -104,7 +104,7 @@ input[type=text]{
 	border : solid 1px #ccc;
 	height : 30px;
 }
-
+  
 .bhs_button{
 	float : right;
 	width : 150px;
