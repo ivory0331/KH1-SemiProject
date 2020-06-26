@@ -81,7 +81,7 @@
 					<h3>${categoryInfo}</h3>
 					
 						<a href='/ShoppingMall/product/productList.do?fk_category_num=${fk_category_num}'><span class="sub">전체보기</span></a>
-					<c:forEach var="cate" items="${categoryList}" varStatus="status">
+					<c:forEach var="cate" items="${subcategoryList}" varStatus="status">
 						<a href='/ShoppingMall/product/productList.do?fk_category_num=${fk_category_num}&fk_subcategory_num=${cate.subcategory_num}'><span class="sub">${cate.subcategory_content}</span></a>
 						
 					</c:forEach>
