@@ -13,7 +13,7 @@
 <head>
 <meta charset="UTF-8">
 <link rel="stylesheet" href="<%= ctxPath %>/css/style.css" />
-<title>상품리스트</title>
+<title>신상품 리스트</title>
 </head>
 <style>
 	div#smallT, .productList {
@@ -29,13 +29,8 @@
 		padding: 0px 15px;
 		cursor: pointer;
 	} 
-	#smallT {
-		border: solid 1px green;
-		clear: both;
-		float: left;
-	}
 	#list {
-		border: solid 1px blue;
+		border: solid 0px red;
 		margin-top: 80px;
 		float: right;
 	}
@@ -44,16 +39,6 @@
 		display: inline-block;
 		padding: 30px;
 	}
-	#h3{
-		border: solid 1px red;
-		width: 200px;
-		margin-top: 100px;
-		font-size: 20pt;
-		float: left;
-	}
-	a:link { text-decoration: none;}
- 	a:visited { text-decoration: none;}
-
 </style>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -64,22 +49,6 @@
 
 	$(document).ready(function(){
 		
-		$(".sub").hover(function(){
-			var selectcate = $(this).index();
-			console.log(selectcate); 
-			// 2 3 4
-			$(this).css('color','purple');
-		},function(){
-			$(".sub").css('color','black');
-		});
-		
-		$(".sub").click(function(){
-			$(".sub").css('border-bottom','solid 0px purple');
-			$(this).css('border-bottom','solid 2px purple');
-			
-		});
-		
-		
 	});
 	
 </script>
@@ -87,38 +56,20 @@
 	<div class="Mycontainer">
 		<jsp:include page="../include/header.jsp"></jsp:include>
 		<div class="section" align="center">
-			<div class="contents">
-				
-				<div id="h3">${categoryInfo}</div>
-				
-				<div id="smallT">
-						<a href='/ShoppingMall/product/productList.do?fk_category_num=${fk_category_num}'><span class="sub">전체보기</span></a>
-					<c:forEach var="cate" items="${subcategoryList}" varStatus="status">
-						<a href='/ShoppingMall/product/productList.do?fk_category_num=${fk_category_num}&fk_subcategory_num=${cate.subcategory_num}'><span class="sub">${cate.subcategory_content}</span></a>
-						
-					</c:forEach>
-				</div>
-				<div id="list">
-					<select>
-						<option value="registerdate" >신상품순</option>
-						<option value="price" >낮은 가격순</option>   
-						<option value="priceasc" >높은 가격순</option>
-					</select>
-				</div>
-				
+			
 		<div class="productList" align="center">
 		<table>
-	        <tbody id="pList">
+	        <tbody id="pList" align="center">
 				<%-- 일단은 페이징처리를 안한 관리자를 제외한 모든 회원정보를 조회하도록 한다. --%>
-				<c:if test="${empty productList}">
+				<c:if test="${empty newprodList}">
 					<tr> 
 						<td colspan = "3">현재 상품 준비중...</td>
 					</tr>
 				</c:if>
 				
-				<c:if test="${not empty productList}">
+				<c:if test="${not empty newprodList}">
 					<tr>
-						<c:forEach var="pvo" items="${productList}" varStatus="status">
+						<c:forEach var="pvo" items="${newprodList}" varStatus="status">
 							<td>
 								<a href='/ShoppingMall/detail.do?product_num=${pvo.product_num}'>
 									<img width="300px;" height="400px;" src="/ShoppingMall/images/${pvo.representative_img}" />

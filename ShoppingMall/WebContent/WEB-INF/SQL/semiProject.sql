@@ -843,12 +843,12 @@ select member_num, name, userid, address
 from member_table 
 order by member_num desc;
 
-<<<<<<< HEAD
+
 select * from member_table where email='28b68acc3cb16bb4484f15c844477637c2f615e6e0b874cb1bbc87490160a50f';
 select email from member_table;
 
 commit;
-=======
+
 
 select nvl(sum(oqty * saleprice), 0) AS SUMTOTALPRICE
      , nvl(sum(oqty * point), 0) AS SUMTOTALPOINT
@@ -873,4 +873,3 @@ join product_subcategory_table PS on P.fk_subcategory_num = PS.subcategory_num
 where OP.reviewFlag = 0 and O.fk_category_num = 1;
 
 
->>>>>>> 851d41d27c4f1da850c5d71dac4a23734a964bb5
