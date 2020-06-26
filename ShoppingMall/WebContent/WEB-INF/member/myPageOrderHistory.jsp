@@ -208,9 +208,9 @@
 			
 				<div id="myOrderHistory_List">
 					<c:if test="${empty orderHistoryList}">
-						<div>
+						<div style="margin-bottom:100px;">
 							<span>
-					   	    	장바구니에 담긴 상품이 없습니다.
+					   	    	주문 내역이 없습니다.
 					   	    </span>
 						</div>
 					</c:if>

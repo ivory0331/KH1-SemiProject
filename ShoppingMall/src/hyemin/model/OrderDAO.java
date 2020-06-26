@@ -57,7 +57,7 @@ public class OrderDAO implements InterOrderDAO {
 	@Override
 	public List<OrderHistoryVO> selectOneMemberAllOrder(int member_num) throws SQLException {
 		
-		List<OrderHistoryVO> orderHistoryList= null;
+		List<OrderHistoryVO> orderHistoryList= new ArrayList<>();
 		
 		try {
 			conn = ds.getConnection();
@@ -81,14 +81,8 @@ public class OrderDAO implements InterOrderDAO {
 			pstmt.setInt(1, member_num);
 			
 			rs = pstmt.executeQuery();
-			
-			int cnt = 0;
+
 			while(rs.next()) {
-				cnt++;
-				
-				if(cnt==1) {
-					orderHistoryList = new ArrayList<>();
-				}
 				
 				OrderHistoryVO ohvo = new OrderHistoryVO();
 				ohvo.setOrder_num(rs.getInt(1));

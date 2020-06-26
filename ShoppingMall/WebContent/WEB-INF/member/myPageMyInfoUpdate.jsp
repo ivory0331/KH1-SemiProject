@@ -649,27 +649,35 @@ input#userid:focus {outline:none;}
 	//== update 버튼 클릭시  ==
 	function goUpdate() {
 		
-		//비밀번호 유효성 검사 체크
-		if (!bPwValidateCheck) {
-			alert("올바른 비밀번호 형식이 형식이 아닙니다");
-			return;
-		}
-		//비밀번호확인 동일여부 검사 체크 
-		if (!bPwChValidateCheck) {
-			alert("동일한 비밀번호 형식을 입력해주세요");
-			return;
-		}
+		if($("input#passwd").val().trim() != "" || $("input#passwdCk").val().trim() != ""){			
+			//비밀번호 유효성 검사 체크
+			if (!bPwValidateCheck) {
+				alert("올바른 비밀번호 형식이 형식이 아닙니다");
+				return;
+			}
+
+			//비밀번호확인 동일여부 검사 체크 
+			if (!bPwChValidateCheck) {
+				alert("동일한 비밀번호 형식을 입력해주세요");
+				return;
+			}
+		}	
+			
+		
 		//휴대폰 번호 검사 체크여부 
 
-		//이메일 중복체크 검사 
-		if (!bEmailDuplicateCheck) {
-			alert("이메일 중복확인을 해주세요");
-			return;
+		
+		if($("#email").val().trim() != "${(sessionScope.loginuser).email}" && $("#email").val().trim() != "") {			
+			//이메일 중복체크 검사 
+			if (!bEmailDuplicateCheck) {
+				alert("이메일 중복확인을 해주세요");
+				return;
+			}			
 		}
-
+		
 		var frm = document.updateFrm;
 		frm.method = "POST";
-		frm.action = "myPageMyInfoUpdateAction.do";
+		frm.action = "myPageMyInfoUpdateEndAction.do";
 		frm.submit();
 
 	}// end of function goRegister(event)----------
