@@ -25,6 +25,7 @@ import javax.servlet.http.HttpServletResponse;
 			initParams = { 
 					@WebInitParam(name = "propertyConfig", value = "C:/Users/user1/Documents/GitHub/KH1-SemiProject/ShoppingMall/WebContent/WEB-INF/Command.properties", description = "*.do 에 대한 클래스의 매핑파일")
 					//@WebInitParam(name = "propertyConfig", value = "C:/Users/LG/Documents/GitHub/KH1-SemiProject/ShoppingMall/WebContent/WEB-INF/Command.properties", description = "*.up 에 대한 클래스의 매핑파일")
+					//@WebInitParam(name = "propertyConfig", value = "C:/Users/LG/Documents/GitHub/KH1-SemiProject/ShoppingMall/WebContent/WEB-INF/Command.properties", description = "*.up 에 대한 클래스의 매핑파일")
 					//@WebInitParam(name = "propertyConfig", value = "C:/Users/Ivory/Documents/GitHub/KH1-SemiProject/ShoppingMall/WebContent/WEB-INF/Command.properties", description = "*.do 에 대한 클래스의 매핑파일")
 					//@WebInitParam(name = "propertyConfig", value = "C:/myjsp/KH1-SemiProject/ShoppingMall/WebContent/WEB-INF/Command.properties", description = "*.do 에 대한 클래스의 매핑파일")
 					

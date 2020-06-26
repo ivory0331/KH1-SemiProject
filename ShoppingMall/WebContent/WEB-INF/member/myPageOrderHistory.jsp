@@ -183,7 +183,7 @@
 
 </head>
 <body>	
-	<div class="container">
+	<div class="Mycontainer">
 		<jsp:include page="../include/header.jsp"></jsp:include>
 		<div class="section" align="center">
 			<div class="contents">	
@@ -208,7 +208,7 @@
 				</div>
 			
 				<div id="myOrderHistory_List">
-					<c:set var="temp" value=0 />
+					<c:set var="temp" value="0" />
 					<c:forEach var="ohvo" items="${orderHistoryList}">
 					<div>
 					 	<c:choose>

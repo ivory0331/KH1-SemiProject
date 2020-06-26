@@ -160,7 +160,7 @@
 
 </head>
 <body>	
-	<div class="container">
+	<div class="Mycontainer">
 		<jsp:include page="../include/header.jsp"></jsp:include>
 		<div class="section" align="center">
 			<div class="contents">	

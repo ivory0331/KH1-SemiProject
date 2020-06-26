@@ -10,6 +10,9 @@ import javax.servlet.http.HttpSession;
 import member.model.*;
 import product.model.*;
 
+import member.model.MemberVO;
+
+
 public abstract class AbstractController implements InterCommand { 
 
 	/*

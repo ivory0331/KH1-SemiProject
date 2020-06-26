@@ -45,7 +45,7 @@ public class ProductDAO implements InterProductDAO {
 		}
 	}
 
-	// 제품 목록 불러오기
+	// 페이징  안한 제품 목록 불러오기
 	@Override
 	public List<ProductVO> selectProductList(HashMap<String, String> paraMap) throws SQLException {
 		
@@ -111,12 +111,9 @@ public class ProductDAO implements InterProductDAO {
 		try {
 			conn = ds.getConnection();
 			
-			String sql = " select distinct C.category_content AS category_content, S.subcategory_content AS subcategory_content "+
-						 " from product_table P JOIN product_category_table C "+
-						 " ON P.fk_category_num = C.category_num "+
-						 " JOIN product_subcategory_table S "+
-						 " on P.fk_subcategory_num = S.subcategory_num "+
-						 " where fk_category_num = ? ";
+			String sql = " select subcategory_num, subcategory_content " + 
+						 " from product_subcategory_table " + 
+						 " where subcategory_num like ?||'_' ";
 			
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setInt(1, Integer.parseInt(fk_category_num));
@@ -126,7 +123,7 @@ public class ProductDAO implements InterProductDAO {
 			while(rs.next()) {
 				ProductVO pvo = new ProductVO();
 				
-				pvo.setCategory_content(rs.getString(1));
+				pvo.setSubcategory_num(rs.getInt(1));
 				pvo.setSubcategory_content(rs.getString(2));
 				
 				categoryList.add(pvo);
@@ -215,6 +212,11 @@ public class ProductDAO implements InterProductDAO {
 	public List<ProductVO> selectAllProduct() throws SQLException {
 		
 		List<ProductVO> productList = new ArrayList<>();
+	// 페이징 처리를 한 제품목록 불러오기
+	@Override
+	public List<ProductVO> selectPagingProduct(HashMap<String, String> paraMap) throws SQLException {
+		List<ProductVO> productList = new ArrayList<>();
+		String sql ="";
 		
 		try {
 			conn = ds.getConnection();
@@ -244,6 +246,59 @@ public class ProductDAO implements InterProductDAO {
 	            
 				productList.add(pvo);				
 			}						
+			sql = " select RNO, product_num, product_name, price, sale, representative_img " + 
+				  " from " + 
+				  " ( " + 
+				  "    select rownum AS RNO, product_num, product_name, price, sale, representative_img " + 
+				  "    from " + 
+				  "     ( " + 
+				  "        select  product_num, product_name, price , sale, representative_img, fk_category_num " + 
+				  "        from product_table "+ 
+				  "        where fk_category_num = ? "; 
+
+			 if(paraMap.get("fk_subcategory_num") == null) { // 전체보기
+				 
+					sql += "    ) P " + 
+						   " ) T " + 
+						   " where  T.RNO between ? and ? ";
+					
+					pstmt = conn.prepareStatement(sql);
+					int currentShowPageNo = Integer.parseInt(paraMap.get("currentShowPageNo"));
+					pstmt.setInt(1, Integer.parseInt(paraMap.get("fk_category_num")));
+					pstmt.setInt(2, (currentShowPageNo * 9) - (9 - 1) ); // 공식
+					pstmt.setInt(3, (currentShowPageNo * 9) ); // 공식
+					
+				}
+				else if(paraMap.get("fk_subcategory_num") != null) { // 소분류 보기
+					
+					sql += " and fk_subcategory_num = ? "+
+						   "    ) P " + 
+						   " ) T " + 
+						   " where  T.RNO between ? and ? ";
+					
+					pstmt = conn.prepareStatement(sql);
+					int currentShowPageNo = Integer.parseInt(paraMap.get("currentShowPageNo"));
+					pstmt.setInt(1, Integer.parseInt(paraMap.get("fk_category_num")));
+					pstmt.setInt(2, Integer.parseInt(paraMap.get("fk_subcategory_num")));	
+					pstmt.setInt(3, (currentShowPageNo * 9) - (9 - 1) ); // 공식
+					pstmt.setInt(4, (currentShowPageNo * 9) ); // 공식
+				}
+								
+				rs = pstmt.executeQuery();
+				
+				while(rs.next()) {
+					ProductVO pvo = new ProductVO();
+					pvo.setProduct_num(rs.getInt("product_num"));
+					pvo.setProduct_name(rs.getString("product_name"));
+					pvo.setPrice(rs.getInt("price"));
+					pvo.setSale(rs.getInt("sale"));
+					pvo.setRepresentative_img(rs.getString("representative_img"));
+					
+					productList.add(pvo);
+				}
+
+			pstmt = conn.prepareStatement(sql);
+			
 			
 		} finally {
 			close();
@@ -362,6 +417,34 @@ public class ProductDAO implements InterProductDAO {
 					pstmt.setInt(2, (currentShowPageNo*sizePerPage) );
 				}
 				
+		return productList;
+	}
+
+	// 페이징 처리를 위한 제품목록 페이지갯수 알아오기
+	@Override
+	public int getTotalpage(HashMap<String, String> paraMap) throws SQLException {
+		int totalpage = 0;
+		String sql = "";
+		
+		try {
+			conn = ds.getConnection();
+			
+			sql = " select ceil( count(*)/9 ) AS totalPage "+
+				  " from product_table "+
+				  " where fk_category_num = ? "; 
+			
+			if(paraMap.get("fk_subcategory_num") == null) { // 전체보기
+				
+				pstmt = conn.prepareStatement(sql);
+				pstmt.setInt(1, Integer.parseInt(paraMap.get("fk_category_num")));
+			}
+			else if(paraMap.get("fk_subcategory_num") != null) { // 소분류 보기
+				
+				sql += "and fk_subcategory_num = ? ";
+				
+				pstmt = conn.prepareStatement(sql);
+				pstmt.setInt(1, Integer.parseInt(paraMap.get("fk_category_num")));
+				pstmt.setInt(2, Integer.parseInt(paraMap.get("fk_subcategory_num")));
 			}
 			
 			rs = pstmt.executeQuery();
@@ -380,6 +463,10 @@ public class ProductDAO implements InterProductDAO {
 			
 		} catch(Exception e){
 			e.printStackTrace();
+			rs.next();
+			
+			totalpage = rs.getInt("totalPage");
+			
 		} finally {
 			close();
 		}
@@ -474,6 +561,66 @@ public class ProductDAO implements InterProductDAO {
 			
 			totalPage = rs.getInt(1);
 			
+		return totalpage;
+	}
+
+	
+	// 로그인한 사용자의 장바구니 목록을 조회하기
+	@Override
+	public List<CartVO> selectProductCart(int member_num) throws SQLException {
+		
+		List<CartVO> cartList = null;
+		
+		try {
+			
+			conn = ds.getConnection();
+			
+			String sql= " select A.basket_num, A.fk_product_num, A.fk_member_num, B.product_name, B.representative_img, B.price, B.sale, A.product_count" + 
+						" from basket_table A join product_table B " + 
+						" on A.fk_product_num = B.product_num " + 
+						" where A.fk_member_num = ? " + 
+						" order by A.basket_num desc";
+			
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, member_num);
+			
+			rs = pstmt.executeQuery();
+			
+			int cnt = 0;
+			while(rs.next()) {
+				cnt++;
+				
+				if(cnt==1) {
+					cartList = new ArrayList<>();
+				}
+				
+				int basket_num = rs.getInt("basket_num");
+				int fk_product_num = rs.getInt("fk_product_num");
+				int fk_member_num = rs.getInt("fk_member_num");
+				String product_name = rs.getString("product_name");
+				String representative_img = rs.getString("representative_img");
+				int price = rs.getInt("price");
+				int sale = rs.getInt("sale");
+				int product_count = rs.getInt("product_count");
+				
+				ProductVO prod = new ProductVO();
+				prod.setProduct_num(fk_product_num);
+				prod.setProduct_name(product_name);
+				prod.setRepresentative_img(representative_img);
+				prod.setPrice(price);
+				prod.setSale(sale);
+				prod.setTotalPrice(price,sale,product_count);
+				
+				CartVO cvo = new CartVO();
+				cvo.setBasket_num(basket_num);
+				cvo.setMember_num(fk_member_num);
+				cvo.setProduct_num(fk_product_num);
+				cvo.setProduct_count(product_count);
+				cvo.setProd(prod);
+				
+				cartList.add(cvo);
+				
+			} // end of while------------------------------------------------------
 			
 			
 		} finally {
@@ -515,6 +662,16 @@ public class ProductDAO implements InterProductDAO {
 	public boolean productNameDuplicateCheck(String productName) throws SQLException {
 		boolean isUse;
 		
+		return cartList;
+	}
+
+	
+	// 로그인한 사용자의 장바구니에 담긴 주문총액합계
+	@Override
+	public HashMap<String, String> selectSumCartPricePoint(int member_num) throws SQLException {
+		
+		HashMap<String, String> sumMap = new HashMap<>();
+		
 		try {
 			conn = ds.getConnection();
 			
@@ -526,6 +683,18 @@ public class ProductDAO implements InterProductDAO {
 			rs = pstmt.executeQuery();
 			
 			isUse = !rs.next();
+			String sql = " select nvl(sum(A.product_count *  (B.price - B.price * (B.sale/100) ) ), 0 ) AS SUMTOTALPRICE " + 
+						 " from basket_table A join product_table B " + 
+						 " on A.fk_product_num = B.product_num " + 
+						 " where A.fk_member_num = ? ";
+			
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, member_num);
+			
+			rs = pstmt.executeQuery();
+			rs.next();
+			
+			sumMap.put("SUMTOTALPRICE", rs.getString("SUMTOTALPRICE"));
 			
 		} finally {
 			close();
@@ -574,6 +743,32 @@ public class ProductDAO implements InterProductDAO {
 
 
 	
+		return sumMap;
+	}
+
+	
+	// 장바구니 테이블에서 특정제품을 장바구니에서 비우기  
+	@Override
+	public int delCart(String cartno) throws SQLException {
+		int n = 0;
+		
+		try {
+			conn = ds.getConnection();
+			
+			String sql = " delete from basket_table " + 
+						 " where basket_num = ? ";
+					   
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, cartno);
+			
+			n = pstmt.executeUpdate();
+			
+		} finally {
+			close();
+		}
+		
+		return n;
+	}
 	
 	
 	

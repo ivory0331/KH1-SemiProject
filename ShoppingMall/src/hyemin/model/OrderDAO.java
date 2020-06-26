@@ -30,7 +30,7 @@ public class OrderDAO implements InterOrderDAO {
 		try {
 		    Context initContext = new InitialContext();
 			Context envContext  = (Context)initContext.lookup("java:/comp/env");
-			ds = (DataSource)envContext.lookup("jdbc/myoracle");
+			ds = (DataSource)envContext.lookup("jdbc/semiProject");
 			aes = new AES256(key);
 		} catch (NamingException e) {
 			e.printStackTrace();
