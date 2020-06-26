@@ -164,7 +164,7 @@
 								<option value="3">3</option>
 							</select>
 						</form>
-						<span class="member-count">전체 회원 수 : ${memberList}</span>
+						<span class="member-count">전체 회원 수 : ${all}</span>
 					</div>
 					<form name="manager_memberTableFrm">
 						<table class="table member-table" style="border-top:solid 2px purple;">

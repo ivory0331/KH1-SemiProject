@@ -44,7 +44,8 @@ create table member_table
 ,constraint ck_member_table_status CHECK (status in(0,1,2))
 );
 
-
+select*
+from member_table;
 
 
 -- 회원테이블에 사용할 시퀀스 생성 --
@@ -63,6 +64,10 @@ create table product_category_table
 , category_content  varchar2(50)  -- 번호에 해당하는 실제 표시할 내용
 ,constraint pk_category_num primary key (category_num)
 );
+
+select*
+from product_category_table;
+
 
 
 
@@ -144,9 +149,12 @@ nocache;
 
 create table product_image_table
 (fk_product_num number not null -- 상품테이블에 있는 상품번호를 참조받는 컬럼
-,image  varchar2(100)
+,image  varchar2(200)
 ,constraint fk_prodcut_detail_num FOREIGN key (fk_product_num) REFERENCES product_table(product_num) on DELETE CASCADE
 );
+
+select*
+from product_image_table;
 
 
 -- 상품문의 테이블 생성 --
@@ -324,7 +332,7 @@ nocache;
 -- 공지사항 테이블 생성 --
 create table notice_table
 (notice_num number not null
-,subject    varchar2(50) not null
+,subject    varchar2(200) not null
 ,content    varchar2(4000) not null
 ,write_date date default sysdate
 ,hits   number default 0
@@ -348,10 +356,11 @@ create table inquiry_category_table
 ,constraint pk_inquiry_category primary key (category_num)
 );
 
+
 -- 자주하는 질문 테이블 생성 --
 create table FAQ_table
 (FAQ_num number not null
-,subject varchar2(50) not null
+,subject varchar2(200) not null
 ,content varchar2(4000) not null
 ,write_date date default sysdate
 ,hits   number default 0

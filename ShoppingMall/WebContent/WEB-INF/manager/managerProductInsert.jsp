@@ -1,12 +1,13 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <% String ctxPath = request.getContextPath(); %>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
 <link rel="stylesheet" href="<%= ctxPath %>/css/style.css" />
-<title>ProductUpdate.jsp</title>
+<title>ProductInsert.jsp</title>
 <!-- 차트 링크 --> 
 <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script> 
 <style type="text/css">
@@ -73,7 +74,7 @@
 	} 
 	
 	
-	.upload_image_representative{
+	.representative_img_upload{
 		margin-bottom:10px;
 		width : 446px;
 		height: 300px;
@@ -151,13 +152,17 @@
 	}
 
 	
-	/* 상품 정보 입력 */
-	div.newProductForm{
+	/* 상품 정보 입력*/
+	div.newProductInfo{
 		width: 35%;
 		display: inline-block;
 		background-color: none;
 		margin-bottom:5px;
 	}
+	
+	
+	
+	
 	
 	.newProductInfo{
 		list-style: none;
@@ -189,22 +194,24 @@
 		
 				
 		// 대표이미지 삽입
-		$('.upload_hidden').on('change', function(){
+		$('.upload_rep_image').on('change', function(){
 			if(window.FileReader){ // modern browser 
 				var filename = $(this)[0].files[0].name;
 			} 
 		
 			$(this).siblings('.upload_name').val(filename); 			
 			var html = "<img src='images/"+filename+"' id='representative_img1' alt='대표이미지 오류'/>";	
-			$(".upload_image_representative").html(html);
+			$(".representative_img_upload").html(html);
 		
 		});	
+		
 		
 		
 		// 상세이미지 삽입
 		$(".upload_image").each(function(index, item){
 			
 			var index = index+1;
+			
 			
 			$('#image'+index+'_btn').on('change', function(){ 
 				if(window.FileReader){  
@@ -218,10 +225,43 @@
 			});		
 			
 		});
-				
+		
+		
+		 
+		// 소분류 활성화	
+		$("select#fk_category_num").bind("change", function(){
+			if($("select#fk_category_num").val()!=0){
+				console.log($("select#fk_category_num").val());
+				$.ajax({
+					url:"<%= ctxPath%>/manager/getSubCategoryList.do",
+					type:"post",
+					data:{"fk_category_num":$("#fk_category_num").val()},
+					dataType:"json",
+					success:function(json){		
+						$("select#fk_subcategory_num").prop('disabled',false);
+						var html='';
+						for(var i=0; i<json.length;i++){
+							html +="<option value='"+json.subCategoryList.subCategory_num+"'>"+json.subCategoryList.subCategory_content+"</option>";
+						}
+						$("#fk_subcategory_num").html(html);
+						
+						console.log(json);
+					},						
+					error: function(request, status, error){
+						alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
+					}
+					
+				});
+			} else{
+				$("select#fk_subcategory_num").prop('disabled',true);
+			}			
+		})
 		
 		
 	});
+	
+	
+	
 	
 	
 	
@@ -321,6 +361,7 @@
 						var frm = document.productInsert;
 						frm.method="post";
 						frm.action="managerProductInsert.do";
+						frm.enctype="multipart/form-data";
 						frm.submit();		
 						 
 					}
@@ -341,69 +382,71 @@
 <body>
 	<div class="Mycontainer">
 	
-		<%-- <jsp:include page="include/header.jsp"></jsp:include> --%>
+		<jsp:include page="../include/header.jsp"></jsp:include>
 		
 		<div class="section" align="center">
 			<div class="contents">
 				<div class="sideMenu">
-					<%-- <jsp:include page="include/managerSide.jsp"></jsp:include> --%>
+				<jsp:include page="../include/managerSide.jsp"></jsp:include>
 				</div>
 				
 				<div id="info">
 					<form name="productInsert" >
 						<div class="newGoodsAdd" id="newGoodsAdd0" align="left">
 							<div class="newGoodsTitle" id="newGoodsTitle0">
-								<h4>상품 수정</h4>
+								<h4>신규 상품 추가 폼</h4>
 							</div>
 							
-							<div class="newProductImg" align="center" id="newGoodsImg0">
+							<div class="newProductImg" align="center" id="newProductImg0">
 								<div class="representative_img">
-									<div class="upload_image_representative">								
+									<div class="representative_img_upload">								
 									</div>
-									<input class="upload_name" id="upload_name_rep" value="※필수※ 대표이미지 선택" disabled="disabled" style="width:200px;">
+									<input class="upload_name" id="upload_name0" value="※필수※ 대표이미지 선택" disabled="disabled" style="width:200px;">
 									<label for="representative_img_btn">찾기</label>
-									<input type="file" class="upload_hidden" id="representative_img_btn" name="representative_img" />
+									<input type="file" class="upload_rep_image" id="representative_img_btn" name="representative_img" />
 								</div>
 								<div class="abcd">
 									<div class="detail_img">
 										<div class="upload_image_detail detail1">
 										</div>
-										<input class="upload_name" id="upload_image1" value="이미지 선택1" disabled="disabled">																		
+										<input class="upload_name" id="upload_name1" value="이미지 선택1" disabled="disabled">																		
 										<label for="image1_btn">찾기</label>
-										<input type="file" class="upload_image" id="image1_btn" name="image1" />
+										<input type="file" class="upload_image" id="image1_btn" name="detail_img" />
 									</div>
 									<div class="detail_img">
 										<div class="upload_image_detail detail2">								
 										</div>
-										<input class="upload_name" value="이미지 선택2" disabled="disabled">
+										<input class="upload_name" id="upload_name2" value="이미지 선택2" disabled="disabled">
 										<label for="image2_btn">찾기</label>
-										<input type="file" class="upload_image" id="image2_btn" name="image2" />
+										<input type="file" class="upload_image" id="image2_btn" name="detail_img" />
 									</div>
 									<div class="detail_img">
 										<div class="upload_image_detail detail3">								
 										</div>
-										<input class="upload_name" value="이미지 선택3" disabled="disabled">
+										<input class="upload_name" id="upload_name3" value="이미지 선택3" disabled="disabled">
 										<label for="image3_btn">찾기</label>
-										<input type="file" class="upload_image" id="image3_btn" name="image3" />
+										<input type="file" class="upload_image" id="image3_btn" name="detail_img" />
 									</div>
 								</div>
 							</div>
 							
-							<div class="newProductForm" align="left" id="newGoodsForm0">				
+							<div class="newProductInfo" align="left" id="newProductInfo0">				
 								
 								<ul class="newProductInfo" id="newProduct_ul">
 									<li>
 										<label>대분류</label>
 										<select id="fk_category_num" name="fk_category_num" class="bigSelect">
-											<option value="1">채소</option>
-											<option value="2">과일 견과</option>									
+											<option value="0">※필수 대분류</option>            
+											<c:forEach var="map" items="${requestScope.categoryList}">
+								               <option value="${map.category_num}">${map.category_content}</option>
+								            </c:forEach>								
 										</select>									
 									</li>
 									<li>
 										<label>소뷴류</label>
-										<select id="fk_subcategory_num" name="fk_subcategory_num" class="smallSelect">
-											<option value="11">기본채소</option>
-											<option value="12">쌈 샐러드</option>	
+										<select id="fk_subcategory_num" name="fk_subcategory_num" class="smallSelect" disabled>
+											<option value="0">※필수 소분류</option>	
+																					
 										</select>
 									</li>
 									<li>
@@ -450,7 +493,7 @@
 							</div>
 							<div align="center">
 								<label>상품 상세 설명</label>
-								<textarea style="width:95%; height:150px; "></textarea>
+								<textarea style="width:95%; height:150px; " name="explain"></textarea>
 							</div>
 							
 							
@@ -466,7 +509,7 @@
 				
 			</div>
 		</div>
-		<%-- <jsp:include page="include/footer.jsp"></jsp:include> --%>
+		<jsp:include page="../include/footer.jsp"></jsp:include>
 	</div>
 </body>
 </html>
