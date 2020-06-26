@@ -60,7 +60,7 @@ public class GoogleMail {
 	    	        
 	    	// 메시지 본문의 내용과 형식, 캐릭터 셋 설정
 	    	msg.setContent(" 안녕하세요. 마켓컬리입니다.<br/> 회원님의 요청하신 비밀번호 찾기 인증번호를 안내 드립니다. <br/> 아래번호를 인증번호 입력란에 입력해주세요<br/><br/>"
-	    			+ " <span style='font-size:12pt; color:purple; font-weight:bold;'>인증번호 : "+certificationCode+"</span>", "text/html;charset=UTF-8");
+	    			+ " <span style='font-size:11pt; color:#5f0080; font-weight:bold;'>인증번호 : "+certificationCode+"</span>", "text/html;charset=UTF-8");
 	    	        
 	    	// 메일 발송하기
 	    	Transport.send(msg);

@@ -124,7 +124,6 @@ a {
     font-size: 12px;
     line-height: 20px;
     text-align: left;
-
 }
 div.pwdCheck{
 	padding-bottom: 14px;
