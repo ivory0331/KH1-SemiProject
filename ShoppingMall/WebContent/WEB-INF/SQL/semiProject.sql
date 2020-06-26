@@ -304,6 +304,9 @@ create table one_inquiry_table
 
 );
 
+insert into one_inquiry_table ( one_inquiry_num, fk_category_num, subject, content, emailFlag, smsFlag, fk_member_num ) 
+values( seq_one_inquiry_table.nexval, ? ? ? )
+
 -- 1:1문의 테이블에서 사용할 시퀀스 생성 --
 create sequence seq_one_inquiry_table
 start with 1

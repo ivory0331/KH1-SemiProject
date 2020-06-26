@@ -11,7 +11,9 @@
 .sideMenu {
 	display: inline-block;
 	width: 150px;
-	float: left;
+	float: left; 
+	
+	nij]]
 }
 
 .serviceCenter-board {
@@ -116,17 +118,74 @@ input[type=text]{
 }
 
 </style>
-<link rel="stylesheet"
-	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-<script
-	src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<script
-	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-<script type="text/javascript"
-	src="/ShoppingMall/js/jquery-3.3.1.min.js"></script>
+<link rel="stylesheet"	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+<script	src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="/ShoppingMall/js/jquery-3.3.1.min.js"></script>
 <script type="text/javascript" src="/ShoppingMall/util/myutil.js"></script>
 <script type="text/javascript">
 	
+	var bSubjectCheck = false; //아이디 유효성 체크 
+	var bContentsCheck = false; //비밀번호 유효성  체크 
+	
+	
+	$(document).ready(function(){
+            
+	   $(".txt_guide").hide();     
+	   $(".txt_guide_address").show();
+	    //== 아이디 유효성검사 ==   
+	   $("input#userid").focus(function(){
+	      $(".txt_guide:eq(0)").show();
+	   });
+	       
+	    
+	    $("input#userid").keyup(function(event){
+	      //== 정규표현식 객체 만들기 ==
+	      // 5자 이상 10글자 이하의 영문과 숫자를 조합
+	      var regExp = /^[A-Za-z0-9]{5,10}$/;
+	      
+	      // 생성된 정규표현식 객체속에 데이터를 넣어서 검사하기
+	      var bool = regExp.test($(this).val()); 
+	      
+	      if(!bool){                  
+	         $(".userid_error:eq(0)").addClass('wrong');
+	         $(".userid_error:eq(0)").removeClass('correct');
+	         bIdValidateCheck = false;
+	      }
+	      else{ //아이디를 올바르게 입력했으면, 에러문자 지워지고 다음 탭 쓸수있게 한다
+	         $(".userid_error:eq(0)").addClass('correct');
+	         $(".userid_error:eq(0)").removeClass('wrong');
+	         bIdValidateCheck = true;
+	      }
+	   });//end of $("input#userid").keyup(function(){});-----------------
+	});
+        
+	
+	
+	
+	
+	//== submit 가입하기 클릭시  ==
+	function goRegister() {
+	
+		//제목 입력 
+		if (!bSubjectCheck) {
+			alert("제목을 입력해주세요");
+			return;
+		}
+		
+		if (!bContentsCheck) {
+			alert("내용을 입력해주세요");
+			return;
+		}
+		
+	
+		var frm = document.boardWritefrm;
+		frm.method = "POST";
+		frm.action = "<%=ctxPath%>/service/serviceCenterMyQboardWrite.do";
+		frm.submit();
+		alert("문의가 등록되었습니다");
+
+	}// end of function goRegister(event)----------
 </script>
 </head>
 <body>
@@ -143,7 +202,7 @@ input[type=text]{
 						<h3 style="display: inline-block">1:1문의</h3>
 					</div>
 					
-						<form name="frm" id="frm" method="post" action="#" style="height: 100%;">
+						<form name="boardWritefrm" id=boardWritefrm style="height: 100%;">
 							<table style="border-top: solid 2px purple;" class="boardTable table">
 								<colgroup><col width="14%" align="right"></colgroup>
 									<tbody>
@@ -151,24 +210,25 @@ input[type=text]{
 										<th class="input_txt" style="border-top: solid 2px purple;">제목</th>
 										<td><select name="itemcd" required class="select">
 												<option value="">선택해주세요.</option>
-												<option value="01">배송지연/불만</option>
-												<option value="11">컬리패스 (무료배송)</option>
-												<option value="02">반품문의</option>
-												<option value="03">A/S문의</option>
-												<option value="06">환불문의</option>
-												<option value="07">주문결제문의</option>
-												<option value="08">회원정보문의</option>
-												<option value="04">취소문의</option>
-												<option value="05">교환문의</option>
-												<option value="09">상품정보문의</option>
-												<option value="10">기타문의</option>
-										</select><br> <input type="text" name="subject" style="width: 100%" required value=""></td>
+												<option value="1">배송지연/불만</option>
+												<option value="2">컬리패스 (무료배송)</option>
+												<option value="3">반품문의</option>
+												<option value="4">A/S문의</option>
+												<option value="5">환불문의</option>
+												<option value="6">주문결제문의</option>
+												<option value="7">회원정보문의</option>
+												<option value="8">취소문의</option>
+												<option value="9">교환문의</option>
+												<option value="10">상품정보문의</option>
+												<option value="11">기타문의</option>
+										</select><br> 
+										<input type="text" id="subject" name="subject" style="width: 100%" required value=""></td>
 									</tr>
 									
 									<tr>
 										<th class="input_txt">주문번호</th>
 										<td>
-										<input type="text" name="ordno" style="width:25%" value="" readonly="readonly"">
+										<input type="text" name="ordno" style="width:25%" value="" readonly="readonly">
 										<input onclick="order_open()" type="button" class="bhs_button" value="주문조회" style="float:none; line-height:27px; width:100px;">
 										<div style="position:relative;">
 										<iframe id="ifm_order" style="display:none;position:absolute;width:560px;height:380px;background-color:#fff;position:absolute;left:0;top:0;border:1px solid #000"></iframe>
@@ -177,16 +237,17 @@ input[type=text]{
 									</tr>
 									<tr>
 										<th class="input_txt">이메일</th>
-										<td><input type="text" name="email" value="userId@naver.com" size="26" readonly="readonly" class="read_only"> 
+										<td><input type="text" name="email" value="${sessionScope.loginuser.email}" size="26" readonly="readonly" class="read_only" style = "text-align:left; color:gray;"> 
 										<span class="noline smalle" style="padding-left: 10px">
-										<input type="checkbox" name="mailling"><span style="font-size: 8pt; padding-left: 5px">답변수신을 이메일로 받겠습니다.</span></span></td>
+										<input type="checkbox" name="mailling" value="1"><span style="font-size: 8pt; padding-left: 5px">답변수신을 이메일로 받겠습니다.</span></span></td>
+										
 									</tr>
 									
 									<tr>
 										<th class="input_txt">문자메시지</th>
-										<td><input type="text" name="mobile" value="010-2345-6789" readonly="readonly" class="read_only">
+										<td><input type="text" name="mobile" value="${sessionScope.loginuser.mobile}" readonly="readonly" class="read_only">
 										<span class="noline smalle" style="padding-left: 10px">
-										<input type="checkbox" name="sms"><span style="font-size: 8pt; padding-left: 5px">답변수신을 문자메시지로 받겠습니다.</span></span></td>
+										<input type="checkbox" name="sms" value="2"><span style="font-size: 8pt; padding-left: 5px">답변수신을 문자메시지로 받겠습니다.</span></span></td>
 									</tr>
 									<tr>
 										<th class="input_txt">내용</th>
@@ -228,7 +289,7 @@ input[type=text]{
 								<tbody>
 								<tr> 
 								<td colspan="2" style= "border:none" id="submit" align="right"; >
-									<input type="submit" class="bhs_button" value="저장">
+									<input type="submit" class="bhs_button" value="저장" onclick="goRegister();">
 								</td>
 								</tr>
 								</tbody>
