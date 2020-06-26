@@ -36,7 +36,7 @@ public class ProductListAction extends AbstractController {
 		
 	//	List<ProductVO> productList = productdao.selectProductList(paraMap);
 		String categoryInfo = productdao.categoryInfo(fk_category_num);
-		List<ProductVO> categoryList = productdao.categoryList(fk_category_num);
+		List<ProductVO> subcategoryList = productdao.subcategoryList(fk_category_num);
 		
 		List<ProductVO> productList = productdao.selectPagingProduct(paraMap);
 		
@@ -87,7 +87,7 @@ public class ProductListAction extends AbstractController {
 		request.setAttribute("productList", productList);
 		
 		request.setAttribute("categoryInfo", categoryInfo);
-		request.setAttribute("categoryList", categoryList);
+		request.setAttribute("subcategoryList", subcategoryList);
 		request.setAttribute("fk_category_num", fk_category_num);
 		
 		super.setViewPage("/WEB-INF/main/productList.jsp");
