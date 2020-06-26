@@ -30,5 +30,6 @@ public interface InterProductDAO {
 
 	// 소분류 구하기
 	List<HashMap<String, String>> getSubCategoryList(String fk_category_num) throws SQLException;
+	
 
 }
