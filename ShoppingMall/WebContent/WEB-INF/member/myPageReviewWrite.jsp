@@ -169,7 +169,7 @@
 
 </head>
 <body>	
-	<div class="container">
+	<div class="Mycontainer">
 		<jsp:include page="../include/header.jsp"></jsp:include>
 		<div class="section" align="center">
 			<div class="contents">	
@@ -186,11 +186,11 @@
 						<table class="myOrder_Desc">
 							<tr class="list">
 								<td class="image">
-									<img alt="해당 주문 대표 상품 이미지" src="../images/iscream.png">
+									<img alt="해당 주문 대표 상품 이미지" src="<%=ctxPath %>/images/${product}">
 								</td>
 								<td class="info">
 									<div class="name">
-										<span class="productName">제품명1</span>
+										<span class="productName">${product.product.prodcut_name}</span>
 									</div>
 								</td>	
 							</tr>

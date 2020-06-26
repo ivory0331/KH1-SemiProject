@@ -3,6 +3,7 @@
 <% String ctxPath = request.getContextPath(); %>
 <!DOCTYPE html>
 <html> 
+
 <head>
 <meta charset="UTF-8">
 <link rel="stylesheet" href="<%= ctxPath %>/css/style.css" />
@@ -212,6 +213,7 @@
       <jsp:include page="../include/footer.jsp"></jsp:include>
       
    </div>
+
 
 </body>
 </html>

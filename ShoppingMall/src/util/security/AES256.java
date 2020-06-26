@@ -11,7 +11,7 @@ import javax.crypto.spec.SecretKeySpec;
 
 import org.apache.commons.codec.binary.Base64;
 
-/**
+/** 
  * 양방향 암호화 알고리즘인 AES256 암호화를 지원하는 클래스
  */
 public class AES256 {

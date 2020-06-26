@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 /common/
 /main/
 /member/
@@ -5,3 +6,12 @@
 /service/
 /util/
 /DAO/
+=======
+/common/
+/main/
+/member/
+/my/
+/service/
+/util/
+/DAO/
+>>>>>>> 7071bca5fc7ada42f6267a1c97b9b4b2490bd4e7

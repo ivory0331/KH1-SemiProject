@@ -30,7 +30,7 @@ public class OrderDAO implements InterOrderDAO {
 		try {
 		    Context initContext = new InitialContext();
 			Context envContext  = (Context)initContext.lookup("java:/comp/env");
-			ds = (DataSource)envContext.lookup("jdbc/myoracle");
+			ds = (DataSource)envContext.lookup("jdbc/semiProject");
 			aes = new AES256(key);
 		} catch (NamingException e) {
 			e.printStackTrace();
@@ -67,8 +67,10 @@ public class OrderDAO implements InterOrderDAO {
 						 "      , P.product_name " + 
 						 "      , P.representative_img " + 
 						 "      , OS.order_state " + 
-						 " from order_table O join order_product_table OP " + 
-						 " on O.order_num = OP.fk_order_num join order_state_table OS " + 
+						 " from order_table O " +
+						 " join order_product_table OP " +
+						 " on O.order_num = OP.fk_order_num " +
+						 " join order_state_table OS " + 
 						 " on O.fk_category_num = OS.category_num join product_table P " + 
 						 " on OP.fk_product_num = P.product_num " + 
 						 " where O.fk_member_num = ? ";

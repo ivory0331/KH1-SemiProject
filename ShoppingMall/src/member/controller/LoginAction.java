@@ -39,10 +39,10 @@ public class LoginAction extends AbstractController {
 
             HttpSession session = request.getSession();
             session.setAttribute("loginuser", loginuser);
+
             
             String goBackURL = request.getContextPath() + "/index.do";
-           
-            
+              
             if (loginuser.isRequirePwdChange() == true) {
                String message = "비밀번호를 변경하신지 3개월이 지났습니다. 암호를 변경하세요!";
                String loc = request.getContextPath() + "/index.do";
@@ -56,6 +56,13 @@ public class LoginAction extends AbstractController {
 
                return;
             }
+ 
+            
+            if(session.getAttribute("goBackURL")!=null) {
+            	goBackURL = (String) session.getAttribute("goBackURL");
+            	session.removeAttribute("goBackURL");
+            }
+            
 
             // 시작페이지로 이동
             super.setRedirect(true);
