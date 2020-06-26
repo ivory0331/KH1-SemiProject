@@ -105,38 +105,42 @@ public class ProductDAO implements InterProductDAO {
 	}
 
 	
-	// 대분류와 소분류 불러오기
-	@Override
-	public List<ProductVO> categoryList(String fk_category_num) throws SQLException {
-		List<ProductVO> categoryList = new ArrayList<>();
 
-		try {
-			conn = ds.getConnection();
-			
-			String sql = " select subcategory_num, subcategory_content " + 
-						 " from product_subcategory_table " + 
-						 " where subcategory_num like ?||'_' ";
-			
-			pstmt = conn.prepareStatement(sql);
-			pstmt.setInt(1, Integer.parseInt(fk_category_num));
-			
-			rs = pstmt.executeQuery();
-			
-			while(rs.next()) {
-				ProductVO pvo = new ProductVO();
-				
-				pvo.setSubcategory_num(rs.getInt(1));
-				pvo.setSubcategory_content(rs.getString(2));
-				
-				categoryList.add(pvo);
-			}
-			
-		} finally {
-			close();
-		}
-		
-		return categoryList;
-	}
+
+	
+	// 대분류와 소분류 불러오기
+	   @Override
+	   public List<ProductVO> subcategoryList(String fk_category_num) throws SQLException {
+
+	      List<ProductVO> subcategoryList = new ArrayList<>();
+	      try {
+	         conn = ds.getConnection();
+	         
+	         String sql = " select subcategory_num, subcategory_content " + 
+	                   " from product_subcategory_table " + 
+	                   " where subcategory_num like ?||'_' ";
+	         
+	         pstmt = conn.prepareStatement(sql);
+	         pstmt.setInt(1, Integer.parseInt(fk_category_num));
+	         
+	         rs = pstmt.executeQuery();
+	         
+	         while(rs.next()) {
+	            ProductVO pvo = new ProductVO();
+	            
+	            pvo.setSubcategory_num(rs.getInt(1));
+	            pvo.setSubcategory_content(rs.getString(2));
+	            
+	            subcategoryList.add(pvo);
+	         }
+	         
+	      } finally {
+	         close();
+	      }
+	      
+	      return subcategoryList;
+	   }
+	
 
 	// 소분류 불러오기
 	@Override
@@ -398,6 +402,33 @@ public class ProductDAO implements InterProductDAO {
 		
 		return n;
 	}
+
+	
+	// 장바구니 테이블에서 특정제품을 장바구니에서 주문량 증감시키기 
+	@Override
+	public int updateCart(String cartno, String oqty) throws SQLException {
+		
+		int n = 0;
+		
+		try {
+			conn = ds.getConnection();
+			
+			String sql = " update basket_table set product_count = ? "
+					   + " where basket_num = ? ";
+					   
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, oqty);
+			pstmt.setString(2, cartno);
+			
+			n = pstmt.executeUpdate();
+			
+		} finally {
+			close();
+		}
+		
+		return n;
+	}
+
 	
 	
 	
