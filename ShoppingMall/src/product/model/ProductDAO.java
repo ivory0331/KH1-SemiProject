@@ -107,6 +107,9 @@ public class ProductDAO implements InterProductDAO {
 	public List<ProductVO> categoryList(String fk_category_num) throws SQLException {
 		
 		List<ProductVO> categoryList = new ArrayList<>();
+		
+	public List<ProductVO> subcategoryList(String fk_category_num) throws SQLException {
+		List<ProductVO> subcategoryList = new ArrayList<>();
 
 		try {
 			conn = ds.getConnection();
@@ -126,14 +129,14 @@ public class ProductDAO implements InterProductDAO {
 				pvo.setSubcategory_num(rs.getInt(1));
 				pvo.setSubcategory_content(rs.getString(2));
 				
-				categoryList.add(pvo);
+				subcategoryList.add(pvo);
 			}
 			
 		} finally {
 			close();
 		}
 		
-		return categoryList;
+		return subcategoryList;
 	}
 
 	
@@ -417,6 +420,32 @@ public class ProductDAO implements InterProductDAO {
 					   
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, cartno);
+			
+			n = pstmt.executeUpdate();
+			
+		} finally {
+			close();
+		}
+		
+		return n;
+	}
+
+	
+	// 장바구니 테이블에서 특정제품을 장바구니에서 주문량 증감시키기 
+	@Override
+	public int updateCart(String cartno, String oqty) throws SQLException {
+		
+		int n = 0;
+		
+		try {
+			conn = ds.getConnection();
+			
+			String sql = " update basket_table set product_count = ? "
+					   + " where basket_num = ? ";
+					   
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, oqty);
+			pstmt.setString(2, cartno);
 			
 			n = pstmt.executeUpdate();
 			

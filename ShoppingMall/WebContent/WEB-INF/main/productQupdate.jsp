@@ -123,9 +123,16 @@
 		$(document).on('change','.imgFile',function(){
 				console.log("이미지 로딩");
 				var idx = $(this).prop("id").substring(7)
-				fileView(this);
-				func_printImg(idx, this);
+				
+				func_imgCheck(idx, this);
 		});
+		
+		$("#txt_area").val('${pivo.content}');
+		
+		for(var i=0; i<<%=len%>; i++){
+			var item = $(".imgFile:eq("+i+")");
+			func_imgCheck(i, item);
+		}
 		
 	});
 	
@@ -136,22 +143,15 @@
 			return;
 		}
 		
-		if(content == ""){
+		if($("#txt_area").val().trim() == ""){
 			alert("내용을 입력해주세요");
 			return;
 		}
-		for(var i=0; i<$(".imgInput").length; i++){
-			var idx = $(".imgInput:eq("+i+")").prop("id").substring(8);
-			console.log(idx);
-			var imageFile = decodeURIComponent($("#fileName"+idx).val());
-			$("#image"+idx).prop("src","<%=ctxPath%>/Upload/"+imageFile);
-			
-		}
-		var content = $("#txt_area").html().trim();
-		console.log(content);
+		
+		var content = $("#txt_area").val().trim();
 		$("#txt_content").val(content);
 		var Frm = document.questionWriteFrm;
-		Frm.action = "<%=ctxPath%>/productQwrite.do"
+		Frm.action = "<%=ctxPath%>/inquiryUp.do"
 		Frm.submit();
 		
 	}
@@ -171,30 +171,17 @@
 		cnt++;
 	}
 	
-	function func_printImg(idx, item){
-		console.log(item);
+	function func_imgCheck(idx, item){
 		if(item.files && item.files[0]) {
 			var fileName = item.files[0].name;
 			var index = fileName.indexOf(".");
 			var fileType = fileName.substr(index);
 			if(fileType==".png"||fileType==".jpg"||fileType==".png"){
-				var reader = new FileReader;
-				reader.onload = function(data) {
-					var check = $("#productQ-img"+idx).find("img").length;
-					console.log(check);
-					if(check==0){
-						var html = "<div id='productQ-img"+idx+"'><img src='"+data.target.result+"' class='image' id='image"+idx+"' /></div><br><div></div>";
-						$("#txt_area").append(html);
-					}
-					else{
-						$("#productQ-img"+idx).find("img").prop("src",data.target.result);
-					}
-					
-				}
-				 reader.readAsDataURL(item.files[0]);
+				 fileView(item);
 			}
 			else{
 				alert("이미지만 올릴 수 있습니다.");
+				item.value=null;
 			}
 		}
 	}
@@ -217,7 +204,6 @@
 		console.log(idx);
 		$("#imgInput"+idx).remove();
 		$("#close"+idx).remove();
-		$("#productQ-img"+idx).remove();
 		$("#fileName"+idx).remove();
 	}
 	
@@ -236,11 +222,13 @@
 		<div class="section" align="center">
 			<div class="contents">
 				<div class="boardInfo">
-					<h3 style="display:inline-block">상품문의 작성</h3>
+					<h3 style="display:inline-block">상품문의 수정</h3>
 					<span style="margin-left:10px; font-size:8pt; font-weight: bold;"></span>
 				</div>
 				<form name="questionWriteFrm" enctype="multipart/form-data" method="post">
-					<input type="hidden" name="product_num" value="" />
+
+					<input type="hidden" name="product_num" value="${pivo.fk_product_num}" />
+
 					<table class="writeTable">
 						<tr>
 							<td class="frmTitle">작성자</td>
@@ -270,11 +258,11 @@
 						</tr>
 						<tr>
 							<td class="frmTitle">제목</td>
-							<td><input type="text" value=""  name="title"/></td>
+							<td><input type="text" value="${pivo.subject}"  name="title"/></td>
 						</tr>
 						<tr>
 							<td class="txt_field" colspan="2">
-								<div id="txt_area" contenteditable="true"></div>
+								<textarea rows="30" cols="30" id="txt_area" ></textarea>
 								<input type="hidden" name="contents" id="txt_content"/>
 							</td>
 
@@ -284,12 +272,15 @@
 								<span id="imgAdd" onclick="func_addArea()">추가 업로드</span>
 								<label for="imgFile0">이미지 파일</label>
 							</td>
+							
 							<td class='productQ-imgTable'>
-								<!-- <div class="imgInput" id='imgInput0'>
-									<input type='file' name="imgFile" class="imgFile" id='imgFile0' accept='.gif, .jpg, .png' style="margin-bottom:10px;"/>
+							<c:forEach var="image" items="${pivo.imageList}" varStatus="status">
+								 <div class="imgInput" id='imgInput${status.index}'>
+									<input type='file' name="imgFile" class="imgFile" id='imgFile${status.index}' value="${image}" accept='.gif, .jpg, .png' style="margin-bottom:10px;"/>
+									<input id='fileName${status.index}' type='hidden' name='fileName' value="${image}"/>
 								</div>
-								<div class="closeInput" id="close0" align="right" onclick="func_deleteImg(this)">X</div>
-								 -->
+								<div class="closeInput" id="close${status.index}" align="right" onclick="func_deleteImg(this)">X</div>
+							</c:forEach>
 							</td>
 					</table>
 					<div class="userBtn" align="center">

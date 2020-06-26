@@ -16,7 +16,7 @@ public class ProductListAction extends AbstractController {
 	
 		InterProductDAO productdao = new ProductDAO();
 		
-	//	String fk_category_num = request.getParameter("fk_category_num");
+		String fk_category_num = request.getParameter("fk_category_num");
 		String fk_subcategory_num = request.getParameter("fk_subcategory_num");
 		
 		
@@ -24,7 +24,9 @@ public class ProductListAction extends AbstractController {
 		if(currentShowPageNo == null)
 			currentShowPageNo = "1";
 		
-		String fk_category_num = "1";
+
+	//	String fk_category_num = "4";
+
 	//	String fk_subcategory_num = "41";
 		
 		HashMap<String,String> paraMap = new HashMap<>();
@@ -34,7 +36,7 @@ public class ProductListAction extends AbstractController {
 		
 	//	List<ProductVO> productList = productdao.selectProductList(paraMap);
 		String categoryInfo = productdao.categoryInfo(fk_category_num);
-		List<ProductVO> categoryList = productdao.categoryList(fk_category_num);
+		List<ProductVO> subcategoryList = productdao.subcategoryList(fk_category_num);
 		
 		List<ProductVO> productList = productdao.selectPagingProduct(paraMap);
 		
@@ -85,7 +87,7 @@ public class ProductListAction extends AbstractController {
 		request.setAttribute("productList", productList);
 		
 		request.setAttribute("categoryInfo", categoryInfo);
-		request.setAttribute("categoryList", categoryList);
+		request.setAttribute("subcategoryList", subcategoryList);
 		request.setAttribute("fk_category_num", fk_category_num);
 		
 		super.setViewPage("/WEB-INF/main/productList.jsp");

@@ -185,6 +185,13 @@ create table product_inquiry_image_table
 );
 select * from product_inquiry_image_table;
 select * from product_inquiry_table;
+update product_inquiry_table set answer = '답변입니다.' where inquiry_num=9;
+commit;
+select count(*) from 
+    (select T.RON, answer, inquiry_num, subject, content from
+        (select rownum as RON, answer, inquiry_num, subject, content from product_inquiry_table)T 
+    where T.RON between 1 and 0)N 
+where N.answer is null;
 
 SELECT LAST_NUMBER 
 FROM  USER_SEQUENCES WHERE  SEQUENCE_NAME = 'SEQ_PRODUCT_INQUIRY';
@@ -246,7 +253,7 @@ create table order_product_table
 ,constraint fk_product FOREIGN key (fk_product_num ) REFERENCES product_table(product_num)
 ,constraint ck_reviewFlag check (reviewFlag in (0,1))
 );
-
+select * from order_table O join order_product_table OP on O.order_num = OP.fk_order_num;
 
 -- 고객 후기 테이블 --
 create table review_table
@@ -389,6 +396,9 @@ create table basket_table
 ,constraint fk_basket_member FOREIGN key (fk_member_num) REFERENCES member_table (member_num)
 ,constraint pk_basket_num primary key (basket_num)
 );
+
+
+select * from basket_table;
 
 -- 장바구니 테이블에 사용할 시퀀스 생성 --
 create sequence seq_basket_table
@@ -862,6 +872,14 @@ where  A.fk_member_num = ?;
 
 select nvl(sum(2 *  (34000 - 34000 * (20/100) ) ), 0 ) 
 from dual;
+
+select * from order_product_table OP
+join order_table O on OP.fk_order_num = O.order_num
+join member_table M on O.fk_member_num = M.member_num
+join product_table P on OP.fk_product_num = P.product_num
+join product_category_table PC on P.fk_category_num = PC.category_num
+join product_subcategory_table PS on P.fk_subcategory_num = PS.subcategory_num
+where OP.reviewFlag = 0 and O.fk_category_num = 1;
 
 
 >>>>>>> 851d41d27c4f1da850c5d71dac4a23734a964bb5
