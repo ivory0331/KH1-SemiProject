@@ -170,9 +170,14 @@ public class ProductVO {
 
 	////////////////////////////////////////////////////////////
 	// *** 제품의 총판매가(실제판매가 * 주문량) 구해오기 ***
-	public void setTotalPrice(int product_count) {
+	public void setTotalPrice(int price, int sale, int product_count) {
 		
-		totalPrice = finalPrice * product_count; // 세일까지 적용한 최종 판매가 * 주문량
+		double salePrice = Double.valueOf(price)*(Double.valueOf(sale)/100);
+		
+		finalPrice = (int)(Double.valueOf(price)-salePrice);
+		
+		totalPrice =  finalPrice * product_count; // 세일까지 적용한 최종 판매가 * 주문량
+
 	}
 	
 	public int getTotalPrice() {

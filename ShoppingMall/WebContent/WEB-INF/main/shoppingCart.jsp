@@ -58,15 +58,85 @@ img.imgsmall {
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 <script type="text/javascript" src="/ShoppingMall/js/jquery-3.3.1.min.js"></script>
 <script type="text/javascript" src="/ShoppingMall/util/myutil.js"></script>
+<link rel="stylesheet" type="text/css" href="<%= ctxPath%>/jquery-ui-1.11.4.custom/jquery-ui.css" />
+<script type="text/javascript" src="<%= ctxPath%>/jquery-ui-1.11.4.custom/jquery-ui.js"></script>
+
 <script type="text/javascript">
 
-	var arrFood = [{name:"루비 싱글 바 (3,600원)",filename:"iscream.png",price:"3600"}
-				  ,{name:"병 샐러드 (6,200원)",filename:"salad.png",price:"6200"}
-				  ,{name:"동물복지 우유 (2,650원)",filename:"milk.png",price:"2650"}];
 			  
 	$(document).ready(function(){
 		// 선택한 목록 테이블에 넣어주기
 		
+		$(".spinner").spinner({
+			spin: function(event, ui) {
+				if(ui.value > 100) {
+					$(this).spinner("value", 100);
+					return false;
+				}
+				else if(ui.value < 0) {
+					$(this).spinner("value", 0);
+					return false;
+				}
+			}
+		
+		});// end of $(".spinner").spinner({});-----------------
+		
+		$(".chkboxpnum").click(function(){
+			
+			var bFlag = false;
+			$(".chkboxpnum").each(function(){
+				var bChecked = $(this).prop("checked");
+				if(!bChecked) {
+					$("input:checkbox[class=allCheckOrNone]").prop("checked",false);
+					bFlag = true;
+					return false;
+				}
+			});
+			
+			if(!bFlag) {
+				$("input:checkbox[class=allCheckOrNone]").prop("checked",true);
+			}
+			
+		});
+		
+		$(document).on("click",".allCheckOrNone",function(){
+			var bool = $(this).prop("checked");
+			
+			$("input:checkbox[class=chkboxpnum]").prop("checked", bool);
+			$("input:checkbox[class=allCheckOrNone]").prop("checked", bool);
+			
+		}); 
+		
+		
+		$(".spinnerImgQty").bind("spinstop", function(){
+		//	alert("확인용 : "+$(this).val()); // 상품수량을 가져옴
+			var oqty = $(this).val();
+			// 필요한게 상품수량이랑 선택한 상품번호
+			
+			$.ajax({
+				url:"/ShoppingMall/product/cartEdit.do",
+				type:"POST",
+				data:{"":	,
+					  "oqty":oqty},
+				dataType:"JSON",
+				success:function(json){
+					if(json.n == 1) {
+						location.href= "<%= request.getContextPath()%>/${goBackURL}"; 
+					}
+				},
+				error: function(request, status, error){
+					alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
+				}
+				
+			});
+			
+			
+		
+		});
+		
+	<%--	
+	}// end of function allCheckBox()-------------------------
+	
 		var html = "";
 		for(var i=0; i<arrFood.length; i++) {
 			html += "<tr id='deleteFood"+[i]+"'> <td>"+
@@ -116,10 +186,10 @@ img.imgsmall {
 			 if(!bFlag)
 				 $("input:checkbox[class=allCheck]").prop("checked", true); 
 		}); 
-		
+		--%>
 	}); // end of $(document).ready(function(){})---------------------------------
 
-	
+	<%--
 	// 가격 표시하기
 	var arrCost = document.getElementsByClassName("cost");
 	var arrFoodOrdercnt = document.getElementsByClassName("foodOrdercnt");
@@ -214,6 +284,40 @@ img.imgsmall {
 			}
 		}
 	}
+	--%>
+
+	
+	function goDel(cartno){
+		console.log("ddd");
+		var $target = $(event.target);
+		var pname = $target.parent().parent().find(".cart_pname").text();
+		
+		var bool = confirm(pname+"을 장바구니에서 제거하시는 것이 맞습니까?");
+		
+		if(bool) {
+			
+			$.ajax({
+				url:"/ShoppingMall/product/cartDel.do",
+				type:"POST",
+				data:{"cartno":cartno},
+				dataType:"JSON",
+				success:function(json){
+					if(json.n == 1) { // 특정 제품을 장바구니에서 비운후 페이지이동을 해야 하는데 이동할 페이지는 페이징 처리하여 보고 있던 그 페이지로 가도록 한다. 
+						location.href= "<%= request.getContextPath()%>/${goBackURL}";
+					}
+				},
+				error: function(request, status, error){
+					alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
+				}
+			});
+			
+		}
+		else {
+			alert("장바구니에서 "+pname+" 제품 삭제를 취소하셨습니다.");
+		}
+		
+	} // end of function goDel()
+	
 	
 </script>
 </head>
@@ -230,7 +334,7 @@ img.imgsmall {
 				<table id="shoppingBasket" class="table">
 				<tr>
 					<td class="td1">
-						<input type="checkbox" class="allCheck"/><label class="j">전체 선택</label>
+						<input type="checkbox" class="allCheckOrNone" id="all2" /><label for="all2" class="j">전체 선택</label>
 					</td>
 					<td>
 						제품이미지
@@ -264,27 +368,38 @@ img.imgsmall {
 						<c:forEach var="cartvo" items="${cartList}" varStatus="status">
 						<tr>
 							<td> <%--체크박스 및 제품번호 --%>
-							 	<input type="checkbox" name="product_num" class="chkboxnum" id="product_num${status.index}" value="${cartvo.product_num}" /> &nbsp;<label for="product_num${status.index}">${cartvo.product_num}</label>
+							 	<input type="checkbox" name="product_num" class="chkboxpnum" id="product_num${status.index}" value="${cartvo.product_num}" /> &nbsp;<input type="text" name="product_num${status.index}" value="${cartvo.product_num}" />
 							</td>
 							<td align="center"> <%-- 제품이미지 --%>
 								<a href='/ShoppingMall/detail.do?product_num=${cartvo.product_num}'>
-									<img src="<%=ctxPath%>/images/${cartvo.prod.product_name}" width="130px" height="100px" />
+
+									<img src="/ShoppingMall/images/${cartvo.prod.representative_img}" width="60px" height="80px" />
+
 								</a>
 							</td>
 							<td align="center"> <%-- 제품정보 --%>
-								<span>${cartvo.prod.product_name}</span>
+								<span style="font-weight: bold;" class="cart_pname">${cartvo.prod.product_name}</span>
+								
+								<c:if test="${cartvo.prod.sale != 0}">
+									<br/><span style="text-decoration: line-through;"><fmt:formatNumber value="${cartvo.prod.price}" pattern="###,###"/> 원</span>
+									&nbsp;=>&nbsp;<fmt:formatNumber value="${cartvo.prod.finalPrice}" pattern="###,###" /> 원
+								</c:if>
+								<c:if test="${cartvo.prod.sale == 0}">
+									<br/><fmt:formatNumber value="${cartvo.prod.price}" pattern="###,###"/> 원
+								</c:if>
 							</td>
 							<td align="center"> <%-- 수량 --%>
-								<input name="product_count" value="${cartvo.product_count}">개
+								<input class="spinner spinnerImgQty" name="product_count" value="${cartvo.product_count}" style="width: 30px; height: 20px;">개
 							</td>
 							<td> <%--총 제품가격 --%>
 							<span id="totalPrice">
 								<fmt:formatNumber value="${cartvo.prod.totalPrice}" pattern="###,###" />
 							</span> 원
 							<input class="totalPrice" type="hidden" value="${cartvo.prod.totalPrice}" />
+							
 							</td>
 							<td align="center"> <%-- 장바구니에서 해당 제품 삭제하기 --%>
-								<span class="del" style="cursor: pointer;" onClick="">X</span>
+								<span class="del" style="cursor: pointer;" onClick="goDel('${cartvo.basket_num}');">X</span>
 							</td>
 						</tr>
 						</c:forEach>
@@ -294,7 +409,7 @@ img.imgsmall {
 				
 				<tr>
 					<td>
-						<input type="checkbox" class="allCheck"/><label class="j">전체 선택</label>
+						<input type="checkbox" class="allCheckOrNone" id="all1"/><label for="all1" class="j">전체 선택</label>
 						<input type="button" onClick="cancelProduct();" value="선택 삭제"/>
 					</td> 
 				</tr>
@@ -318,10 +433,10 @@ img.imgsmall {
 							<span style="color: red; font-weight: bold;"><fmt:formatNumber value="${sumMap.SUMTOTALPRICE}" pattern="###,###" /> 원</span>
 						</td>
 						<td id="delivery" class="t d">
-							<label>0원</label>
+							<label>3,000원</label>
 						</td>
 						<td id="totalPrice" class="t d">
-							<label>0원</label>
+							<span style="color: red; font-weight: bold;"><fmt:formatNumber value="${sumMap.SUMTOTALPRICE+3000}" pattern="###,###" /> 원</span>
 						</td>
 					</tr>
 				</table>

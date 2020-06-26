@@ -386,9 +386,9 @@ div.check_event{
            return;
         }$.ajax({
             url:"<%=ctxPath%>/member/idDuplicateCheck.do",
-            type:"post",
+            type:"get",
             data:{"userid":$("#userid").val()},
-            dataType:"json",
+            dataType:"JSON",
             success:function(json){
                if(json.isUse) {
                     alert("사용 가능한 ID입니다.");
@@ -470,7 +470,7 @@ div.check_event{
            //console.log($(this).val().length);
            //console.log(keycode);
          
-         if( !((48 <= keycode && keycode<=57) || (96<=keycode && keycode<=105))){
+         if( !((48 <= keycode && keycode<=57) || (96<=keycode && keycode<=105) || (keycode == 8))){
             var word = $(this).val().length;
             var keyValue = $(this).val().substring(0,word-1);
             $(this).val(keyValue);
@@ -766,7 +766,7 @@ div.check_event{
 		frm.method = "POST";
 		frm.action = "register.do";
 		frm.submit();
-		alert("가입되었습니다")
+		alert("가입되었습니다");
 
 	}// end of function goRegister(event)----------
 </script>

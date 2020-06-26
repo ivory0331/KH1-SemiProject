@@ -226,7 +226,9 @@
 					<span style="margin-left:10px; font-size:8pt; font-weight: bold;"></span>
 				</div>
 				<form name="questionWriteFrm" enctype="multipart/form-data" method="post">
+
 					<input type="hidden" name="product_num" value="${pivo.fk_product_num}" />
+
 					<table class="writeTable">
 						<tr>
 							<td class="frmTitle">작성자</td>

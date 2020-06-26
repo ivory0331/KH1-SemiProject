@@ -332,8 +332,9 @@ $(document).ready(function(){
 });
 	
 	function goBasket(){
-		location.href="<%= ctxPath%>/product/basketList.do";
-	}
+    	location.href="<%= ctxPath%>/product/basketList.do";
+ 	}
+	
 	
 	
 	function che(){

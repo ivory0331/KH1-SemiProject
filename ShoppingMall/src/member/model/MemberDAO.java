@@ -101,12 +101,10 @@ public class MemberDAO implements InterMemberDAO {
          rs = pstmt.executeQuery();
          isEmail = !rs.next(); // 행이 존재하면 F를 리턴
 
-      } 
-      catch (UnsupportedEncodingException | GeneralSecurityException e) {
+      } catch (UnsupportedEncodingException | GeneralSecurityException e) {
           e.printStackTrace();
 
-       }
-      finally {
+      } finally {
          close();
       }
       return isEmail;
@@ -268,6 +266,5 @@ public class MemberDAO implements InterMemberDAO {
       return userid;
       
    }
-   
    
 }

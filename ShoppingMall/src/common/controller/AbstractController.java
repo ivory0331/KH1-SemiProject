@@ -5,6 +5,7 @@ import javax.servlet.http.HttpSession;
 
 import member.model.MemberVO;
 
+
 public abstract class AbstractController implements InterCommand {
 
 	/*
