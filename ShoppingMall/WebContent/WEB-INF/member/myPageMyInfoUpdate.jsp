@@ -669,9 +669,8 @@ input#userid:focus {outline:none;}
 
 		var frm = document.updateFrm;
 		frm.method = "POST";
-		frm.action = "myPageMyInfoUpdate.do";
+		frm.action = "myPageMyInfoUpdateAction.do";
 		frm.submit();
-		alert("회원정보가 수정되었습니다.");
 
 	}// end of function goRegister(event)----------
 	
@@ -710,6 +709,7 @@ input#userid:focus {outline:none;}
 			                    <tr>
 			                       <td class="memberCols1">아이디*</td>
 			                       <td class="memberCols2">
+			                       	  <input type="hidden" name="member_num" value="${sessionScope.loginuser.member_num}" readonly />
 			                          <input type="text" name="userid" id="userid" value="${(sessionScope.loginuser).userid}" style="color:#aaa" readonly>		                          
 			                       </td>
 			                    </tr>				                    

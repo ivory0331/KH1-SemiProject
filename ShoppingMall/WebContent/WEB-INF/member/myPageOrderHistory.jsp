@@ -175,7 +175,7 @@
 		$(".myOrder_Name").click(function(){
 			var order_num = $(this).find(".order_num").text();
 			// alert(order_num);
-		    location.href="<%= ctxPath%>/member/myPageOrderHistoryDetail.do?order_num="+order_num;  
+		    location.href="<%= ctxPath%>/member/myPageOrderHistoryDetail.do?order_num="+order_num;
 		});
 		
 	});// end of $(document).ready()---------------------
@@ -208,6 +208,15 @@
 				</div>
 			
 				<div id="myOrderHistory_List">
+					<c:if test="${empty orderHistoryList}">
+						<div>
+							<span>
+					   	    	장바구니에 담긴 상품이 없습니다.
+					   	    </span>
+						</div>
+					</c:if>
+					
+					<c:if test="${not empty orderHistoryList}">					
 					<c:set var="temp" value="0" />
 					<c:forEach var="ohvo" items="${orderHistoryList}">
 					<div>
@@ -258,6 +267,7 @@
 						</c:choose>						
 					</div>	
 					</c:forEach>
+					</c:if>
 				</div>	
 				<div style="border-bottom:solid 1px black; text-align:center;">페이징 처리</div>			
 			</div>						
