@@ -51,9 +51,9 @@ public class ProductQwriteAction extends AbstractController {
 			}
 			
 			
-			if(product == null) {
+			if(product == null) { //장난질 할 경우
 				message = "등록된 상품이 없습니다.";
-				loc = "javascript:history.back()";
+				loc = request.getContextPath()+"/index.do";
 				
 				request.setAttribute("message", message);
 				request.setAttribute("loc", loc);
@@ -75,7 +75,7 @@ public class ProductQwriteAction extends AbstractController {
 			if(!dir.isDirectory()){
 				dir.mkdir();//.mkdirs차이
 			}
-			int maxsize = 5*1024*1024; 
+			int maxsize = 10*1024*1024; 
 			String encoding = "UTF-8";
 			
 			MultipartRequest multi = new MultipartRequest(request, realPath, maxsize, encoding, new DefaultFileRenamePolicy());
@@ -90,13 +90,22 @@ public class ProductQwriteAction extends AbstractController {
 			String content = multi.getParameter("contents");
 			product_num = multi.getParameter("product_num");
 			
-			System.out.println(emailFlag+"/"+smsFlag+"/"+secretFlag+"/"+String.join(",", fileName));
+			content = content.replaceAll("<", "&lt;");
+			content = content.replaceAll(">", "&gt;");
+			content = content.replaceAll("\r\n", "<br/>");
+			content = content.replaceAll("&","&amp;");
+			content = content.replaceAll("\"","&quot");
+			
+			
 			System.out.println(content);
 			
 			if(emailFlag==null) emailFlag="0";
 			if(smsFlag == null) smsFlag="0";
 			if(secretFlag == null) secretFlag="0";
 			if(fileNameArr != null) fileName = String.join(",", fileNameArr);
+			
+			System.out.println(emailFlag+"/"+smsFlag+"/"+secretFlag+"/"+fileName+"/"+content);
+			
 			
 			Map<String,String> paraMap = new HashMap<String, String>();
 			paraMap.put("subject", title);

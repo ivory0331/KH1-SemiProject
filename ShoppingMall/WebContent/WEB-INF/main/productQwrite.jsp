@@ -107,8 +107,7 @@
 		$(document).on('change','.imgFile',function(){
 				console.log("이미지 로딩");
 				var idx = $(this).prop("id").substring(7)
-				fileView(this);
-				func_printImg(idx, this);
+				func_imgCheck(idx, this);
 		});
 		
 	});
@@ -120,23 +119,18 @@
 			return;
 		}
 		
-		if(content == ""){
+		if($("#txt_area").val().trim() == ""){
 			alert("내용을 입력해주세요");
 			return;
 		}
-		for(var i=0; i<$(".imgInput").length; i++){
-			var idx = $(".imgInput:eq("+i+")").prop("id").substring(8);
-			console.log(idx);
-			var imageFile = decodeURIComponent($("#fileName"+idx).val());
-			$("#image"+idx).prop("src","<%=ctxPath%>/Upload/"+imageFile);
-			
-		}
-		var content = $("#txt_area").html().trim();
+		
+		var content = $("#txt_area").val();
 		console.log(content);
 		$("#txt_content").val(content);
+		console.log($("#txt_content").val());
 		var Frm = document.questionWriteFrm;
 		Frm.action = "<%=ctxPath%>/productQwrite.do"
-		Frm.submit();
+		Frm.submit(); 
 		
 	}
 
@@ -155,30 +149,18 @@
 		cnt++;
 	}
 	
-	function func_printImg(idx, item){
+	function func_imgCheck(idx, item){
 		console.log(item);
 		if(item.files && item.files[0]) {
 			var fileName = item.files[0].name;
 			var index = fileName.indexOf(".");
 			var fileType = fileName.substr(index);
 			if(fileType==".png"||fileType==".jpg"||fileType==".png"){
-				var reader = new FileReader;
-				reader.onload = function(data) {
-					var check = $("#productQ-img"+idx).find("img").length;
-					console.log(check);
-					if(check==0){
-						var html = "<div id='productQ-img"+idx+"'><img src='"+data.target.result+"' class='image' id='image"+idx+"' /></div><br><div></div>";
-						$("#txt_area").append(html);
-					}
-					else{
-						$("#productQ-img"+idx).find("img").prop("src",data.target.result);
-					}
-					
-				}
-				 reader.readAsDataURL(item.files[0]);
+				 fileView(item);
 			}
 			else{
 				alert("이미지만 올릴 수 있습니다.");
+				item.value=null;
 			}
 		}
 	}
@@ -190,6 +172,7 @@
 		console.log(idx);
 		var fullPath = elem.value;
 		fileName = fullPath.substring(12);
+		console.log(fullPath)
 		console.log(fileName);
 		$("#fileName"+idx).val(fileName);
 	}
@@ -201,7 +184,6 @@
 		console.log(idx);
 		$("#imgInput"+idx).remove();
 		$("#close"+idx).remove();
-		$("#productQ-img"+idx).remove();
 		$("#fileName"+idx).remove();
 	}
 	
@@ -258,7 +240,7 @@
 						</tr>
 						<tr>
 							<td class="txt_field" colspan="2">
-								<div id="txt_area" contenteditable="true"></div>
+								<textarea rows="30" cols="30" id="txt_area"></textarea>
 								<input type="hidden" name="contents" id="txt_content"/>
 							</td>
 

@@ -25,13 +25,14 @@ public class InBasketAction extends AbstractController {
 		System.out.println(request.getParameter("product_num")+"/"+ request.getParameter("price")+"/"+request.getParameter("count"));
 		boolean check = true;
 		String message="";
-		int n = -1;
+		int n = 0;
 		
 		boolean loginFlag = super.checkLogin(request);
 		if(!loginFlag) {
 			String goBackURL = request.getContextPath()+"/detail.do?product_num="+request.getParameter("product_num");
 			session.setAttribute("goBackURL", goBackURL);
 			message = "로그인이 필요한 기능입니다.";
+			n=-1;
 		}
 		else {
 			MemberVO loginuser = (MemberVO) session.getAttribute("loginuser");
