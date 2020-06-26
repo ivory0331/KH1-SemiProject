@@ -81,6 +81,7 @@
 			}			
 		})
 		
+		
 		// 검색 상황 유지
 		if("${searchWord}" != "") {
 			$("select#fk_category_num").val("${fk_category_num}");

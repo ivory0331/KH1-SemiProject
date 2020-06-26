@@ -8,7 +8,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import common.controller.AbstractController;
-import product.model.*;
+import manager.model.*;
+import product.model.ProductVO;
 
 
 // 진하

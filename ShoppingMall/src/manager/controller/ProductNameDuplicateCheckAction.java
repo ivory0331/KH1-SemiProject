@@ -6,7 +6,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.json.JSONObject;
 
 import common.controller.AbstractController;
-import product.model.*;
+import manager.model.*;
 
 public class ProductNameDuplicateCheckAction extends AbstractController {
 

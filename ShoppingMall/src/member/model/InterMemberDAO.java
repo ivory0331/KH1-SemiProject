@@ -28,21 +28,7 @@ public interface InterMemberDAO {
 	
 	
 	
-	////////////////// 매니저 진하
-	// 전체 회원 조회
-	List<MemberVO> selectAllMember() throws SQLException;
-
 	
-	// 페이징 처리
-	List<MemberVO> selectPagingMember(HashMap<String, String> paraMap) throws SQLException;
-
-	
-	// 페이지 그룹
-	int getTotalPage(HashMap<String,String> paraMap) throws SQLException;
-
-	
-	// 회원 삭제
-	int memberDelete(String member_num) throws SQLException;
 
 
 }

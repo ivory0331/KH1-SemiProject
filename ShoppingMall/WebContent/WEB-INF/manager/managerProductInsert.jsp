@@ -206,10 +206,12 @@
 		});	
 		
 		
+		
 		// 상세이미지 삽입
 		$(".upload_image").each(function(index, item){
 			
 			var index = index+1;
+			
 			
 			$('#image'+index+'_btn').on('change', function(){ 
 				if(window.FileReader){  
@@ -223,14 +225,43 @@
 			});		
 			
 		});
-				
 		
 		
-		
-		
+		 
+		// 소분류 활성화	
+		$("select#fk_category_num").bind("change", function(){
+			if($("select#fk_category_num").val()!=0){
+				console.log($("select#fk_category_num").val());
+				$.ajax({
+					url:"<%= ctxPath%>/manager/getSubCategoryList.do",
+					type:"post",
+					data:{"fk_category_num":$("#fk_category_num").val()},
+					dataType:"json",
+					success:function(json){		
+						$("select#fk_subcategory_num").prop('disabled',false);
+						var html='';
+						for(var i=0; i<json.length;i++){
+							html +="<option value='"+json.subCategoryList.subCategory_num+"'>"+json.subCategoryList.subCategory_content+"</option>";
+						}
+						$("#fk_subcategory_num").html(html);
+						
+						console.log(json);
+					},						
+					error: function(request, status, error){
+						alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
+					}
+					
+				});
+			} else{
+				$("select#fk_subcategory_num").prop('disabled',true);
+			}			
+		})
 		
 		
 	});
+	
+	
+	
 	
 	
 	
@@ -351,12 +382,12 @@
 <body>
 	<div class="Mycontainer">
 	
-		<%-- <jsp:include page="include/header.jsp"></jsp:include> --%>
+		<jsp:include page="../include/header.jsp"></jsp:include>
 		
 		<div class="section" align="center">
 			<div class="contents">
 				<div class="sideMenu">
-					<%-- <jsp:include page="include/managerSide.jsp"></jsp:include> --%>
+				<jsp:include page="../include/managerSide.jsp"></jsp:include>
 				</div>
 				
 				<div id="info">
@@ -413,9 +444,9 @@
 									</li>
 									<li>
 										<label>소뷴류</label>
-										<select id="fk_subcategory_num" name="fk_subcategory_num" class="smallSelect">
-											<option value="11">기본채소</option>
-											<option value="12">쌈 샐러드</option>	
+										<select id="fk_subcategory_num" name="fk_subcategory_num" class="smallSelect" disabled>
+											<option value="0">※필수 소분류</option>	
+																					
 										</select>
 									</li>
 									<li>
@@ -478,7 +509,7 @@
 				
 			</div>
 		</div>
-		<%-- <jsp:include page="include/footer.jsp"></jsp:include> --%>
+		<jsp:include page="../include/footer.jsp"></jsp:include>
 	</div>
 </body>
 </html>

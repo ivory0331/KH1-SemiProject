@@ -15,7 +15,7 @@ import com.oreilly.servlet.multipart.DefaultFileRenamePolicy;
 
 import common.controller.AbstractController;
 import my.util.MyUtil;
-import product.model.*;
+import manager.model.*;
 
 public class ManagerProductInsertAction extends AbstractController {
 
@@ -32,9 +32,9 @@ public class ManagerProductInsertAction extends AbstractController {
 	    
 	    List<HashMap<String, String>> subCategoryList = new ArrayList<>();	      
 
-	    subCategoryList = pdao.getSubCategoryList(fk_category_num);
+	 //   subCategoryList = pdao.getSubCategoryList(fk_category_num);
 	    
-	    request.setAttribute("subCategoryList", subCategoryList);
+	 //   request.setAttribute("subCategoryList", subCategoryList);
 	    
 	    /*
 		
@@ -88,7 +88,7 @@ public class ManagerProductInsertAction extends AbstractController {
 
 		*/
 	   
-
+	    super.setViewPage("/WEB-INF/manager/managerProductInsert.jsp");
 		  
 		
 	}

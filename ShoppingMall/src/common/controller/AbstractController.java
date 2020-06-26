@@ -7,8 +7,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import member.model.*;
-import product.model.*;
+import manager.model.*;
 
 import member.model.MemberVO;
 
