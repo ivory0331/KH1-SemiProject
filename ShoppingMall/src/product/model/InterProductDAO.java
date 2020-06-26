@@ -15,9 +15,9 @@ public interface InterProductDAO {
 	// 대분류 불러오기
 	String categoryInfo(String fk_category_num) throws SQLException;
 
-	// 소분류 불러오기
-	List<ProductVO> subcategoryList(String fk_category_num) throws SQLException;
-
+	// 대분류와 소분류 불러오기
+	List<ProductVO> subcategoryList(String fk_category_num) throws SQLException ;
+	
 	// 페이징 처리를 한 제품목록 불러오기
 	List<ProductVO> selectPagingProduct(HashMap<String, String> paraMap) throws SQLException;
 
