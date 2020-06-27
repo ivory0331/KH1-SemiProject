@@ -20,6 +20,7 @@ import javax.sql.DataSource;
 import member.model.EncryptMyKey;
 import member.model.MemberVO;
 import util.security.AES256;
+import product.model.*;
 
 public class IndexDAO implements InterIndexDAO{
 
@@ -68,7 +69,7 @@ public class IndexDAO implements InterIndexDAO{
 		try {
 			conn = ds.getConnection();
 			String sql = "";
-			String subSql = " select product_num, product_name, price, stock, to_char(registerdate,'yyyy-mm-dd') as registerdate, representative_img from product_table ";
+			String subSql = " select product_num, product_name, price, stock, sale, to_char(registerdate,'yyyy-mm-dd') as registerdate, representative_img from product_table ";
 			
 			switch (type) {
 			case "sale":
@@ -88,7 +89,7 @@ public class IndexDAO implements InterIndexDAO{
 				sql= subSql+" where product_num in(?,?,?,?,?,?,?,?) ";
 			}
 			else {
-				sql="select ROM,product_num, product_name, price, stock, representative_img from (select rownum as ROM, product_num, product_name, price, stock, representative_img  from("+subSql+") )T where T.ROM between 1 and 8 ";
+				sql="select ROM,product_num, product_name, price, stock, sale, representative_img from (select rownum as ROM, product_num, product_name, price, stock, sale, representative_img  from("+subSql+") )T where T.ROM between 1 and 8 ";
 
 			}
 			
@@ -109,10 +110,12 @@ public class IndexDAO implements InterIndexDAO{
 			while(rs.next()) {
 				ProductVO product = new ProductVO();
 				product.setProduct_num(rs.getInt("product_num"));
+				product.setSale(rs.getInt("sale"));
 				product.setProduct_name(rs.getString("product_name"));
 				product.setPrice(rs.getInt("price"));
 				product.setStock(rs.getInt("stock"));
 				product.setRepresentative_img(rs.getString("representative_img"));
+				product.setFinalPrice();
 				productList.add(product);
 			}
 			

@@ -162,9 +162,10 @@ img.imgsmall {
 			error: function(request, status, error){
 				alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
 			}
+
 		});
 			
-	} // function func_edit(cartno, oqty)---------------------------------------------------------------------
+	} // function func_edit(cartno, oqty)----------------------------------------------------------------------
 	
 	// 장바구니 카테고리에 선택 물품 삭제
 	function goDel(cartno){

@@ -105,38 +105,42 @@ public class ProductDAO implements InterProductDAO {
 	}
 
 	
-	// 대분류와 소분류 불러오기
-	@Override
-	public List<ProductVO> subcategoryList(String fk_category_num) throws SQLException {
-		List<ProductVO> subcategoryList = new ArrayList<>();
 
-		try {
-			conn = ds.getConnection();
-			
-			String sql = " select subcategory_num, subcategory_content " + 
-						 " from product_subcategory_table " + 
-						 " where subcategory_num like ?||'_' ";
-			
-			pstmt = conn.prepareStatement(sql);
-			pstmt.setInt(1, Integer.parseInt(fk_category_num));
-			
-			rs = pstmt.executeQuery();
-			
-			while(rs.next()) {
-				ProductVO pvo = new ProductVO();
-				
-				pvo.setSubcategory_num(rs.getInt(1));
-				pvo.setSubcategory_content(rs.getString(2));
-				
-				subcategoryList.add(pvo);
-			}
-			
-		} finally {
-			close();
-		}
-		
-		return subcategoryList;
-	}
+
+	
+	// 대분류와 소분류 불러오기
+	   @Override
+	   public List<ProductVO> subcategoryList(String fk_category_num) throws SQLException {
+
+	      List<ProductVO> subcategoryList = new ArrayList<>();
+	      try {
+	         conn = ds.getConnection();
+	         
+	         String sql = " select subcategory_num, subcategory_content " + 
+	                   " from product_subcategory_table " + 
+	                   " where subcategory_num like ?||'_' ";
+	         
+	         pstmt = conn.prepareStatement(sql);
+	         pstmt.setInt(1, Integer.parseInt(fk_category_num));
+	         
+	         rs = pstmt.executeQuery();
+	         
+	         while(rs.next()) {
+	            ProductVO pvo = new ProductVO();
+	            
+	            pvo.setSubcategory_num(rs.getInt(1));
+	            pvo.setSubcategory_content(rs.getString(2));
+	            
+	            subcategoryList.add(pvo);
+	         }
+	         
+	      } finally {
+	         close();
+	      }
+	      
+	      return subcategoryList;
+	   }
+	
 
 	// 소분류 불러오기
 	@Override
@@ -435,6 +439,7 @@ public class ProductDAO implements InterProductDAO {
 		return n;
 	}
 
+
 	
 	// 페이징 처리를 한 신상품 목록을 조회하기
 	@Override
@@ -488,6 +493,7 @@ public class ProductDAO implements InterProductDAO {
 
 		
 	}
+
 	
 	
 	

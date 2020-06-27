@@ -12,7 +12,7 @@
 <meta charset="UTF-8">
 <link rel="stylesheet" href="<%= ctxPath %>/css/style.css" />
 <!-- 진하 -->
-<title>managerGoods.jsp</title>
+<title>managerProduct.jsp</title>
 
 <!-- 차트 링크 --> 
 <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script> 
@@ -80,6 +80,7 @@
 				$("select#fk_subcategory_num").prop('disabled',true);
 			}			
 		})
+		
 		
 		// 검색 상황 유지
 		if("${searchWord}" != "") {

@@ -190,7 +190,7 @@
 				<div id="myOrderHistoryDetail_List">
 					<div>												
 						<div class="myOrder_number">
-							<h3>주문번호 1111111111</h3>
+							<h3>주문번호&nbsp;${order_num}</h3>
 						</div>
 						
 						<div class="myOrder_Goods">						
@@ -241,7 +241,7 @@
 								</table>	
 													
 								<div style="clear:both;"></div>
-								
+														
 								<div class="head_section">								
 									<h3 class="tit">결제 정보</h3>									
 								</div>
@@ -249,19 +249,15 @@
 								<table class="info">
 									<tr>
 										<th class="info">총주문금액</th>
-										<td class="info"><span>10,000</span>원</td>
+										<td class="info"><span>${OrderInfoList.price}</span>원</td>
 									</tr>
 									<tr>
 										<th class="info">배송비</th>
-										<td class="info">+2,500원</td>
-									</tr>
-									<tr>
-										<th class="info">결제금액</th>
-										<td class="info"><span>12,500</span>원</td>										
+										<td class="info">3,000원</td>
 									</tr>
 									<tr style="border-bottom:solid 1px #ddd;">
-										<th class="info">결제방법</th>
-										<td class="info">신용카드</td>										
+										<th class="info">결제금액</th>
+										<td class="info"><span>${OrderInfoList.price}</span>원</td>										
 									</tr>
 								</table>
 								
@@ -272,23 +268,19 @@
 								<table class="info">
 									<tr>
 										<th class="info">주문 번호</th>
-										<td class="info">1111111111</td>
+										<td class="info">${order_num}</td>
 									</tr>
 									<tr>
 										<th class="info">주문자명</th>
-										<td class="info">OOO</td>
-									</tr>
-									<tr>
-										<th class="info">보내는 분</th>
-										<td class="info">OOO</td>										
+										<td class="info">${OrderInfoList.name}</td>
 									</tr>
 									<tr>
 										<th class="info">결제일시</th>
-										<td class="info">0000-00-00 00:00:00</td>										
+										<td class="info">${OrderInfoList.order_date}</td>										
 									</tr>
 									<tr style="border-bottom:solid 1px #ddd;">
 										<th class="info">주문 처리상태</th>
-										<td class="info">배송완료</td>										
+										<td class="info">${OrderInfoList.order_state}</td>										
 									</tr>
 								</table>
 								
@@ -299,47 +291,25 @@
 								<table class="info">
 									<tr>
 										<th class="info">받는 분</th>
-										<td class="info">OOO</td>
+										<td class="info">${OrderInfoList.recipient}</td>
 									</tr>
 									<tr>
 										<th class="info">받는 분 핸드폰</th>
-										<td class="info">010-****-0000</td>
+										<td class="info">010-0000-0000</td>
 									</tr>
 									<tr>
 										<th class="info">우편번호</th>
-										<td class="info">00000</td>										
+										<td class="info">${OrderInfoList.recipient_postcode}</td>										
 									</tr>
 									<tr>
 										<th class="info">주소</th>
-										<td class="info">서울 OOO구 ~~~~~~~~ OOO동 OOO호</td>										
+										<td class="info">${OrderInfoList.recipient_address}&nbsp;${OrderInfoList.recipient_detailAddress}</td>										
 									</tr>
 									<tr style="border-bottom:solid 1px #ddd;">
 										<th class="info">배송 요청사항</th>
-										<td class="info"></td>										
+										<td class="info">${OrderInfoList.memo}</td>										
 									</tr>
-								</table>
-								
-								<div class="head_section">								
-									<h3 class="tit">공동현관 출입방법</h3>									
-								</div>
-								
-								<table class="info">
-									<tr style="border-bottom:solid 1px #ddd;">
-										<th class="info">비밀번호</th>
-										<td class="info">***********</td>										
-									</tr>
-								</table>
-								
-								<div class="head_section">								
-									<h3 class="tit">추가 정보</h3>									
-								</div>
-								
-								<table class="info">
-									<tr style="border-bottom:solid 1px #ddd;">
-										<th class="info">메시지 전송 시점</th>
-										<td class="info">오전 7시</td>										
-									</tr>
-								</table>
+								</table>								
 								
 							</div>						
 						</div>

@@ -2,6 +2,7 @@ package member.model;
 
 import java.sql.SQLException;
 import java.util.HashMap;
+import java.util.List;
 
 import member.model.MemberVO;
 
@@ -24,5 +25,10 @@ public interface InterMemberDAO {
 
 	//아이디찾기(이름, 핸드폰번호) 
 	String findUserid(HashMap<String, String> paraMap) throws SQLException;
+	
+	
+	
+	
+
 
 }

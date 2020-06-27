@@ -98,10 +98,12 @@
 			return;	// goUpdate() 함수 종료
 		}		
 		
-		var frm = document.updateFrm;
-		frm.action = "<%= ctxPath%>/member/myPageMyInfoUpdatePW.do";
-		frm.method = "POST";
-		frm.submit();
+		else {		
+			var frm = document.updateFrm;
+			frm.action = "<%= ctxPath%>/member/myPageMyInfoUpdate.do";
+			frm.method = "POST";
+			frm.submit();
+		}
 			
 	}// end of function goUpdate()---------------------------------
 	
