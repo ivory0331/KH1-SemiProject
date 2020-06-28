@@ -50,6 +50,9 @@ public interface InterIndexDAO {
 	// 해당 상품이 로그인 한 회원의 후기작성이 가능한 상품인지 조회
 	OrderProductVO productReviewFind(Map<String, String> paraMap)throws SQLException;
 
+	// 최근 배송지역 유무 조회
+	Map<String, String> orderHistoryFind(int member_num)throws SQLException;
+
 	
 
 	

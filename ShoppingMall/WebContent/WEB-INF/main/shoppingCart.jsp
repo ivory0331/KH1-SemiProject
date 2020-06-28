@@ -162,10 +162,10 @@ img.imgsmall {
 			error: function(request, status, error){
 				alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
 			}
-		})
 
+		});
 			
-	} // function func_edit(cartno, oqty)---------------------------------------------------------------------
+	} // function func_edit(cartno, oqty)----------------------------------------------------------------------
 	
 	// 장바구니 카테고리에 선택 물품 삭제
 	function goDel(cartno){
@@ -243,6 +243,13 @@ img.imgsmall {
 		
 	} // function cancelProduct()---------------------------------------------------------------------------
 	
+	function order(){
+		var frm = document.frmData;
+		frm.action="<%=ctxPath%>/payment.do";
+		frm.method="post";
+		frm.submit();
+	}
+	
 	
 </script>
 </head>
@@ -294,18 +301,17 @@ img.imgsmall {
 						<tr class="cartTR">
 							<td class="longtd"> <%--체크박스 및 제품번호 --%>
 							 	<input type="checkbox" name="product_num" class="chkboxpnum" id="product_cknum${status.index}" value="${cartvo.product_num}" />
-							 	<input type="hidden" class="basketNum" id="product_num${status.index}" value="${cartvo.basket_num}" />
+							 	<input type="hidden" class="basketNum" name="product_num" id="product_num${status.index}" value="${cartvo.basket_num}" />
 							</td>
 							<td align="center"> <%-- 제품이미지 --%>
 								<a href='/ShoppingMall/detail.do?product_num=${cartvo.product_num}'>
 
 									<img src="/ShoppingMall/images/${cartvo.prod.representative_img}" width="60px" height="80px" />
-
+									<input type="hidden" name="product_img" value="${cartvo.prod.representative_img}"/>
 								</a>
 							</td>
 							<td align="center"> <%-- 제품정보 --%>
 								<span style="font-weight: bold;" class="cart_pname">${cartvo.prod.product_name}</span>
-								
 								<c:if test="${cartvo.prod.sale != 0}">
 									<br/><span style="text-decoration: line-through;"><fmt:formatNumber value="${cartvo.prod.price}" pattern="###,###"/> 원</span>
 									&nbsp;=>&nbsp;<fmt:formatNumber value="${cartvo.prod.finalPrice}" pattern="###,###" /> 원
@@ -321,7 +327,7 @@ img.imgsmall {
 							<span id="totalPrice">
 								<fmt:formatNumber value="${cartvo.prod.totalPrice}" pattern="###,###" />
 							</span> 원
-							<input class="totalPrice" type="hidden" value="${cartvo.prod.totalPrice}" />
+							<input class="totalPrice" type="hidden" name="product_totalPrice" value="${cartvo.prod.totalPrice}" />
 							
 							</td>
 							<td align="center"> <%-- 장바구니에서 해당 제품 삭제하기 --%>

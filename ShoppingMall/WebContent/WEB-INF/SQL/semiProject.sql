@@ -297,8 +297,12 @@ create table review_table
 ,constraint uq_review_orderProduct UNIQUE (fk_product_num, fk_order_num)
 );
 
+select * from member_table;
+
+
+
 insert into review_table(review_num, subject, content, hit, favorite, fk_product_num, fk_order_num, fk_member_num)
-values(seq_review_table.nextval, '맛있어요', '이렇게 맛있는 음식은 처음이에요', 4, 2, 10, 1, 1);
+values(seq_review_table.nextval, '맛있어요', '이렇게 맛있는 음식은 처음이에요', 4, 2, 115, 1, 1);
 
 select R.review_num, P.product_name, R.write_date, R.hit, R.favorite
 	, R.subject, RI.image, R.content
