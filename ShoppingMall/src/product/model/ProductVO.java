@@ -13,6 +13,10 @@ public class ProductVO {
 	private String unit;
 	private String registerdate;
 	private int sale;
+	private int best_point;
+	private String seller;
+	private String seller_phone;
+	private String explain;
 	private int fk_category_num;
 	private int fk_subcategory_num;
 	private int category_num;
@@ -28,7 +32,7 @@ public class ProductVO {
 	public ProductVO() { }
 
 	public ProductVO(int product_num, String product_name, int price, int stock, String origin, String packing,
-			String unit, String registerdate, int sale, int fk_category_num, int fk_subcategory_num, int category_num,
+			String unit, String registerdater, int sale, int best_point, int fk_category_num, int fk_subcategory_num, int category_num,
 			String category_content, int subcategory_num, String subcategory_content, String representative_img,
 			List<String> imageList) {
 		super();
@@ -41,6 +45,7 @@ public class ProductVO {
 		this.unit = unit;
 		this.registerdate = registerdate;
 		this.sale = sale;
+		this.best_point=best_point;
 		this.fk_category_num = fk_category_num;
 		this.fk_subcategory_num = fk_subcategory_num;
 		this.category_num = category_num;
@@ -107,6 +112,37 @@ public class ProductVO {
 	public void setSale(int sale) {
 		this.sale = sale;
 	}
+	public int getBest_point() {
+		return best_point;
+	}
+	public void setBest_point(int best_point) {
+		this.best_point = best_point;
+	}
+	
+	public String getSeller() {
+		return seller;
+	}
+
+	public void setSeller(String seller) {
+		this.seller = seller;
+	}
+
+	public String getSeller_phone() {
+		return seller_phone;
+	}
+
+	public void setSeller_phone(String seller_phone) {
+		this.seller_phone = seller_phone;
+	}
+
+	public String getExplain() {
+		return explain;
+	}
+
+	public void setExplain(String explain) {
+		this.explain = explain;
+	}
+
 	public int getFk_category_num() {
 		return fk_category_num;
 	}

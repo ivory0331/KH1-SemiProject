@@ -15,12 +15,52 @@ import com.oreilly.servlet.multipart.DefaultFileRenamePolicy;
 
 import common.controller.AbstractController;
 import my.util.MyUtil;
+import product.model.ProductVO;
 import manager.model.*;
+import member.model.MemberVO;
 
 public class ManagerProductInsertAction extends AbstractController {
 
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		
+		
+		// 1. 로그인 해야 가능		
+		if(!super.checkLogin(request)) {
+			
+			 String message = "먼저 로그인 해야 가능합니다.";
+	         String loc = "javascript:history.back()";
+	         
+	         request.setAttribute("message", message);
+	         request.setAttribute("loc", loc);
+	         
+	         super.setRedirect(false);
+	         super.setViewPage("/WEB-INF/msg.jsp");
+	         
+	         return;
+	         
+		}
+		//2. 관리자로 로그인 해야 가능
+		else {
+	    	 HttpSession session = request.getSession();
+	    	 MemberVO loginuser = (MemberVO)session.getAttribute("loginuser");
+	         int status = loginuser.getStatus();
+	         
+	         if(status!=2) {
+	            String message = "관리자만 접근이 가능합니다.";
+	            String loc = "javascript:history.back()";
+	            
+	            request.setAttribute("message", message);
+	            request.setAttribute("loc", loc);
+	            
+	            super.setRedirect(false);
+	            super.setViewPage("/WEB-INF/msg.jsp");
+	            
+	            return;
+	         }
+	         
+	      }
+		
 		
 	    super.getCategoryList(request);	
 	    
@@ -28,68 +68,117 @@ public class ManagerProductInsertAction extends AbstractController {
 	    
 	    InterProductDAO pdao = new ProductDAO();
 
-	    String fk_category_num = request.getParameter("fk_category_num");
 	    
-	    List<HashMap<String, String>> subCategoryList = new ArrayList<>();	      
+	    if(!"POST".equalsIgnoreCase(method)) {
+	         // GET 이라면
+	    	  super.setViewPage("/WEB-INF/manager/managerProductInsert.jsp");	    	  
+	    }else {
+	    	
+			MultipartRequest mtrequest = null;// 파일업로드, 다운로드 기능을 위한 객체, cos.jar 라이브러리 넣어줌
 
-	 //   subCategoryList = pdao.getSubCategoryList(fk_category_num);
-	    
-	 //   request.setAttribute("subCategoryList", subCategoryList);
-	    
-	    /*
-		
-		MultipartRequest mtrequest = null;// 파일업로드, 다운로드 기능을 위한 객체, cos.jar 라이브러리 넣어줌
-		
-		// 1. 첨부되어진 파일의 업로드 경로 설정
-		HttpSession sesssion = request.getSession();
-		
-		ServletContext svlCtx = sesssion.getServletContext();
-		String imagesDir = svlCtx.getRealPath("/images");// /MyMVC/images 는 웹경로
-		
-		
-		try {	
-			  // 파일 업로드
-			  mtrequest = new MultipartRequest(request, imagesDir, 10*1024*1024, "UTF-8", new DefaultFileRenamePolicy() );
+	    	
+		   
+			// 1. 첨부되어진 파일의 업로드 경로 설정
+			HttpSession sesssion = request.getSession();
 			
-	      } catch(IOException e) {
-	    	  request.setAttribute("message", "업로드 되어질 경로가 잘못되었거나 또는 최대용량 10MB를 초과하여 파일 업로드에 실패하였습니다.");
-	    	  request.setAttribute("loc", request.getContextPath()+"/manager/managerProductInsert.do");
-	    	  
-	    	  super.setViewPage("/WEB-INF/msg.jsp");
-	    	  return;
-		  }
-		
-		  String representative_img = mtrequest.getFilesystemName("representative_img");
-		  String detail_img = mtrequest.getFilesystemName("detail_img");
-		  
-		  
-		
-		  String fk_category_num = mtrequest.getParameter("fk_category_num");
-		  String fk_subcategory_num = mtrequest.getParameter("fk_subcategory_num");
-		  String product_name = mtrequest.getParameter("product_name");
-		  String unit = mtrequest.getParameter("unit");
-		  String packing = mtrequest.getParameter("packing");
-		  String origin = mtrequest.getParameter("origin");
-		  String price = mtrequest.getParameter("price");
-		  String sale = mtrequest.getParameter("sale");
-		  String best_point = mtrequest.getParameter("best_point");
+			ServletContext svlCtx = sesssion.getServletContext();
+			String imagesDir = svlCtx.getRealPath("/images");// 웹경로
+			// 절대경로 => C:\myjsp\.metadata\.plugins\org.eclipse.wst.server.core\tmp0\wtpwebapps\ShoppingMall\images
+			
+			
+			try {	
+				  // 파일 업로드
+				  mtrequest = new MultipartRequest(request, imagesDir, 10*1024*1024, "UTF-8", new DefaultFileRenamePolicy() );
+				
+		      } catch(IOException e) {
+		    	  request.setAttribute("message", "업로드 되어질 경로가 잘못되었거나 또는 최대용량 10MB를 초과하여 파일 업로드에 실패하였습니다.");
+		    	  request.setAttribute("loc", request.getContextPath()+"/manager/managerProductInsert.do");
+		    	  
+		    	  super.setViewPage("/WEB-INF/msg.jsp");
+		    	  return;
+			  }
+			
+			  String representative_img = mtrequest.getFilesystemName("representative_img");
+			  //String detail_img = mtrequest.getFilesystemName("detail_img");  
+			
+			  int fk_category_num = Integer.parseInt(mtrequest.getParameter("fk_category_num"));
+			  int fk_subcategory_num = Integer.parseInt(mtrequest.getParameter("fk_subcategory_num"));
+			  String product_name = mtrequest.getParameter("product_name");
+			  String unit = mtrequest.getParameter("unit");
+			  String packing = mtrequest.getParameter("packing");
+			  String origin = mtrequest.getParameter("origin");			 
+			  int price = Integer.parseInt(mtrequest.getParameter("price"));
+			  
+			  String getSale = mtrequest.getParameter("sale");
+			  System.out.println("겟세일 null : "+getSale);
+			  System.out.println("겟세일 길이 : " + getSale.length());
+			  System.out.println(getSale.isEmpty());
+			  
+			  if("".equals(getSale)) {
+				  getSale="0";
+			  }
+			  System.out.println("겟세일 0 : "+getSale);
 
-		  String seller = mtrequest.getParameter("seller");
-		  String seller_phone = mtrequest.getParameter("seller_phone");
-		  String stock = mtrequest.getParameter("stock");
-		  String explain = mtrequest.getParameter("explain");
+			  int sale = Integer.parseInt(getSale);
+			  
+			  System.out.println("세일 0 : "+getSale);
 
-		  explain =  MyUtil.replaceParameter(explain);			
-		  explain = explain.replaceAll("\r\n", "<br/>");
+			  
+			  String getBest_point = mtrequest.getParameter("best_point");
+			  if(getBest_point.isEmpty()) {
+				  getBest_point="0";
+			  }
+			  
+			  int best_point = Integer.parseInt(getBest_point);
+			  String seller = mtrequest.getParameter("seller");
+			  String seller_phone = mtrequest.getParameter("seller_phone");
+			  int stock = Integer.parseInt(mtrequest.getParameter("stock"));
+			  String explain = mtrequest.getParameter("explain");
+	
+			  explain =  MyUtil.replaceParameter(explain);			
+			  explain = explain.replaceAll("\r\n", "<br/>");
+	
+			  ProductVO pvo = new ProductVO();
+			  int product_num = pdao.getPnumOfProduct();
+			  
+			  pvo.setProduct_num(product_num);
+			  pvo.setRepresentative_img(representative_img);
+			  pvo.setFk_category_num(fk_category_num);
+			  pvo.setFk_subcategory_num(fk_subcategory_num);
+			  pvo.setProduct_name(product_name);
+			  pvo.setUnit(unit);
+			  pvo.setPacking(packing);
+			  pvo.setOrigin(origin);
+			  pvo.setPrice(price);
+			  pvo.setSale(sale);
+			  pvo.setBest_point(best_point);
+			  pvo.setSeller(seller);
+			  pvo.setSeller_phone(seller_phone);
+			  pvo.setStock(stock);
+			  pvo.setExplain(explain);
 
-		  ProductVO pvo = new ProductVO();
-		  int pnum = pdao.getPnumOfProduct();
-
-
-		*/
-	   
-	    super.setViewPage("/WEB-INF/manager/managerProductInsert.jsp");
-		  
+			  int n = pdao.productInsert(pvo);
+			  
+			  String message = "";
+			  String loc = "";
+			  
+			  if(n==1) {
+				  
+				  message = "제품등록 성공!!";
+				  loc = request.getContextPath()+"/manager/managerProductInsert.do";				  
+				  
+			  }
+			  else {
+				  message = "제품등록 실패!!";
+				  loc = request.getContextPath()+"/manager/managerProductInsert.do";
+			  }
+			  
+			  request.setAttribute("message", message);
+			  request.setAttribute("loc", loc);
+			  
+			  super.setViewPage("/WEB-INF/msg.jsp");
+	    }
+	   		  
 		
 	}
 

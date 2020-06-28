@@ -30,6 +30,12 @@ public interface InterProductDAO {
 
 	// 소분류 구하기
 	List<HashMap<String, String>> getSubCategoryList(String fk_category_num) throws SQLException;
+
+	// 제품 등록을 위한 제품 번호 채번
+	int getPnumOfProduct() throws SQLException;
+
+	// 제품 신상 등록
+	int productInsert(ProductVO pvo) throws SQLException;
 	
 
 }

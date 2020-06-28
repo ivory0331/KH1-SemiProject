@@ -8,6 +8,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.json.JSONObject;
 
+import com.google.gson.Gson;
+
 import common.controller.AbstractController;
 import manager.model.InterProductDAO;
 import manager.model.ProductDAO;
@@ -33,11 +35,11 @@ public class GetSubCategoryListAction extends AbstractController {
 		  
 		  System.out.println("subCategoryList 결과 " + subCategoryList);
 		  
-		  JSONObject jsonObj = new JSONObject();
+		  Gson gson = new Gson();
 		  
-		  jsonObj.put("subCategoryList", subCategoryList);
 		  
-		  String json = jsonObj.toString(); 
+		  String json = gson.toJson(subCategoryList);
+		  System.out.println(json);
 		  request.setAttribute("json",json);
 		  
 		  super.setViewPage("/WEB-INF/jsonview.jsp");

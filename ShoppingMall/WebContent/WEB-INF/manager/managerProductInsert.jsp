@@ -237,13 +237,14 @@
 					type:"post",
 					data:{"fk_category_num":$("#fk_category_num").val()},
 					dataType:"json",
-					success:function(json){		
+					success:function(json){	
+						console.log(json);
 						$("select#fk_subcategory_num").prop('disabled',false);
 						var html='';
 						for(var i=0; i<json.length;i++){
-							html +="<option value='"+json.subCategoryList.subCategory_num+"'>"+json.subCategoryList.subCategory_content+"</option>";
+							html +="<option value='"+json[i].subcategory_num+"'>"+json[i].subcategory_content+"</option>";
 						}
-						$("#fk_subcategory_num").html(html);
+						$("#fk_subcategory_num").html(html); 
 						
 						console.log(json);
 					},						
@@ -269,10 +270,16 @@
 		
 		var boolSubmit = false;
 		// 1. 대표이미지 선택
-		if($("#upload_name_rep").val()=="※필수 대표이미지선택"){
+		if($(".upload_rep_image").val()==""){
 			alert("대표이미지를 등록해주세요.");
 			return;
 		}		 
+		
+		// 1.1 분류 선택
+		if($("#fk_category_num").val()=="0"){
+			alert('상품 분류를 선택해주세요.');
+			return;
+		}
 		 
 		// 2. 상품명 필수		
 		if($("#product_name").val().trim()==""){

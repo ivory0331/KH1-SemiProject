@@ -415,7 +415,8 @@ public class ProductDAO implements InterProductDAO {
 			  conn = ds.getConnection();
 		  
 			  String sql = " select subcategory_num, subcategory_content " +
-					  		" from product_subcategory_table " + " where subcategory_num like ?||'%' " +
+					  		" from product_subcategory_table " + 
+					  		" where subcategory_num like ?||'%' " +
 					  		" order by subcategory_num asc ";
 			  
 			  pstmt = conn.prepareStatement(sql);
@@ -441,43 +442,78 @@ public class ProductDAO implements InterProductDAO {
 		  return subCategoryList;
 	  
 	  }
-	  
-	  
-	  
 
 
-		public List<ProductVO> subcategoryList(String fk_category_num) throws SQLException {
-			List<ProductVO> subcategoryList = new ArrayList<>();
-
+	 
+		// 제품등록 채번
+		@Override
+		public int getPnumOfProduct() throws SQLException {
+			
+			int pnum = 0;
+			
+			try {
+				 conn = ds.getConnection();
+				 
+				 String sql = " select seq_product_table.nextval AS PNUM " +
+						      " from dual ";
+						   
+				 pstmt = conn.prepareStatement(sql);
+				 rs = pstmt.executeQuery();
+				 			 
+				 rs.next();
+				 pnum = rs.getInt("PNUM");
+			
+			} finally {
+				close();
+			}
+			
+			return pnum;	
+			
+		}
+		
+		
+		// 제품 신상 등록
+		@Override
+		public int productInsert(ProductVO pvo) throws SQLException {
+			int result = 0;
+			
 			try {
 				conn = ds.getConnection();
 				
-				String sql = " select subcategory_num, subcategory_content " + 
-							 " from product_subcategory_table " + 
-							 " where subcategory_num like ?||'_' ";
+				String sql = "insert into product_table(product_num, product_name, price, stock "+
+						                                " ,origin, packing, unit, sale, best_point "+
+						                                " ,seller, seller_phone, explain, representative_img, fk_category_num, fk_subcategory_num ) "+
+						     " values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 				
 				pstmt = conn.prepareStatement(sql);
-				pstmt.setInt(1, Integer.parseInt(fk_category_num));
 				
-				rs = pstmt.executeQuery();
-				
-				while(rs.next()) {
-					ProductVO pvo = new ProductVO();
+				pstmt.setInt(1, pvo.getProduct_num());
+				pstmt.setString(2, pvo.getProduct_name());
+				pstmt.setInt(3, pvo.getPrice());    
+				pstmt.setInt(4, pvo.getStock()); 
+				pstmt.setString(5, pvo.getOrigin());    
+				pstmt.setString(6, pvo.getPacking()); 
+				pstmt.setString(7, pvo.getUnit()); 
+				pstmt.setInt(8, pvo.getSale());
+				pstmt.setInt(9, pvo.getBest_point());
+				pstmt.setString(10, pvo.getSeller());
+				pstmt.setString(11, pvo.getSeller_phone());
+				pstmt.setString(12, pvo.getExplain());
+				pstmt.setString(13, pvo.getRepresentative_img());
+				pstmt.setInt(14, pvo.getFk_category_num());
+				pstmt.setInt(15, pvo.getFk_subcategory_num());
+
 					
-					pvo.setSubcategory_num(rs.getInt(1));
-					pvo.setSubcategory_content(rs.getString(2));
-					
-					subcategoryList.add(pvo);
-				}
+				result = pstmt.executeUpdate();
 				
 			} finally {
 				close();
 			}
 			
-			return subcategoryList;
+			return result;					
 		}
-
-	 
+		
+		
 		
 		
 		

@@ -145,6 +145,9 @@ nominvalue
 nocycle
 nocache;
 
+select seq_product_table.nextval AS PNUM
+from dual;
+
 -- 상품 이미지와 설명 테이블 생성 --
 
 create table product_image_table
@@ -762,14 +765,15 @@ values(4,'1등급 한우 알사태 수육용 500g(냉장).png','1등급 한우 �
 
 select * from product_category_table union select * from product_subcategory_table;
 
-insert into member_table (member_num, name, userid, pwd, email, mobile) 
-values (seq_member_table.nextval, '관리자', 'admin', 'qwer1234$','2wnaud@naver.com','010-9101-8698');
+insert into member_table (member_num, name, userid, pwd, email, mobile, status) 
+values (seq_member_table.nextval, '관리자', 'admin', 'qwer1234!','2wnaud@naver.com','010-9101-8698','2');
 
 commit;
 
 
 select * from member_table;
-update member_table set status=2;
+update member_table set status=2 where userid='admin1';
+
 commit;
 
 delete from member_table;
@@ -849,7 +853,7 @@ where userid like '%'||'mimi'||'%' ;
 
 
 select member_num, name, userid, address				
-from member_table 
+from member_table ;
 order by member_num desc;
 
 <<<<<<< HEAD
