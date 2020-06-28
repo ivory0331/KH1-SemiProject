@@ -485,7 +485,7 @@ $(document).ready(function(){
 					</ul> 
 				</div>
 			</li>
-			<li><a><span class="listType" onclick="goList()">알뜰쇼핑</span></a><span class="bar">I</span></li>
+			<li><a href="javascript:location.href='<%=ctxPath%>/product/saleProduct.do'"><span class="listType">알뜰쇼핑</span></a><span class="bar">I</span></li>
 			<li><a href="javascript:location.href='<%=ctxPath%>/product/newProduct.do'"><span class="listType">신상품</span></a><span class="bar">I</span></li>
 			<li><a><span class="listType" onclick="goList()">추천쇼핑</span></a></li>
 			<li><span class="search"><input type="text" placeholder="test"/></span></li>

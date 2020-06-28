@@ -153,7 +153,7 @@ public class ProductDAO implements InterProductDAO {
 			String sql = " select distinct C.category_content AS category_content "+
 						 " from product_table P JOIN product_category_table C "+
 						 " ON P.fk_category_num = C.category_num "+
-						 " where fk_category_num = ?";
+						 " where fk_category_num = ? ";
 			
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setInt(1, Integer.parseInt(fk_category_num));
@@ -495,6 +495,55 @@ public class ProductDAO implements InterProductDAO {
 	}
 
 	
+	// 페이징 처리를 한 세일품목 조회하기
+	@Override
+	public List<ProductVO> selectSale(HashMap<String, String> paraMap) throws SQLException {
+		
+		List<ProductVO> saleprodList = new ArrayList<>();
+		String sql ="";
+		
+		try {
+			conn = ds.getConnection();
+			
+			sql = " select RNO, product_num, product_name, price, sale, representative_img " + 
+				  " from " + 
+				  " ( " + 
+				  "     select rownum AS RNO, product_num, product_name, price, sale, representative_img " + 
+				  "     from " + 
+				  "     ( " + 
+				  "        select  product_num, product_name, price, sale, representative_img " + 
+				  "        from product_table " + 
+				  "        where sale > 0 " + 
+				  "    ) V " + 
+				  " ) T " + 
+				  " where T.RNO between ? and ? ";
+				
+				pstmt = conn.prepareStatement(sql);
+				int currentShowPageNo = Integer.parseInt(paraMap.get("currentShowPageNo"));
+				pstmt.setInt(1, (currentShowPageNo * 9) - (9 - 1) ); // 공식
+				pstmt.setInt(2, (currentShowPageNo * 9) ); // 공식
 	
-	
+				rs = pstmt.executeQuery();
+				
+				while(rs.next()) {
+					ProductVO pvo = new ProductVO();
+					pvo.setProduct_num(rs.getInt("product_num"));
+					pvo.setProduct_name(rs.getString("product_name"));
+					pvo.setPrice(rs.getInt("price"));
+					pvo.setSale(rs.getInt("sale"));
+					pvo.setRepresentative_img(rs.getString("representative_img"));
+					
+					saleprodList.add(pvo);
+				}
+				
+			pstmt = conn.prepareStatement(sql);
+			
+		} finally {
+			close();
+		}
+		
+		return saleprodList;
+
+	}
+
 }
