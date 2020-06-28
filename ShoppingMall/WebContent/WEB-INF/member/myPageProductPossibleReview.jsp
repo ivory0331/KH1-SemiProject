@@ -1,5 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>    
+    
 <% String ctxPath = request.getContextPath(); %>
 <!DOCTYPE html>
 <html>
@@ -32,6 +34,14 @@
 		border: solid 0px blue;
 		font-size: 16pt;
 		display: inline-block;
+		float: left;
+	}	
+	
+	#myProductReview_Text {
+		border: solid 0px red;	
+		font-size: 8pt;
+		display: inline-block;
+		margin: 30px 0 0 10px;
 		float: left;
 	}	
 	
@@ -170,15 +180,15 @@
 			<div id="myPage_Contents">		
 				<div id="myProductReview_Header">
 					<h2 id="myProductReview_Title">상품후기</h2>
-
+					<span id="myProductReview_Text">후기 작성은 배송 완료인 상품만 가능합니다.</span>	
 					
 					<div style="clear:both; height:20px;"></div>
 					
 					<div class="tab">
-						<a class="tab possibleReview" href="<%= ctxPath %>/member/myPageProductPossibleReview.do">작성가능 후기(<span>3</span>)</a>	
+						<a class="tab possibleReview" href="<%= ctxPath %>/member/myPageProductPossibleReview.do">작성가능 후기(<span>${pReviewCount}</span>)</a>	
 					</div>				
 					<div class="tab">					
-						<a class="tab completedReview" href="<%= ctxPath %>/member/myPageProductCompleteReview.do">작성완료 후기(<span>2</span>)</a>	
+						<a class="tab completedReview" href="<%= ctxPath %>/member/myPageProductCompleteReview.do">작성완료 후기(<span>${cReviewCount}</span>)</a>	
 					</div>	
 					
 					<div style="clear:both; height:10px;"></div>
@@ -186,86 +196,55 @@
 				</div>
 			
 				<div id="myProductReviewPossible_List">
-					<div>																	
-						<div class="myOrder_number">
-							<h3>주문번호 1111111111</h3>
-						</div>
-						
-						<div class="myOrder_Goods">						
-							<div class="myOrder_Info">							
-								<table class="myOrder_Desc">
-									<tr class="desc-list">
-										<td class="image">
-											<img alt="해당 주문 대표 상품 이미지" src="include/images/logo.png">
-										</td>
-										<td class="info">
-											<div class="name">
-												<a class="productName">제품명1</a>
-											</div>
-											<div class="desc">
-												<span class="count">1개 구매</span>
-											</div>											
-										</td>		
-										<!-- <td class="delivery">
-											<span>00월00일 배송완료</span>
-										</td> -->
-
-										<td class="link">
-											<a class="link_review">후기 작성</a>
-										</td>																	
-									</tr>
-									
-									<tr class="desc-list">
-										<td class="image">
-											<img alt="해당 주문 대표 상품 이미지" src="include/images/logo.png">
-										</td>
-										<td class="info">
-											<div class="name">
-												<a class="productName">제품명2</a>
-											</div>
-											<div class="desc">
-												<span class="count">1개 구매</span>
-											</div>											
-										</td>		
-
-
-										<td class="link">
-											<a class="link_review">후기 작성</a>
-										</td>																	
-									</tr>
-								</table>
-								
+					<div>		
+						<c:if test="${empty possibleReviewList}">
+							<div style="margin-bottom:100px;">
+								<span>
+						   	    	작성가능 후기내역이 없습니다.
+						   	    </span>
 							</div>
-						</div>
+						</c:if>
 						
-						<div class="myOrder_number">
-							<h3>주문번호 2222222222</h3>
-						</div>
+						<c:if test="${not empty orderHistoryList}">
+						<c:set var="temp" value="0" />
+						<c:forEach var="List" items="${possibleReviewList}">	
+							<c:choose>	
+								<c:when test="${List.order_num != temp}">										
+									<div class="myOrder_number">
+										<h3>주문번호 ${List.order_num}</h3>
+									</div>
+								</c:when>
+								<c:otherwise></c:otherwise>
+							</c:choose>
 						
-						<div class="myOrder_Goods">						
-							<div class="myOrder_Info">							
-								<table class="myOrder_Desc">
-									<tr class="desc-list">
-										<td class="image">
-											<img alt="해당 주문 대표 상품 이미지" src="include/images/logo.png">
-										</td>
-										<td class="info">
-											<div class="name">
-												<a class="productName">제품명3</a>
-											</div>
-											<div class="desc">
-												<span class="count">1개 구매</span>
-											</div>											
-										</td>		
-
-										<td class="link">
-											<a class="link_review">후기 작성</a>
-										</td>																	
-									</tr>
-								</table>
-								
+							<div class="myOrder_Goods">						
+								<div class="myOrder_Info">							
+									<table class="myOrder_Desc">
+										<tr class="desc-list">
+											<td class="image">
+												<img alt="해당 주문 대표 상품 이미지" src="<%=ctxPath %>/images/${List.representative_img}">
+											</td>
+											<td class="info">
+												<div class="name">
+													<a class="productName">${List.product_name}</a>
+												</div>
+												<div class="desc">
+													<span class="count">${List.count}개 구매</span>
+												</div>											
+											</td>		
+	
+											<td class="link">
+												<a class="link_review" href="<%= ctxPath %>/member/myPageReviewWrite.do?product_num='${List.product_num}'">후기 작성</a>
+											</td>																	
+										</tr>
+										
+									</table>										
+								</div>
 							</div>
-						</div>
+							<c:set var="temp" value="${ohvo.order_num}" />
+					
+						</c:forEach>
+						</c:if>
 						
 					</div>		
 				</div>	

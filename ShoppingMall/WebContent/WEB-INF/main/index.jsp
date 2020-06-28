@@ -209,49 +209,82 @@
 	         success:function(json){
 	            console.log(json);
 	            if(data.type=="new"){
-	            	for(var i=0; i<json.length; i++){
-	            		var imgFileName = decodeURIComponent(json[i].representative_img);
-		            	var html="<img alt='상품1' src='<%=ctxPath %>/images/"+imgFileName+"' onclick = 'goDetail("+json[i].product_num+")'>"
-		            	        +"<a href='#'>"
-		            	        +json[i].product_name
-		            	        +"</a><br/>"
-		            	        +"<span>"+func_comma(""+json[i].price)+"원</span>";
-		            	$("#new_item"+i).html(html);
-		            }
+	            	$(json).each(function(index, item){
+	            		console.log(item.sale);
+	            		var imgFileName = decodeURIComponent(item.representative_img);
+	            		var html="<img alt='상품1' src='<%=ctxPath %>/images/"+imgFileName+"' onclick = 'goDetail("+item.product_num+")'>"
+            	        +"<a href='#'>"
+            	        +item.product_name
+            	        +"</a><br/>";
+            	        if(item.sale==0){
+            	        	html+="<span>"+func_comma(""+item.price)+"원</span>";
+            	        }
+            	        else{
+            	        	html+="<span style='text-decoration:line-through;'>"+func_comma(""+item.price)+"</span>"
+            	        	html+="&nbsp;=>&nbsp;<span>"+func_comma(""+item.finalPrice)+"원</span>"
+            	        }
+            	        
+            			$("#new_item"+index).html(html);
+	            	});
+	            	
 	            }
 	            else if(data.type=="best"){
-	            	for(var i=0; i<json.length; i++){
-	            		var imgFileName = decodeURIComponent(json[i].representative_img);
-		            	var html="<img alt='상품1' src='<%=ctxPath %>/images/"+imgFileName+"' onclick = 'goDetail("+json[i].product_num+")'>"
-		            	        +"<a href='javascript:goDetail("+json[i].product_num+")'>"
-		            	        +json[i].product_name
-		            	        +"</a><br/>"
-		            	        +"<span>"+func_comma(""+json[i].price)+"원</span>";
-		            	$("#MDbest_item"+i).html(html);
-		            }
+	            	$(json).each(function(index, item){
+	            		console.log(item.sale);
+	            		var imgFileName = decodeURIComponent(item.representative_img);
+	            		var html="<img alt='상품1' src='<%=ctxPath %>/images/"+imgFileName+"' onclick = 'goDetail("+item.product_num+")'>"
+            	        +"<a href='#'>"
+            	        +item.product_name
+            	        +"</a><br/>";
+            	        if(item.sale==0){
+            	        	html+="<span>"+func_comma(""+item.price)+"원</span>";
+            	        }
+            	        else{
+            	        	html+="<span style='text-decoration:line-through;'>"+func_comma(""+item.price)+"</span>"
+            	        	html+="&nbsp;=>&nbsp;<span>"+func_comma(""+item.finalPrice)+"원</span>"
+            	        }
+            	        
+            			$("#MDbest_item"+index).html(html);
+	            	});
 	            }
 	            else if(data.type=="sale"){
-	            	for(var i=0; i<json.length; i++){
-	            		var imgFileName = decodeURIComponent(json[i].representative_img);
-		            	var html="<img alt='상품1' src='<%=ctxPath %>/images/"+imgFileName+"' onclick = 'goDetail("+json[i].product_num+")'>"
-		            	        +"<a href='javascript:goDetail("+json[i].product_num+")'>"
-		            	        +json[i].product_name
-		            	        +"</a><br/>"
-		            	        +"<span>"+func_comma(""+json[i].price)+"원</span>";
-		            	$("#sale_item"+i).html(html);
-		            }
+	            	$(json).each(function(index, item){
+	            		console.log(item.sale);
+	            		var imgFileName = decodeURIComponent(item.representative_img);
+	            		var html="<img alt='상품1' src='<%=ctxPath %>/images/"+imgFileName+"' onclick = 'goDetail("+item.product_num+")'>"
+            	        +"<a href='#'>"
+            	        +item.product_name
+            	        +"</a><br/>";
+            	        if(item.sale==0){
+            	        	html+="<span>"+func_comma(""+item.price)+"원</span>";
+            	        }
+            	        else{
+            	        	html+="<span style='text-decoration:line-through;'>"+func_comma(""+item.price)+"</span>"
+            	        	html+="&nbsp;=>&nbsp;<span>"+func_comma(""+item.finalPrice)+"원</span>"
+            	        }
+            	        
+            			$("#sale_item"+index).html(html);
+	            	});
 	            }
 	            
 	            else if(data.type=="random"){
-	            	for(var i=0; i<json.length; i++){
-	            		var imgFileName = decodeURIComponent(json[i].representative_img);
-		            	var html="<img alt='상품1' src='<%=ctxPath %>/images/"+imgFileName+"' onclick = 'goDetail("+json[i].product_num+")'>"
-		            	        +"<a href='javascript:goDetail("+json[i].product_num+")'>"
-		            	        +json[i].product_name
-		            	        +"</a><br/>"
-		            	        +"<span>"+func_comma(""+json[i].price)+"원</span>";
-		            	$("#random_item"+i).html(html);
-		            }
+	            	$(json).each(function(index, item){
+	            		console.log(item.sale);
+	            		var imgFileName = decodeURIComponent(item.representative_img);
+	            		var html="<img alt='상품1' src='<%=ctxPath %>/images/"+imgFileName+"' onclick = 'goDetail("+item.product_num+")'>"
+            	        +"<a href='#'>"
+            	        +item.product_name
+            	        +"</a><br/>";
+            	        if(item.sale==0){
+            	        	html+="<span>"+func_comma(""+item.price)+"원</span>";
+            	        }
+            	        else{
+            	        	html+="<span style='text-decoration:line-through;'>"+func_comma(""+item.price)+"</span>"
+            	        	html+="&nbsp;=>&nbsp;<span>"+func_comma(""+item.finalPrice)+"원</span>"
+            	        }
+            	        
+            			$("#random_item"+index).html(html);
+	            	});
 	            }
 	            
 	         },
@@ -501,7 +534,7 @@
 						<h6>매일 정오 신상품을 확인해보세요</h6>
 						<!-- sale영역에 있는 li(class=sale_item)태그를 움직여야 하므로 onclick의 파라미터에 'sale'을 입력한다. -->
 						<span id="new_slideL" class="slideL" onclick="func_slideL('new')">&lt;&lt;&lt;</span>
-						<span id="new_slideR" class="slideR"onclick="func_slideR('new')" style="display:none;">&gt;&gt;&gt;</span>
+						<span id="new_slideR" class="slideR" onclick="func_slideR('new')" style="display:none;">&gt;&gt;&gt;</span>
 					</div>
 					<div class="slide_wrapper">
 					<ul class="item_list">

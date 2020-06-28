@@ -1,5 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <% String ctxPath = request.getContextPath(); %>
 <% ServletContext context = request.getSession().getServletContext(); 
    String realPath = context.getRealPath("Upload");
@@ -225,7 +227,7 @@
 <script type="text/javascript" src="/ShoppingMall/js/jquery-3.3.1.min.js"></script>
 <script type="text/javascript" src="/ShoppingMall/util/myutil.js"></script>
 <script type="text/javascript">
-	var money = "${product.price}";
+	var money = "";
 	var offSet = new Array();
 	var productQ_currentPage = 1;
 	var productQ_totalPage = 1;
@@ -233,9 +235,11 @@
 	var rivew_totalPage = 1;
 	
 	$(document).ready(function(){
-		
+		money = "${product.finalPrice}"
 		$(".numPrice").val(money);
 		$(".money").html(func_comma(money));
+		
+		
 		
 		for(var i=0; i<$(".detailTablePart").length; i++){
 			offSet[i] = $(".detailTablePart")[i].offsetTop;
@@ -243,7 +247,8 @@
 		
 		
 		var acc = document.getElementsByClassName("accordion");
-		$(document).on("click",".accordion",function(){
+		/* $(document).on("click",".accordion",function(){
+			
 			var $target = $(this).next();
 			var $other = $target.siblings();
 			$other.each(function(index, item){
@@ -252,9 +257,10 @@
 				}
 			});
 			
+			
 			$target.toggleClass("panel-none");
 			offSet[2] = $(".detailTablePart")[2].offsetTop;
-		});
+		}); */
 		
 		func_reviewCall();
 		func_productQCall(productQ_currentPage);
@@ -264,7 +270,7 @@
 		var $num = $("#count").val();
 		var $money = $(".numPrice").val();
 		
-		if($num<999){
+		if($num<100){
 			$num++;
 		}
 		
@@ -392,9 +398,10 @@
 		if(json[Object.keys(json)[0]].length > 0){
 			var html="";
 			 for(var i=0; i<json[Object.keys(json)[0]].length; i++){
-				html += "<tr class='accordion'>"
-				         + "<td>"+json[Object.keys(json)[0]][i].inquiry_num+"</td>"
-				         + "<td class='content-title'>"+json[Object.keys(json)[0]][i].subject+"</td>"
+				console.log();
+				html += "<tr class='accordion' onclick='inquiryOpen(this)'>"
+				         + "<td>"+json[Object.keys(json)[0]][i].inquiry_num+"<input type='hidden' class='secret' value='"+json[Object.keys(json)[0]][i].secretFlag+"'/></td>"
+				         + "<td class='content-title'>"+json[Object.keys(json)[0]][i].subject+"<input type='hidden' class='writer' value='"+json[Object.keys(json)[0]][i].fk_member_num+"'</td>"
 				         + "<td>"+json[Object.keys(json)[0]][i].name+"</td>"
 				         + "<td>"+json[Object.keys(json)[0]][i].write_date+"</td>"
 				         + "</tr>"
@@ -405,7 +412,7 @@
 								 html+="<div><img src='<%=ctxPath%>/Upload/"+json[Object.keys(json)[0]][i].imageList[j]+"' / style='margin-bottom:10px;'></div>";
 							 }
 						 }
-					if(json[Object.keys(json)[0]][i].name == "${sessionScope.loginuser.name}"){
+					if(json[Object.keys(json)[0]][i].fk_member_num == "${sessionScope.loginuser.member_num}"){
 					html+=" <div class='userBtn' align='right'>"
 					     +" <span onclick='goInquiryUpdate("+json[Object.keys(json)[0]][i].inquiry_num+","+json[Object.keys(json)[0]][i].fk_member_num+")'>수정</span><span onclick ='goInquiryDelete("+json[Object.keys(json)[0]][i].inquiry_num+")'>삭제</span> "
 					     +" </div> ";
@@ -419,7 +426,7 @@
 				html += "</td>"
 			         + "</tr>";
 			    if(json[Object.keys(json)[0]][i].answer != null){
-			    	html += "<tr class='accordion'>"
+			    	html += "<tr class='accordion' onclick='inquiryOpen(this)'>"
 			    	      + "<td>Re</td>"
 			    	      + "<td class='content-title'>안녕하세요, 마켓컬리입니다.</td>"
 			    	      + "<td>MarketKurly</td>"
@@ -439,6 +446,31 @@
 			$(".goodsQ").css("border-bottom","none");
 			
 		}
+	}
+	
+	
+	function inquiryOpen(elem){
+		console.log(elem);
+		var $target = $(elem).next();
+		var $other = $target.siblings();
+		var secretFlag = $(elem).find(".secret").val();
+		var writer = $(elem).find(".writer").val();
+		var loginuser = '${sessionScope.loginuser.member_num}';
+		
+		if(secretFlag==1 && writer == loginuser){
+			alert("비밀글은 작성자만 볼 수 있습니다.");
+			return;
+		}
+		
+		$other.each(function(index, item){
+			if($(item).hasClass("panel")){
+			   $(item).addClass("panel-none");	
+			   
+			}
+		});
+		
+		$target.toggleClass("panel-none");
+		offSet[2] = $(".detailTablePart")[2].offsetTop;
 	}
 	
 	function goInquiryDelete(num){
@@ -501,6 +533,19 @@
 					</div>
 					<div class="goodsInfo">
 						<h2><strong>${product.product_name}</strong></h2>
+						
+						<dl>
+							<c:if test = "${product.sale != 0 }">
+								<h4>할인가격&nbsp;&nbsp;<span style="color:orange; font-size: 16pt">${product.sale}%</span></h4>
+								<span style="font-size: 10pt; color:gary; text-decoration: line-through;"><fmt:formatNumber value="${product.price}" pattern="###,###" />원</span>
+								<dt style="font-size:16pt">&nbsp;=>&nbsp;<fmt:formatNumber value="${product.finalPrice}" pattern="###,###" />원</dt>
+							</c:if>
+							<c:if test = "${product.sale == 0 }">
+								<dt style="font-size:16pt"><fmt:formatNumber value="${product.finalPrice}" pattern="###,###" />원</dt>
+							</c:if>
+							
+						</dl>
+						
 						<dl>
 							<dt>분류</dt>
 							<dd>${product.category_content} / ${product.subcategory_content }</dd>
@@ -513,14 +558,18 @@
 							<dt>배송구분</dt>
 							<dd>택배배송</dd>
 						</dl>
+						<c:if test="${!empty(product.origin)}">
 						<dl class="underLine">
 							<dt>원산지</dt>
 							<dd>${product.origin}</dd>
 						</dl>
+						</c:if>
+						<c:if test="${!empty(product.packing)}">
 						<dl class="underLine">
 							<dt>포장타입</dt>
 							<dd>${product.packing}</dd>
 						</dl>
+						</c:if>
 						<dl class="underLine">
 							<dt>구매수량</dt>
 							<dd><spna class="count"><button onclick="cntMynus()">-</button><input type="text" value="1" size="3" readonly id="count"/><button onclick="cntPlus()">+</button></spna></dd>

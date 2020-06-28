@@ -15,7 +15,6 @@ public interface InterProductDAO {
 	// 대분류 불러오기
 	String categoryInfo(String fk_category_num) throws SQLException;
 
-
 	// 대분류와 소분류 불러오기
 	List<ProductVO> subcategoryList(String fk_category_num) throws SQLException ;
 	
@@ -36,6 +35,12 @@ public interface InterProductDAO {
 
 	// 장바구니 테이블에서 특정제품을 장바구니에서 주문량 증감시키기 
 	int updateCart(String cartno, String oqty) throws SQLException;
+
+	// 페이징 처리를 한 신상품 목록을 조회하기
+	List<ProductVO> selectNewList(HashMap<String, String> paraMap) throws SQLException;
+
+	// 페이징 처리를 한 세일품목 조회하기
+	List<ProductVO> selectSale(HashMap<String, String> paraMap) throws SQLException;
 
 	
 	

@@ -90,8 +90,15 @@ public class MemberVO {
 	}
 
 	public String getMobile() {
+		
 		return mobile;
 	}
+	
+	public String getMobileForm() {
+		
+		return mobile.substring(0,3)+"-"+mobile.substring(3,7)+"-"+mobile.substring(7);
+	}
+
 
 	public void setMobile(String mobile) {
 		this.mobile = mobile;

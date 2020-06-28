@@ -15,11 +15,13 @@ public class ReviewVO {
 	private String name;
 	private List<String> imageList;
 	
+	private ProductVO product;
+	
 	public ReviewVO() {}
 	
 
 	public ReviewVO(int review_num, String subject, String content, String write_date, int hit, int favorite,
-			int fk_product_num, int fk_order_num, int fk_member_num, String name, List<String> imageList) {
+			int fk_product_num, int fk_order_num, int fk_member_num, String name, List<String> imageList, ProductVO product) {
 		
 		this.review_num = review_num;
 		this.subject = subject;
@@ -32,6 +34,7 @@ public class ReviewVO {
 		this.fk_member_num = fk_member_num;
 		this.name = name;
 		this.imageList = imageList;
+		this.product = product;
 	}
 	
 	
@@ -122,9 +125,14 @@ public class ReviewVO {
 	public void setImageList(List<String> imageList) {
 		this.imageList = imageList;
 	}
-	
-	
-	
+
+
+	public ProductVO getProduct() {
+		return product;
+	}
+	public void setProduct(ProductVO product) {
+		this.product = product;
+	}
 	
 	
 }
