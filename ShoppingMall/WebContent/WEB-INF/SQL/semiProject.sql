@@ -11,6 +11,8 @@ drop table order_table;
 drop table order_state_table;
 drop table product_inquiry_table;
 drop table product_detail_table;
+drop table product_image_table;
+drop table basket_table;
 drop table product_table;
 drop table product_category_table;
 drop table product_subcategory_table;
@@ -40,9 +42,14 @@ create table member_table
 ,constraint pk_member_table PRIMARY KEY (member_num)
 ,constraint uq_member_table_userid UNIQUE(userid)
 ,constraint uq_member_table_email unique(email)
-,constraint ck_member_table_gender CHECK (gender in (0,1,2))
+,constraint ck_member_table_gender CHECK (gender in (1,2,3))
 ,constraint ck_member_table_status CHECK (status in(0,1,2))
 );
+
+alter table member_table drop constraint ck_member_table_gender;
+alter table member_table add constraint ck_member_table_gender check(gender in (1,2,3));
+update member_table set status = 2;
+commit;
 
 select*
 from member_table;
@@ -115,7 +122,7 @@ create table product_table
 ,price          number  not null -- 가격 필수
 ,stock          number not null -- 재고 필수
 ,origin         varchar2(100) -- 원산지
-,packing      varchar2(80) -- 포장방법
+,packing        varchar2(80) -- 포장방법
 ,unit           varchar2(50) -- 단위
 ,registerdate   date default sysdate -- 등록날짜
 ,sale           number default 0 -- 세일 %값
@@ -183,10 +190,14 @@ create table product_inquiry_image_table
 ,image varchar2(100)
 ,constraint fk_inquiry_image FOREIGN key (fk_inquiry_num) REFERENCES product_inquiry_table(inquiry_num) on delete CASCADE
 );
+
+
 select * from product_inquiry_image_table;
 select * from product_inquiry_table;
 update product_inquiry_table set answer = '답변입니다.' where inquiry_num=9;
 commit;
+
+
 select count(*) from 
     (select T.RON, answer, inquiry_num, subject, content from
         (select rownum as RON, answer, inquiry_num, subject, content from product_inquiry_table)T 
@@ -852,12 +863,11 @@ select member_num, name, userid, address
 from member_table 
 order by member_num desc;
 
-<<<<<<< HEAD
 select * from member_table where email='28b68acc3cb16bb4484f15c844477637c2f615e6e0b874cb1bbc87490160a50f';
 select email from member_table;
 
 commit;
-=======
+
 
 select nvl(sum(oqty * saleprice), 0) AS SUMTOTALPRICE
      , nvl(sum(oqty * point), 0) AS SUMTOTALPOINT
@@ -882,4 +892,3 @@ join product_subcategory_table PS on P.fk_subcategory_num = PS.subcategory_num
 where OP.reviewFlag = 0 and O.fk_category_num = 1;
 
 
->>>>>>> 851d41d27c4f1da850c5d71dac4a23734a964bb5

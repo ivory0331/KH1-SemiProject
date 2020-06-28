@@ -136,7 +136,7 @@ public class IndexDAO implements InterIndexDAO{
 		
 		try {
 			conn = ds.getConnection();
-			String sql = " select P.product_num, P.product_name, P.price, P.stock, P.origin, P.packing, P.unit, P.representative_img, P.explain, C.category_content , S.subcategory_content" + 
+			String sql = " select P.product_num, P.product_name, P.price, P.sale, P.stock, P.origin, P.packing, P.unit, P.representative_img, P.explain, C.category_content , S.subcategory_content" + 
 
 					" from product_table P join product_category_table C \r\n" + 
 					" on P.fk_category_num = C.category_num  " + 
@@ -152,15 +152,18 @@ public class IndexDAO implements InterIndexDAO{
 				product.setProduct_num(rs.getInt(1));
 				product.setProduct_name(rs.getString(2));
 				product.setPrice(rs.getInt(3));
-				product.setStock(rs.getInt(4));
-				product.setOrigin(rs.getString(5));
-				product.setPacking(rs.getString(6));
-				product.setUnit(rs.getString(7));
+				product.setSale(rs.getInt(4));
+				product.setStock(rs.getInt(5));
+				product.setOrigin(rs.getString(6));
+				product.setPacking(rs.getString(7));
+				product.setUnit(rs.getString(8));
 
-				product.setRepresentative_img(rs.getString(8));
-				product.setExplain(rs.getString(9));
-				product.setCategory_content(rs.getString(10));
-				product.setSubcategory_content(rs.getString(11));
+				product.setRepresentative_img(rs.getString(9));
+				product.setExplain(rs.getString(10));
+				product.setCategory_content(rs.getString(11));
+				product.setSubcategory_content(rs.getString(12));
+				
+				product.setFinalPrice();
 			}
 		}
 		finally {
@@ -724,6 +727,31 @@ public class IndexDAO implements InterIndexDAO{
 		}
 		
 		return opvo;
+	}
+
+	// 최근 배송지역 유무 조회
+	@Override
+	public Map<String, String> orderHistoryFind(int member_num) throws SQLException {
+		Map<String, String> deliveryInfo = null;
+		try {
+			conn = ds.getConnection();
+			String sql = " select recipient, recipient_mobile, recipient_postcode, recipient_address, recipient_detailaddress from order_table where fk_member_num = ? order by order_date desc ";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, member_num);
+			rs = pstmt.executeQuery();
+			if(rs.next()) {
+				deliveryInfo = new HashMap<String, String>();
+				deliveryInfo.put("recipient", rs.getString("recipient"));
+				deliveryInfo.put("recipient_mobile", rs.getString("rscipient_mobile"));
+				deliveryInfo.put("recipient_postcode", rs.getString("recipient_postcode"));
+				deliveryInfo.put("recipient_address", rs.getString("recipient_address"));
+				deliveryInfo.put("recipient_detailaddress", rs.getString("recipient_detailaddress"));
+			}
+		}
+		finally {
+			close();
+		}
+		return deliveryInfo;
 	}
 	
 }
