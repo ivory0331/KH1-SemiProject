@@ -89,45 +89,40 @@ public class MemberDAO implements InterMemberDAO {
 		try {
 			 conn = ds.getConnection();
 			 
-			 String sql = " update member_table set userid=?, pwd_change_date=sysdate ";
+			 String sql = " update member_table set userid='"+membervo.getUserid()+"', pwd_change_date=sysdate ";
 			 
-			 int cnt = 1;
-			 if(membervo.getPwd() != "") {
+			 if(membervo.getPwd() != null) {
 				 sql += " , pwd='"+Sha256.encrypt(membervo.getPwd())+"' ";		// 암호를 SHA256 알고리즘으로 단방향암호화 시킨다. 
-				 cnt++;
 			 }
 			 
-			 if(membervo.getName() != "") {
+			 if(membervo.getName() != null) {
 				 sql += " , name='"+membervo.getName()+"' ";
-				 cnt++;
 			 }
 			 
-			 if(membervo.getEmail() != "") {
+			 if(membervo.getEmail() != null) {
 				 sql += " , email='"+aes.encrypt(membervo.getEmail())+"' ";		// 이메일을 AES256 알고리즘으로 양방향암호화 시킨다. 
-				 cnt++;
 			 }
 			 
-			 if(membervo.getMobile() != "") {
+			 if(membervo.getMobile() != null) {
 				 sql += " , mobile='"+aes.encrypt(membervo.getMobile())+"' ";	// 휴대폰번호를 AES256 알고리즘으로 양방향암호화 시킨다.
-				 cnt++;
 			 }
 			 
-			 if(membervo.getGender() != "") {
+			 if(membervo.getGender() != null) {
 				 sql += " , gender='"+membervo.getGender()+"' ";
-				 cnt++;
 			 }
 			 
-			 if(membervo.getBirthday() != "") {
+			 if(membervo.getBirthday() != null) {
 				 sql += " , birthday='"+membervo.getBirthday()+"' ";
-				 cnt++;
 			 }			 
+			 
+			 else {
+				 sql += " ";
+			 }
 			 
 			 sql += " where member_num = '"+membervo.getMember_num()+"' ";
 	
 			 pstmt = conn.prepareStatement(sql);
-				
-			 pstmt.setString(1, membervo.getUserid());
-							 
+							  
 			 result = pstmt.executeUpdate();
 			 
 		} catch( UnsupportedEncodingException | GeneralSecurityException e) {

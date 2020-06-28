@@ -76,10 +76,10 @@ public class IndexDAO implements InterIndexDAO{
 				subSql+=" order by sale desc ";
 				break;
 			case "best" :
-				subSql+="where fk_category_num = ? order by best_point desc";
+				subSql+=" where fk_category_num = ? order by best_point desc ";
 				break;
 			case "new":
-				subSql+="order by registerdate desc";
+				subSql+=" order by registerdate desc ";
 				break;
 			default:
 				break;
@@ -89,7 +89,7 @@ public class IndexDAO implements InterIndexDAO{
 				sql= subSql+" where product_num in(?,?,?,?,?,?,?,?) ";
 			}
 			else {
-				sql="select ROM,product_num, product_name, price, stock, sale, representative_img from (select rownum as ROM, product_num, product_name, price, stock, sale, representative_img  from("+subSql+") )T where T.ROM between 1 and 8 ";
+				sql=" select ROM,product_num, product_name, price, stock, sale, representative_img from (select rownum as ROM, product_num, product_name, price, stock, sale, representative_img  from("+subSql+") )T where T.ROM between 1 and 8 ";
 
 			}
 			

@@ -10,7 +10,7 @@ public class IndexAction extends AbstractController {
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		super.setViewPage("/WEB-INF/main/index.jsp");
-		
+		 
 	}
 
 }

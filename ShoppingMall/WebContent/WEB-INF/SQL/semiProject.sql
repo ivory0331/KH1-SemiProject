@@ -47,6 +47,10 @@ create table member_table
 select*
 from member_table;
 
+update member_table set pwd='9695b88a59a1610320897fa84cb7e144cc51f2984520efb77111d94b402a8382'
+where userid='hyeminj98';
+
+commit;
 
 -- 회원테이블에 사용할 시퀀스 생성 --
 create sequence seq_member_table
@@ -77,7 +81,7 @@ insert into product_category_table(category_num, category_content) values(2,'과
 insert into product_category_table(category_num, category_content) values(3,'수산 해산');
 insert into product_category_table(category_num, category_content) values(4,'정육 계란');
 insert into product_category_table(category_num, category_content) values(5,'음료 우유');
-
+commit;
 
 -- 상품 소분류 카테고리 테이블 생성 --
 create table product_subcategory_table
@@ -102,6 +106,7 @@ insert into product_subcategory_table(subcategory_num, subcategory_content) valu
 insert into product_subcategory_table(subcategory_num, subcategory_content) values(51,'생수 음료 주스');
 insert into product_subcategory_table(subcategory_num, subcategory_content) values(52,'커피 차');
 insert into product_subcategory_table(subcategory_num, subcategory_content) values(53,'우유 두유 요거트');
+commit;
 
 select * from product_category_table;
 select * from product_subcategory_table;
@@ -131,9 +136,6 @@ create table product_table
 ,constraint fk_product_category_num FOREIGN key(fk_category_num) REFERENCES product_category_table(category_num)
 ,constraint fk_product_subcategory_num FOREIGN key(fk_subcategory_num) REFERENCES product_subcategory_table(subcategory_num)
 );
-
-
-alter table product_table modify (product_name varchar2(200)) ;
 
 
 -- 상품 테이블에 사용할 시퀀스 생성 --
@@ -183,10 +185,15 @@ create table product_inquiry_image_table
 ,image varchar2(100)
 ,constraint fk_inquiry_image FOREIGN key (fk_inquiry_num) REFERENCES product_inquiry_table(inquiry_num) on delete CASCADE
 );
+
 select * from product_inquiry_image_table;
+
 select * from product_inquiry_table;
+
 update product_inquiry_table set answer = '답변입니다.' where inquiry_num=9;
+
 commit;
+
 select count(*) from 
     (select T.RON, answer, inquiry_num, subject, content from
         (select rownum as RON, answer, inquiry_num, subject, content from product_inquiry_table)T 
@@ -208,10 +215,27 @@ nocache;
 
 -- 배송상테 테이블 생성 --
 create table order_state_table
-(category_num   number  not null -- 배송상태 카테고리 번호
+(category_num   number  not null -- 배송상태 카테고리 번호 (1:상품준비중, 2:배송중, 3:배송완료)
 ,order_state    varchar2(50) -- 번호에 해당하는 실제 내용
 ,constraint pk_order_state  primary key(category_num)
 );
+
+select * FROM order_state_table;
+
+insert into order_state_table(category_num, order_state) values(1, '상품 준비중');
+insert into order_state_table(category_num, order_state) values(2, '배송중');
+insert into order_state_table(category_num, order_state) values(3, '배송 완료');
+commit;
+
+-- 작성가능 후기
+select count(*)
+from(
+select OP.fk_order_num, P.representative_img, P.product_name, OP.product_count
+from order_table O join order_product_table OP 
+on O.order_num = OP.fk_order_num
+join product_table P
+on OP.fk_product_num = P.product_num
+where O.fk_member_num = 1 and OP.reviewFlag = 0 and O.fk_category_num = 3);
 
 
 -- 주문 정보 테이블 생성 --
@@ -273,6 +297,14 @@ create table review_table
 ,constraint uq_review_orderProduct UNIQUE (fk_product_num, fk_order_num)
 );
 
+insert into review_table(review_num, subject, content, hit, favorite, fk_product_num, fk_order_num, fk_member_num)
+values(seq_review_table.nextval, '맛있어요', '이렇게 맛있는 음식은 처음이에요', 4, 2, 10, 1, 1);
+
+select R.review_num, P.product_name, R.write_date, R.hit, R.favorite
+	, R.subject, RI.image, R.content
+from product_table P join review_table R
+on P.product_num = R.fk_product_num
+where R.fk_member_num = 3;
 
 -- 후기테이블용 이미지 테이블 생성 --
 create table review_image_table
@@ -450,6 +482,8 @@ values(seq_product_table.nextval, '초이스 찜갈비 2kg(냉동)', '58000', '5
 
 commit;
 
+delete from product_table
+where origin = '국내산(한우)';
 
 select*
 from product_category_table;
@@ -852,12 +886,12 @@ select member_num, name, userid, address
 from member_table 
 order by member_num desc;
 
-<<<<<<< HEAD
+
 select * from member_table where email='28b68acc3cb16bb4484f15c844477637c2f615e6e0b874cb1bbc87490160a50f';
 select email from member_table;
 
 commit;
-=======
+
 
 select nvl(sum(oqty * saleprice), 0) AS SUMTOTALPRICE
      , nvl(sum(oqty * point), 0) AS SUMTOTALPOINT
@@ -882,4 +916,3 @@ join product_subcategory_table PS on P.fk_subcategory_num = PS.subcategory_num
 where OP.reviewFlag = 0 and O.fk_category_num = 1;
 
 
->>>>>>> 851d41d27c4f1da850c5d71dac4a23734a964bb5

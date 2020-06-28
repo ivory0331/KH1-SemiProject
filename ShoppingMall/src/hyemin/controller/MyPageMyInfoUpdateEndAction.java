@@ -42,7 +42,7 @@ public class MyPageMyInfoUpdateEndAction extends AbstractController {
 			
 			MemberVO membervo = new MemberVO();
 			membervo.setMember_num(Integer.parseInt(member_num));
-			membervo.setUserid(userid);
+			membervo.setUserid(userid);			
 			membervo.setPwd(pwd);
 			membervo.setName(name);
 			membervo.setEmail(email);

@@ -27,7 +27,7 @@ public class MyPageMyInfoUpdatePWAction extends AbstractController {
 			return;
 		}
 		else {
-			// 로그인 했고 자신의 회원번호(member_num)를 사용하려는 경우
+			// 로그인 했을 경우
 
 		//	super.setRedirect(false);	
 			super.setViewPage("/WEB-INF/member/myPageMyInfoUpdatePW.jsp");

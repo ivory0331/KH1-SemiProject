@@ -36,7 +36,7 @@ public class IndexListAction extends AbstractController {
 		if(category != null) paraMap.put("category",category); 
 		
 		if("random".equals(type)) {
-			product_numArr = idao.product_numFind();   
+			product_numArr = idao.product_numFind();    
 			boolean check = true;
 			System.out.println("사이즈:"+product_numArr.size());
 			String[] randomArr = {"-1","-1","-1","-1","-1","-1","-1","-1"};
