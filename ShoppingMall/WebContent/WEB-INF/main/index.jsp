@@ -534,7 +534,7 @@
 						<h6>매일 정오 신상품을 확인해보세요</h6>
 						<!-- sale영역에 있는 li(class=sale_item)태그를 움직여야 하므로 onclick의 파라미터에 'sale'을 입력한다. -->
 						<span id="new_slideL" class="slideL" onclick="func_slideL('new')">&lt;&lt;&lt;</span>
-						<span id="new_slideR" class="slideR"onclick="func_slideR('new')" style="display:none;">&gt;&gt;&gt;</span>
+						<span id="new_slideR" class="slideR" onclick="func_slideR('new')" style="display:none;">&gt;&gt;&gt;</span>
 					</div>
 					<div class="slide_wrapper">
 					<ul class="item_list">
