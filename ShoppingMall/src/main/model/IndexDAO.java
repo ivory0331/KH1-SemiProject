@@ -853,7 +853,7 @@ public class IndexDAO implements InterIndexDAO{
 				  "     ( " + 
 				  "        select  product_num, product_name, price , sale, representative_img, fk_category_num " + 
 				  "        from product_table " +
-				  " 	   where product_name like %?% or explain like %?% ";
+				  " 	   where product_name like '%'||?||'%' or explain like '%'||?||'%' ";
 			
 				
 			
@@ -864,8 +864,8 @@ public class IndexDAO implements InterIndexDAO{
 				
 				pstmt = conn.prepareStatement(sql);
 				int currentShowPageNo = Integer.parseInt(paraMap.get("currentShowPageNo"));
-				pstmt.setString(1, paraMap.get("searchWord"));
-				pstmt.setString(2, paraMap.get("searchWord"));
+				pstmt.setString(1, paraMap.get("productSearchWord"));
+				pstmt.setString(2, paraMap.get("productSearchWord"));
 				pstmt.setInt(3, (currentShowPageNo * 9) - (9 - 1) ); // 공식
 				pstmt.setInt(4, (currentShowPageNo * 9) ); // 공식
 				
@@ -898,8 +898,31 @@ public class IndexDAO implements InterIndexDAO{
 	// 상품 검색 기능으로 나온 전체 결과물 수 조회
 	@Override
 	public int getTotalpage(HashMap<String, String> paraMap) throws SQLException {
-		// TODO Auto-generated method stub
-		return 0;
+		int totalpage = 0;
+		String sql = "";
+		
+		try {
+			conn = ds.getConnection();
+			
+			sql = " select ceil( count(*)/9 ) AS totalPage "+
+				  " from product_table where product_name like '%'||?||'%' or explain like '%'||?||'%' ";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, paraMap.get("productSearchWord"));
+			pstmt.setString(2, paraMap.get("productSearchWord"));
+			
+			
+			rs = pstmt.executeQuery();
+			if(rs.next()) {
+				totalpage = rs.getInt("totalPage");
+			}
+			
+			
+			
+		} finally {
+			close();
+		}
+		
+		return totalpage;
 	}
 	
 }

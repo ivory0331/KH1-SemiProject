@@ -2,6 +2,8 @@ package main.model;
 
 import java.util.List;
 
+import member.model.MemberVO;
+
 public class OneInquiryVO {
 	private int one_inquiry_num;
 	private String subject;
@@ -14,13 +16,13 @@ public class OneInquiryVO {
 	private int fk_member_num;
 	private int fk_order_num;
 	private List<String> imageList;
-	
+	private MemberVO member;
 	
 	public OneInquiryVO() {}
 	
 	public OneInquiryVO(int one_inquiry_num, String subject, String content, String write_date, String answer,
 			int emailFlag, int smsFlag, String category_content, int fk_member_num, int fk_order_num,
-			List<String> imageList) {
+			List<String> imageList, MemberVO member) {
 		this.one_inquiry_num = one_inquiry_num;
 		this.subject = subject;
 		this.content = content;
@@ -32,6 +34,7 @@ public class OneInquiryVO {
 		this.fk_member_num = fk_member_num;
 		this.fk_order_num = fk_order_num;
 		this.imageList = imageList;
+		this.member = member;
 	}
 	
 	
@@ -121,6 +124,16 @@ public class OneInquiryVO {
 	public void setImageList(List<String> imageList) {
 		this.imageList = imageList;
 	}
+
+	public MemberVO getMember() {
+		return member;
+	}
+
+	public void setMember(MemberVO member) {
+		this.member = member;
+	}
+	
+	
 	
 	
 	

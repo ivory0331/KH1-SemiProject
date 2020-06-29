@@ -204,6 +204,7 @@
 	      $.ajax({
 	         url:"<%=ctxPath%>"+url,
 	         type:"get",
+	         async:false,
 	         data:data,
 	         dataType:"JSON",
 	         success:function(json){
