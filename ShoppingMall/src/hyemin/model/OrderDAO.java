@@ -10,7 +10,9 @@ import javax.naming.*;
 import javax.sql.DataSource;
 
 import main.model.OrderHistoryVO;
+import main.model.OrderProductVO;
 import main.model.OrderVO;
+import member.model.MemberVO;
 import util.security.AES256;
 
 public class OrderDAO implements InterOrderDAO {
@@ -53,7 +55,7 @@ public class OrderDAO implements InterOrderDAO {
 	
 	// 페이징처리를 안 한, 특정 회원의 모든 주문내역 보여주기
 	@Override
-	public List<OrderHistoryVO> selectOneMemberAllOrder(String member_num) throws SQLException {
+	public List<OrderHistoryVO> selectOneMemberAllOrder(int member_num) throws SQLException {
 		
 		List<OrderHistoryVO> orderHistoryList= new ArrayList<>();
 		
@@ -76,11 +78,12 @@ public class OrderDAO implements InterOrderDAO {
 						 " where O.fk_member_num = ? ";
 			
 			pstmt = conn.prepareStatement(sql);
-			pstmt.setInt(1, Integer.parseInt(member_num));
+			pstmt.setInt(1, member_num);
 			
 			rs = pstmt.executeQuery();
-			
+
 			while(rs.next()) {
+				
 				OrderHistoryVO ohvo = new OrderHistoryVO();
 				ohvo.setOrder_num(rs.getInt(1));
 				ohvo.setOrder_date(rs.getString(2));
@@ -120,15 +123,83 @@ public class OrderDAO implements InterOrderDAO {
 	}
 
 	
-	// order_num 값을 입력받아서 특정 주문 내역의 상세정보를 알아오기(select)
+	// order_num 값을 입력받아서 특정 주문 내역의 상품정보를 알아오기(select)
 	@Override
-	public OrderVO OrderOneDetail(String order_num) throws SQLException {
+	public List<OrderProductVO> OneOrderProductsDetail(String order_num) throws SQLException {
 
+		List<OrderProductVO> OrderProductsList = new ArrayList<>();
 		
+		try {				
+			conn = ds.getConnection();			
+			
 		
-		return null;
+		} finally {
+			close();
+		}
+		
+		return OrderProductsList;
 	}
 
+	
+	// order_num 값을 입력받아서 특정 주문 내역의 상세정보를 알아오기(select)
+	@Override
+	public List<OrderVO> OneOrderInfoDetail(String order_num) throws SQLException {
+
+		List<OrderVO> OrderInfoList = new ArrayList<>();
+		
+		try {				
+			conn = ds.getConnection();			
+			
+			String sql = " select O.price, " + 
+						 "        M.name, to_char(O.order_date, 'yyyy-mm-dd hh24:mi:ss'), OS.order_state, " + 
+						 "        O.recipient, O.recipient_mobile, O.recipient_postcode, O.recipient_address, O.recipient_detailaddress, O.memo " + 
+						 " from order_table O join member_table M " + 
+						 " on O.fk_member_num = M.member_num " + 
+						 " join order_state_table OS " + 
+						 " on O.fk_category_num = OS.category_num " + 
+						 " where O.order_num = ? ";
+			
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, order_num);
+			
+			rs = pstmt.executeQuery();
+			
+			if(rs.next()) {
+				
+				int price = rs.getInt(1);
+				String name = rs.getString(2);
+				String order_date = rs.getString(3);
+				String order_state = rs.getString(4);
+				String recipient = rs.getString(5);
+				String recipient_mobile = rs.getString(6);
+				String recipient_postcode = rs.getString(7);
+				String recipient_address = rs.getString(8);
+				String recipient_detailaddress = rs.getString(9);
+				String memo = rs.getString(10);
+				
+				MemberVO mvo = new MemberVO();
+				mvo.setName(name);
+				
+				OrderVO ovo = new OrderVO();
+				ovo.setPrice(price);
+				ovo.setOrder_date(order_date);
+				ovo.setOrder_state(order_state);
+				ovo.setRecipient(recipient);
+				ovo.setRecipient_mobile(recipient_mobile);
+				ovo.setRecipient_postcode(recipient_postcode);
+				ovo.setRecipient_address(recipient_address);
+				ovo.setRecipient_detailAddress(recipient_detailaddress);
+				ovo.setMemo(memo);
+				
+				OrderInfoList.add(ovo);	
+			}// end of while----------------------------------
+			
+		} finally {
+			close();
+		}
+		
+		return OrderInfoList;
+	}
 
 		
 }

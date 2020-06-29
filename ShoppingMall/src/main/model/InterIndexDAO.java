@@ -1,8 +1,12 @@
 package main.model;
 
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import member.model.MemberVO;
+import product.model.CartVO;
 
 public interface InterIndexDAO {
 	// Index.jsp의 slide영역에 나올 상품 리스트 출력
@@ -49,6 +53,18 @@ public interface InterIndexDAO {
 
 	// 해당 상품이 로그인 한 회원의 후기작성이 가능한 상품인지 조회
 	OrderProductVO productReviewFind(Map<String, String> paraMap)throws SQLException;
+
+	// 최근 배송지역 유무 조회
+	Map<String, String> orderHistoryFind(int member_num)throws SQLException;
+
+	// 주문서 페이지의 값 DB 저장(결제) 및 장바구니 비우기
+	int order(MemberVO loginuser, Map<String, String> delivery, List<CartVO> cartList)throws SQLException;
+
+	// 상품 검색 결과 조회
+	List<ProductVO> selectPagingProduct(HashMap<String, String> paraMap)throws SQLException;
+
+	// 상품 검색 결과 행의 갯수 조회
+	int getTotalpage(HashMap<String, String> paraMap)throws SQLException;
 
 	
 

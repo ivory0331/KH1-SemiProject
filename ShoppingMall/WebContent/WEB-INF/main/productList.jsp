@@ -30,10 +30,12 @@
 		cursor: pointer;
 	} 
 	#smallT {
+		border: solid 1px green;
+		clear: both;
 		float: left;
 	}
 	#list {
-		border: solid 0px red;
+		border: solid 1px blue;
 		margin-top: 80px;
 		float: right;
 	}
@@ -42,6 +44,16 @@
 		display: inline-block;
 		padding: 30px;
 	}
+	#h3{
+		border: solid 1px red;
+		width: 200px;
+		margin-top: 100px;
+		font-size: 20pt;
+		float: left;
+	}
+	a:link { text-decoration: none;}
+ 	a:visited { text-decoration: none;}
+
 </style>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -76,22 +88,21 @@
 		<jsp:include page="../include/header.jsp"></jsp:include>
 		<div class="section" align="center">
 			<div class="contents">
-			
+				
+				<div id="h3">${categoryInfo}</div>
+				
 				<div id="smallT">
-					<h3>${categoryInfo}</h3>
-					
 						<a href='/ShoppingMall/product/productList.do?fk_category_num=${fk_category_num}'><span class="sub">전체보기</span></a>
-					<c:forEach var="cate" items="${categoryList}" varStatus="status">
+					<c:forEach var="cate" items="${subcategoryList}" varStatus="status">
 						<a href='/ShoppingMall/product/productList.do?fk_category_num=${fk_category_num}&fk_subcategory_num=${cate.subcategory_num}'><span class="sub">${cate.subcategory_content}</span></a>
 						
 					</c:forEach>
 				</div>
 				<div id="list">
 					<select>
-						<option>신상품순</option>
-						<option>인기상품순</option>
-						<option>낮은 가격순</option>   
-						<option>높은 가격순</option>
+						<option value="registerdate" >신상품순</option>
+						<option value="price" >낮은 가격순</option>   
+						<option value="priceasc" >높은 가격순</option>
 					</select>
 				</div>
 				

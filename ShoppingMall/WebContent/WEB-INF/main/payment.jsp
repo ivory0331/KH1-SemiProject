@@ -1,5 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %> 
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <% String ctxPath = request.getContextPath(); %>
 <!DOCTYPE html>
 <html>
@@ -62,13 +64,13 @@
 		border-bottom: solid 1px #ddd;		
 	}
 	
-	 th,  td{
+	 .contents th,  .contents td{
 		height : 50px;
 		vertical-align: middle;	
 		padding : 20px;
 	}
 	
-	 th{
+	.contents th{
 		width: 200px;
 		text-align: left;
 		padding-left: 10px;
@@ -187,7 +189,6 @@
 	span.input_address{
 		display : block;
 		margin: 10px 0 10px 0;
-		width : 150px;
 	}
 	
 	span#address_all{
@@ -240,7 +241,7 @@
 		vertical-align: middle;
 	}
 	
-	.list{
+	.contents .list{
 		height: 35px;
 	}
 
@@ -291,138 +292,148 @@
 
 	
 	$(document).ready(function(){
-		//처음 상품 리스트 숨기기
-		$("#productList").hide();	
-		
-		//상품 리스트
-		var html='';
-		for(var i=0; i<productArr.length; i++){
-			var price = productArr[i].price;
-			var cnt = productArr[i].cnt;
-			var priceall=String(price*cnt);
-			html+="<tr style='border-bottom:solid 1px #ddd'>"
-				+	"<td class='product productImg'><img style ='width: 100%' src='include/images/"+productArr[i].img+"' /></td>"
-				+ 	"<td class='product productInfo'>"
-				+		"<div id='productInfo_name'>"+productArr[i].name+"</div>"
-				+		"<div id='productInfo_cnt'><span>"+productArr[i].cnt+"</span><span>개 / 개당 </span><span>"+func_comma(price)+"</span><span>원</span></div>"
-				+	"</td>"
-				+	"<td class='product productInfo last_td productPrice'><span>"+func_comma(priceall)+"</span><span>원</span></td>"
-				+ "</tr>";
+		if("${sessionScope.payResult}"==""){
+			//처음 상품 리스트 숨기기
+			$("#productList").hide();	
+			
+			
+			
+			//배송 메모 입력
+			$("#deliveryMemo").keyup(function(){
+				var cntMemo = $("#deliveryMemo").val().length;
+				$("#bytesMemo").val('');
+				$("#bytesMemo").text(cntMemo);
+			});
+			
+			
+			//새배송지클릭
+			$("input#selectDelivery2").click(function(){
+				$(".address_default").hide();
+				$("#btn_add").show();
+			})
+			
+			//기존배송지클릭
+			$("#selectDelivery").click(function(){
+				$(".address_default").show();
+				$("#btn_add").hide();
+				$(".address_new").hide();
+			})
+			
+			//기존배송지에 최근 기록 또는 자신의 핸드폰 번호 입력
+			if("${deliveryInfo.recipient_mobile}"!=""){
+				var mobile1 = "${deliveryInfo.recipient_mobile}".substring(0,3);
+				console.log(mobile1);
+				$("input[name='mobile']:eq(0)").val(mobile1);
 				
-			$("#productList_body").html(html);
+				var mobile2 = "${deliveryInfo.recipient_mobile}".substring(3,7);
+				$("input[name='mobile']:eq(1)").val(mobile2);
+				
+				var mobile3 = "${deliveryInfo.recipient_mobile}".substring(7);
+				$("input[name='mobile']:eq(2)").val(mobile3);
+			}
+			
+			
+			//배송지 상세주소 카운트
+			var cntAddress = "";
+			
+			// 배송 주소 전부 입력
+			var address_all = "";
+			
+			if("${deliveryInfo.recipient_address}"!=""){
+				cntAddress = $("#address_default_sub").val().length;
+				$("#bytesAddress").text(cntAddress);
+				
+				// 배송 주소 전부 입력
+				address_all = $("#address_default_main").val()+" "+$("#address_default_sub").val();
+				$("#address_all").text(address_all);
+					
+				//배송지 상세주소 재입력 카운트
+				$("input#address_default_sub").keyup(function(){
+					cntAddress = $("#address_default_sub").val().length;
+					$("#bytesAddress").val('');
+					$("#bytesAddress").text(cntAddress);
+				});
+				
+			}
+			
+			
+			// 새배송지 상세주소 카운트
+			var cntNewAddress = $("#address_new_sub").val().length;
+			$("#bytesNewAddress").text(cntNewAddress);
+			
+			$("#address_new_sub").keyup(function(){
+				var cntNewAddress2 = $("#address_new_sub").val().length;
+				$("#bytesNewAddress").val('');
+				$("#bytesNewAddress").text(cntNewAddress2);
+			});
+				
+			
+			
+			
+			
+			
+			
+			
+			//결제 정보 페이지 플로팅
+		/* 	// 기존 css에서 플로팅 배너 위치(top)값을 가져와 저장한다.
+			var floatPosition = parseInt($("#costInfo").css('top'));
+		
+			$(window).scroll(function() {
+				// 현재 스크롤 위치를 가져온다.
+				var scrollTop = $(window).scrollTop();
+				var newPosition = scrollTop + floatPosition + "px";
+		
+				// 애니메이션 없이 바로 따라감
+				$("#costInfo").css('top', newPosition);
+				 
+			}).scroll(); */
+			
+			
+		  /*   var agreeInfoHei = $('#agreeInfo').outerHeight(); //동의 전까지
+
+		    $("#paymentInfo").on('scroll', function() {
+		
+			    var sT = $(window).scrollTop();
+			    var val = $(document).height() - $(window).height() - agreeInfoHei;
+		
+			    if (sT >= val)
+			    	$('#agreeInfo').addClass('on')
+			    else
+			    	$('#agreeInfo').removeClass('on')
+		    }); 
+		     */
+		    
+		    var $w = $(window),
+		    footerHei = $('footer').outerHeight(),
+		    $banner = $('#costInfo');
+
+		  	$w.on('scroll', function() {
+
+			    var sT = $w.scrollTop();
+			    var val = $(document).height() - $w.height() - footerHei;
+		
+			    if (sT >= val)
+			        $banner.addClass('on')
+			    else
+			    	$banner.removeClass('on')
+			    	
+		   });
+		  
+		  
+
+			//일반결제 선택시 카드/할부 선택
+			$("input[type=radio]").click(function(){
+				if($("#card").prop('checked')){
+					$("#card_detail").css('display','');
+					console.log('111');
+				}else{
+					$("#card_detail").css('display','none');
+					console.log('222');
+
+				}
+			});
 		}
 		
-		
-		
-		//배송 메모 입력
-		$("#deliveryMemo").keyup(function(){
-			var cntMemo = $("#deliveryMemo").val().length;
-			$("#bytesMemo").val('');
-			$("#bytesMemo").text(cntMemo);
-		});
-		
-		
-		//새배송지클릭
-		$("input#selectDelivery2").click(function(){
-			$(".address_default").hide();
-			$("#btn_add").show();
-		})
-		
-		//기존배송지클릭
-		$("#selectDelivery").click(function(){
-			$(".address_default").show();
-			$("#btn_add").hide();
-			$(".address_new").hide();
-		})
-		
-		//배송지 상세주소 카운트
-		var cntAddress = $("#address_default_sub").val().length;
-		$("#bytesAddress").text(cntAddress);
-		
-		// 배송 주소 전부 입력
-		var address_all = $("#address_default_main").val()+" "+$("#address_default_sub").val();
-		$("#address_all").text(address_all);
-			
-		//배송지 상세주소 재입력 카운트
-		$("input#address_default_sub").keyup(function(){
-			cntAddress = $("#address_default_sub").val().length;
-			$("#bytesAddress").val('');
-			$("#bytesAddress").text(cntAddress);
-		});
-		
-				
-		
-		// 새배송지 상세주소 카운트
-		var cntNewAddress = $("#address_new_sub").val().length;
-		$("#bytesNewAddress").text(cntNewAddress);
-		
-		$("#address_new_sub").keyup(function(){
-			var cntNewAddress2 = $("#address_new_sub").val().length;
-			$("#bytesNewAddress").val('');
-			$("#bytesNewAddress").text(cntMemo);
-		});
-		
-		
-		
-		
-		//결제 정보 페이지 플로팅
-	/* 	// 기존 css에서 플로팅 배너 위치(top)값을 가져와 저장한다.
-		var floatPosition = parseInt($("#costInfo").css('top'));
-	
-		$(window).scroll(function() {
-			// 현재 스크롤 위치를 가져온다.
-			var scrollTop = $(window).scrollTop();
-			var newPosition = scrollTop + floatPosition + "px";
-	
-			// 애니메이션 없이 바로 따라감
-			$("#costInfo").css('top', newPosition);
-			 
-		}).scroll(); */
-		
-		
-	  /*   var agreeInfoHei = $('#agreeInfo').outerHeight(); //동의 전까지
-
-	    $("#paymentInfo").on('scroll', function() {
-	
-		    var sT = $(window).scrollTop();
-		    var val = $(document).height() - $(window).height() - agreeInfoHei;
-	
-		    if (sT >= val)
-		    	$('#agreeInfo').addClass('on')
-		    else
-		    	$('#agreeInfo').removeClass('on')
-	    }); 
-	     */
-	    
-	    var $w = $(window),
-	    footerHei = $('footer').outerHeight(),
-	    $banner = $('#costInfo');
-
-	  	$w.on('scroll', function() {
-
-		    var sT = $w.scrollTop();
-		    var val = $(document).height() - $w.height() - footerHei;
-	
-		    if (sT >= val)
-		        $banner.addClass('on')
-		    else
-		    	$banner.removeClass('on')
-		    	
-	   });
-	  
-	  
-
-		//일반결제 선택시 카드/할부 선택
-		$("input[type=radio]").click(function(){
-			if($("#card").prop('checked')){
-				$("#card_detail").css('display','');
-				console.log('111');
-			}else{
-				$("#card_detail").css('display','none');
-				console.log('222');
-
-			}
-		});
 		
 	});
 	
@@ -471,7 +482,7 @@
 					$("#address_new_postcode").show();
 	                $("#address_new_postcode").val(data.zonecode);
 	                $("#address_new_main").show();
-                    $("#address_new_main").val(addr);
+                    $("#address_new_main").val(addr+extraAddr);
                     $(".address_new_bytes").show();
 	                
 	            }
@@ -480,19 +491,75 @@
 		
 	
 	function go_complete(){	
-
+		var mobileFlag=true;
+		var selectDelivery = $("input[name='selectDelivery']:checked").val();
+		
+		
+		if(selectDelivery=="1"){
+			if($("#address_default_postcode").val().trim()=="" || $("#address_default_main").val().trim()=="" ){
+				alert("주소를 입력해 주세요");
+				return;
+			}
+		}else{
+			if($("#address_new_postcode").val().trim()=="" || $("#address_new_main").val().trim()=="" ){
+				alert("주소를 입력해 주세요");
+				return;
+			}
+		}
+		
+		if($("#nameReceiver").val().trim()==""){
+			alert("수령인을 작성해주세요");
+			return;
+		}
+		
+		$("input[name='mobile']").each(function(index,item){
+			if(item.value.trim()==""){
+				mobileFlag=false;
+			}
+		})
+		
+		if(!mobileFlag){
+			alert("수령인 핸드폰 번호를 정확히 입력해주세요");
+			return;
+		}
+		
 		//약관 동의
 		if(!($("input:checkbox[id=agreeCheck]").prop('checked'))){
 			alert('약관에 동의해주세요.');			
 			return;
-	 	}	 		
+	 	}
+		
+		func_pop();
 	
-		var frm = document.frm_payment;
-		frm.action = 'register.do';
-		frm.method = 'post';
-		frm.submit();
+		
 		
 	};
+	
+	
+	function func_pop(){
+		var pay = $("input[name='pay']:checked").val();
+		console.log(pay);
+		window.name="parentFrm";
+		sessionStorage.setItem("recieve",$("#totalPrice").val());
+		if($("input[name='selectDelivery']:checked").val()=="1"){
+			sessionStorage.setItem("postcode",$("#address_default_postcode").val());
+			sessionStorage.setItem("address",$("#address_default_main").val());
+		}
+		else{
+			sessionStorage.setItem("postcode",$("#address_new_postcode").val());
+			sessionStorage.setItem("address",$("#address_new_main").val());
+		}
+		console.log(sessionStorage.getItem("recieve"));
+		var win = window.open("<%=ctxPath%>/pay.do?pay="+pay,"childFrm","left=300px, top=100px, width=800px, height=700px");
+	}
+	
+	function goSubmit(){
+		
+		var frm = document.frm_payment;
+		frm.action = 'pay.do';
+		frm.method = 'post';
+		frm.submit(); 
+	}
 	
 	
 	
@@ -505,7 +572,8 @@
 		<jsp:include page="../include/header.jsp"></jsp:include>
 		<div class="section" align="center">
 			<div class="contents">
-				<form name="frm_payment" action = 'market.html' method='post'>
+				<c:if test="${empty sessionScope.payResult}">
+				<form name="frm_payment" method='post'>
 					<!-- 0 주문서 -->						
 					<div id="header_div">
 						<h3 id="header_order">주문서</h3>
@@ -534,14 +602,19 @@
 								</tr>					
 							</thead>
 							<tbody id="productList_body">
-								<!-- <tr>
-									<td class="product productImg"><img style ="width: 100%" src="" /></td>
-									<td class="product productInfo">
-										<div id="productInfo_name">하리보</div>
-										<div id="productInfo_cnt"><span>1</span><span>개 / 개당 </span><span>12,000</span><span>원</span></div>
-									</td>
-									<td class="product productInfo last_td productPrice">1,000원</td>
-								</tr> -->
+								<c:forEach var="item" items="${cartList}">
+									<tr>
+										<td class="product productImg"><img style="width:100%" src="/ShoppingMall/images/${item.prod.representative_img}" /></td>
+										<td class="product productInfo">
+											<div id="productInfo_name">${item.prod.product_name }</div>
+											<input type="hidden" name="order_product_num" value="${item.prod.product_num}" />
+											<div id="productInfo_cnt"><span>${item.product_count}</span><span>개/개당<span><fmt:formatNumber value="${item.prod.finalPrice}" pattern="###,###" /> 원</span></span></div>
+											<input type="hidden" name="order_product_count" value="${item.product_count}" />
+											<input type="hidden" name="order_product_price" value="${item.prod.finalPrice }" />
+										</td>
+										<td class="product productInfo last_td productPrice"><fmt:formatNumber value="${item.prod.totalPrice}" pattern="###,###" /> 원</td>
+									</tr>
+								</c:forEach>
 							</tbody>			
 						</table>
 					</div>
@@ -551,26 +624,27 @@
 					<!-- 2 주문자정보 -->
 					<div id="ordererInfo">
 						<div class="payment_title">주문자 정보</div>
+						<input type="hidden" name="order_member_num" value="${sessionScope.loginuser.member_num }" />
 						<table id="ordererTable">
 							<tr>
 								<td colspan="2" style="height:10px"></td>
 							</tr>
 							<tr>
 								<th class="table_th">보내는분</th>
-								<td><input class=peopleInfo type = "text" value="나나" readonly></input></td>
+								<td><input class=peopleInfo type = "text" value="${sessionScope.loginuser.name}" readonly></input></td>
 							</tr>
 							<tr>
+								<c:if test="${not empty sessionScope.loginuser.mobile}">
 								<th class="table_th">휴대폰</th>
+								
 								<td>
-								<input class=peopleInfo style="width:43px;" type="text" name="mobileOrder" value="010" size="3" readonly>
-									<span class="bar"><span>-</span></span>
-								<input class=peopleInfo style="width:43px;" type="text" name="mobileOrder" value="1234" size="4" readonly>
-									<span class="bar"><span>-</span></span>
-								<input class=peopleInfo style="width:43px;" type="text" name="mobileOrder" value="5678" size="4" readonly>
+									${sessionScope.loginuser.mobileForm}
+								</td>
+								</c:if>
 							</tr>
 							<tr>
 								<th class="table_th">이메일</th>
-								<td><input class=peopleInfo type = "text" value="nana@naver.com" readonly></input></td>
+								<td><input type = "text" value="${sessionScope.loginuser.email }" readonly></input></td>
 							</tr>
 							<tr>
 								<th class="table_th"></th>
@@ -594,6 +668,7 @@
 						</div>
 						
 						<table id="deliverInfo_table">
+							<c:if test="${!empty deliveryInfo.recipient_address}">
 								<tr>
 									<td colspan="2" style="height:10px"></td>
 								</tr>
@@ -601,10 +676,10 @@
 									<th>배송지 선택</th>
 									<td>
 										<label for="selectDelivery">
-										<input type="radio" name="selectDelivery" id="selectDelivery" checked="checked"> 최근 배송지
+										<input type="radio" value="1" name="selectDelivery" id="selectDelivery" checked="checked"> 최근 배송지
 										</label>
 										<label for="selectDelivery2">
-										<input type="radio" name="selectDelivery" id="selectDelivery2"> 새로운 배송지
+										<input type="radio" value="2" name="selectDelivery" id="selectDelivery2"> 새로운 배송지
 										</label>
 									</td>
 								</tr>		
@@ -613,17 +688,18 @@
 									<th>주소</th>
 									<td>
 										<div class="address_default">
-											<input class="input_address" id="address_default_main" value="서울강남">
-											<input class="input_address"id="address_default_sub" value="1234호" style="display:inline-block;">
+											<input class="input_address" name="postcode" type="text" id="address_default_postcode" value="${deliveryInfo.recipient_postcode}" readonly/>
+											<input class="input_address" name="mainaddress" type="text" id="address_default_main" value="${deliveryInfo.recipient_address}" readonly>
+											<input class="input_address" name="subaddress" type="text" id="address_default_sub" value="${deliveryInfo.recipient_detailaddress}" style="display:inline-block;" readonly>
 											<span id="bytesAddress" style="display:inline-block;"></span>자 / 60자
 											<span class="input_address" id="address_all"></span>										
 										</div>			
 										
 										<button type="button" id="btn_add" style="display: none;" onclick="openPOST()">새 배송지 추가</button>	
 											<div class="address_new">
-												<input class="input_address" id="address_new_postcode" style="display: none;">
-												<input class="input_address" id="address_new_main" style="display: none;">
-												<input class="input_address" id="address_new_sub" style="display: none;">
+												<input class="input_address" name="newPostcode" id="address_new_postcode" style="display: none;">
+												<input class="input_address" name="newMainaddress" id="address_new_main" style="display: none;">
+												<input class="input_address" name="newSubaddress" id="address_new_sub" style="display: none;">
 												<div class="address_new_bytes" style="display: none;">
 													<span id="bytesNewAddress" ></span>자 /60자
 												</div>
@@ -645,7 +721,7 @@
 								<tr>
 									<th>수령인 이름 *</th>
 									<td>
-										<input type="text" id="nameReceiver" name="nameReceiver" value="나나" required="required">
+										<input type="text" id="nameReceiver" name="nameReceiver" value="${deliveryInfo.recipient}" required="required">
 									</td>
 								</tr>
 								
@@ -670,7 +746,71 @@
 								<tr>
 									<td colspan="2" style="height:10px"></td>
 								</tr>
-																								
+							</c:if>
+							<c:if test="${empty deliveryInfo.recipient_address}">
+								<tr>
+									<td colspan="2" style="height:10px"></td>
+								</tr>
+								<tr>
+									<th>배송지 선택</th>
+									<td>
+										<label for="selectDelivery2">
+										<input type="radio" value="2" name="selectDelivery" id="selectDelivery2" checked> 새로운 배송지
+										</label>
+									</td>
+								</tr>
+								<tr>
+									<th>주소</th>
+									<td>		
+										<button type="button" id="btn_add" onclick="openPOST()">새 배송지 추가</button>	
+										<input class="input_address" name="newPostcode" id="address_new_postcode" style="display: none;">
+										<input class="input_address" name="newMainaddress" id="address_new_main" style="display: none;">
+										<input class="input_address" name="newSubaddress" id="address_new_sub" style="display: none;">
+										<div class="address_new_bytes" style="display: none;">
+											<span id="bytesNewAddress" ></span>자 /60자
+										</div>
+									</td>
+								</tr>
+								<tr>
+									<th>배송 구분</th>
+									<td>
+										<span id="adress">택배배송지역</span>
+										<span class="deliver_guide" style="display: none;">
+											샛별 배송 지역 중 아래 장소는 <strong>배송 불가 장소</strong>입니다.<br/>
+											<strong>▶ 배송 불가 장소</strong> : 관공서/ 학교/ 병원/ 시장/ 공단 지역/ 산간 지역/ 백화점 등
+										</span>
+									</td>
+								</tr>
+																							
+								<tr>
+									<th>수령인 이름 *</th>
+									<td>
+										<input type="text" id="nameReceiver" name="nameReceiver" value="${deliveryInfo.recipient}" required="required">
+									</td>
+								</tr>
+								
+								<tr>
+									<th>휴대폰 *</th>
+									<td>
+										<input style="width:43px;" type="text" name="mobile" value="" size="3" maxlength="3" required="required" >
+											<span class="bar"><span>-</span></span>
+										<input style="width:50px;" type="text" name="mobile" value="" size="4" maxlength="4" required="required">
+											<span class="bar"><span>-</span></span>
+										<input style="width:50px;" type="text" name="mobile" value="" size="4" maxlength="4" required="required" >
+									</td>
+								</tr>							
+															
+								<tr>
+									<th>배송 요청사항</th>
+									<td class="last_td">
+										<textarea id="deliveryMemo" name="deliveryMemo" maxlength="50"></textarea>
+										<span id="bytesMemo">0</span>자 / 50자
+									</td>
+								</tr>
+								<tr>
+									<td colspan="2" style="height:10px"></td>
+								</tr>		
+							</c:if>		 														
 						</table> 
 						
 					</div>					
@@ -761,7 +901,7 @@
 									<th>토스 결제</th>
 									<td>
 										<label for="toss">
-											<input type="radio" name="pay" id="toss"><img src="http://res.kurly.com/pc/service/order/1912/toss-logo-signature.svg" height="18"/>
+											<input type="radio" value="2" name="pay" id="toss"><img src="http://res.kurly.com/pc/service/order/1912/toss-logo-signature.svg" height="18"/>
 										</label>
 									</td>
 								</tr>
@@ -789,14 +929,19 @@
 								</tr>
 							</table>
 						</div>
+						 <c:set var="sum" value="0" />
+						<c:forEach var="item" items="${cartList}">
+									<c:set var="sum" value="${sum + item.prod.totalPrice}" />
+						</c:forEach> 
 						<!-- 5.결제금액 -->					
 						<div id="costInfo">
 							<div class="payment_title" style="border:none; padding: 0;"><h4>결제 금액</h4></div>		
 							<div id="costInfo_div">		
 								<table id="costInfo_table" style="border:none;">
+								
 									<tr>
 										<th>상품 금액</th>
-										<td>12,000 원</td>
+										<td><fmt:formatNumber value="${sum}" pattern="###,###" />원</td>
 									</tr>								
 									<tr style="height:2px;">
 										<td colspan="2" style="height:2px;"><hr style="border-top:solid 1px black;"></td>
@@ -816,7 +961,11 @@
 									</tr>							
 									<tr>
 										<th>최종 결제 금액</th>
-										<td>15,000 원</td>
+										<td>
+											<fmt:formatNumber value="${sum+3000}" pattern="###,###" />원
+											<input type="hidden" name="totalPrice" id="totalPrice" value="${sum+3000}" />
+										</td>
+										
 									</tr>						
 								</table>	
 							</div>	
@@ -863,6 +1012,10 @@
 					
 					
 				</form>
+				</c:if>
+				<c:if test="${not empty sessionScope.payResult}">
+					<h3>결제가 완료되었습니다.</h3>
+				</c:if>
 			</div>						
 		</div>
 		

@@ -105,38 +105,42 @@ public class ProductDAO implements InterProductDAO {
 	}
 
 	
-	// 대분류와 소분류 불러오기
-	@Override
-	public List<ProductVO> categoryList(String fk_category_num) throws SQLException {
-		List<ProductVO> categoryList = new ArrayList<>();
 
-		try {
-			conn = ds.getConnection();
-			
-			String sql = " select subcategory_num, subcategory_content " + 
-						 " from product_subcategory_table " + 
-						 " where subcategory_num like ?||'_' ";
-			
-			pstmt = conn.prepareStatement(sql);
-			pstmt.setInt(1, Integer.parseInt(fk_category_num));
-			
-			rs = pstmt.executeQuery();
-			
-			while(rs.next()) {
-				ProductVO pvo = new ProductVO();
-				
-				pvo.setSubcategory_num(rs.getInt(1));
-				pvo.setSubcategory_content(rs.getString(2));
-				
-				categoryList.add(pvo);
-			}
-			
-		} finally {
-			close();
-		}
-		
-		return categoryList;
-	}
+
+	
+	// 대분류와 소분류 불러오기
+	   @Override
+	   public List<ProductVO> subcategoryList(String fk_category_num) throws SQLException {
+
+	      List<ProductVO> subcategoryList = new ArrayList<>();
+	      try {
+	         conn = ds.getConnection();
+	         
+	         String sql = " select subcategory_num, subcategory_content " + 
+	                   " from product_subcategory_table " + 
+	                   " where subcategory_num like ?||'_' ";
+	         
+	         pstmt = conn.prepareStatement(sql);
+	         pstmt.setInt(1, Integer.parseInt(fk_category_num));
+	         
+	         rs = pstmt.executeQuery();
+	         
+	         while(rs.next()) {
+	            ProductVO pvo = new ProductVO();
+	            
+	            pvo.setSubcategory_num(rs.getInt(1));
+	            pvo.setSubcategory_content(rs.getString(2));
+	            
+	            subcategoryList.add(pvo);
+	         }
+	         
+	      } finally {
+	         close();
+	      }
+	      
+	      return subcategoryList;
+	   }
+	
 
 	// 소분류 불러오기
 	@Override
@@ -149,7 +153,7 @@ public class ProductDAO implements InterProductDAO {
 			String sql = " select distinct C.category_content AS category_content "+
 						 " from product_table P JOIN product_category_table C "+
 						 " ON P.fk_category_num = C.category_num "+
-						 " where fk_category_num = ?";
+						 " where fk_category_num = ? ";
 			
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setInt(1, Integer.parseInt(fk_category_num));
@@ -183,37 +187,39 @@ public class ProductDAO implements InterProductDAO {
 				  "    from " + 
 				  "     ( " + 
 				  "        select  product_num, product_name, price , sale, representative_img, fk_category_num " + 
-				  "        from product_table "+ 
-				  "        where fk_category_num = ? "; 
-
-			 if(paraMap.get("fk_subcategory_num") == null) { // 전체보기
+				  "        from product_table " +
+				  " 	   where fk_category_num = ? ";
+			
+				
+			if(paraMap.get("fk_subcategory_num") == null) { // 전체보기
 				 
-					sql += "    ) P " + 
-						   " ) T " + 
-						   " where  T.RNO between ? and ? ";
-					
-					pstmt = conn.prepareStatement(sql);
-					int currentShowPageNo = Integer.parseInt(paraMap.get("currentShowPageNo"));
-					pstmt.setInt(1, Integer.parseInt(paraMap.get("fk_category_num")));
-					pstmt.setInt(2, (currentShowPageNo * 9) - (9 - 1) ); // 공식
-					pstmt.setInt(3, (currentShowPageNo * 9) ); // 공식
-					
-				}
-				else if(paraMap.get("fk_subcategory_num") != null) { // 소분류 보기
-					
-					sql += " and fk_subcategory_num = ? "+
-						   "    ) P " + 
-						   " ) T " + 
-						   " where  T.RNO between ? and ? ";
-					
-					pstmt = conn.prepareStatement(sql);
-					int currentShowPageNo = Integer.parseInt(paraMap.get("currentShowPageNo"));
-					pstmt.setInt(1, Integer.parseInt(paraMap.get("fk_category_num")));
-					pstmt.setInt(2, Integer.parseInt(paraMap.get("fk_subcategory_num")));	
-					pstmt.setInt(3, (currentShowPageNo * 9) - (9 - 1) ); // 공식
-					pstmt.setInt(4, (currentShowPageNo * 9) ); // 공식
-				}
-								
+				sql += "    ) P " + 
+					   " ) T " + 
+					   " where  T.RNO between ? and ? ";
+				
+				pstmt = conn.prepareStatement(sql);
+				int currentShowPageNo = Integer.parseInt(paraMap.get("currentShowPageNo"));
+				pstmt.setInt(1, Integer.parseInt(paraMap.get("fk_category_num")));
+				pstmt.setInt(2, (currentShowPageNo * 9) - (9 - 1) ); // 공식
+				pstmt.setInt(3, (currentShowPageNo * 9) ); // 공식
+				
+			}
+			else if(paraMap.get("fk_subcategory_num") != null) { // 소분류 보기
+				
+				sql += " and fk_subcategory_num = ? "+
+					   "    ) P " + 
+					   " ) T " + 
+					   " where  T.RNO between ? and ? ";
+				
+				pstmt = conn.prepareStatement(sql);
+				int currentShowPageNo = Integer.parseInt(paraMap.get("currentShowPageNo"));
+				pstmt.setInt(1, Integer.parseInt(paraMap.get("fk_category_num")));
+				pstmt.setInt(2, Integer.parseInt(paraMap.get("fk_subcategory_num")));	
+				pstmt.setInt(3, (currentShowPageNo * 9) - (9 - 1) ); // 공식
+				pstmt.setInt(4, (currentShowPageNo * 9) ); // 공식
+		
+			}
+	
 				rs = pstmt.executeQuery();
 				
 				while(rs.next()) {
@@ -247,22 +253,30 @@ public class ProductDAO implements InterProductDAO {
 			conn = ds.getConnection();
 			
 			sql = " select ceil( count(*)/9 ) AS totalPage "+
-				  " from product_table "+
-				  " where fk_category_num = ? "; 
+				  " from product_table ";
+				   
+			if(paraMap.get("fk_category_num") != null) {
+				
+				sql += " where fk_category_num = ? ";
+				
+				if(paraMap.get("fk_subcategory_num") == null) { // 전체보기
+					
+					pstmt = conn.prepareStatement(sql);
+					pstmt.setInt(1, Integer.parseInt(paraMap.get("fk_category_num")));
+				}
+				else if(paraMap.get("fk_subcategory_num") != null) { // 소분류 보기
+					
+					sql += "and fk_subcategory_num = ? ";
+					
+					pstmt = conn.prepareStatement(sql);
+					pstmt.setInt(1, Integer.parseInt(paraMap.get("fk_category_num")));
+					pstmt.setInt(2, Integer.parseInt(paraMap.get("fk_subcategory_num")));
+				}
+			}
+			else {
+				pstmt = conn.prepareStatement(sql);
+			}
 			
-			if(paraMap.get("fk_subcategory_num") == null) { // 전체보기
-				
-				pstmt = conn.prepareStatement(sql);
-				pstmt.setInt(1, Integer.parseInt(paraMap.get("fk_category_num")));
-			}
-			else if(paraMap.get("fk_subcategory_num") != null) { // 소분류 보기
-				
-				sql += "and fk_subcategory_num = ? ";
-				
-				pstmt = conn.prepareStatement(sql);
-				pstmt.setInt(1, Integer.parseInt(paraMap.get("fk_category_num")));
-				pstmt.setInt(2, Integer.parseInt(paraMap.get("fk_subcategory_num")));
-			}
 			
 			rs = pstmt.executeQuery();
 			
@@ -398,7 +412,138 @@ public class ProductDAO implements InterProductDAO {
 		
 		return n;
 	}
+
 	
+	// 장바구니 테이블에서 특정제품을 장바구니에서 주문량 증감시키기 
+	@Override
+	public int updateCart(String cartno, String oqty) throws SQLException {
+		
+		int n = 0;
+		
+		try {
+			conn = ds.getConnection();
+			
+			String sql = " update basket_table set product_count = ? "
+					   + " where basket_num = ? ";
+					   
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, oqty);
+			pstmt.setString(2, cartno);
+			
+			n = pstmt.executeUpdate();
+			
+		} finally {
+			close();
+		}
+		
+		return n;
+	}
+
+
 	
+	// 페이징 처리를 한 신상품 목록을 조회하기
+	@Override
+	public List<ProductVO> selectNewList(HashMap<String, String> paraMap) throws SQLException {
+		
+		List<ProductVO> newprodList = new ArrayList<>();
+		String sql ="";
+		
+		try {
+			conn = ds.getConnection();
+			
+			sql = " select RNO, product_num, product_name, price, sale, representative_img " + 
+				  " from " + 
+				  " ( " + 
+				  "     select rownum AS RNO, product_num, product_name, price, sale, representative_img " + 
+				  "     from " + 
+				  "     ( " + 
+				  "        select  product_num, product_name, price, sale, representative_img " + 
+				  "        from product_table " + 
+				  "        order by  registerdate desc " + 
+				  "    ) V " + 
+				  " ) T " + 
+				  " where T.RNO between ? and ? ";
+				
+				pstmt = conn.prepareStatement(sql);
+				int currentShowPageNo = Integer.parseInt(paraMap.get("currentShowPageNo"));
+				pstmt.setInt(1, (currentShowPageNo * 9) - (9 - 1) ); // 공식
+				pstmt.setInt(2, (currentShowPageNo * 9) ); // 공식
 	
+				rs = pstmt.executeQuery();
+				
+				while(rs.next()) {
+					ProductVO pvo = new ProductVO();
+					pvo.setProduct_num(rs.getInt("product_num"));
+					pvo.setProduct_name(rs.getString("product_name"));
+					pvo.setPrice(rs.getInt("price"));
+					pvo.setSale(rs.getInt("sale"));
+					pvo.setRepresentative_img(rs.getString("representative_img"));
+					
+					newprodList.add(pvo);
+				}
+
+			pstmt = conn.prepareStatement(sql);
+			
+			
+		} finally {
+			close();
+		}
+		
+		return newprodList;
+
+		
+	}
+
+	
+	// 페이징 처리를 한 세일품목 조회하기
+	@Override
+	public List<ProductVO> selectSale(HashMap<String, String> paraMap) throws SQLException {
+		
+		List<ProductVO> saleprodList = new ArrayList<>();
+		String sql ="";
+		
+		try {
+			conn = ds.getConnection();
+			
+			sql = " select RNO, product_num, product_name, price, sale, representative_img " + 
+				  " from " + 
+				  " ( " + 
+				  "     select rownum AS RNO, product_num, product_name, price, sale, representative_img " + 
+				  "     from " + 
+				  "     ( " + 
+				  "        select  product_num, product_name, price, sale, representative_img " + 
+				  "        from product_table " + 
+				  "        where sale > 0 " + 
+				  "    ) V " + 
+				  " ) T " + 
+				  " where T.RNO between ? and ? ";
+				
+				pstmt = conn.prepareStatement(sql);
+				int currentShowPageNo = Integer.parseInt(paraMap.get("currentShowPageNo"));
+				pstmt.setInt(1, (currentShowPageNo * 9) - (9 - 1) ); // 공식
+				pstmt.setInt(2, (currentShowPageNo * 9) ); // 공식
+	
+				rs = pstmt.executeQuery();
+				
+				while(rs.next()) {
+					ProductVO pvo = new ProductVO();
+					pvo.setProduct_num(rs.getInt("product_num"));
+					pvo.setProduct_name(rs.getString("product_name"));
+					pvo.setPrice(rs.getInt("price"));
+					pvo.setSale(rs.getInt("sale"));
+					pvo.setRepresentative_img(rs.getString("representative_img"));
+					
+					saleprodList.add(pvo);
+				}
+				
+			pstmt = conn.prepareStatement(sql);
+			
+		} finally {
+			close();
+		}
+		
+		return saleprodList;
+
+	}
+
 }

@@ -19,7 +19,7 @@ import main.model.IndexDAO;
 import main.model.InterIndexDAO;
 import main.model.ProductVO;
 
-public class IndexListAction extends AbstractController {
+public class IndexListAction extends AbstractController { 
 
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
@@ -33,10 +33,10 @@ public class IndexListAction extends AbstractController {
 		InterIndexDAO idao = new IndexDAO();
 		
 		// MD추천에 사용되는 category 값이 있는지 없는지 유무 확인
-		if(category != null) paraMap.put("category",category);
+		if(category != null) paraMap.put("category",category); 
 		
 		if("random".equals(type)) {
-			product_numArr = idao.product_numFind();
+			product_numArr = idao.product_numFind();    
 			boolean check = true;
 			System.out.println("사이즈:"+product_numArr.size());
 			String[] randomArr = {"-1","-1","-1","-1","-1","-1","-1","-1"};

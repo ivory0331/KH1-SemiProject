@@ -23,7 +23,7 @@ public class BasketListAction extends AbstractController {
 		if(!loginFlag) { // 로그인 상태가 아닌경우
 			
 			request.setAttribute("message", "장바구니를 보려면 먼저 로그인 부터 하세요!!");
-			request.setAttribute("loc", "javascript:history.back()"); 
+			request.setAttribute("loc", request.getContextPath()+"/member/login.do"); 
 			
 		//	super.setRedirect(false);
 			super.setViewPage("/WEB-INF/msg.jsp");
@@ -34,6 +34,8 @@ public class BasketListAction extends AbstractController {
 			
 			HttpSession session = request.getSession();
 			MemberVO loginuser = (MemberVO) session.getAttribute("loginuser");
+			
+			session.removeAttribute("payResult"); //결제완료 값을 갖는 session 지우기
 			
 			InterProductDAO pdao = new ProductDAO();
 			

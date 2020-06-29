@@ -1,5 +1,7 @@
 package hyemin.controller;
 
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -7,6 +9,7 @@ import javax.servlet.http.HttpSession;
 import common.controller.AbstractController;
 import hyemin.model.InterOrderDAO;
 import hyemin.model.OrderDAO;
+import main.model.OrderProductVO;
 import main.model.OrderVO;
 import member.model.MemberVO;
 
@@ -53,9 +56,15 @@ public class MyPageOrderHistoryDetailAction extends AbstractController {
 		
 		///////////////////////////////////////////////////////////////////////////
 		String order_num = request.getParameter("order_num");
-		InterOrderDAO odao = new OrderDAO();
-		OrderVO ovo = odao.OrderOneDetail(order_num);
-		request.setAttribute("ovo", ovo);
+
+		InterOrderDAO odao = new OrderDAO();		
+		List<OrderProductVO> OrderProductsList = odao.OneOrderProductsDetail(order_num);
+		
+		List<OrderVO> OrderInfoList = odao.OneOrderInfoDetail(order_num);		
+		
+		request.setAttribute("order_num", order_num);
+		request.setAttribute("OrderProductsList", OrderProductsList);
+		request.setAttribute("OrderInfoList", OrderInfoList);
 		
 	//	super.setRedirect(false);
 		super.setViewPage("/WEB-INF/member/myPageOrderHistoryDetail.jsp");

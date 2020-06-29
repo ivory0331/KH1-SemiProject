@@ -2,7 +2,6 @@ package member.model;
 
 import java.sql.SQLException;
 import java.util.HashMap;
-
 import main.model.OneInquiryVO;
 import member.model.MemberVO;
 
@@ -41,6 +40,6 @@ public interface InterMemberDAO {
 	//1:1문의 게시판(고객센터)
 	int serviceCenterMyQboardWrite(OneInquiryVO oneInQueryVO ) throws SQLException;
 
-	
+
 
 }

@@ -20,6 +20,8 @@ import javax.sql.DataSource;
 import member.model.EncryptMyKey;
 import member.model.MemberVO;
 import util.security.AES256;
+import product.model.*;
+
 
 public class IndexDAO implements InterIndexDAO{
 
@@ -68,17 +70,17 @@ public class IndexDAO implements InterIndexDAO{
 		try {
 			conn = ds.getConnection();
 			String sql = "";
-			String subSql = " select product_num, product_name, price, stock, to_char(registerdate,'yyyy-mm-dd') as registerdate, representative_img from product_table ";
+			String subSql = " select product_num, product_name, price, stock, sale, to_char(registerdate,'yyyy-mm-dd') as registerdate, representative_img from product_table ";
 			
 			switch (type) {
 			case "sale":
 				subSql+=" order by sale desc ";
 				break;
 			case "best" :
-				subSql+="where fk_category_num = ? order by best_point desc";
+				subSql+=" where fk_category_num = ? order by best_point desc ";
 				break;
 			case "new":
-				subSql+="order by registerdate desc";
+				subSql+=" order by registerdate desc ";
 				break;
 			default:
 				break;
@@ -88,7 +90,7 @@ public class IndexDAO implements InterIndexDAO{
 				sql= subSql+" where product_num in(?,?,?,?,?,?,?,?) ";
 			}
 			else {
-				sql="select ROM,product_num, product_name, price, stock, representative_img from (select rownum as ROM, product_num, product_name, price, stock, representative_img  from("+subSql+") )T where T.ROM between 1 and 8 ";
+				sql=" select ROM,product_num, product_name, price, stock, sale, representative_img from (select rownum as ROM, product_num, product_name, price, stock, sale, representative_img  from("+subSql+") )T where T.ROM between 1 and 8 ";
 
 			}
 			
@@ -109,10 +111,12 @@ public class IndexDAO implements InterIndexDAO{
 			while(rs.next()) {
 				ProductVO product = new ProductVO();
 				product.setProduct_num(rs.getInt("product_num"));
+				product.setSale(rs.getInt("sale"));
 				product.setProduct_name(rs.getString("product_name"));
 				product.setPrice(rs.getInt("price"));
 				product.setStock(rs.getInt("stock"));
 				product.setRepresentative_img(rs.getString("representative_img"));
+				product.setFinalPrice();
 				productList.add(product);
 			}
 			
@@ -130,10 +134,10 @@ public class IndexDAO implements InterIndexDAO{
 	@Override
 	public ProductVO productDetail(String idx) throws SQLException {
 		ProductVO product = null;
-		
+		List<String> imageList = new ArrayList<String>();
 		try {
 			conn = ds.getConnection();
-			String sql = " select P.product_num, P.product_name, P.price, P.stock, P.origin, P.packing, P.unit, P.representative_img, P.explain, C.category_content , S.subcategory_content" + 
+			String sql = " select P.product_num, P.product_name, P.price, P.sale, P.stock, P.origin, P.packing, P.unit, P.representative_img, P.explain, C.category_content , S.subcategory_content" + 
 
 					" from product_table P join product_category_table C \r\n" + 
 					" on P.fk_category_num = C.category_num  " + 
@@ -149,16 +153,31 @@ public class IndexDAO implements InterIndexDAO{
 				product.setProduct_num(rs.getInt(1));
 				product.setProduct_name(rs.getString(2));
 				product.setPrice(rs.getInt(3));
-				product.setStock(rs.getInt(4));
-				product.setOrigin(rs.getString(5));
-				product.setPacking(rs.getString(6));
-				product.setUnit(rs.getString(7));
+				product.setSale(rs.getInt(4));
+				product.setStock(rs.getInt(5));
+				product.setOrigin(rs.getString(6));
+				product.setPacking(rs.getString(7));
+				product.setUnit(rs.getString(8));
 
-				product.setRepresentative_img(rs.getString(8));
-				product.setExplain(rs.getString(9));
-				product.setCategory_content(rs.getString(10));
-				product.setSubcategory_content(rs.getString(11));
+				product.setRepresentative_img(rs.getString(9));
+				product.setExplain(rs.getString(10));
+				product.setCategory_content(rs.getString(11));
+				product.setSubcategory_content(rs.getString(12));
+				
+				product.setFinalPrice();
 			}
+			rs.close();
+			
+			// 해당 상품 상세 이미지 불러오기
+			sql = " select image from product_image_table where fk_product_num = ? ";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, idx);
+			rs = pstmt.executeQuery();
+			while(rs.next()) {
+				String image = rs.getString("image");
+				imageList.add(image);
+			}
+			product.setImageList(imageList);
 		}
 		finally {
 			close();
@@ -721,6 +740,166 @@ public class IndexDAO implements InterIndexDAO{
 		}
 		
 		return opvo;
+	}
+
+	// 최근 배송지역 유무 조회
+	@Override
+	public Map<String, String> orderHistoryFind(int member_num) throws SQLException {
+		Map<String, String> deliveryInfo = null;
+		try {
+			conn = ds.getConnection();
+			String sql = " select recipient, recipient_mobile, recipient_postcode, recipient_address, recipient_detailaddress from order_table where fk_member_num = ? order by order_date desc ";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, member_num);
+			rs = pstmt.executeQuery();
+			if(rs.next()) {
+				deliveryInfo = new HashMap<String, String>();
+				deliveryInfo.put("recipient", rs.getString("recipient"));
+				deliveryInfo.put("recipient_mobile", rs.getString("recipient_mobile"));
+				deliveryInfo.put("recipient_postcode", rs.getString("recipient_postcode"));
+				deliveryInfo.put("recipient_address", rs.getString("recipient_address"));
+				deliveryInfo.put("recipient_detailaddress", rs.getString("recipient_detailaddress"));
+			}
+		}
+		finally {
+			close();
+		}
+		return deliveryInfo;
+	}
+
+	// 주문기능 및 주문된 물품 장바구니에서 지우고 주문상품테이블에 추가
+	@Override
+	public int order(MemberVO loginuser, Map<String, String> delivery, List<CartVO> cartList) throws SQLException {
+		int result = 0;
+		String seq_num="";
+		try {
+			conn = ds.getConnection();
+			conn.setAutoCommit(false);
+			String sql = " select last_number from user_sequences where SEQUENCE_NAME = 'SEQ_ORDER_TABLE' ";
+			pstmt = conn.prepareStatement(sql);
+			rs = pstmt.executeQuery();
+			if(rs.next()) {
+				seq_num = rs.getString(1);
+				System.out.println("시퀀스 현재값 : "+seq_num);
+			}
+			rs.close();
+			
+			sql = " insert into order_table(order_num, recipient, recipient_mobile, "
+					   + " recipient_postcode, recipient_address, recipient_detailaddress, "
+					   + " price, memo, fk_member_num, fk_category_num ) "
+					   + " values(seq_order_table.nextval, ?, ?, ?, ?, ?, ?, ?, ?,'1') ";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, delivery.get("receiver"));
+			pstmt.setString(2, delivery.get("reciverMobbile"));
+			pstmt.setString(3, delivery.get("postcode"));
+			pstmt.setString(4, delivery.get("mainAddress"));
+			pstmt.setString(5, delivery.get("subAddress"));
+			pstmt.setString(6, delivery.get("totalPrice"));
+			pstmt.setString(7, delivery.get("deliveryMemo"));
+			pstmt.setInt(8, loginuser.getMember_num());
+			
+			result = pstmt.executeUpdate();
+			
+			if(result == 1) {
+				sql = " insert into order_product_table(product_count, fk_order_num, fk_product_num, price)"
+					+ " values(?, ?, ?, ?)";
+				pstmt = conn.prepareStatement(sql);
+				for(int i=0; i<cartList.size(); i++) {
+					pstmt.setInt(1, cartList.get(i).getProduct_count());
+					pstmt.setString(2, seq_num);
+					pstmt.setInt(3, cartList.get(i).getProd().getProduct_num());
+					pstmt.setInt(4, cartList.get(i).getProd().getFinalPrice());
+					result+=pstmt.executeUpdate();
+				}
+				
+				if(result==cartList.size()+1) {
+					sql = " delete from basket_table where fk_member_num = ? ";
+					pstmt = conn.prepareStatement(sql);
+					pstmt.setInt(1, loginuser.getMember_num());
+					result += pstmt.executeUpdate();
+					if(result == (2*cartList.size())+1) {
+						conn.commit();
+					}
+				}
+				else {
+					result = 0;
+					conn.rollback();
+				}
+			}
+			else {
+				conn.rollback();
+			}
+		}
+		finally {
+			close();
+		}
+		return result;
+	}
+
+	// 상품검색 기능 조회
+	@Override
+	public List<ProductVO> selectPagingProduct(HashMap<String, String> paraMap) throws SQLException {
+		List<ProductVO> productList = new ArrayList<>();
+		String sql ="";
+		
+		try {
+			conn = ds.getConnection();
+			
+			sql = " select RNO, product_num, product_name, price, sale, representative_img " + 
+				  " from " + 
+				  " ( " + 
+				  "    select rownum AS RNO, product_num, product_name, price, sale, representative_img " + 
+				  "    from " + 
+				  "     ( " + 
+				  "        select  product_num, product_name, price , sale, representative_img, fk_category_num " + 
+				  "        from product_table " +
+				  " 	   where product_name like %?% or explain like %?% ";
+			
+				
+			
+				 
+				sql += "    ) P " + 
+					   " ) T " + 
+					   " where  T.RNO between ? and ? ";
+				
+				pstmt = conn.prepareStatement(sql);
+				int currentShowPageNo = Integer.parseInt(paraMap.get("currentShowPageNo"));
+				pstmt.setString(1, paraMap.get("searchWord"));
+				pstmt.setString(2, paraMap.get("searchWord"));
+				pstmt.setInt(3, (currentShowPageNo * 9) - (9 - 1) ); // 공식
+				pstmt.setInt(4, (currentShowPageNo * 9) ); // 공식
+				
+			
+	
+				rs = pstmt.executeQuery();
+				
+				while(rs.next()) {
+					ProductVO pvo = new ProductVO();
+					pvo.setProduct_num(rs.getInt("product_num"));
+					pvo.setProduct_name(rs.getString("product_name"));
+					pvo.setPrice(rs.getInt("price"));
+					pvo.setSale(rs.getInt("sale"));
+					pvo.setRepresentative_img(rs.getString("representative_img"));
+					pvo.setFinalPrice();
+					
+					productList.add(pvo);
+				}
+
+			pstmt = conn.prepareStatement(sql);
+			
+			
+		} finally {
+			close();
+		}
+		
+		return productList;
+	}
+
+	// 상품 검색 기능으로 나온 전체 결과물 수 조회
+	@Override
+	public int getTotalpage(HashMap<String, String> paraMap) throws SQLException {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 	
 }
