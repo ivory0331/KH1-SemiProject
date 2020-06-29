@@ -3,6 +3,7 @@ package member.model;
 import java.sql.SQLException;
 import java.util.HashMap;
 
+import main.model.OneInquiryVO;
 import member.model.MemberVO;
 
 public interface InterMemberDAO {
@@ -30,5 +31,16 @@ public interface InterMemberDAO {
 	
 	//패스워드 업데이트 
 	int pwdUpdate(String pwd, String userid) throws SQLException;
+	
+	//탈퇴하기 패스워드 중복검사
+	boolean dropoutPwdDuplicateCheck(String pwd) throws SQLException ;
+
+	//회원탈퇴하기 
+	int dropoutMember(String userid) throws SQLException ;
+	
+	//1:1문의 게시판(고객센터)
+	int serviceCenterMyQboardWrite(OneInquiryVO oneInQueryVO ) throws SQLException;
+
+	
 
 }

@@ -174,8 +174,8 @@ button.btn_address{
 }
 
 .btnCheck{
-   width: 130px;
-   height: 40px;
+    width: 130px;
+    height: 40px;
     display: inline-block;
     line-height: 30px;
     text-align: center;
@@ -186,6 +186,7 @@ button.btn_address{
     float: right;
     margin-left: 2px;
     border-radius: 3px;  
+
 }
 
 
@@ -254,8 +255,6 @@ div.reg_agree {
     border: 0;
     text-align: center;
 }
-
-
 .contents a.link {
     font-size: 14px;
     font-weight: 430;
@@ -263,13 +262,14 @@ div.reg_agree {
     line-height: 17px;
     letter-spacing: 0;
     text-decoration: none;
-
 }
-
 .contents a {
    cursor: pointer;
    text-decoration: none;
-
+}
+span#email_btn, span#idcheck{
+	cursor: pointer;
+   text-decoration: none;
 }
 #head_tit_agree{
    /*border : solid 1px pink;*/
@@ -280,14 +280,12 @@ div.reg_agree {
    font-weight: bold;
    letter-spacing: 0;
 }
-
 .head_sub_agree{
    font-size: 11px;
    font-weight: normal;
    padding-left: 10px;
    color: #333;
 }
-
 div#submit {
    padding: 40px 0;
    display: flex;
@@ -295,7 +293,6 @@ div#submit {
    justify-content : center;
    /*border: solid 1px black;*/
 }
-
 button.btn_submit{
    width: 340px;
    height: 54px;
@@ -306,7 +303,6 @@ button.btn_submit{
     border-radius: 3px; 
     letter-spacing: 0.6px;
 }
-
 .check{
    font-size: 12pt;
    font-weight: 630;
@@ -350,6 +346,7 @@ div.check_event{
    var bPwChValidateCheck = false; //비밀번호 확인 체크 
    var bIdDuplicateCheck = false; // 아이디 중복확인을 클릭여부 확인 
    var bEmailDuplicateCheck = false; //이메일 중복확인 클릭여부 확인 
+   
    $(document).ready(function(){
                
       $(".txt_guide").hide();     
@@ -751,6 +748,10 @@ div.check_event{
 			return;
 		}
 		//휴대폰 번호 검사 체크여부 
+		if($("#tel").val().trim()==""){
+	           alert("휴대폰 번호를 입력하세요");
+	           return;
+	    }
 
 		//아이디 중복체크 검사 
 		if (!bIdDuplicateCheck) {
@@ -801,7 +802,7 @@ div.check_event{
                         <td class="memberCols1" style="padding-top:30px;">아이디*</td>
                         <td class="memberCols2" style="padding-top:30px;">
                            <input type="text" name="userid" id="userid" placeholder ="5자 이상 10글자 이하의 영문과 숫자를 조합" value="" maxlength="16" required autocomplete="off">
-                           <span  id="idcheck"><span class="btnCheck" id="idcheckResult">중복확인</span></span>
+                           <span id="idcheck"><span class="btnCheck" id="idcheckResult">중복확인</span></span>
                            <p class="txt_guide" style="display: block;">
                            <span class="txt txt_errorCk userid_error">5자 이상 10글자 이하의 영문과 숫자를 조합</span><br/>
                            <span class="txt txt_errorCk userid_error">아이디 중복확인</span>
@@ -842,7 +843,7 @@ div.check_event{
                         <td class="memberCols1">이메일*</td>
                         <td class="memberCols2">
                            <input type="email" name="email" id="email" value="" maxlength="40" placeholder="예: marketkurly@kurly.com" required />
-                              <a href="javascript:chkEmail()"><span class="btnCheck email_error">이메일 중복확인</span></a>            
+                              <span id="email_btn" class="btnCheck email_error">이메일 중복확인</span>           
                         </td>
                      </tr>
                      

@@ -13,6 +13,7 @@ import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.sql.DataSource;
 
+import main.model.OneInquiryVO;
 import util.security.AES256;
 import util.security.Sha256;
 
@@ -348,4 +349,73 @@ public class MemberDAO implements InterMemberDAO {
  		
  		return result;
  	}
+
+ 	//탈퇴하기 패스워드 중복검사
+	@Override
+	public boolean dropoutPwdDuplicateCheck(String pwd) throws SQLException  {
+		
+		boolean isPassword = false;
+
+	      try {
+	         conn = ds.getConnection();
+	         String sql = " select pwd " + " from member_table " + " where status = 1 and pwd = ? ";
+	         pstmt = conn.prepareStatement(sql);
+	         
+	         pstmt.setString(1, Sha256.encrypt(pwd));
+	         
+	         rs = pstmt.executeQuery();
+	         isPassword = !rs.next(); // 행이 존재하면 F를 리턴
+
+	      } finally {
+	         close();
+	      }
+	      return isPassword;
+		
+	}
+	
+	//회원탈퇴하기 
+	@Override
+	public int dropoutMember(String userid) throws SQLException {
+		int result = 0;
+		
+		try {
+			conn = ds.getConnection();
+			String sql = " delete from member_table " + " where status = 1 and userid = ? ";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, userid);
+			result = pstmt.executeUpdate();
+			
+		} finally {
+			close();
+		}
+		return result;
+	}
+
+	//1:1문의 게시판(서비스센터)
+	@Override
+	public int serviceCenterMyQboardWrite(OneInquiryVO oneInQueryVO) throws SQLException {
+		int result = 0;
+		
+		try {
+			conn = ds.getConnection();
+			String sql = " insert into one_inquiry_table(one_inquiry_num, fk_category_num, subject, content, emailFlag, smsFlag, fk_member_num ) " 
+					   + " values(seq_one_inquiry_table.nextval , ? , ? , ? , ? , ?, ? ) ";
+					
+			 pstmt = conn.prepareStatement(sql);
+
+	         pstmt.setInt(1, oneInQueryVO.getFk_category_num());
+	         pstmt.setString(2, oneInQueryVO.getSubject()); 
+	         pstmt.setString(3, oneInQueryVO.getContent()); 
+	         pstmt.setString(4, oneInQueryVO.getEmailFlag());   
+	         pstmt.setString(5, oneInQueryVO.getSmsFlag());
+	         pstmt.setInt(6, oneInQueryVO.getFk_member_num());
+	         
+	         
+	         result = pstmt.executeUpdate();
+			
+		} finally {
+			close();
+		}
+		return result;
+	}
 }

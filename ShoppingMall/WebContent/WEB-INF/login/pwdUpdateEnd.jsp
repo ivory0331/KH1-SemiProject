@@ -42,7 +42,7 @@
     color: #333;
 }
 
-h3 {
+#content h3 {
     display: block;
     font-weight: bold;
     padding: 0;
@@ -53,10 +53,9 @@ h3 {
     padding-top: 36px;
 }
 
-
-input {
+#content input {
     display: inline-block;
-    width: 300px;
+    width: 320px;
     height: 54px;
     padding: 0 0 0 20px;
     border: 1px solid #ccc;
@@ -66,14 +65,13 @@ input {
     margin: 0px;
 }
 
-
 input::placeholder {
   color: #ccc;
 }
 
 
-a {
-    color: -webkit-link;
+#content a {
+    color: #5f0080;
     cursor: pointer;
     text-decoration: none;
 }
@@ -115,6 +113,7 @@ a {
 	vertical-align: middle;
 }
 .txt_type_form{
+	width : 300px;
 	float:left;
 	font-weight: 600;
 	font-size: 12px;
@@ -146,11 +145,15 @@ div.loginCheck {
 
 .passwd_error{
 	padding-top: 3px;
+	padding-left: 12px;
 	font-weight: 400;
 	font-size: 9pt;
 	line-height: 20px;
 	font-family: noto sans;
 	color: gray;	
+	float : left;
+	margin-bottom: 10px;
+	text-align: left;
 }
 
 </style>
@@ -201,6 +204,7 @@ div.loginCheck {
 
 
 <body>
+	<jsp:include page="../include/header.jsp"></jsp:include>
 	<div id="content">
 		<div class = "section_login">
 			<h3 class="tit_login">비밀번호 찾기</h3>
@@ -224,6 +228,8 @@ div.loginCheck {
 			</div>
 		</div>
 	</div>
+	<jsp:include page="../include/footer.jsp"></jsp:include>
+</body>
 </body>
 </html>
     

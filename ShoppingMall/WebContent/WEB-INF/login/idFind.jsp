@@ -53,9 +53,10 @@ div.loginCheck {
 	color: #333;
 }
 
-h3 {
+h3.tit_login {
 	display: block;
-	font-weight: bold;
+	font-weight: 800;
+	font-size: 16pt;
 	padding: 0;
 	margin: 0;
 }
@@ -70,10 +71,10 @@ h3 {
 	margin: 10px 0 5px 0;
 }
 
-input {
+#content input{
 	display: inline-block;
-	width: 300px;
-	height: 54px;
+	width: 320px;
+	height: 52px;
 	padding: 0 0 0 20px;
 	border: 1px solid #ccc;
 	border-radius: 3px;
@@ -86,7 +87,7 @@ input::placeholder {
 	color: #ccc;
 }
 
-a {
+#content a {
 	color: -webkit-link;
 	cursor: pointer;
 	text-decoration: none;
@@ -131,6 +132,7 @@ a {
 }
 
 .txt_type_form {
+	width : 300px;
 	float: left;
 	font-weight: 600;
 	font-size: 12px;
@@ -140,6 +142,7 @@ a {
 	font-size: 12px;
 	line-height: 20px;
 	text-align: left;
+	/*border : solid 1px red;*/
 }
 </style>
 <script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
@@ -214,7 +217,8 @@ a {
 
 </head>
 <body>
-	<div id="content">
+	<jsp:include page="../include/header.jsp"></jsp:include>
+	 <div id="content">
 		<div class = "section_login">
 			<h3 class="tit_login">아이디 찾기</h3>
 			<div class="write_form">
@@ -243,7 +247,8 @@ a {
 		        
    			 </c:if>
 			</div>
+		  </div>
 		</div>
-	</div>
+	 <jsp:include page="../include/footer.jsp"></jsp:include>
 </body>
 </html>

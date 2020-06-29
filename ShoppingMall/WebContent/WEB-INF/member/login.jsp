@@ -9,32 +9,34 @@
 <link rel="stylesheet" href="<%= ctxPath %>/css/style.css" />
 <title>market kurly login page</title>
 <style type="text/css">
-#content{
-	font-family : noto sans, sans-serif, malgun gothic;
-	min-width : 1080px;
+.contents{
+	font-family: noto sans, sans-serif, malgun gothic;
+	width: 100%;
 	height: 612px;
 	background-color: #fafafa;
-	padding : 0;
-	margin : 0 auto;
-	text-align: center;	
+	padding: 0;
+	margin: 0 auto;
+	text-align: center;
+	border : solid 1px #fafafa;
 }
+
 
 .section_login{
 	width: 340px;
 	margin: 0 auto;
-	padding-top : 90px;
-	letter-spacint : 6px;
-	diplay : block;
-	color : #4c4c4c;
+	padding-top: 90px;
+	letter-spacint: 6px;
+	diplay: block;
+	color: #4c4c4c;
 	font-size: 12px;
 	max-width: 100%;
-    line-height: 35px;
+	line-height: 35px;
 }
 
 
- .tit_login {
+.tit_login {
     font-weight: 800;
-    font-size: 20px;
+    font-size: 16pt;
     line-height: 20px;
     text-align: center;
     padding: 30px 0;
@@ -44,13 +46,11 @@
     color: #333;
 }
 
-
 .contents h3 {
     display: block;
     font-weight: bold;
+    padding-top : 50px;
 }
-
-
 
 .section_login .write_form {
     padding-top: 36px;
@@ -59,7 +59,7 @@
 
 .contents input {
     display: inline-block;
-    width: 300px;
+    width: 320px;
     height: 54px;
     padding: 0 0 0 20px;
     border: 1px solid #ccc;
@@ -72,7 +72,6 @@
 .login_search {
     line-height: 40px;
     text-align: right;
-   
 }
 
 .contents input::placeholder {
@@ -80,13 +79,19 @@
 }
 
 
-.contents a {
-    color: -webkit-link;
+.contents a:hover{
+    color: #5f0080;
     cursor: pointer;
     text-decoration: none;
 }
 
-
+.contents a{
+    color: #5f0080;
+    cursor: pointer;
+    text-decoration: none;
+    padding: 6px 0;
+    display: inline-block;
+}
 
 .login_search .bar {
     float: right;
