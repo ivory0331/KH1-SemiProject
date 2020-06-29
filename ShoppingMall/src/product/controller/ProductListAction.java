@@ -19,7 +19,6 @@ public class ProductListAction extends AbstractController {
 		String fk_category_num = request.getParameter("fk_category_num");
 		String fk_subcategory_num = request.getParameter("fk_subcategory_num");
 		
-		
 		String currentShowPageNo = request.getParameter("currentShowPageNo");
 		if(currentShowPageNo == null)
 			currentShowPageNo = "1";
@@ -89,6 +88,7 @@ public class ProductListAction extends AbstractController {
 		request.setAttribute("categoryInfo", categoryInfo);
 		request.setAttribute("subcategoryList", subcategoryList);
 		request.setAttribute("fk_category_num", fk_category_num);
+		request.setAttribute("fk_subcategory_num", fk_subcategory_num);
 		
 		super.setViewPage("/WEB-INF/main/productList.jsp");
 		

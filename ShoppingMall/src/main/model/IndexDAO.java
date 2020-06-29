@@ -356,7 +356,6 @@ public class IndexDAO implements InterIndexDAO{
 		String product_num = orderMap.get("product_num");
 		String member_num = orderMap.get("member_num");
 		String count = orderMap.get("count");
-		String price = orderMap.get("price");
 		
 		
 		try {

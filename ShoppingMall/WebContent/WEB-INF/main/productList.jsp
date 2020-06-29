@@ -79,6 +79,28 @@
 			
 		});
 		
+		$("#list").change(function(){
+			var optionSelect = $("#list option:selected").val();
+			var cate = $(".cate").val();
+			var subcate = $(".subcate").val();
+			// alert(subcate);
+			
+			$.ajax({
+				url:"<%=ctxPath%>/product/selectOption.do",
+				data:{"optionSelect":optionSelect,
+					  "subcate":subcate,
+					  "cate":cate},
+				dataType:"JSON",
+				success:function(json){
+					
+				},
+				error: function(request, status, error){
+					alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
+				}
+			});
+			
+		}); // end of $("#list").change()----------------------------
+		
 		
 	});
 	
@@ -95,14 +117,16 @@
 						<a href='/ShoppingMall/product/productList.do?fk_category_num=${fk_category_num}'><span class="sub">전체보기</span></a>
 					<c:forEach var="cate" items="${subcategoryList}" varStatus="status">
 						<a href='/ShoppingMall/product/productList.do?fk_category_num=${fk_category_num}&fk_subcategory_num=${cate.subcategory_num}'><span class="sub">${cate.subcategory_content}</span></a>
-						
 					</c:forEach>
+					<input type="hidden" class="cate" value="${fk_category_num}"/>
+					<input type="hidden" class="subcate" value="${fk_subcategory_num}"/>
+					
 				</div>
 				<div id="list">
 					<select>
 						<option value="registerdate" >신상품순</option>
-						<option value="price" >낮은 가격순</option>   
-						<option value="priceasc" >높은 가격순</option>
+						<option value="desc" >낮은 가격순</option>   
+						<option value="asc" >높은 가격순</option>
 					</select>
 				</div>
 				

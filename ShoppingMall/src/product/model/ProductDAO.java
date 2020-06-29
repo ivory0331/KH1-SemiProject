@@ -546,4 +546,113 @@ public class ProductDAO implements InterProductDAO {
 
 	}
 
+	
+	// 선택한 옵션에 맞게 상품 리스트 보여주기
+	@Override
+	public List<ProductVO> selectOption(HashMap<String, String> paraMap) throws SQLException {
+		List<ProductVO> selectOption = new ArrayList<>();
+		String sql ="";
+		
+		try {
+			conn = ds.getConnection();
+			
+			sql = " select RNO, product_num, product_name, price, sale, representative_img " + 
+				  " from " + 
+				  " ( " + 
+				  "    select rownum AS RNO, product_num, product_name, price, sale, representative_img " + 
+				  "    from " + 
+				  "     ( " + 
+				  "        select  product_num, product_name, price , sale, representative_img, fk_category_num " + 
+				  "        from product_table " +
+				  " 	   where fk_category_num = ? ";
+			
+				
+			if(paraMap.get("fk_subcategory_num") == "" ) { // 전체보기
+				
+				 if(paraMap.get("optionSelect") == "registerdate") {
+					sql += " order by registerdate desc " +
+						   "    ) P " + 
+						   " ) T " + 
+						   " where  T.RNO between ? and ? ";
+					
+					pstmt = conn.prepareStatement(sql);
+					int currentShowPageNo = Integer.parseInt(paraMap.get("currentShowPageNo"));
+					pstmt.setInt(1, Integer.parseInt(paraMap.get("fk_category_num")));
+					pstmt.setInt(2, (currentShowPageNo * 9) - (9 - 1) ); // 공식
+					pstmt.setInt(3, (currentShowPageNo * 9) ); // 공식
+				 }
+				 else {
+					sql += " order by price ? " +
+						   "    ) P " + 
+						   " ) T " + 
+						   " where  T.RNO between ? and ? ";
+					
+					pstmt = conn.prepareStatement(sql);
+					int currentShowPageNo = Integer.parseInt(paraMap.get("currentShowPageNo"));
+					pstmt.setInt(1, Integer.parseInt(paraMap.get("fk_category_num")));
+					pstmt.setString(2, paraMap.get("optionSelect"));
+					pstmt.setInt(3, (currentShowPageNo * 9) - (9 - 1) ); // 공식
+					pstmt.setInt(4, (currentShowPageNo * 9) ); // 공식
+				 }
+			}
+			else if(paraMap.get("fk_subcategory_num") != "") { // 소분류 보기
+				if(paraMap.get("optionSelect") == "registerdate") {
+					
+					sql += " and fk_subcategory_num = ? "+
+						   " order by registerdate desc "+
+						   "    ) P " + 
+						   " ) T " + 
+						   " where  T.RNO between ? and ? ";
+					
+					pstmt = conn.prepareStatement(sql);
+					int currentShowPageNo = Integer.parseInt(paraMap.get("currentShowPageNo"));
+					pstmt.setInt(1, Integer.parseInt(paraMap.get("fk_category_num")));
+					pstmt.setInt(2, Integer.parseInt(paraMap.get("fk_subcategory_num")));	
+					pstmt.setInt(3, (currentShowPageNo * 9) - (9 - 1) ); // 공식
+					pstmt.setInt(4, (currentShowPageNo * 9) ); // 공식
+				}
+				else {
+					sql += " and fk_subcategory_num = ? "+
+						   " order by price ? "+
+						   "    ) P " + 
+						   " ) T " + 
+						   " where  T.RNO between ? and ? ";
+					
+					pstmt = conn.prepareStatement(sql);
+					int currentShowPageNo = Integer.parseInt(paraMap.get("currentShowPageNo"));
+					pstmt.setInt(1, Integer.parseInt(paraMap.get("fk_category_num")));
+					pstmt.setInt(2, Integer.parseInt(paraMap.get("fk_subcategory_num")));	
+					pstmt.setString(3, paraMap.get("optionSelect"));
+					pstmt.setInt(4, (currentShowPageNo * 9) - (9 - 1) ); // 공식
+					pstmt.setInt(5, (currentShowPageNo * 9) ); // 공식
+				}
+			}
+	
+				rs = pstmt.executeQuery();
+				
+				while(rs.next()) {
+					ProductVO pvo = new ProductVO();
+					pvo.setProduct_num(rs.getInt("product_num"));
+					pvo.setProduct_name(rs.getString("product_name"));
+					pvo.setPrice(rs.getInt("price"));
+					pvo.setSale(rs.getInt("sale"));
+					pvo.setRepresentative_img(rs.getString("representative_img"));
+					
+					selectOption.add(pvo);
+				}
+
+			pstmt = conn.prepareStatement(sql);
+			
+			
+		} finally {
+			close();
+		}
+		
+		return selectOption;
+
+	}
+
+
+
+
 }

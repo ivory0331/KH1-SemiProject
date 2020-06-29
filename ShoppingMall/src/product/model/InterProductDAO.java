@@ -41,8 +41,9 @@ public interface InterProductDAO {
 
 	// 페이징 처리를 한 세일품목 조회하기
 	List<ProductVO> selectSale(HashMap<String, String> paraMap) throws SQLException;
-
 	
+	// 선택한 옵션에 맞게 상품 리스트 보여주기
+	List<ProductVO> selectOption(HashMap<String, String> paraMap) throws SQLException;
 	
 	
 	
