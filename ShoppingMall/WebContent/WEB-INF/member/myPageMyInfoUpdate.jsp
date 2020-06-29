@@ -649,6 +649,11 @@ input#userid:focus {outline:none;}
 	//== update 버튼 클릭시  ==
 	function goUpdate() {
 		
+		if($("input#userid").val().trim() == null){
+			alert("이름은 필수 입력 사항입니다.\r\n이름을 입력해주세요.");
+			return;
+		}
+		
 		if($("input#passwd").val().trim() != "" || $("input#passwdCk").val().trim() != ""){			
 			//비밀번호 유효성 검사 체크
 			if (!bPwValidateCheck) {
@@ -665,7 +670,10 @@ input#userid:focus {outline:none;}
 			
 		
 		//휴대폰 번호 검사 체크여부 
-
+		if($("input#tel").val().trim() == null){
+			alert("휴대폰 번호는 필수 입력 사항입니다.\r\n휴대폰 번호를 입력해주세요.");
+			return;
+		}
 		
 		if($("#email").val().trim() != "${(sessionScope.loginuser).email}" && $("#email").val().trim() != "") {			
 			//이메일 중복체크 검사 
@@ -675,11 +683,13 @@ input#userid:focus {outline:none;}
 			}			
 		}
 		
-		var frm = document.updateFrm;
-		frm.method = "POST";
-		frm.action = "myPageMyInfoUpdateEndAction.do";
-		frm.submit();
-
+		else{
+			var frm = document.updateFrm;
+			frm.method = "POST";
+			frm.action = "myPageMyInfoUpdateEndAction.do";
+			frm.submit();
+		}
+		
 	}// end of function goRegister(event)----------
 	
 </script>
