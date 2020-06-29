@@ -36,6 +36,7 @@
 		background-color: purple;
 		color:white;
 		float: right;
+		cursor:pointer;
 	}
 	
 	.paging{

@@ -12,6 +12,7 @@ public class LogoutAction extends AbstractController {
 
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		
 		HttpSession session = request.getSession();
 		session.removeAttribute("loginuser");
 		boolean check = session.getAttribute("loginuser")==null;

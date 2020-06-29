@@ -224,6 +224,7 @@ public class ServiceDAO implements InterServiceDAO {
 	}
 
 
+
 	// 자주하는 질문 테이블 조회
 	@Override
 	public List<FAQtableVO> selectFAQ(HashMap<String, String> paraMap) throws SQLException {
@@ -444,8 +445,8 @@ public class ServiceDAO implements InterServiceDAO {
 				ovo.setContent(rs.getString(4));
 				ovo.setWrite_date(rs.getString(5));
 				ovo.setAnswer(rs.getString(6));
-				ovo.setEmailFlag(rs.getInt(7));
-				ovo.setSmsFlag(rs.getInt(8));
+				ovo.setEmailFlag(rs.getString(7));
+				ovo.setSmsFlag(rs.getString(8));
 				ovo.setFk_member_num(rs.getInt(9));
 				ovo.setFk_order_num(rs.getInt(10));
 				ovo.setCategory_content(rs.getString(11));
@@ -470,5 +471,6 @@ public class ServiceDAO implements InterServiceDAO {
 
 
 	
+
 
 }

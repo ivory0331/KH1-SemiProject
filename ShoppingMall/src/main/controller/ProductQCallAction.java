@@ -1,17 +1,15 @@
 package main.controller;
 
+
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 import org.json.JSONArray;
 import org.json.JSONObject;
-
 import com.google.gson.Gson;
-
 import common.controller.AbstractController;
 import main.model.IndexDAO;
 import main.model.InterIndexDAO;
@@ -23,6 +21,7 @@ public class ProductQCallAction extends AbstractController {
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		String product_num = request.getParameter("product_num");
+
 		
 		//페이징 처리
 		int currentPage = Integer.parseInt(request.getParameter("currentPage"));
