@@ -31,22 +31,40 @@ public class IdFindAction extends AbstractController {
 			String userid = memberdao.findUserid(paraMap);
 		
 			if(userid != null ) {
-				request.setAttribute("name", name);
+				//아이디가 존재할 때 (글자몇자수 이상이면 *** sql문 처리) 
+				
+	            request.setAttribute("userid", userid);
+				request.setAttribute("name", name); 
+				request.setAttribute("email", email);
+	            
+				super.setRedirect(false);
+	            super.setViewPage("/WEB-INF/login/idFind.jsp");
+			
+	            return;
 				
 			}else {
-				request.setAttribute("name", "존재하지 않습니다.");
+				//아이디가 존재하지 않을 때 
 				
+				String message = "아이디가 존재하지 않습니다";
+	            String loc = "javascript:history.back()";
+
+	            request.setAttribute("message", message);
+	            request.setAttribute("loc", loc);
+
+	            super.setRedirect(false);
+	            super.setViewPage("/WEB-INF/msg.jsp");
+	            
+	            return;
 			}
 			
-			request.setAttribute("name", name); 
-			request.setAttribute("email", email);
-			
+						
 		}//end of if-------------
-		
+		else {			
+			super.setViewPage("/WEB-INF/login/idFind.jsp");	
+			
+		}
 		request.setAttribute("method", method); //get or post 가 idFind.jsp로 넘어감 
 		
-		//super.setRedirect(false); 
-		super.setViewPage("/WEB-INF/login/idFind.jsp");
 		
 	}
 

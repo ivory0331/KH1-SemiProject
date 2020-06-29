@@ -217,4 +217,5 @@ public class ServiceDAO implements InterServiceDAO {
 		return totalPage;
 	}
 
+
 }

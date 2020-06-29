@@ -35,6 +35,7 @@
 		background-color: purple;
 		color:white;
 		float: right;
+		cursor:pointer;
 	}
 	
 	.paging{
@@ -149,7 +150,7 @@
 					
 					<div class="paging">
 						<a>페이징 처리</a>
-						<span class="writeBtn">글쓰기</span>
+						<span class="writeBtn" onclick="javascript:location.href='<%=ctxPath%>/service/serviceCenterMyQboardWrite.do'">글쓰기</span>
 					</div>
 				</div>
 				

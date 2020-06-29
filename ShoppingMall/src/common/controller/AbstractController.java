@@ -1,18 +1,12 @@
 package common.controller;
 
-import java.sql.SQLException;
-import java.util.HashMap;
-import java.util.List;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-
-import manager.model.*;
 
 import member.model.MemberVO;
 
 
-public abstract class AbstractController implements InterCommand { 
+public abstract class AbstractController implements InterCommand {
 
 	/*
 	    === 다음의 나오는 것은 우리끼리한 약속이다. ===
@@ -64,21 +58,4 @@ public abstract class AbstractController implements InterCommand {
 		else
 			return false;		
 	}
-	
-	
-	//카테고리를 보여줄 메소드 생성
-	public void getCategoryList(HttpServletRequest request) throws SQLException {
-		
-		InterProductDAO pdao = new ProductDAO();
-		
-		List<HashMap<String,String>> categoryList = pdao.getCategoryList();
-		
-		request.setAttribute("categoryList", categoryList);
-	
-	}
-	
-	
-	
-	
-	
 }

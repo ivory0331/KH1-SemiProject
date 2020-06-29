@@ -172,7 +172,7 @@
 		console.log(idx);
 		var fullPath = elem.value;
 		fileName = fullPath.substring(12);
-		console.log(fullPath)
+		console.log(fullPath);
 		console.log(fileName);
 		$("#fileName"+idx).val(fileName);
 	}

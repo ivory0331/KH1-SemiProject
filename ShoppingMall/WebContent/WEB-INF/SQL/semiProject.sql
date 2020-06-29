@@ -258,7 +258,9 @@ create table order_table
 ,constraint fk_order_member FOREIGN key(fk_member_num) REFERENCES member_table(member_num)
 ,constraint fk_order_category foreign key(fk_category_num) references order_state_table(category_num)
 );
-
+select * from order_table;
+select * from order_product_table;
+select * from basket_table;
 -- 주문 테이블에 사용할 시퀀스 생성 --
 create sequence seq_order_table
 start with 1
