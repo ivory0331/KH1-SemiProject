@@ -35,6 +35,8 @@ public class BasketListAction extends AbstractController {
 			HttpSession session = request.getSession();
 			MemberVO loginuser = (MemberVO) session.getAttribute("loginuser");
 			
+			session.removeAttribute("payResult"); //결제완료 값을 갖는 session 지우기
+			
 			InterProductDAO pdao = new ProductDAO();
 			
 			List<CartVO> cartList = pdao.selectProductCart(loginuser.getMember_num());

@@ -225,7 +225,7 @@
 								<div class="myOrder_Goods">
 									<div class="myOrder_Name">
 										<a class="myOrder_Name">${ohvo.product_name}&nbsp;
-											<c:if test="${ohvo.product_count != 1}">외 ${ohvo.product_count-1}건</c:if>
+											<c:if test="${ohvo.product_cnt != 1}">외 ${ohvo.product_cnt-1}건</c:if>
 										</a>
 									</div>
 									<div class="myOrder_block">

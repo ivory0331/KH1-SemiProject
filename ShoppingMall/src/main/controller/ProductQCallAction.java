@@ -78,16 +78,16 @@ public class ProductQCallAction extends AbstractController {
     	 
     	 // [이전]
     	 if(pageNo!=1) {
-    		 pageBar += "&nbsp;<span style='cursor:pointer;' onclick='func_productQCall('"+(pageNo-pagePerNum)+"')'>이전</span>&nbsp;";
+    		 pageBar += " &nbsp; <span style='cursor:pointer;' onclick='func_productQCall('"+(pageNo-pagePerNum)+"')'>이전</span> &nbsp ; ";
     	 }
     	 
     	 // 페이지바
     	 while(!(loop > blockSize || pageNo > totalPage)) {
    		  
 	   		  if(pageNo == currentPage) {
-	   			  pageBar += "&nbsp;<span style='color: red; padding: 2px 4px;'>" + pageNo + "</span>&nbsp;";			  
+	   			  pageBar += " &nbsp; <span style='color: red; padding: 2px 4px;'>" + pageNo + "</span> &nbsp; ";			  
 	   		  } else {	
-	   			  pageBar += "&nbsp;<span style='cursor:pointer;' onclick='func_productQCall("+pageNo+")'>"+pageNo+"</span>&nbsp;";
+	   			  pageBar += " &nbsp; <span style='cursor:pointer;' onclick='func_productQCall("+pageNo+")'>"+pageNo+"</span> &nbsp; ";
 	   		  }
 
 	   		  pageNo++;	// 1 2 3 4 5... (pageNo이 1이라면).... 40 41 42
@@ -98,7 +98,7 @@ public class ProductQCallAction extends AbstractController {
     	 // [다음]
     	 if(!(pageNo > totalPage)) {
 	    	
-	    	 pageBar += "&nbsp;<span style='cursor:pointer;' onclick='func_productQCall('"+(pageNo+pagePerNum)+"')'>다음</span>&nbsp;";
+	    	 pageBar += " &nbsp; <span style='cursor:pointer;' onclick='func_productQCall('"+(pageNo+pagePerNum)+"')'>다음</span> &nbsp; ";
     	 }
 		
     	 
