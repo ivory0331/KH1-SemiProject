@@ -100,7 +100,8 @@
 	}
 	
 	/* 파일 선택 디자인 */
-	.newProductImg label { 
+	.newProductImg label{ 
+		height:35px;
 		margin: 2px;
 		padding: .5em .75em; 
 		color: #999; 
@@ -196,7 +197,7 @@
 		// 대표이미지 삽입
 		$('.upload_rep_image').on('change', function(){
 			if(window.FileReader){ // modern browser 
-				var filename = $(this)[0].files[0].name;
+				var filename = $(this)[0].files[0].name; //고양이.jpg
 			} 
 		
 			$(this).siblings('.upload_name').val(filename); 			
@@ -206,47 +207,65 @@
 		});	
 		
 		
-		
+		var imageCount=0;
 		// 상세이미지 삽입
-		$(".upload_image").each(function(index, item){
+		$(".detail_img").each(function(index, item){
 			
 			var index = index+1;
-			
+
 			
 			$('#image'+index+'_btn').on('change', function(){ 
+								
 				if(window.FileReader){  
 					var filename = $(this)[0].files[0].name; 
 				}
 			
-			$(this).siblings('#upload_image'+index).val(filename); 
-			var html = "<img src='images/"+filename+"' class = 'detail' id='image'"+index+"' alt='상세이미지 오류'/>";
-			$(".detail"+index).html(html);
+				$(this).siblings('#upload_name'+index).val(filename); 
+				//var html = "<img src='images/"+filename+"' class = 'detail' id='image'"+index+"' alt='상세이미지 오류'/>";
+				//$(".detail"+index).html(html);
 			
+				if($("#image"+index+"_btn").val!=null){
+					imageCount++;	
+					$("#imageCount").val(imageCount);						
+				}												
+									
+				console.log('이미지 카운드'+imageCount);
+				console.log('이미지 카운드 아이디 값'+$("#imageCount").val());							
+				
+				
 			});		
 			
+
+			$("#image"+index+"_delete").click(function(){ 
+				if($('image'+index+'_btn').val!=null){
+					$('image'+index+'_btn').val();
+					$('#upload_name'+index).val('이미지 선택'+index); 
+					imageCount--;
+				}
+			});
+			
+			
 		});
+		
+		
 		
 		
 		 
 		// 소분류 활성화	
 		$("select#fk_category_num").bind("change", function(){
 			if($("select#fk_category_num").val()!=0){
-				console.log($("select#fk_category_num").val());
 				$.ajax({
 					url:"<%= ctxPath%>/manager/getSubCategoryList.do",
 					type:"post",
 					data:{"fk_category_num":$("#fk_category_num").val()},
 					dataType:"json",
 					success:function(json){	
-						console.log(json);
 						$("select#fk_subcategory_num").prop('disabled',false);
 						var html='';
 						for(var i=0; i<json.length;i++){
 							html +="<option value='"+json[i].subcategory_num+"'>"+json[i].subcategory_content+"</option>";
 						}
 						$("#fk_subcategory_num").html(html); 
-						
-						console.log(json);
 					},						
 					error: function(request, status, error){
 						alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
@@ -267,6 +286,7 @@
 	
 	
 	function goSubmit(){
+		
 		
 		var boolSubmit = false;
 		// 1. 대표이미지 선택
@@ -412,28 +432,33 @@
 									<label for="representative_img_btn">찾기</label>
 									<input type="file" class="upload_rep_image" id="representative_img_btn" name="representative_img" />
 								</div>
-								<div class="abcd">
+								
+								<div class="detailImgDiv">
 									<div class="detail_img">
 										<div class="upload_image_detail detail1">
 										</div>
-										<input class="upload_name" id="upload_name1" value="이미지 선택1" disabled="disabled">																		
+										<input class="upload_name" name="upload_name" id="upload_name1" value="이미지 선택1" disabled="disabled">																		
 										<label for="image1_btn">찾기</label>
-										<input type="file" class="upload_image" id="image1_btn" name="detail_img" />
+										<input type="file" class="upload_image" id="image1_btn" name="detail_img1" />
+										<label class="image_delete" id="image1_delete">삭제</label>
 									</div>
 									<div class="detail_img">
 										<div class="upload_image_detail detail2">								
 										</div>
-										<input class="upload_name" id="upload_name2" value="이미지 선택2" disabled="disabled">
+										<input class="upload_name" name="upload_name" id="upload_name2" value="이미지 선택2" disabled="disabled">
 										<label for="image2_btn">찾기</label>
-										<input type="file" class="upload_image" id="image2_btn" name="detail_img" />
+										<input type="file" class="upload_image" id="image2_btn" name="detail_img2" />
+										<label class="image_delete" id="image2_delete">삭제</label>										
 									</div>
 									<div class="detail_img">
 										<div class="upload_image_detail detail3">								
 										</div>
-										<input class="upload_name" id="upload_name3" value="이미지 선택3" disabled="disabled">
+										<input class="upload_name" name="upload_name" id="upload_name3" value="이미지 선택3" disabled="disabled">
 										<label for="image3_btn">찾기</label>
-										<input type="file" class="upload_image" id="image3_btn" name="detail_img" />
+										<input type="file" class="upload_image" id="image3_btn" name="detail_img3" />
+										<label class="image_delete" id="image3_delete">삭제</label>
 									</div>
+									<input type="hidden" name="imageCount" id="imageCount">
 								</div>
 							</div>
 							

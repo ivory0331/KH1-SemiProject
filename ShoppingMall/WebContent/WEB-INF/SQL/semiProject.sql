@@ -162,6 +162,7 @@ select*
 from product_image_table;
 
 
+
 -- 상품문의 테이블 생성 --
 create table product_inquiry_table
 (inquiry_num    number not null     -- 상품문의 번호 필수+고유 시퀀스 사용
@@ -436,6 +437,10 @@ create table basket_table
 ,constraint pk_basket_num primary key (basket_num)
 );
 
+ alter table basket_table
+    drop column price; 
+    
+    commit;
 
 select * from basket_table;
 
@@ -924,3 +929,12 @@ join product_subcategory_table PS on P.fk_subcategory_num = PS.subcategory_num
 where OP.reviewFlag = 0 and O.fk_category_num = 1;
 
 
+select*
+from product_table;
+
+
+
+update member_table set status='2' 
+where userid='admin';
+
+commit;

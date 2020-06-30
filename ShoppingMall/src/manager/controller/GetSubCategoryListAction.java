@@ -33,13 +33,11 @@ public class GetSubCategoryListAction extends AbstractController {
 		  
 		  List<HashMap<String,String>> subCategoryList = dao.getSubCategoryList(fk_category_num);
 		  
-		  System.out.println("subCategoryList 결과 " + subCategoryList);
 		  
 		  Gson gson = new Gson();
 		  
 		  
 		  String json = gson.toJson(subCategoryList);
-		  System.out.println(json);
 		  request.setAttribute("json",json);
 		  
 		  super.setViewPage("/WEB-INF/jsonview.jsp");

@@ -75,7 +75,6 @@ public class ManagerProductInsertAction extends AbstractController {
 	    }else {
 	    	
 			MultipartRequest mtrequest = null;// 파일업로드, 다운로드 기능을 위한 객체, cos.jar 라이브러리 넣어줌
-
 	    	
 		   
 			// 1. 첨부되어진 파일의 업로드 경로 설정
@@ -98,8 +97,12 @@ public class ManagerProductInsertAction extends AbstractController {
 		    	  return;
 			  }
 			
+			
+			  int product_num = pdao.getPnumOfProduct();
+
 			  String representative_img = mtrequest.getFilesystemName("representative_img");
-			  //String detail_img = mtrequest.getFilesystemName("detail_img");  
+			  
+			  System.out.println(">>>>>>>>>>>>대표이미지 이름 : "+representative_img);
 			
 			  int fk_category_num = Integer.parseInt(mtrequest.getParameter("fk_category_num"));
 			  int fk_subcategory_num = Integer.parseInt(mtrequest.getParameter("fk_subcategory_num"));
@@ -110,19 +113,12 @@ public class ManagerProductInsertAction extends AbstractController {
 			  int price = Integer.parseInt(mtrequest.getParameter("price"));
 			  
 			  String getSale = mtrequest.getParameter("sale");
-			  System.out.println("겟세일 null : "+getSale);
-			  System.out.println("겟세일 길이 : " + getSale.length());
-			  System.out.println(getSale.isEmpty());
 			  
 			  if("".equals(getSale)) {
 				  getSale="0";
 			  }
-			  System.out.println("겟세일 0 : "+getSale);
 
-			  int sale = Integer.parseInt(getSale);
-			  
-			  System.out.println("세일 0 : "+getSale);
-
+			  int sale = Integer.parseInt(getSale);			  
 			  
 			  String getBest_point = mtrequest.getParameter("best_point");
 			  if(getBest_point.isEmpty()) {
@@ -137,9 +133,9 @@ public class ManagerProductInsertAction extends AbstractController {
 	
 			  explain =  MyUtil.replaceParameter(explain);			
 			  explain = explain.replaceAll("\r\n", "<br/>");
+			  
 	
 			  ProductVO pvo = new ProductVO();
-			  int product_num = pdao.getPnumOfProduct();
 			  
 			  pvo.setProduct_num(product_num);
 			  pvo.setRepresentative_img(representative_img);
@@ -159,10 +155,35 @@ public class ManagerProductInsertAction extends AbstractController {
 
 			  int n = pdao.productInsert(pvo);
 			  
+			  
+			  
+			 // 상품 상세 이미지 업로드 
+			  int m = 0; 
+			  int imageCount = Integer.parseInt(mtrequest.getParameter("imageCount"));
+			  System.out.println(">>>>>>>>>이미지 카운드 : "+imageCount);
+			  for(int i=0; i<imageCount; i++) {
+				  String detail_img = mtrequest.getFilesystemName("detail_img"+(i+1));
+				  System.out.println(">>>>>>>>>>>>>>>>>>>>>>디테일이미지 이름 "+detail_img);
+				  m = pdao.productImageInsert(product_num, detail_img);	 
+			  }
+
+			  /*
+			  String[] detail_imgList = mtrequest.getParameterValues("detail_img"); 
+			  System.out.println(">>>>>>>>>>>>>>>>>여기 : "+detail_imgList);
+
+			  if(detail_imgList!=null) { 				  
+				  for(int i=0; i<detail_imgList.length; i++) { 
+					  String detail_img = mtrequest.getFilesystemName(detail_imgList[i]);				  
+					  m = pdao.productImageInsert(product_num, detail_img);					  
+				  } 
+			  }
+			  */
+			  
+			  
 			  String message = "";
 			  String loc = "";
 			  
-			  if(n==1) {
+			  if(n*m==1) {
 				  
 				  message = "제품등록 성공!!";
 				  loc = request.getContextPath()+"/manager/managerProductInsert.do";				  
@@ -173,6 +194,7 @@ public class ManagerProductInsertAction extends AbstractController {
 				  loc = request.getContextPath()+"/manager/managerProductInsert.do";
 			  }
 			  
+			  super.getCategoryList(request);
 			  request.setAttribute("message", message);
 			  request.setAttribute("loc", loc);
 			  

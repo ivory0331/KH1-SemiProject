@@ -590,9 +590,11 @@
 							<button class="tablinks" onclick="goTable('1')">고객 후기</button>
 							<button class="tablinks" onclick="goTable('2')" style="border-right:solid 1px black">상품 문의</button>
 						</div>
-						<img alt="상품이미지1" src="<%=ctxPath %>/images/logo.png" class="otherImg">
-						<img alt="상품이미지1" src="<%=ctxPath %>/images/logo.png" class="otherImg">
-						<img alt="상품이미지1" src="<%=ctxPath %>/images/logo.png" class="otherImg">
+						<c:if test="${product.imageList!=null}">
+	                        <c:forEach var="image" items="${product.imageList}">
+	                           <img src="<%=ctxPath %>/images/${image}"  style="margin:20px 0;"/>
+	                        </c:forEach>
+                     	</c:if>
 						<div>${product.explain}</div>
 					</div>
 				
