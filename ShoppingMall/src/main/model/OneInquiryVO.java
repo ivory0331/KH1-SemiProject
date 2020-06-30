@@ -129,7 +129,7 @@ public class OneInquiryVO {
 		this.imageList = imageList;
 	}
 
-
+ 
 	public MemberVO getMember() {
 		return member;
 	}

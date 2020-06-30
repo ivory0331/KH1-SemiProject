@@ -9,9 +9,7 @@ import java.util.List;
 import javax.naming.*;
 import javax.sql.DataSource;
 
-import main.model.OrderHistoryVO;
-import main.model.OrderProductVO;
-import main.model.OrderVO;
+import main.model.*;
 import member.model.MemberVO;
 import util.security.AES256;
 
@@ -125,13 +123,41 @@ public class OrderDAO implements InterOrderDAO {
 	
 	// order_num 값을 입력받아서 특정 주문 내역의 상품정보를 알아오기(select)
 	@Override
-	public List<OrderProductVO> OneOrderProductsDetail(String order_num) throws SQLException {
+	public List<OrderHistoryDetailVO> OneOrderProductsDetail(String order_num) throws SQLException {
 
-		List<OrderProductVO> OrderProductsList = new ArrayList<>();
+		List<OrderHistoryDetailVO> OrderProductsList = new ArrayList<>();
 		
 		try {				
-			conn = ds.getConnection();			
+			conn = ds.getConnection();		
 			
+			String sql = " select P.representative_img, P.product_name, OP.price, OP.product_count, " + 
+						 "	      OS.order_state, OP.reviewFlag, P.product_num " + 
+						 " from product_table P join order_product_table OP " + 
+						 " on P.product_num = OP.fk_product_num " + 
+						 " join order_table O " + 
+						 " on OP.fk_order_num = O.order_num " + 
+						 " join order_state_table OS " + 
+						 " on O.fk_category_num = OS.category_num " + 
+						 " where OP.fk_order_num = ? ";
+			
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, order_num);
+			
+			rs = pstmt.executeQuery();
+			
+			while(rs.next()) {
+				
+				OrderHistoryDetailVO ohdvo = new OrderHistoryDetailVO();
+				ohdvo.setRepresentative_img(rs.getString(1));
+				ohdvo.setProduct_name(rs.getString(2));
+				ohdvo.setPrice(rs.getInt(3));
+				ohdvo.setProduct_count(rs.getInt(4));
+				ohdvo.setOrder_state(rs.getString(5));
+				ohdvo.setReviewFlag(rs.getInt(6));
+				ohdvo.setProduct_num(rs.getInt(7));
+
+				OrderProductsList.add(ohdvo);				
+			}
 		
 		} finally {
 			close();
@@ -143,9 +169,9 @@ public class OrderDAO implements InterOrderDAO {
 	
 	// order_num 값을 입력받아서 특정 주문 내역의 상세정보를 알아오기(select)
 	@Override
-	public List<OrderVO> OneOrderInfoDetail(String order_num) throws SQLException {
+	public OrderVO OneOrderInfoDetail(String order_num) throws SQLException {
 
-		List<OrderVO> OrderInfoList = new ArrayList<>();
+		OrderVO ovo = null;
 		
 		try {				
 			conn = ds.getConnection();			
@@ -180,7 +206,7 @@ public class OrderDAO implements InterOrderDAO {
 				MemberVO mvo = new MemberVO();
 				mvo.setName(name);
 				
-				OrderVO ovo = new OrderVO();
+				ovo = new OrderVO();
 				ovo.setPrice(price);
 				ovo.setOrder_date(order_date);
 				ovo.setOrder_state(order_state);
@@ -190,15 +216,15 @@ public class OrderDAO implements InterOrderDAO {
 				ovo.setRecipient_address(recipient_address);
 				ovo.setRecipient_detailAddress(recipient_detailaddress);
 				ovo.setMemo(memo);
-				
-				OrderInfoList.add(ovo);	
+				ovo.setMember(mvo);
+
 			}// end of while----------------------------------
 			
 		} finally {
 			close();
 		}
 		
-		return OrderInfoList;
+		return ovo;
 	}
 
 		
