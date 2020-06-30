@@ -54,7 +54,11 @@
 <script type="text/javascript" src="/ShoppingMall/util/myutil.js"></script>
 <script type="text/javascript">
 $(document).ready(function(){    
-	 
+	 if("<%=searchType2%>"==""){
+		 if("<%=searchType1%>"=='subject'){
+			 
+		 }
+	 }
 	$("#searchType-<%=searchType1%>").prop("checked",true);
 	$("#searchType-<%=searchType2%>").prop("checked",true);
 	
@@ -101,7 +105,7 @@ $(document).ready(function(){
 							<tbody>
 								<c:if test="${empty noticeList}">	
 									<tr>
-										<td colspan="5"> 자주하는 질문 게시판 준비중 입니다. </td>
+										<td colspan="5"> 공지사항 게시판 준비중 입니다. </td>
 									</tr>	
 								</c:if>
 								<c:if test="${not empty noticeList}">		
@@ -120,6 +124,10 @@ $(document).ready(function(){
 						
 						<div style="border-bottom:solid 1px black; text-align:center;">${pageBar}</div>
 						<div class="boardSearch">
+							<span style="float:left">
+							검색어 : <label for="search-subject">제목</label> <input type="checkbox" checked id="search-subject" value="subject" name="searchType" style="margin-right:15px;"/>
+								   <label for="search-content">내용</label> <input type="checkbox" id="search-content" value="content" name="searchType" style="margin-right:15px;"/>
+							</span>
 							<input type="text" name="searchWord" style="float:right" id="searchWord"/>
 						</div>
 					</form>

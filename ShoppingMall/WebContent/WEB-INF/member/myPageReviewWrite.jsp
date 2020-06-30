@@ -186,11 +186,11 @@
 						<table class="myOrder_Desc">
 							<tr class="list">
 								<td class="image">
-									<img alt="해당 주문 대표 상품 이미지" src="<%=ctxPath %>/images/${product}">
+									<img alt="해당 주문 대표 상품 이미지" src="<%=ctxPath %>/images/${product.product.representative_img}">
 								</td>
 								<td class="info">
 									<div class="name">
-										<span class="productName">${product.product.prodcut_name}</span>
+										<span class="productName">${product.product.getProduct_name()}</span>
 									</div>
 								</td>	
 							</tr>

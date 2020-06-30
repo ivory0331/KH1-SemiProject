@@ -723,7 +723,8 @@ public class IndexDAO implements InterIndexDAO{
 				opvo.setPrice(rs.getInt(2));
 				opvo.setCount(rs.getInt(3));
 				
-				pvo = new ProductVO(); pvo.setProduct_num(rs.getInt(4));
+				pvo = new ProductVO(); 
+				pvo.setProduct_num(rs.getInt(4));
 				pvo.setProduct_name(rs.getString(5));
 				pvo.setRepresentative_img(rs.getString(6));
 				pvo.setFk_category_num(rs.getInt(7));
