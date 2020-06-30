@@ -569,8 +569,6 @@
 							
 							<h3 >${product.product_name}</h3>
 						</div>
-						
-						
 						<div style="margin-top:15px; font-size: 18pt; line-height: 32px; color:gray; font-family: noto sans; font-weight: 200;">
 							${product.explain}
 						</div>

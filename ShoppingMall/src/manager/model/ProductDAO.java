@@ -512,6 +512,32 @@ public class ProductDAO implements InterProductDAO {
 			
 			return result;					
 		}
+
+
+		// 제품 신상 상세이미지 등록
+		@Override
+		public int productImageInsert(int product_num, String detail_img) throws SQLException {
+			int result = 0;
+			
+			try {
+				conn = ds.getConnection();
+				
+				String sql = " insert into product_image_table(fk_product_num, image) "
+							+" values(?,?) ";
+				
+				pstmt = conn.prepareStatement(sql);
+
+				pstmt.setInt(1, product_num);
+				pstmt.setString(2, detail_img);
+				
+				result = pstmt.executeUpdate();
+				
+			} finally {
+				close();
+			}
+			
+			return result;
+		}
 		
 		
 		
