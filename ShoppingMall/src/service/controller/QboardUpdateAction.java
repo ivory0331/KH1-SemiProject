@@ -14,7 +14,7 @@ import my.util.MyUtil;
 import service.model.InterServiceDAO;
 import service.model.ServiceDAO;
 
-public class ServiceCenterQboardUpdateAction extends AbstractController {
+public class QboardUpdateAction extends AbstractController {
 
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws Exception {

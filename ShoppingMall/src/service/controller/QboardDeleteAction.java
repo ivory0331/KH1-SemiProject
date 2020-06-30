@@ -7,7 +7,7 @@ import common.controller.AbstractController;
 import service.model.InterServiceDAO;
 import service.model.ServiceDAO;
 
-public class ServiceCenterQboardDeleteAction extends AbstractController {
+public class QboardDeleteAction extends AbstractController {
 
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
