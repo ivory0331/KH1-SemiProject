@@ -44,7 +44,7 @@ create table member_table
 ,constraint ck_member_table_status CHECK (status in(0,1,2))
 );
 
-select*
+select *
 from member_table;
 
 update member_table set pwd='9695b88a59a1610320897fa84cb7e144cc51f2984520efb77111d94b402a8382'
@@ -62,6 +62,12 @@ nocycle
 nocache;
 
 
+insert into order_state_table(category_num, order_state) values(1, '상품준비중');
+insert into order_state_table(category_num, order_state) values(2, '배송중');
+insert into order_state_table(category_num, order_state) values(3, '배송완료');
+
+commit;
+
 -- 상품 대분류 카테고리 테이블 생성 --
 create table product_category_table
 ( category_num  number            -- 대분류 카테고리 번호 필수+고유
@@ -71,9 +77,6 @@ create table product_category_table
 
 select*
 from product_category_table;
-
-
-
 
 
 insert into product_category_table(category_num, category_content) values(1,'채소');
@@ -253,7 +256,7 @@ create table order_table
 ,price  number  not null    -- 주문금액 필수
 ,memo   varchar2(200)       -- 요청사항
 ,fk_member_num  number  not null    -- 회원테이블의 회원번호를 참조하는 컬럼
-,fk_category_num number not null    -- 주문상태 케이블의 주문상태 번호를 참조하는 컬럼
+,fk_category_num number not null    -- 주문상태 테이블의 주문상태 번호를 참조하는 컬럼
 ,constraint pk_order_table  primary key(order_num)
 ,constraint fk_order_member FOREIGN key(fk_member_num) REFERENCES member_table(member_num)
 ,constraint fk_order_category foreign key(fk_category_num) references order_state_table(category_num)
@@ -303,7 +306,6 @@ create table review_table
 );
 
 select * from member_table;
-
 
 
 insert into review_table(review_num, subject, content, hit, favorite, fk_product_num, fk_order_num, fk_member_num)
@@ -861,8 +863,29 @@ where O.fk_member_num = ?
 +
 select count(*) from order_product_table where fk_order_num = ?
 
+---------------------------------1:1문의 주문조회 sql문
+select O.order_num --주문번호 
+      , to_char(O.order_date,'yyyy.mm.dd hh24:mi:ss') --주문일자 
+      , O.price --주문금액
+      , P.product_name  --상품명 
+      , OP.product_count --수량
+ from order_table O join order_product_table OP 
+ on O.order_num = OP.fk_order_num join order_state_table OS -->배송상태 필요 없음
+ on O.fk_category_num = OS.category_num join product_table P 
+ on OP.fk_product_num = P.product_num 
+ where O.fk_member_num = 1 ;
+			
 
-
+select O.order_num --주문번호 
+      , to_char(O.order_date,'yyyy.mm.dd hh24:mi:ss') --주문일자 
+      , O.price --주문금액
+      , P.product_name  --상품명 
+      , OP.product_count --수량
+ from order_table O join order_product_table OP 
+ on O.order_num = OP.fk_order_num join product_table P
+ on OP.fk_product_num = P.product_num 
+ where O.fk_member_num = ? ;
+			
 
 
 select  RNO, PRODUCT_NUM, CATEGORY_CONTENT, SUBCATEGORY_CONTENT, PRODUCT_NAME, PRICE, STOCK 
