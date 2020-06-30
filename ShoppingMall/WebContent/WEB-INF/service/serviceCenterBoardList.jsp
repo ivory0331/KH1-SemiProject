@@ -101,7 +101,7 @@ $(document).ready(function(){
 							<tbody>
 								<c:if test="${empty noticeList}">	
 									<tr>
-										<td colspan="5"> 공지사항 게시판 준비중 입니다. </td>
+										<td colspan="5"> 자주하는 질문 게시판 준비중 입니다. </td>
 									</tr>	
 								</c:if>
 								<c:if test="${not empty noticeList}">		
@@ -120,9 +120,6 @@ $(document).ready(function(){
 						
 						<div style="border-bottom:solid 1px black; text-align:center;">${pageBar}</div>
 						<div class="boardSearch">
-							<span style="padding-right:20px;">검색어</span>
-							<label for="searchType-title">제목</label><input type="checkbox" value="subject" name="searchType" id="searchType-subject" style="margin-right:20px;"/>
-							<label for="searchType-content">내용</label><input type="checkbox" value="content" name="searchType" id="searchType-content"/>
 							<input type="text" name="searchWord" style="float:right" id="searchWord"/>
 						</div>
 					</form>

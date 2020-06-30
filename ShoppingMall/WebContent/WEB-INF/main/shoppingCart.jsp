@@ -69,7 +69,6 @@ img.imgsmall {
 <script type="text/javascript" src="<%= ctxPath%>/jquery-ui-1.11.4.custom/jquery-ui.js"></script>
 <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 <%-- <link rel="stylesheet" href="/resources/demos/style.css"> --%>
-
 <script type="text/javascript">
 
 			  
@@ -244,6 +243,11 @@ img.imgsmall {
 	} // function cancelProduct()---------------------------------------------------------------------------
 	
 	function order(){
+		if("${cartList}"==""){
+			alert("구매하고자 하는 상품이 없습니다.");
+			return false;
+		}
+		
 		var frm = document.frmData;
 		frm.action="<%=ctxPath%>/payment.do";
 		frm.method="post";

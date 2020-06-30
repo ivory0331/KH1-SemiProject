@@ -2,6 +2,7 @@ package hyemin.model;
 
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Map;
 
 import main.model.OrderProductVO;
 import main.model.ReviewVO;
@@ -22,6 +23,9 @@ public interface InterReviewDAO {
 
 	// 특정 작성완료 후기 삭제하기
 	int deleteReview(String review_num) throws SQLException;
+
+	// 후기 작성하기
+	int writeReview(Map<String, String> paraMap) throws SQLException;
 
 	
 	

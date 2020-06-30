@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <% String ctxPath = request.getContextPath(); %>
 <!DOCTYPE html>
 <html>
@@ -55,6 +56,7 @@
 <script type="text/javascript" src="/ShoppingMall/util/myutil.js"></script>
 <script type="text/javascript">
 	$(document).ready(function(){
+		console.log("${categoryList}");
 		var acc = document.getElementsByClassName("accordion");
 
 		for (i = 0; i < acc.length; i++) {
@@ -69,7 +71,19 @@
 				$target.toggleClass("panel-none");
 			  });
 			}
-	})
+		
+		
+		$("select[name='favoriteQ_Category']").bind("change",function(){
+			goInquiry();
+		});
+	});
+	
+	function goInquiry(){
+		var frm = document.faqFrm;
+		frm.action="<%=ctxPath%>/service/FAQ.do";
+		frm.method="get";
+		frm.submit();
+	}
 </script>
 </head>
 <body>
@@ -81,16 +95,21 @@
 				<div class="sideMenu">
 					<jsp:include page="../include/serviceCenterSide.jsp"></jsp:include>
 				</div>
+				<form name="faqFrm">
 				<div class="serviceCenter-board">
 					<div class="boardInfo">
 						<h3 style="display:inline-block">자주하는 질문</h3>
 						<span style="margin-left:10px; font-size:8pt; font-weight: bold;">고객님들께서 가장 많이하는 질문들은 모두 모았습니다.</span>
 						<br/>
-						<select>
-							<option>선택</option>
-							<option>회원문의</option>
-							<option>주문/결제</option>
-							<option>배송문의</option>
+						<select name="favoriteQ_Category">
+							<c:forEach var="item" items="${categoryList}">
+								<c:if test="${category == item.num }">
+									<option value="${item.num }" selected>${item.category}</option>
+								</c:if>
+								<c:if test="${category != item.num }">
+									<option value="${item.num }" >${item.category}</option>
+								</c:if>
+							</c:forEach>
 						</select>
 					</div>
 					<table style="border-top:solid 2px purple;" class="boardTable table">
@@ -99,40 +118,31 @@
 							<th class="txt_center">카테고리</th>
 							<th class="txt_center board-title">제목</th>
 						</tr>
-						
-						<%-- DB에서 갖고온 결과물 뿌리는 부분 --%>
-						<tr class=accordion>
-							<td class="txt_center">공지</td>
-							<td class="txt_center">Market kurly</td>
-							<td>제목</td>
-						</tr>
-						<tr class="panel panel-none">
-							<td colspan="3" >test입니다. 안녕하세요1</td>
-						</tr>
-						<tr class=accordion>
-							<td class="txt_center">공지</td>
-							<td class="txt_center">Market kurly</td>
-							<td>제목</td>
-						</tr>
-						<tr class="panel panel-none">
-							<td colspan="3" >test입니다. 안녕하세요2</td>
-						</tr>
-						<tr class=accordion>
-							<td class="txt_center">공지</td>
-							<td class="txt_center">Market kurly</td>
-							<td>제목</td>
-						</tr>
-						<tr class="panel panel-none">
-							<td colspan="3" >test입니다. 안녕하세요3</td>
-						</tr>
+						<c:if test="${empty FAQList}">	
+							<tr>
+								<td colspan="5"> 자주하는 질문 게시판 준비중 입니다. </td>
+							</tr>	
+						</c:if>
+						<c:if test="${not empty FAQList}">		
+							<c:forEach var="faq" items="${FAQList}">
+									<tr class='accordion'>
+										<td class="txt_center">${faq.faq_num}<input type="hidden" value="${nvo.faq_num}" name="faq_num" /></td>
+										<td class="board-title">${faq.category_content}</td>
+										<td class="txt_center">${faq.subject}</td>
+									</tr>
+									<tr class='panel panel-none'>
+										<td colspan="3">${faq.content}</td>
+									</tr>
+								</c:forEach>	
+							</c:if>
 					</table>
 					
-					<div style="border-bottom:solid 1px black; text-align:center;">페이징 처리</div>
+					<div style="border-bottom:solid 1px black; text-align:center;">${pageBar}</div>
 					<div class="boardSearch">
-						<input type="text" style="float:right"/>
+						<input type="text" style="float:right" name="searchWord" />
 					</div>
 				</div>
-				
+				</form>
 			</div>
 		</div>
 		<div style="clear:both;">

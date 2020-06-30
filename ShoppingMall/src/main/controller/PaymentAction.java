@@ -22,20 +22,6 @@ public class PaymentAction extends AbstractController {
 
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
-		String[] product_numArr = request.getParameterValues("product_num");
-		String[] product_countArr = request.getParameterValues("product_count");
-		String[] product_totalPriceArr = request.getParameterValues("product_totalPrice");
-		String[] product_imgArr = request.getParameterValues("product_img");
-		
-		List<Map<String, String>> productInfo = new ArrayList<Map<String,String>>();
-		for(int i=0; i<product_numArr.length; i++) {
-			Map<String, String> map = new HashMap<String, String>();
-			map.put("product_num", product_numArr[i]);
-			map.put("product_count", product_countArr[i]);
-			map.put("product_totalPrice", product_totalPriceArr[i]);
-			map.put("product_img", product_imgArr[i]);
-			productInfo.add(map);
-		}
 		
 		if(!super.checkLogin(request)) {
 			request.setAttribute("message", "주문서를 보려면 먼저 로그인 부터 하세요!!");

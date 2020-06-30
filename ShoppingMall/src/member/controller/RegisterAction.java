@@ -20,7 +20,7 @@ public class RegisterAction extends AbstractController {
 			
 			//super.setRedirect(false);
 			super.setViewPage("/WEB-INF/member/register.jsp");
-			
+			 
 		}
 		else {
 			

@@ -21,18 +21,23 @@ body {
 
 .page_article {
    background-color: #f2f2f2;
-   margin: 0 auto;
-   
+   margin: 0 auto;   
    width: 1080px;
    margin: 0 auto;
-   border: solid 1px #fff;
+   border: solid 1px #f2f2f2;
 }
 #form {
    width: 640px;
    margin: 0 auto;
-   /*border: solid 1px hotpink;*/
+   /* border: solid 1px hotpink; */
+  /*  padding-top: 20px; */
 }
 
+#tit_name{
+	font-size : 13pt;
+	font-weight: 600;
+	margin-top: 50px;
+}
 
 .tit {
    text-align: center;
@@ -42,8 +47,8 @@ body {
 .fieldhead_tit{
     padding: 8px 0;
     margin:0;
-   color: #666;   
-   font-size: 12px;
+    color: #666;   
+    font-size: 12px;
 }
 
 .member_join .txt_guide {
@@ -60,13 +65,9 @@ body {
 fieldset {
    text-align: left;
    border: none;
-   background-color: #fff;
-  /*  width: 640px; */
-   width: 613px;
-   height: 900px;
-
-  /* border : solid 1px navy; */
-
+   background-color: #fff; 
+   width: 640px;
+   padding-top: 20px;
 }
 
 .contents input {
@@ -173,8 +174,8 @@ button.btn_address{
 }
 
 .btnCheck{
-   width: 130px;
-   height: 40px;
+    width: 130px;
+    height: 40px;
     display: inline-block;
     line-height: 30px;
     text-align: center;
@@ -185,6 +186,7 @@ button.btn_address{
     float: right;
     margin-left: 2px;
     border-radius: 3px;  
+
 }
 
 
@@ -206,10 +208,10 @@ button.btn_address{
 
 .memberCols1 {      
    width: 130px;
-   font-size: 14px;
-   font-weight: 500;
+   font-size: 12px;
+   font-weight: 600;
    /*border: solid 1px pink;*/
-   padding: 20px 0 20px 15px;   
+   padding: 20px 30px 15px 23px;   
     color: #333;
     line-height: 20px;
     vertical-align: top;
@@ -217,7 +219,7 @@ button.btn_address{
 
 
 .memberCols2 {
-   padding: 10px 0 ;
+   padding: 10px 0px 10px 15px ;
    border-top: 0;
    font-size: 10pt;
    vertical-align: top;
@@ -248,13 +250,11 @@ div.reg_agree {
 
 .contents input[type=checkbox] {
    display : inline-block;   
-    width: 14px;
-    height: 14px;
+    width: 12px;
+    height: 12px;
     border: 0;
     text-align: center;
 }
-
-
 .contents a.link {
     font-size: 14px;
     font-weight: 430;
@@ -262,30 +262,30 @@ div.reg_agree {
     line-height: 17px;
     letter-spacing: 0;
     text-decoration: none;
-
 }
-
 .contents a {
    cursor: pointer;
    text-decoration: none;
-
+}
+span#email_btn, span#idcheck{
+	cursor: pointer;
+   text-decoration: none;
 }
 #head_tit_agree{
    /*border : solid 1px pink;*/
    padding: 8px 0 8px 18px;
    color: #333;
    letter-spacing: 0px;
-   font-size: 12pt;
+   font-size: 11pt;
    font-weight: bold;
+   letter-spacing: 0;
 }
-
 .head_sub_agree{
-   font-size: 12px;
+   font-size: 11px;
    font-weight: normal;
-   padding: 0;
+   padding-left: 10px;
    color: #333;
 }
-
 div#submit {
    padding: 40px 0;
    display: flex;
@@ -293,7 +293,6 @@ div#submit {
    justify-content : center;
    /*border: solid 1px black;*/
 }
-
 button.btn_submit{
    width: 340px;
    height: 54px;
@@ -304,7 +303,6 @@ button.btn_submit{
     border-radius: 3px; 
     letter-spacing: 0.6px;
 }
-
 .check{
    font-size: 12pt;
    font-weight: 630;
@@ -331,6 +329,10 @@ div.check_event{
 .wrong{
    color : #b3130b;
 }
+.txt_checkbox{
+	font-size : 9.5pt;
+	font-weight:500;
+}
 </style>
 <script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
@@ -344,6 +346,7 @@ div.check_event{
    var bPwChValidateCheck = false; //비밀번호 확인 체크 
    var bIdDuplicateCheck = false; // 아이디 중복확인을 클릭여부 확인 
    var bEmailDuplicateCheck = false; //이메일 중복확인 클릭여부 확인 
+   
    $(document).ready(function(){
                
       $(".txt_guide").hide();     
@@ -418,7 +421,7 @@ div.check_event{
       }); 
       
       $("#passwd").keyup(function(event){          
-         var regExp = new RegExp(/^.*(?=^.{8,15}$)(?=.*\d)(?=.*[a-zA-Z])(?=.*[^a-zA-Z0-9]).*$/g); 
+         var regExp = /^.*(?=^.{8,15}$)(?=.*\d)(?=.*[a-zA-Z])(?=.*[^a-zA-Z0-9]).*$/g; 
          // 숫자/문자/특수문자/ 포함 형태의 8~15자리 이내의 암호 정규표현식 객체 생성
          
          var bool = regExp.test($(this).val()); 
@@ -470,7 +473,9 @@ div.check_event{
            //console.log($(this).val().length);
            //console.log(keycode);
          
-         if( !((48 <= keycode && keycode<=57) || (96<=keycode && keycode<=105) || (keycode == 8))){
+
+         if( !((48 <= keycode && keycode<=57) || (96<=keycode && keycode<=105)|| (keycode==8))){
+
             var word = $(this).val().length;
             var keyValue = $(this).val().substring(0,word-1);
             $(this).val(keyValue);
@@ -743,6 +748,10 @@ div.check_event{
 			return;
 		}
 		//휴대폰 번호 검사 체크여부 
+		if($("#tel").val().trim()==""){
+	           alert("휴대폰 번호를 입력하세요");
+	           return;
+	    }
 
 		//아이디 중복체크 검사 
 		if (!bIdDuplicateCheck) {
@@ -778,7 +787,7 @@ div.check_event{
          <div class="contents">
             <div class = "page_article"> 
             <div class=" head_join">
-               <h3 class="tit">회원가입</h3>
+               <h3 class="tit" id="tit_name">회원가입</h3>
             </div>
                
             <div class="member_join">
@@ -790,10 +799,10 @@ div.check_event{
                   
                   <table>
                      <tr>
-                        <td class="memberCols1">아이디*</td>
-                        <td class="memberCols2">
+                        <td class="memberCols1" style="padding-top:30px;">아이디*</td>
+                        <td class="memberCols2" style="padding-top:30px;">
                            <input type="text" name="userid" id="userid" placeholder ="5자 이상 10글자 이하의 영문과 숫자를 조합" value="" maxlength="16" required autocomplete="off">
-                           <span  id="idcheck"><span class="btnCheck" id="idcheckResult">중복확인</span></span>
+                           <span id="idcheck"><span class="btnCheck" id="idcheckResult">중복확인</span></span>
                            <p class="txt_guide" style="display: block;">
                            <span class="txt txt_errorCk userid_error">5자 이상 10글자 이하의 영문과 숫자를 조합</span><br/>
                            <span class="txt txt_errorCk userid_error">아이디 중복확인</span>
@@ -834,7 +843,7 @@ div.check_event{
                         <td class="memberCols1">이메일*</td>
                         <td class="memberCols2">
                            <input type="email" name="email" id="email" value="" maxlength="40" placeholder="예: marketkurly@kurly.com" required />
-                              <a href="javascript:chkEmail()"><span class="btnCheck email_error">이메일 중복확인</span></a>            
+                              <span id="email_btn" class="btnCheck email_error">이메일 중복확인</span>           
                         </td>
                      </tr>
                      
@@ -884,8 +893,8 @@ div.check_event{
                         </tr>
                
                         <tr>
-                        <td class="memberCols1">생년월일</td>
-                           <td class="memberCols2">   
+                        <td class="memberCols1" style="padding-bottom:30px;">생년월일</td>
+                           <td class="memberCols2" style="padding-bottom:30px;">   
                            <div class="birth_day">
                            <input type="text" name="birthyear" id="birth_year"  value="" size="4" maxlength="4" placeholder="YYYY">
                            <span class="bar">/</span>
@@ -911,7 +920,7 @@ div.check_event{
                      <div class="check">
                      <label class="inp_check check_agree label_all_check">
                      <input type="checkbox" name="agree_allcheck">
-                     <span class="txt_checkbox">전체동의</span>
+                     <span class="txt_checkbox" style="font-size:10pt; font-weight:550;">전체동의</span>
                      </label>
                      </div>
                      
