@@ -360,8 +360,21 @@ create table one_inquiry_table
 ,constraint fk_one_category FOREIGN key (fk_category_num) REFERENCES one_category_table(category_num)
 ,constraint ck_one_emailCheck   check (emailFlag in(0,1))
 ,constraint ck_one_smsCheck check (smsFlag in (0,1))
-
 );
+
+insert into one_category_table(category_num, category_content) values(1, '배송지연/불만');
+insert into one_category_table(category_num, category_content) values(2, '컬리패스(무료배송)');
+insert into one_category_table(category_num, category_content) values(3, '반품문의');
+insert into one_category_table(category_num, category_content) values(4, 'A/S문의');
+insert into one_category_table(category_num, category_content) values(5, '환불문의');
+insert into one_category_table(category_num, category_content) values(6, '주문결제문의');
+insert into one_category_table(category_num, category_content) values(7, '회원정보문의');
+insert into one_category_table(category_num, category_content) values(8, '취소문의');
+insert into one_category_table(category_num, category_content) values(9, '교환문의');
+insert into one_category_table(category_num, category_content) values(10, '상품정보문의');
+insert into one_category_table(category_num, category_content) values(11, '기타문의');
+
+commit;
 
 -- 1:1문의 테이블에서 사용할 시퀀스 생성 --
 create sequence seq_one_inquiry_table
