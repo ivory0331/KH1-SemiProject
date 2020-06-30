@@ -329,7 +329,7 @@ $(document).ready(function(){
 		func_basketCnt();
 	}
 	
-	$("input[name='searchWord']").bind("keyup",function(event){
+	$("input[name='productSearchWord']").bind("keyup",function(event){
 		if(event.keyCode==13){
 			searchList();
 		}
@@ -425,14 +425,14 @@ $(document).ready(function(){
 		
 	}
 	
-	function searchList(){
-		var searchWord = $("input[name='searchWord']").val();
-		if(searchWord.trim().length<1){
+	 function searchList(){
+		var productSearchWord = $("input[name='productSearchWord']").val();
+		if(productSearchWord.trim().length<1){
 			alert("검색할 단어를 최소 1글자 이상 입력해야 합니다.");
 			return;
 		}
 		
-		location.href="<%=ctxPath%>/searchList.do?searchWord="+searchWord;
+		location.href="<%=ctxPath%>/searchList.do?productSearchWord="+productSearchWord;
 	}
 
 </script>
@@ -451,9 +451,9 @@ $(document).ready(function(){
 					<ul class="mypage-categori">
 						<c:if test="${sessionScope.loginuser.status=='2'}">
 							<li class="list"><a href="javascript:location.href='<%=ctxPath%>/service/board.do'"><span class="listType">매출관리</span></a></li>
-							<li class="list"><a href="javascript:location.href='<%=ctxPath%>/service/FAQ.do'"><span class="listType">회원관리</span></a></li>
-							<li class="list"><a href="javascript:location.href='<%=ctxPath%>/service/MyQue.do'"><span class="listType">상품관리</span></a></li>
-							<li class="list"><a href="javascript:location.href='<%=ctxPath%>/service/MyQue.do'"><span class="listType">주문관리</span></a></li>
+							<li class="list"><a href="javascript:location.href='<%=ctxPath%>/manager/managerMemberList.do'"><span class="listType">회원관리</span></a></li>
+							<li class="list"><a href="javascript:location.href='<%=ctxPath%>/manager/managerProductList.do'"><span class="listType">상품관리</span></a></li>
+							<li class="list"><a href="javascript:location.href='<%=ctxPath%>/manager/managerMemberList.do'"><span class="listType">주문관리</span></a></li>
 							<li class="list"><a href="javascript:logout()"><span class="listType">로그아웃</span></a></li>
 						</c:if>
 						<c:if test="${sessionScope.loginuser.status=='1'}">
@@ -504,7 +504,14 @@ $(document).ready(function(){
 			<li><a href="javascript:location.href='<%=ctxPath%>/product/saleProduct.do'"><span class="listType">알뜰쇼핑</span></a><span class="bar">I</span></li>
 			<li><a href="javascript:location.href='<%=ctxPath%>/product/newProduct.do'"><span class="listType">신상품</span></a><span class="bar">I</span></li>
 			<li><a><span class="listType" onclick="goList()">추천쇼핑</span></a></li>
-			<li style="border:solid 1px gray; border-radius: 15px; padding:5px;"><input type="text" placeholder="검색" style="border:none;" name="searchWord" /><img src="<%=ctxPath %>/images/search.png" onclick="searchList()" style="display:inline-block; width:20px; height:20px; cursor: pointer"/></li>
+			<li style="border:solid 1px gray; border-radius: 15px; padding:5px;">
+				<c:if test = "${not empty productSearchWord}">
+					<input type="text" placeholder="검색" style="border:none;" name="productSearchWord" value="${productSearchWord}"/>
+				</c:if>
+				<c:if test = "${empty productSearchWord}">
+					<input type="text" placeholder="검색" style="border:none;" name="productSearchWord" />
+				</c:if>
+			<img src="<%=ctxPath %>/images/search.png" onclick="searchList()" style="display:inline-block; width:20px; height:20px; cursor: pointer"/></li>
 			<li>
 				<span class="navi-basket" style="position:relative; ">
 					<img src="<%=ctxPath %>/images/basket.jpg" onclick="goBasket()"/>

@@ -24,6 +24,11 @@ public class ProductListAction extends AbstractController {
 		if(currentShowPageNo == null)
 			currentShowPageNo = "1";
 		
+		String optionSelect = request.getParameter("optionSelect");
+		if(optionSelect == null) {
+			
+		}
+		
 
 	//	String fk_category_num = "4";
 

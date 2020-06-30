@@ -246,22 +246,6 @@
 		}
 		
 		
-		var acc = document.getElementsByClassName("accordion");
-		/* $(document).on("click",".accordion",function(){
-			
-			var $target = $(this).next();
-			var $other = $target.siblings();
-			$other.each(function(index, item){
-				if($(item).hasClass("panel")){
-				   $(item).addClass("panel-none");	
-				}
-			});
-			
-			
-			$target.toggleClass("panel-none");
-			offSet[2] = $(".detailTablePart")[2].offsetTop;
-		}); */
-		
 		func_reviewCall();
 		func_productQCall(productQ_currentPage);
 	});

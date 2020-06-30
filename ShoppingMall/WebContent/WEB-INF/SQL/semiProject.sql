@@ -159,7 +159,7 @@ create table product_image_table
 );
 
 select*
-from product_image_table;
+from product_table where product_name like '%'||'오징어'||'%';
 
 
 -- 상품문의 테이블 생성 --
@@ -340,6 +340,8 @@ create table one_category_table
 ,constraint pk_one_category primary key (category_num)
 );
 
+
+
 -- 1:1문의 테이블 생성 --
 create table one_inquiry_table
 (one_inquiry_num number not null    -- 1:1문의 게시글 번호
@@ -422,6 +424,16 @@ create table FAQ_table
 ,constraint pk_FAQ_table primary key(FAQ_num)
 ,constraint fk_FAQ_category FOREIGN key(fk_category_num) REFERENCES inquiry_category_table(category_num)
 );
+
+
+insert into inquiry_category_table(category_num, category_content) values(1, '회원문의');
+insert into inquiry_category_table(category_num, category_content) values(2, '주문/결제');
+insert into inquiry_category_table(category_num, category_content) values(3, '배송문의');
+insert into inquiry_category_table(category_num, category_content) values(4, '서비스 이용 및 기타');
+
+commit;
+
+
 
 
 -- 자주하는 질문 테이블에서 사용할 시퀀스 생성 --

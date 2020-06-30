@@ -2,6 +2,8 @@ package main.model;
 
 import java.util.List;
 
+import member.model.MemberVO;
+
 public class OneInquiryVO {
 	private int one_inquiry_num;
 	private String subject;
@@ -14,13 +16,16 @@ public class OneInquiryVO {
 	private int fk_member_num;
 	private int fk_order_num;
 	private List<String> imageList;
+	private MemberVO member;
 	private int fk_category_num;
+
 	
 	public OneInquiryVO() {}
 	
 	public OneInquiryVO(int one_inquiry_num, String subject, String content, String write_date, String answer,
 			String emailFlag, String smsFlag, String category_content, int fk_member_num, int fk_order_num,
-			List<String> imageList, int fk_category_num) {
+			List<String> imageList, MemberVO member) {
+
 		this.one_inquiry_num = one_inquiry_num;
 		this.subject = subject;
 		this.content = content;
@@ -32,6 +37,7 @@ public class OneInquiryVO {
 		this.fk_member_num = fk_member_num;
 		this.fk_order_num = fk_order_num;
 		this.imageList = imageList;
+		this.member = member;
 		this.fk_category_num = fk_category_num;
 	}
 	
@@ -123,6 +129,17 @@ public class OneInquiryVO {
 		this.imageList = imageList;
 	}
 
+
+	public MemberVO getMember() {
+		return member;
+	}
+
+	public void setMember(MemberVO member) {
+		this.member = member;
+	}
+	
+	
+
 	public int getFk_category_num() {
 		return fk_category_num;
 	}
@@ -130,6 +147,7 @@ public class OneInquiryVO {
 	public void setFk_category_num(int fk_category_num) {
 		this.fk_category_num = fk_category_num;
 	}
+
 	
 	
 	

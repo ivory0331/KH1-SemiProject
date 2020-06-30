@@ -15,7 +15,7 @@ public class SearchListAction extends AbstractController {
 
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
-		String searchWord = request.getParameter("searchWord");
+		String productSearchWord = request.getParameter("productSearchWord");
 		
 		String currentShowPageNo = request.getParameter("currentShowPageNo");
 		if(currentShowPageNo == null)
@@ -23,7 +23,7 @@ public class SearchListAction extends AbstractController {
 		
 		HashMap<String,String> paraMap = new HashMap<>();
 		paraMap.put("currentShowPageNo", currentShowPageNo);
-		paraMap.put("searchWord", searchWord);
+		paraMap.put("productSearchWord", productSearchWord);
 		
 		InterIndexDAO dao = new IndexDAO();
 		
@@ -41,7 +41,7 @@ public class SearchListAction extends AbstractController {
 		
 		// *** [이전] 만들기 *** //
 		if( pageNo != 1 ) {
-			pageBar += "&nbsp;<a href='searchList.do?searchWord="+searchWord+"&currentShowPageNo="+(pageNo-1)+"'>[이전]</a>&nbsp;";
+			pageBar += "&nbsp;<a href='searchList.do?productSearchWord="+productSearchWord+"&currentShowPageNo="+(pageNo-1)+"'>[이전]</a>&nbsp;";
 		}
 				
 		while( !(loop > blockSize || pageNo > totalPage) ) {
@@ -50,7 +50,7 @@ public class SearchListAction extends AbstractController {
 				pageBar += "&nbsp;<span style='color: red; border: solid 1px gray; padding: 2px 4px;'>"+pageNo+"</span>&nbsp;";
 			}
 			else {
-				pageBar += "&nbsp;<a href='searchList.do?searchWord="+searchWord+"&currentShowPageNo="+pageNo+"'>"+pageNo+"</a>&nbsp;";
+				pageBar += "&nbsp;<a href='searchList.do?productSearchWord="+productSearchWord+"&currentShowPageNo="+pageNo+"'>"+pageNo+"</a>&nbsp;";
 			}		
 			pageNo++; // 1 2 3 4 5 6 7 8 9 10 11 12 13 14 ... 40 41 42
 			loop++;	  // 1 2 3 4 5 6 7 8 9 10
@@ -59,12 +59,12 @@ public class SearchListAction extends AbstractController {
 		
 		// *** [다음] 만들기 *** //
 		if( !(pageNo > totalPage) ) {
-				pageBar += "&nbsp;<a href='searchList.do?searchWord="+searchWord+"&currentShowPageNo="+pageNo+"'>[다음]</a>&nbsp;";
+				pageBar += "&nbsp;<a href='searchList.do?productSearchWord="+productSearchWord+"&currentShowPageNo="+pageNo+"'>[다음]</a>&nbsp;";
 		}
 		
 		request.setAttribute("pageBar", pageBar);
 		
-		request.setAttribute("searchWord", searchWord);
+		request.setAttribute("productSearchWord", productSearchWord);
 		request.setAttribute("productList", productList);
 		
 		super.setViewPage("/WEB-INF/main/productList.jsp");

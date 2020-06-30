@@ -33,16 +33,17 @@ public class LoginAction extends AbstractController {
 
          MemberVO loginuser = memberdao.selectOneMember(paraMap);
          // loginuser == 로그인 되어진 유저
-
+         
+        
+         
          if (loginuser != null && loginuser.isIdleStatus() == false) {
             // 로그인 성공시
 
             HttpSession session = request.getSession();
             session.setAttribute("loginuser", loginuser);
-
-            
             String goBackURL = request.getContextPath() + "/index.do";
-              
+            
+            
             if (loginuser.isRequirePwdChange() == true) {
                String message = "비밀번호를 변경하신지 3개월이 지났습니다. 암호를 변경하세요!";
                String loc = request.getContextPath() + "/index.do";
@@ -56,7 +57,6 @@ public class LoginAction extends AbstractController {
 
                return;
             }
- 
             
             if(session.getAttribute("goBackURL")!=null) {
             	goBackURL = (String) session.getAttribute("goBackURL");
