@@ -119,51 +119,54 @@
 <script type="text/javascript" src="/ShoppingMall/util/myutil.js"></script>
 <script type="text/javascript">
 	$(document).ready(function(){
-		
-		$("#btnSubmit").click(function(){
-		
-			// == 제목 입력했는지 확인 == //
-			if($("input#subject").val().trim()=="") {
-				
-				alert("제목을 입력해주세요.");	
-									
-				$(this).focus();					
-				return;
-			}
+	)};	
+	
+	
+	function divCheck(){
+	
+		// == 제목 입력했는지 확인 == //
+		if($("input#subject").val().trim()=="") {
 			
-			
-			// == 내용 10글자 이상 입력했는지 확인 == //				
-			if($("textarea#content").val().length < 10) {
-				
-				alert("내용은 최소 10글자 이상 입력해야 합니다.");	
-									
-				$(this).focus();
-				return;
-			}				
-			
-			// == 이미지 파일 유효성 검사 == //
-			var imgFile = $('#image').val().toLowerCase();
-			var fileForm = /(.*?)\.(jpg|jpeg|png|gif|bmp|pdf)$/;
-			var fileSize;		
-			
-			if(imgFile != "") {
-				fileSize = document.getElementById("isFile").files[0].size;
-			    
-			    if(!imgFile.match(fileForm)) {
-			    	alert("이미지 파일만 업로드 가능합니다.");
-			        return;
-			    }
-			}
-		
-			var frm = document.reviewFrm;
-			frm.method = "POST";
-			frm.action = "myPageReviewWrite.do";
-			frm.submit();			
-			
-		});// end of $("#btnRegister").click(function(){})-----------------------------------	
+			alert("제목을 입력해주세요.");	
+								
+			$(this).focus();					
+			return;
+		}
 		
 		
-	});
+		// == 내용 10글자 이상 입력했는지 확인 == //				
+		if($("textarea#content").val().length < 10) {
+			
+			alert("내용은 최소 10글자 이상 입력해야 합니다.");	
+								
+			$(this).focus();
+			return;
+		}				
+		
+		// == 이미지 파일 유효성 검사 == //
+		var imgFile = $('#image').val().toLowerCase();
+		var fileForm = /(.*?)\.(jpg|jpeg|png|gif|bmp|pdf)$/;
+		var fileSize;		
+		
+		if(imgFile != "") {
+			fileSize = document.getElementById("isFile").files[0].size;
+		    
+		    if(!imgFile.match(fileForm)) {
+		    	alert("이미지 파일만 업로드 가능합니다.");
+		        return;
+		    }
+		}
+	
+		var content = $("#content").val();
+		console.log(content);
+		$("#txt_content").val(content);
+		console.log($("#txt_content").val());
+		var frm = document.reviewFrm;
+		frm.method = "POST";
+		frm.action = "<%=ctxPath%>/myPageReviewWrite.do";
+		frm.submit();
+	}		
+
 
 </script>
 
@@ -186,11 +189,11 @@
 						<table class="myOrder_Desc">
 							<tr class="list">
 								<td class="image">
-									<img alt="해당 주문 대표 상품 이미지" src="<%=ctxPath %>/images/${product}">
+									<img alt="해당 주문 대표 상품 이미지" src="<%=ctxPath %>/images/${product.product.representative_img}">
 								</td>
 								<td class="info">
 									<div class="name">
-										<span class="productName">${product.product.prodcut_name}</span>
+										<span class="productName">${product.product.getProduct_name()}</span>
 									</div>
 								</td>	
 							</tr>
@@ -198,7 +201,7 @@
 					</div>	
 				</div>				
 				<div class="review">
-				<form name="reviewFrm">	
+				<form name="reviewFrm" enctype="multipart/form-data" method="post">	
 					<table class="write">
 						<tr class="reviewTR title">
 							<th class="reviewTH">제목</th>
@@ -210,7 +213,8 @@
 							<th class="reviewTH">후기작성</th>
 							<td class="reviewTD">
 								<div class="field_cmt">
-									<textarea id="content" name="content" cols="100" rows="10" placeholder="최소 10글자 이상 작성 가능합니다."></textarea>
+									<textarea id="content" name="content" cols="100" rows="10" placeholder="최소 10글자 이상 작성 가능합니다."></textarea>									
+									<input type="hidden" name="content" id="txt_content"/>
 								</div>
 							</td>
 						</tr>
@@ -224,7 +228,7 @@
 					</table>
 				</form>					
 				</div>				
-				<button type="button" id="btnSubmit" class="button">등록하기</button>	
+				<button type="button" id="btnSubmit" class="button" onclick="divCheck()">등록하기</button>	
 			</div>				
 			</div>
 			<div style="clear:both;"></div>

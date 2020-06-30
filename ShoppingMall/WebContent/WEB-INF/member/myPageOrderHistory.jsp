@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>    
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
 <% String ctxPath = request.getContextPath(); %>
 <!DOCTYPE html>
@@ -70,7 +71,7 @@
 		margin-bottom: 20px;
 	}
 	
-	.myOrder_Name {
+	div.myOrder_Name {
 		border: solid 0px cyan;
 		border-bottom: solid 1px #eee;
 		padding: 10px 5px;
@@ -122,31 +123,17 @@
 	.myOrder_Status {
 		border: solid 0px lime;
 		display: inline-block;
+		margin-bottom: 17px;
 		width: 15%;
 	}	
 	
-	a.link {
+	a.link_question {
 		border: solid 1px #5f0080;
 		display: inline-block; 
 		float: right;
 		width: 100px;
 		padding: 5px 0;
 		margin: 5px;
-	}
-	
-	a.link_review {
-		color: white;
-		font-weight: bold;
-		background-color: #5f0080;
-	}
-	
-	a.link_review:hover {
-		text-decoration: none;		
-		color: white;
-		cursor: pointer;
-	}
-	
-	a.link_question {
 		color: #5f0080;
 		background-color: white;
 	}
@@ -172,7 +159,7 @@
 	$(document).ready(function(){
 		
 		$(".myOrder_Name").click(function(){
-			var order_num = $(this).find(".order_num").text();
+			var order_num = $(this).find(".order_num").val();
 			// alert(order_num);
 		    location.href="<%= ctxPath%>/member/myPageOrderHistoryDetail.do?order_num="+order_num;
 		});
@@ -226,21 +213,22 @@
 									<div class="myOrder_Name">
 										<a class="myOrder_Name">${ohvo.product_name}&nbsp;
 											<c:if test="${ohvo.product_cnt != 1}">외 ${ohvo.product_cnt-1}건</c:if>
+											<input type="hidden" class="order_num" value="${ohvo.order_num}"/>
 										</a>
 									</div>
 									<div class="myOrder_block">
 										<div class="myOrder_Info">
 											<div class="myOrder_Image">
-												<img alt="해당 주문 대표 상품 이미지" src="include/images/logo.png">
+												<img alt="해당 주문 대표 상품 이미지" src="<%=ctxPath %>/images/${ohvo.representative_img}">
 											</div> 
 											<table class="myOrder_Desc">
 												<tr>
 													<td class="mytd1">주문번호</td>
-													<td class="mytd2 order_num">${ohvo.order_num}</td>
+													<td class="mytd2">${ohvo.order_num}</td>
 												</tr>
 												<tr>
 													<td class="mytd1">결제금액</td>
-													<td class="mytd2">${ohvo.price}원</td>
+													<td class="mytd2"><fmt:formatNumber value="${ohvo.price}" pattern="###,###"/> 원</td>
 												</tr>
 												<tr>
 													<td class="mytd1">주문상태</td>
@@ -251,8 +239,7 @@
 										</div>						
 										<div class="myOrder_Status">
 											<span class="myOrder_InnerStatus">
-												<a class="link link_review">후기 작성</a>
-												<a class="link link_question">1:1 문의</a>
+												<a class="link link_question" href="<%= ctxPath %>/service/serviceCenterMyQboardWrite.do">1:1 문의</a>
 											</span>
 										</div>
 									</div>
