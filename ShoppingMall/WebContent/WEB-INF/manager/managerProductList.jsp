@@ -76,6 +76,24 @@
 		$("select#fk_category_num").bind("change", function(){
 			if($("select#fk_category_num").val()!=0){
 				$("select#fk_subcategory_num").prop('disabled',false);
+				$.ajax({
+					url:"<%= ctxPath%>/manager/getSubCategoryList.do",
+					type:"post",
+					data:{"fk_category_num":$("#fk_category_num").val()},
+					dataType:"json",
+					success:function(json){	
+						$("select#fk_subcategory_num").prop('disabled',false);
+						var html='<option value="0">전체</option>';
+						for(var i=0; i<json.length;i++){
+							html +="<option value='"+json[i].subcategory_num+"'>"+json[i].subcategory_content+"</option>";
+						}
+						$("#fk_subcategory_num").html(html); 						
+					},						
+					error: function(request, status, error){
+						alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
+					}
+					
+				});
 			}else{
 				$("select#fk_subcategory_num").prop('disabled',true);
 			}			
@@ -150,6 +168,10 @@
 		    return;
 		}
 	}
+	
+	function product_insert(){
+		location.href="<%=ctxPath%>/manager/managerProductInsert.do";
+	}
 
 	
 
@@ -168,17 +190,14 @@
 						<h4>상품관리</h4>
 						<form name="manager_productFrm">
 							<div>
-								<select id="fk_category_num" name="fk_category_num">
+								<select id="fk_category_num" name="fk_category_num" class="bigSelect">
 									<option value="0">=== 대분류 ===</option>
-									<option value="1">채소</option>
-									<option value="2">과일 견과</option>
-									<option value="3">수산 해산</option>
-									<option value="4">정육 계란</option>
-									<option value="5">음료 우유</option>
+									<c:forEach var="map" items="${requestScope.categoryList}">
+								    	<option value="${map.category_num}">${map.category_content}</option>
+								    </c:forEach>	
 								</select>
 								<select id="fk_subcategory_num" name="fk_subcategory_num" disabled>
 									<option value="0">=== 소분류 ===</option>
-									<option value="41">기본채소</option>
 								</select>
 							</div>
 							<input type="text" id ="searchWord" name="searchWord"/>	
@@ -189,7 +208,7 @@
 								<option value="3">3</option>
 							</select>									
 						</form>		
-						<span class="type goods-add">상품 추가</span>
+						<span class="type goods-add" onclick="product_insert()">상품 추가</span>
 					</div>
 					
 					<button type="button" id="btnAllCheck" onclick="allCheck();">전체선택</button>

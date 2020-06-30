@@ -559,6 +559,11 @@
 							<button class="tablinks" onclick="goTable('1')">고객 후기</button>
 							<button class="tablinks" onclick="goTable('2')" style="border-right:solid 1px black">상품 문의</button>
 						</div>
+						<c:if test="${product.imageList!=null}">
+	                        <c:forEach var="image" items="${product.imageList}">
+	                           <img src="<%=ctxPath %>/images/${image}"  style="margin:20px 0;"/>
+	                        </c:forEach>
+                     	</c:if>
 						<c:if test="${not empty product.imageList}">
 							<c:forEach var="image" items="${product.imageList}">
 								<img src="<%=ctxPath %>/images/${image}" style="margin: 0 auto;"/>
