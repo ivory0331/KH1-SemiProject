@@ -9,7 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 import common.controller.AbstractController;
 import product.model.*;
 
-public class SaleProductAction extends AbstractController {
+public class RecommendProductAction extends AbstractController {
 
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
@@ -22,9 +22,9 @@ public class SaleProductAction extends AbstractController {
 		
 		HashMap<String,String> paraMap = new HashMap<>();
 		paraMap.put("currentShowPageNo", currentShowPageNo);
-		paraMap.put("sale", "sale");
+		paraMap.put("recommend", "recommend");
 		
-		List<ProductVO> saleProduct = productdao.selectSale(paraMap);
+		List<ProductVO> recommendProduct = productdao.recommendList(paraMap);
 		
 		int totalPage = productdao.getTotalpage(paraMap);
 		int pageNo = 1;
@@ -38,7 +38,7 @@ public class SaleProductAction extends AbstractController {
 		
 		// *** [이전] 만들기 *** //
 		if( pageNo != 1 ) {
-			pageBar += "&nbsp;<a href='saleProduct.do?currentShowPageNo="+(pageNo-1)+"'>[이전]</a>&nbsp;";
+			pageBar += "&nbsp;<a href='recommendProduct.do?currentShowPageNo="+(pageNo-1)+"'>[이전]</a>&nbsp;";
 		}
 				
 		while( !(loop > blockSize || pageNo > totalPage) ) {
@@ -47,7 +47,7 @@ public class SaleProductAction extends AbstractController {
 				pageBar += "&nbsp;<span style='color: red; border: solid 1px gray; padding: 2px 4px;'>"+pageNo+"</span>&nbsp;";
 			}
 			else {
-				pageBar += "&nbsp;<a href='saleProduct.do?currentShowPageNo="+pageNo+"'>"+pageNo+"</a>&nbsp;";
+				pageBar += "&nbsp;<a href='recommendProduct.do?currentShowPageNo="+pageNo+"'>"+pageNo+"</a>&nbsp;";
 			}		
 			pageNo++; // 1 2 3 4 5 6 7 8 9 10 11 12 13 14 ... 40 41 42
 			loop++;	  // 1 2 3 4 5 6 7 8 9 10
@@ -56,13 +56,14 @@ public class SaleProductAction extends AbstractController {
 		
 		// *** [다음] 만들기 *** //
 		if( !(pageNo > totalPage) ) {
-			pageBar += "&nbsp;<a href='saleProduct.do?currentShowPageNo="+pageNo+"'>[다음]</a>&nbsp;";
+			pageBar += "&nbsp;<a href='recommendProduct.do?currentShowPageNo="+pageNo+"'>[다음]</a>&nbsp;";
 		}
 		
-		request.setAttribute("saleProduct", saleProduct);
+		request.setAttribute("recommendProduct", recommendProduct);
 		request.setAttribute("pageBar", pageBar);
 		
-		super.setViewPage("/WEB-INF/main/saleProdList.jsp");
+		super.setViewPage("/WEB-INF/main/recommendList.jsp");
+
 		
 	}
 

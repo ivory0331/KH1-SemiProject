@@ -35,7 +35,7 @@
 		float: left;
 	}
 	#list {
-		border: solid 1px blue;
+		border: solid 0px blue;
 		margin-top: 80px;
 		float: right;
 	}
@@ -45,7 +45,7 @@
 		padding: 30px;
 	}
 	#h3{
-		border: solid 1px red;
+		border: solid 0px red;
 		width: 200px;
 		margin-top: 100px;
 		font-size: 20pt;
@@ -98,26 +98,15 @@
 			
 		});
 		
+		$("#optionSelect").val("${optionSelect}");
+		
 		$("#list").change(function(){
-			var optionSelect = $("#list option:selected").val();
-			var cate = $(".cate").val();
-			var subcate = $(".subcate").val();
-			// alert(subcate);
 			
-			$.ajax({
-				url:"<%=ctxPath%>/product/selectOption.do",
-				data:{"optionSelect":optionSelect,
-					  "subcate":subcate,
-					  "cate":cate},
-				dataType:"JSON",
-				success:function(json){
-					
-				},
-				error: function(request, status, error){
-					alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
-				}
-			});
-			
+			var frm = document.opList;
+			frm.action="<%=ctxPath%>/product/productList.do";
+			frm.method="get";
+			frm.submit();
+		
 		}); // end of $("#list").change()----------------------------
 		
 		
@@ -145,33 +134,18 @@
 							
 						</c:forEach>
 					</div>
+					<form name="opList">
 					<div id="list">
-						<select>
+						<select name="optionSelect" id="optionSelect">
 							<option value="registerdate" >신상품순</option>
-							<option value="price" >낮은 가격순</option>   
-							<option value="priceasc" >높은 가격순</option>
+							<option value="asc" >낮은 가격순</option>   
+							<option value="desc" >높은 가격순</option>
 						</select>
 					</div>
+						<input type="hidden" name="fk_category_num" value="${fk_category_num}" />
+						<input type="hidden" name="fk_subcategory_num" value="${fk_subcategory_num}" />
+					</form>
 				</c:if>
-
-				<div id="h3">${categoryInfo}</div>
-				
-				<div id="smallT">
-						<a href='/ShoppingMall/product/productList.do?fk_category_num=${fk_category_num}'><span class="sub">전체보기</span></a>
-					<c:forEach var="cate" items="${subcategoryList}" varStatus="status">
-						<a href='/ShoppingMall/product/productList.do?fk_category_num=${fk_category_num}&fk_subcategory_num=${cate.subcategory_num}'><span class="sub">${cate.subcategory_content}</span></a>
-					</c:forEach>
-					<input type="hidden" class="cate" value="${fk_category_num}"/>
-					<input type="hidden" class="subcate" value="${fk_subcategory_num}"/>
-					
-				</div>
-				<div id="list">
-					<select>
-						<option value="registerdate" >신상품순</option>
-						<option value="desc" >낮은 가격순</option>   
-						<option value="asc" >높은 가격순</option>
-					</select>
-				</div>
 
 				<c:if test="${not empty productSearchWord}">
 					<h1>상품검색</h1>
@@ -205,18 +179,21 @@
 									<img width="300px;" height="400px;" src="/ShoppingMall/images/${pvo.representative_img}" />
 								</a>
 								<br/>${pvo.product_name}
+								
 								<c:if test="${pvo.sale != 0}">
 									<br/><span style="text-decoration: line-through;"><fmt:formatNumber value="${pvo.price}" pattern="###,###"/> 원</span>
 									&nbsp;=>&nbsp;<fmt:formatNumber value="${pvo.finalPrice}" pattern="###,###" /> 원
 								</c:if>
+								
 								<c:if test="${pvo.sale == 0}">
 									<br/><fmt:formatNumber value="${pvo.price}" pattern="###,###"/> 원
 								</c:if>
+								
 							</td> 
-						<c:if test="${(status.count)%3 == 0 }">
-							</tr>
-							<tr>
-						</c:if>
+							<c:if test="${(status.count)%3 == 0 }">
+								</tr>
+								<tr>
+							</c:if>
 						
 						</c:forEach>
 					</tr>

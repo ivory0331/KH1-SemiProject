@@ -9,7 +9,7 @@ import product.model.CartVO;
 
 public interface InterProductDAO {
 
-	// 페이징 안한 제품 목록 불러오기
+	// 페이징 안한 제품 목록 불러오기 <안씀>
 	List<ProductVO> selectProductList(HashMap<String, String> paraMap) throws SQLException;
 
 	// 대분류 불러오기
@@ -18,7 +18,7 @@ public interface InterProductDAO {
 	// 대분류와 소분류 불러오기
 	List<ProductVO> subcategoryList(String fk_category_num) throws SQLException ;
 	
-	// 페이징 처리를 한 제품목록 불러오기
+	// 페이징 처리를 한 제품목록 불러오기 <안씀>
 	List<ProductVO> selectPagingProduct(HashMap<String, String> paraMap) throws SQLException;
 
 	// 페이징 처리를 위한 제품목록 페이지갯수 알아오기
@@ -42,8 +42,11 @@ public interface InterProductDAO {
 	// 페이징 처리를 한 세일품목 조회하기
 	List<ProductVO> selectSale(HashMap<String, String> paraMap) throws SQLException;
 	
-	// 선택한 옵션에 맞게 상품 리스트 보여주기
+	// 선택한 옵션에 맞게 상품 리스트 보여주기 <씀>
 	List<ProductVO> selectOption(HashMap<String, String> paraMap) throws SQLException;
+
+	// 페이징 처리를 한 추천상품 조회하기
+	List<ProductVO> recommendList(HashMap<String, String> paraMap) throws SQLException;
 	
 	
 	

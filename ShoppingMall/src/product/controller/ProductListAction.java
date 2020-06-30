@@ -19,30 +19,33 @@ public class ProductListAction extends AbstractController {
 		String fk_category_num = request.getParameter("fk_category_num");
 		String fk_subcategory_num = request.getParameter("fk_subcategory_num");
 		
+		if(fk_subcategory_num == "")
+			fk_subcategory_num = null;
+		
 		String currentShowPageNo = request.getParameter("currentShowPageNo");
 		if(currentShowPageNo == null)
 			currentShowPageNo = "1";
 		
 		String optionSelect = request.getParameter("optionSelect");
-		if(optionSelect == null) {
-			
-		}
 		
+		if(optionSelect == null) {
+			optionSelect = "registerdate";
+		}
 
 	//	String fk_category_num = "4";
-
 	//	String fk_subcategory_num = "41";
 		
 		HashMap<String,String> paraMap = new HashMap<>();
 		paraMap.put("currentShowPageNo", currentShowPageNo);
 		paraMap.put("fk_category_num", fk_category_num);
 		paraMap.put("fk_subcategory_num", fk_subcategory_num);
+		paraMap.put("optionSelect", optionSelect);
 		
 	//	List<ProductVO> productList = productdao.selectProductList(paraMap);
 		String categoryInfo = productdao.categoryInfo(fk_category_num);
 		List<ProductVO> subcategoryList = productdao.subcategoryList(fk_category_num);
 		
-		List<ProductVO> productList = productdao.selectPagingProduct(paraMap);
+		List<ProductVO> productList = productdao.selectOption(paraMap);
 		
 		int totalPage = productdao.getTotalpage(paraMap);
 		int pageNo =1;
@@ -57,9 +60,9 @@ public class ProductListAction extends AbstractController {
 		// *** [이전] 만들기 *** //
 		if( pageNo != 1 ) {
 			if(fk_subcategory_num == null) {
-				pageBar += "&nbsp;<a href='productList.do?fk_category_num="+fk_category_num+"&currentShowPageNo="+(pageNo-1)+"'>[이전]</a>&nbsp;";
+				pageBar += "&nbsp;<a href='productList.do?fk_category_num="+fk_category_num+"&optionSelect="+optionSelect+"&currentShowPageNo="+(pageNo-1)+"'>[이전]</a>&nbsp;";
 			} else
-			pageBar += "&nbsp;<a href='productList.do?fk_category_num="+fk_category_num+"&fk_subcategory_num="+fk_subcategory_num+"&currentShowPageNo="+(pageNo-1)+"'>[이전]</a>&nbsp;";
+			pageBar += "&nbsp;<a href='productList.do?fk_category_num="+fk_category_num+"&fk_subcategory_num="+fk_subcategory_num+"&optionSelect="+optionSelect+"&currentShowPageNo="+(pageNo-1)+"'>[이전]</a>&nbsp;";
 		}
 				
 		while( !(loop > blockSize || pageNo > totalPage) ) {
@@ -69,9 +72,9 @@ public class ProductListAction extends AbstractController {
 			}
 			else {
 				if(fk_subcategory_num == null) {
-					pageBar += "&nbsp;<a href='productList.do?fk_category_num="+fk_category_num+"&currentShowPageNo="+pageNo+"'>"+pageNo+"</a>&nbsp;";
+					pageBar += "&nbsp;<a href='productList.do?fk_category_num="+fk_category_num+"&optionSelect="+optionSelect+"&currentShowPageNo="+pageNo+"'>"+pageNo+"</a>&nbsp;";
 				} else
-				pageBar += "&nbsp;<a href='productList.do?fk_category_num="+fk_category_num+"&fk_subcategory_num="+fk_subcategory_num+"&currentShowPageNo="+pageNo+"'>"+pageNo+"</a>&nbsp;";
+				pageBar += "&nbsp;<a href='productList.do?fk_category_num="+fk_category_num+"&fk_subcategory_num="+fk_subcategory_num+"&optionSelect="+optionSelect+"&currentShowPageNo="+pageNo+"'>"+pageNo+"</a>&nbsp;";
 			}		
 			pageNo++; // 1 2 3 4 5 6 7 8 9 10 11 12 13 14 ... 40 41 42
 			loop++;	  // 1 2 3 4 5 6 7 8 9 10
@@ -81,9 +84,9 @@ public class ProductListAction extends AbstractController {
 		// *** [다음] 만들기 *** //
 		if( !(pageNo > totalPage) ) {
 			if(fk_subcategory_num == null) {
-				pageBar += "&nbsp;<a href='productList.do?fk_category_num="+fk_category_num+"&currentShowPageNo="+pageNo+"'>[다음]</a>&nbsp;";
+				pageBar += "&nbsp;<a href='productList.do?fk_category_num="+fk_category_num+"&optionSelect="+optionSelect+"&currentShowPageNo="+pageNo+"'>[다음]</a>&nbsp;";
 			} else
-				pageBar += "&nbsp;<a href='productList.do?fk_category_num="+fk_category_num+"&fk_subcategory_num="+fk_subcategory_num+"&currentShowPageNo="+pageNo+"'>[다음]</a>&nbsp;";
+				pageBar += "&nbsp;<a href='productList.do?fk_category_num="+fk_category_num+"&fk_subcategory_num="+fk_subcategory_num+"&optionSelect="+optionSelect+"&currentShowPageNo="+pageNo+"'>[다음]</a>&nbsp;";
 		}
 		
 		request.setAttribute("pageBar", pageBar);

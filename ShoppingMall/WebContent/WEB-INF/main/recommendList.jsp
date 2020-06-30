@@ -13,7 +13,7 @@
 <head>
 <meta charset="UTF-8">
 <link rel="stylesheet" href="<%= ctxPath %>/css/style.css" />
-<title>알뜰쇼핑 리스트</title>
+<title>추천쇼핑 리스트</title>
 </head>
 <style>
 	div#smallT, .productList {
@@ -61,15 +61,15 @@
 		<table>
 	        <tbody id="pList" align="center">
 				<%-- 일단은 페이징처리를 안한 관리자를 제외한 모든 회원정보를 조회하도록 한다. --%>
-				<c:if test="${empty saleProduct}">
+				<c:if test="${empty recommendProduct}">
 					<tr> 
 						<td colspan = "3">현재 상품 준비중...</td>
 					</tr>
 				</c:if>
 				
-				<c:if test="${not empty saleProduct}">
+				<c:if test="${not empty recommendProduct}">
 					<tr>
-						<c:forEach var="pvo" items="${saleProduct}" varStatus="status">
+						<c:forEach var="pvo" items="${recommendProduct}" varStatus="status">
 							<td>
 								<a href='/ShoppingMall/detail.do?product_num=${pvo.product_num}'>
 									<img width="300px;" height="400px;" src="/ShoppingMall/images/${pvo.representative_img}" />
@@ -79,6 +79,10 @@
 								<c:if test="${pvo.sale != 0}">
 									<br/><span style="text-decoration: line-through;"><fmt:formatNumber value="${pvo.price}" pattern="###,###"/> 원</span>
 									&nbsp;=>&nbsp;<fmt:formatNumber value="${pvo.finalPrice}" pattern="###,###" /> 원
+								</c:if>
+								
+								<c:if test="${pvo.sale == 0}">
+									<br/><fmt:formatNumber value="${pvo.price}" pattern="###,###"/> 원
 								</c:if>
 								
 							</td> 
