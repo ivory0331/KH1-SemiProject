@@ -324,7 +324,7 @@ create table review_table
 ,constraint uq_review_orderProduct UNIQUE (fk_product_num, fk_order_num)
 );
 
-select * from member_table;
+select * from review_table;
 
 
 
