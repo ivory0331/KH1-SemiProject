@@ -586,6 +586,120 @@ public class ServiceDAO implements InterServiceDAO {
 	}
 
 
+	// 공지사항 특정 글 상세보기 메소드
+	@Override
+	public List<NoticeVO> boardDetail(String notice_num) throws SQLException {
+		List<NoticeVO> nvoList = new ArrayList<NoticeVO>();
+		
+		try {
+			conn = ds.getConnection();
+			String sql = " select notice_num, subject, content, to_char(write_date,'yyyy-mm-dd')as write_date, hits from notice_table where notice_num = ? order by notice_num desc ";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, notice_num);
+			rs = pstmt.executeQuery();
+			
+			if(rs.next()) {
+				NoticeVO nvo = new NoticeVO();
+				nvo.setSubject(rs.getString("subject"));
+				nvo.setNotice_num(rs.getInt("notice_num"));
+				nvo.setContent(rs.getString("content"));
+				nvo.setWrite_date(rs.getString("write_date"));
+				nvo.setHit(rs.getInt("hits"));
+				nvoList.add(nvo);
+			}
+			
+			rs.close();
+			
+			sql = " select notice_num, subject from notice_table where notice_num > ? order by notice_num ";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, notice_num);
+			rs = pstmt.executeQuery();
+			if(rs.next()) {
+				NoticeVO nvo = new NoticeVO();
+				nvo.setSubject(rs.getString("subject"));
+				nvo.setNotice_num(rs.getInt("notice_num"));
+				nvoList.add(nvo);
+			}
+			rs.close();
+			
+			sql = " select notice_num, subject from notice_table where notice_num < ? order by notice_num desc ";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, notice_num);
+			rs = pstmt.executeQuery();
+			if(rs.next()) {
+				NoticeVO nvo = new NoticeVO();
+				nvo.setSubject(rs.getString("subject"));
+				nvo.setNotice_num(rs.getInt("notice_num"));
+				nvoList.add(nvo);
+			}
+			rs.close();
+			
+		}
+		finally {
+			close();
+		}
+		return nvoList;
+	}
+
+
+	// 공지사항 게시판 특정 글 조회수 증가
+	@Override
+	public int boardHitUp(String notice_num) throws SQLException {
+		int result = 0;
+		try {
+			conn = ds.getConnection();
+			String sql = " update notice_table set hits = hits+1 where notice_num = ? ";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, notice_num);
+			result = pstmt.executeUpdate();
+		}
+		finally {
+			close();
+		}
+		
+		return result;
+	}
+
+
+	// 공지사항 게시판 특정 글 수정페이지 이동
+	@Override
+	public NoticeVO selectOneNotice(String notice_num) throws SQLException {
+		NoticeVO nvo = null;
+		try {
+			conn = ds.getConnection();
+			String sql = " select notice_num, subject, content, to_char(write_date,'yyyy-mm-dd')as write_date, hits from notice_table where notice_num = ? ";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, notice_num);
+			rs = pstmt.executeQuery();
+			if(rs.next()) {
+				nvo = new NoticeVO();
+				nvo.setNotice_num(rs.getInt("notice_num"));
+				nvo.setWrite_date(rs.getString("write_date"));
+				nvo.setHit(rs.getInt("hits"));
+				
+				String subject= rs.getString("subject");
+				String content = rs.getString("content");
+				
+				subject = subject.replaceAll("&lt;", "<");
+				subject = subject.replaceAll("&gt;", ">");
+				subject = subject.replaceAll("<br>", "\r\n");
+				
+				content = content.replaceAll("&lt;", "<");
+				content = content.replaceAll("&gt;", ">");
+				content = content.replaceAll("<br>", "\r\n");
+				
+				nvo.setSubject(subject);
+				nvo.setContent(content);
+			}
+		}
+		finally {
+			close();
+		}
+		
+		return nvo;
+	}
+
+
 	
 
 

@@ -43,4 +43,13 @@ public interface InterServiceDAO {
 	// 자주하는 질문 게시판 특정 글 삭제
 	int FAQDelete(String faq_num)throws SQLException;
 
+	// 공지사항 게시판 특정 글 상세보기
+	List<NoticeVO> boardDetail(String notice_num)throws SQLException;
+
+	// 공지사항 게시판 조회수 증가(일반회원이 공지사항 상세보기 기능 사용했을 경우)
+	int boardHitUp(String notice_num)throws SQLException;
+
+	// 공지사항 특정 글 수정페이지 이동
+	NoticeVO selectOneNotice(String notice_num)throws SQLException;
+
 }

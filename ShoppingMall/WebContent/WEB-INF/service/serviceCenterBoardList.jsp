@@ -68,15 +68,26 @@ $(document).ready(function(){
 		  }
 	});
 	
-	 // 검색
-	 function goSearch() {		  
-		  var frm = document.noticeFrm;
-		  frm.method = "GET";
-		  frm.action = "<%=ctxPath%>/service/board.do";
-		  frm.submit(); 
-	  }
 	
 });
+
+
+// 검색
+function goSearch() {		  
+	  var frm = document.noticeFrm;
+	  frm.method = "GET";
+	  frm.action = "<%=ctxPath%>/service/board.do";
+	  frm.submit(); 
+ }
+ 
+ function goDetail(num){
+	 console.log(num);
+	 
+	location.href="<%=ctxPath%>/service/boardDetail.do?notice_num="+num;
+ }
+ 
+ 
+
 </script>
 </head>
 <body>
@@ -93,7 +104,7 @@ $(document).ready(function(){
 						<h3 style="display:inline-block">공지사항</h3>
 						<span style="margin-left:10px; font-size:8pt; font-weight: bold;">새로운 소식들과 유용한 정보들을 한곳에 확인하세요.</span>
 					</div>
-					<form name="noticeFrm">
+					
 						<table style="border-top:solid 2px purple; " class="boardTable table">
 							<tr style="border-bottom:solid 1px black;">
 								<th class="txt_center">번호</th>
@@ -110,8 +121,8 @@ $(document).ready(function(){
 								</c:if>
 								<c:if test="${not empty noticeList}">		
 									<c:forEach var="nvo" items="${noticeList}">
-										<tr>
-											<td class="txt_center">${nvo.notice_num}<input type="hidden" value="${nvo.notice_num}" name="notice_num" /></td>
+										<tr onclick = "goDetail('${nvo.notice_num}')">
+											<td class="txt_center">공지<input type="hidden" value="${nvo.notice_num}" name="notice_num" /></td>
 											<td class="board-title">${nvo.subject}</td>
 											<td class="txt_center">MarketKurly</td>
 											<td class="txt_center">${nvo.write_date}</td>
@@ -130,7 +141,7 @@ $(document).ready(function(){
 							</span>
 							<input type="text" name="searchWord" style="float:right" id="searchWord"/>
 						</div>
-					</form>
+					
 				</div>
 				<div style="clear:both;"></div>
 			</div>
