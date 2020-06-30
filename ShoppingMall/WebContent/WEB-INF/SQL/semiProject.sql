@@ -150,6 +150,10 @@ nocache;
 select seq_product_table.nextval AS PNUM
 from dual;
 
+update product_table set explain = 
+'몸통과 다리가 온전히 붙어 있는 통문어는 참 쓸 곳이 많아요.한 냄비 가득 푸짐하게 자려내는 해물찜이나 큼직한 튀김의 메인 재료는 물론 제수용으로도 알맞지요'
+where product_num=151;
+commit;
 -- 상품 이미지와 설명 테이블 생성 --
 
 create table product_image_table
@@ -360,21 +364,8 @@ create table one_inquiry_table
 ,constraint fk_one_category FOREIGN key (fk_category_num) REFERENCES one_category_table(category_num)
 ,constraint ck_one_emailCheck   check (emailFlag in(0,1))
 ,constraint ck_one_smsCheck check (smsFlag in (0,1))
+
 );
-
-insert into one_category_table(category_num, category_content) values(1, '배송지연/불만');
-insert into one_category_table(category_num, category_content) values(2, '컬리패스(무료배송)');
-insert into one_category_table(category_num, category_content) values(3, '반품문의');
-insert into one_category_table(category_num, category_content) values(4, 'A/S문의');
-insert into one_category_table(category_num, category_content) values(5, '환불문의');
-insert into one_category_table(category_num, category_content) values(6, '주문결제문의');
-insert into one_category_table(category_num, category_content) values(7, '회원정보문의');
-insert into one_category_table(category_num, category_content) values(8, '취소문의');
-insert into one_category_table(category_num, category_content) values(9, '교환문의');
-insert into one_category_table(category_num, category_content) values(10, '상품정보문의');
-insert into one_category_table(category_num, category_content) values(11, '기타문의');
-
-commit;
 
 -- 1:1문의 테이블에서 사용할 시퀀스 생성 --
 create sequence seq_one_inquiry_table
@@ -950,4 +941,5 @@ join product_category_table PC on P.fk_category_num = PC.category_num
 join product_subcategory_table PS on P.fk_subcategory_num = PS.subcategory_num
 where OP.reviewFlag = 0 and O.fk_category_num = 1;
 
+select * from order_table;
 
