@@ -47,6 +47,23 @@
 		display: none;
 	}
 	
+	.faq_content{
+		min-height: 300px;
+	}
+	
+	.userBtn > span{
+		display: inline-block;
+		text-align: center;
+		padding : 10 0px;
+		margin-right:5px;
+		width:60px;
+		border: solid 1px purple;
+		background-color: #f1f1f1;
+		color: purple;
+		font-size: 12pt;
+		cursor: pointer;
+		
+	}
 
 </style>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
@@ -62,6 +79,7 @@
 		for (i = 0; i < acc.length; i++) {
 			  acc[i].addEventListener("click", function(event) {
 				var $target = $(this).next();
+				console.log($target);
 				var $other = $target.siblings();
 				$other.each(function(index, item){
 					if($(item).hasClass("panel")){
@@ -84,6 +102,15 @@
 		frm.method="get";
 		frm.submit();
 	}
+	
+	function goUpdate(num){
+		location.href="<%=ctxPath%>/service/FAQupdate.do?faq_num="+num;
+	}
+	
+	function goDelete(num){
+		location.href="<%=ctxPath%>/service/FAQdelete.do?faq_num="+num;
+	}
+	
 </script>
 </head>
 <body>
@@ -102,6 +129,7 @@
 						<span style="margin-left:10px; font-size:8pt; font-weight: bold;">고객님들께서 가장 많이하는 질문들은 모두 모았습니다.</span>
 						<br/>
 						<select name="favoriteQ_Category">
+							<option value="0">전체보기</option>
 							<c:forEach var="item" items="${categoryList}">
 								<c:if test="${category == item.num }">
 									<option value="${item.num }" selected>${item.category}</option>
@@ -120,18 +148,25 @@
 						</tr>
 						<c:if test="${empty FAQList}">	
 							<tr>
-								<td colspan="5"> 자주하는 질문 게시판 준비중 입니다. </td>
+								<td colspan="5"> 검색한 내용에 해당하는 글이 없습니다. </td>
 							</tr>	
 						</c:if>
 						<c:if test="${not empty FAQList}">		
 							<c:forEach var="faq" items="${FAQList}">
 									<tr class='accordion'>
-										<td class="txt_center">${faq.faq_num}<input type="hidden" value="${nvo.faq_num}" name="faq_num" /></td>
-										<td class="board-title">${faq.category_content}</td>
-										<td class="txt_center">${faq.subject}</td>
+										<td class="txt_center">${faq.count}</td>
+										<td class="txt_center">${faq.category_content}</td>
+										<td style="cursor: pointer">${faq.subject}</td>
 									</tr>
 									<tr class='panel panel-none'>
-										<td colspan="3">${faq.content}</td>
+										<td colspan="3" >
+											<div class="faq_content">${faq.content}</div>
+											<c:if test="${sessionScope.loginuser.status=='2'}">
+											<div class="userBtn" align="right">
+												<span onclick = "goUpdate('${faq.faq_num}')">수정</span><span onclick = "goDelete('${faq.faq_num}')">삭제</span>
+											</div>
+											</c:if>
+										</td>
 									</tr>
 								</c:forEach>	
 							</c:if>

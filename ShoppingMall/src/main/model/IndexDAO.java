@@ -710,7 +710,7 @@ public class IndexDAO implements InterIndexDAO{
 					   + " join product_table P on OP.fk_product_num = P.product_num "
 					   + " join product_category_table PC on P.fk_category_num = PC.category_num "
 					   + " join product_subcategory_table PS on P.fk_subcategory_num = PS.subcategory_num"
-					   + " where O.fk_category_num = 1 and O.fk_member_num = ? and OP.fk_product_num = ? and OP.reviewFlag = 0 ";
+					   + " where O.fk_category_num = 3 and O.fk_member_num = ? and OP.fk_product_num = ? and OP.reviewFlag = 0 ";
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, member_num); 
 			pstmt.setString(2, product_num);
@@ -722,7 +722,8 @@ public class IndexDAO implements InterIndexDAO{
 				opvo.setPrice(rs.getInt(2));
 				opvo.setCount(rs.getInt(3));
 				
-				pvo = new ProductVO(); pvo.setProduct_num(rs.getInt(4));
+				pvo = new ProductVO(); 
+				pvo.setProduct_num(rs.getInt(4));
 				pvo.setProduct_name(rs.getString(5));
 				pvo.setRepresentative_img(rs.getString(6));
 				pvo.setFk_category_num(rs.getInt(7));

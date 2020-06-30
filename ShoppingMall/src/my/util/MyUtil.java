@@ -11,6 +11,7 @@ public class MyUtil {
 			if(param != null) {
 				result = result.replaceAll("<", "&lt;");
 				result = result.replaceAll(">", "&gt;");
+				result = result.replaceAll("\r\n", "<br>");
 			//	result = result.replaceAll("&", "&amp;");
 			//	result = result.replaceAll("\"", "&quot;");
 			}

@@ -129,7 +129,7 @@ public class OneInquiryVO {
 		this.imageList = imageList;
 	}
 
-
+ 
 	public MemberVO getMember() {
 		return member;
 	}
@@ -148,6 +148,7 @@ public class OneInquiryVO {
 		this.fk_category_num = fk_category_num;
 	}
 
+	
 	
 	
 	

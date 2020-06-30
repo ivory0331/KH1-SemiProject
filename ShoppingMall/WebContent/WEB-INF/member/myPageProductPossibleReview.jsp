@@ -158,7 +158,6 @@
 </style>
 
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-<link rel="stylesheet" href="css/style.css" />
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 <script type="text/javascript" src="/ShoppingMall/js/jquery-3.3.1.min.js"></script>
@@ -205,7 +204,7 @@
 							</div>
 						</c:if>
 						
-						<c:if test="${not empty orderHistoryList}">
+						<c:if test="${not empty possibleReviewList}">
 						<c:set var="temp" value="0" />
 						<c:forEach var="List" items="${possibleReviewList}">	
 							<c:choose>	
@@ -222,11 +221,11 @@
 									<table class="myOrder_Desc">
 										<tr class="desc-list">
 											<td class="image">
-												<img alt="해당 주문 대표 상품 이미지" src="<%=ctxPath %>/images/${List.representative_img}">
+												<img alt="해당 주문 대표 상품 이미지" src="<%=ctxPath %>/images/${List.product.representative_img}">
 											</td>
 											<td class="info">
 												<div class="name">
-													<a class="productName">${List.product_name}</a>
+													<a class="productName" href="<%= ctxPath %>/detail.do?product_num=${List.product.product_num}">${List.product.product_name}</a>
 												</div>
 												<div class="desc">
 													<span class="count">${List.count}개 구매</span>
@@ -234,14 +233,14 @@
 											</td>		
 	
 											<td class="link">
-												<a class="link_review" href="<%= ctxPath %>/member/myPageReviewWrite.do?product_num='${List.product_num}'">후기 작성</a>
+												<a class="link_review" href="<%= ctxPath %>/member/myPageReviewWrite.do?product_num=${List.product.product_num}">후기 작성</a>
 											</td>																	
 										</tr>
 										
 									</table>										
 								</div>
 							</div>
-							<c:set var="temp" value="${ohvo.order_num}" />
+							<c:set var="temp" value="${List.order_num}" />
 					
 						</c:forEach>
 						</c:if>

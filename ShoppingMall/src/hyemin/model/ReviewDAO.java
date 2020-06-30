@@ -119,8 +119,6 @@ public class ReviewDAO implements InterReviewDAO {
 							 "	, R.subject, R.content " + 
 							 " from product_table P join review_table R " + 
 							 " on P.product_num = R.fk_product_num " + 
-							 " join review_image_table RI " + 
-							 " on R.review_num = RI.fk_review_num " + 
 							 " where R.fk_member_num = ? ";
 				
 				pstmt = conn.prepareStatement(sql);
