@@ -95,11 +95,18 @@ $(document).ready(function(){
 		<div class="section" align="center">
 			<div class="contents">
 				<div class="boardInfo" align="left">
-					<h3 style="display:inline-block">공지사항 작성</h3>
+					<h3 style="display:inline-block">게시글 작성</h3>
 					<span style="margin-left:10px; font-size:8pt; font-weight: bold;">새로운 소식들과 유용한 정보들을 고객에게 전달할게요.</span>
+					<div>
+						<select id="boardType">
+							<option value="board">공지사항</option>
+							<option value="Qboard">자주하는 질문</option>
+						</select>
+					</div>
 				</div>
 				<form name="questionWriteFrm">
-					<table class="writeTable">
+					<div id="board">
+						<table class="writeTable">
 						<tr>
 							<td class="frmTitle">작성자</td>
 							<td><input type="text" value="test" disabled name="userName"/></td>
@@ -119,6 +126,40 @@ $(document).ready(function(){
 							<td><input type="file" id="imgFile" accept=".gif, .jpg, .png"/></td>
 						</tr>
 					</table>
+					</div>
+					<div id="Qboard">
+						<table class="writeTable">
+						<tr>
+							<td class="frmTitle">작성자</td>
+							<td><input type="text" value="test" disabled name="userName"/></td>
+						</tr>
+						<tr>
+							<td class="frmTitle">카테고리</td>
+							<td>
+								<select id="Qboard-categori">
+									<option>선택</option>
+									<option>회원문의</option>
+									<option>주문/결제</option>
+									<option>배송문의</option>
+								</select>
+							</td>
+						</tr>
+						<tr>
+							<td class="frmTitle">제목</td>
+							<td><input type="text" value=""  name="title"/></td>
+						</tr>
+						<tr>
+							<td class="txt_field" colspan="2">
+								<div contenteditable="true" style="border:solid 1px black; margin-top:10px; height: 600px;" id="txt_area"></div>
+								<input type="hidden" name="contents"/>
+							</td>
+						</tr>
+						<tr>
+							<td><label for="imgFile">이미지 추가</label></td>
+							<td><input type="file" id="imgFile" accept=".gif, .jpg, .png"/></td>
+						</tr>
+					</table>
+					</div>
 					<div class="userBtn" align="center">
 						<span>취소</span> <span style="background-color:purple; color:white;" onclick="divCheck()">등록</span>
 					</div>

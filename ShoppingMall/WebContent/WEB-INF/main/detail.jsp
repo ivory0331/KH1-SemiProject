@@ -703,7 +703,7 @@
 						</table>
 						<div id="inqueruyPageBar"></div>
 						<p align="right">
-							<span class="writeBtn" onclick="location.href='<%=ctxPath %>/productList.do'">목록 보기</span><span class="writeBtn" onclick="goWriteQ('${product.product_num}')">문의 쓰기</span>
+							<span class="writeBtn" onclick="location.href='javascript:history.back()'">뒤로가기</span><span class="writeBtn" onclick="goWriteQ('${product.product_num}')">문의 쓰기</span>
 						</p>
 					</div>
 				</div>
