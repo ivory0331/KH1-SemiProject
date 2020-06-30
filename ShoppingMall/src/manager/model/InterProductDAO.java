@@ -36,9 +36,6 @@ public interface InterProductDAO {
 
 	// 제품 신상 등록
 	int productInsert(ProductVO pvo) throws SQLException;
-
-	// 제품 신상 상세이미지 등록
-	int productImageInsert(int product_num, String detail_img) throws SQLException;
 	
 
 }

@@ -9,7 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import common.controller.AbstractController;
 import main.model.FAQtableVO;
-import main.model.NoticeVO;
+
 import service.model.InterServiceDAO;
 import service.model.ServiceDAO;
 
@@ -17,11 +17,9 @@ public class QboardListAction extends AbstractController {
 
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
-		super.setViewPage("/WEB-INF/service/serviceCenterQboardList.jsp");
-	 
-	}
-InterServiceDAO dao = new ServiceDAO();
 		
+		InterServiceDAO dao = new ServiceDAO();
+
 		String currentShowPageNo = request.getParameter("currentShowPageNo");
 		String sizePerPage = "15";
 		String category = request.getParameter("favoriteQ_Category");
