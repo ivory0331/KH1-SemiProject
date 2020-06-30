@@ -7,6 +7,8 @@ public class FAQtableVO {
 	private String write_date;
 	private int hits;
 	private String category_content;
+	private int count;
+	private int fk_category_num;
 	
 	public FAQtableVO() {}
 	
@@ -67,6 +69,23 @@ public class FAQtableVO {
 	public void setCategory_content(String category_content) {
 		this.category_content = category_content;
 	}
+
+	public int getCount() {
+		return count;
+	}
+
+	public void setCount(int count) {
+		this.count = count;
+	}
+
+	public int getFk_category_num() {
+		return fk_category_num;
+	}
+
+	public void setFk_category_num(int fk_category_num) {
+		this.fk_category_num = fk_category_num;
+	}
+	
 	
 	
 	
