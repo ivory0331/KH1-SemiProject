@@ -21,7 +21,7 @@ public class NaviCategoryCallAction extends AbstractController {
 		
 		Gson gson = new Gson();
 		String json= gson.toJson(categoryList);
-		System.out.println("json:"+json);
+
 		request.setAttribute("json", json);
 		super.setViewPage("/WEB-INF/jsonview.jsp");
 	}

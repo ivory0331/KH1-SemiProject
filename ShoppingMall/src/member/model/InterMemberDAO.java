@@ -2,8 +2,7 @@ package member.model;
 
 import java.sql.SQLException;
 import java.util.HashMap;
-import java.util.List;
-
+import main.model.OneInquiryVO;
 import member.model.MemberVO;
 
 public interface InterMemberDAO {
@@ -26,9 +25,21 @@ public interface InterMemberDAO {
 	//아이디찾기(이름, 핸드폰번호) 
 	String findUserid(HashMap<String, String> paraMap) throws SQLException;
 	
+	//비밀번호 찾기(이름, 아이디, 이메일 번호를 입력받아 해당 사용자가 존재하는지 유무를 알려준다.)
+	boolean isUserExist(HashMap<String, String> paraMap) throws SQLException;
 	
+	//패스워드 업데이트 
+	int pwdUpdate(String pwd, String userid) throws SQLException;
 	
+	//탈퇴하기 패스워드 중복검사
+	boolean dropoutPwdDuplicateCheck(String pwd) throws SQLException ;
+
+	//회원탈퇴하기 
+	int dropoutMember(String userid) throws SQLException ;
 	
+	//1:1문의 게시판(고객센터)
+	int serviceCenterMyQboardWrite(OneInquiryVO oneInQueryVO ) throws SQLException;
+
 
 
 }

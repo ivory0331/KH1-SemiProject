@@ -5,6 +5,7 @@ import java.security.GeneralSecurityException;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import javax.naming.*;
 import javax.sql.DataSource;
@@ -259,6 +260,79 @@ public class ReviewDAO implements InterReviewDAO {
 			
 		}
 
+		
+		// 후기 작성하기
+		@Override
+		public int writeReview(Map<String, String> paraMap) throws SQLException {
+			int result = 0;
+			String seq_num="";
+			
+			try {
+				conn = ds.getConnection();
+				conn.setAutoCommit(false);
+				
+				// 시퀀스 값 얻기
+				String sql = " select last_number from user_sequences where SEQUENCE_NAME = 'SEQ_REVIEW_TABLE' ";
+				pstmt = conn.prepareStatement(sql);
+				rs = pstmt.executeQuery();
+				if(rs.next()) {
+					seq_num = rs.getString(1);
+					System.out.println("시퀀스 현재값 : "+seq_num);
+				}
+				rs.close();
+				
+				// 상품후기 insert
+				sql = " insert into review_table(review_num, subject, content, fk_product_num, fk_order_num, fk_member_num) " + 
+					  " values(seq_review_table.nextval, ?, ?, ?, ?, ?) ";
+				
+				pstmt = conn.prepareStatement(sql);
+				pstmt.setString(1, paraMap.get("subject"));
+				pstmt.setString(2, paraMap.get("content"));
+				pstmt.setString(3, paraMap.get("product_num"));
+				pstmt.setString(4, paraMap.get("order_num"));
+				pstmt.setString(5, paraMap.get("member_num"));
+				
+				result += pstmt.executeUpdate();
+				
+				if(result==0) {
+					conn.rollback();
+					return 0;
+				}
+				if(paraMap.get("image")!= null) {
+					String[] fileNameArr = paraMap.get("image").split(",");
+					sql = " insert into review_image_table (fk_review_num, image) "
+					    + " values (?,?)";
+					pstmt = conn.prepareStatement(sql);
+					for(int i=0; i<fileNameArr.length; i++) {
+						pstmt.setString(1, seq_num);
+						pstmt.setString(2, fileNameArr[i]);
+						result+=pstmt.executeUpdate();
+					}
+					if(result < (fileNameArr.length+1)) {
+						conn.rollback();
+						return 0;
+					}
+				}
+				
+				conn.commit();
+				conn.setAutoCommit(true);
+				
+				sql = " update order_product_table set reviewFlag = 1 "
+					+ " where fk_order_num = ? and fk_product_num = ? ";
+								
+				pstmt = conn.prepareStatement(sql);
+				pstmt.setString(1, paraMap.get("order_num"));
+				pstmt.setString(2, paraMap.get("product_num"));
+				
+				result = pstmt.executeUpdate();
+								
+			}
+			finally {
+				close();
+			}
+
+			return result;
+		}
 
 
 		

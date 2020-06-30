@@ -54,6 +54,25 @@
 	a:link { text-decoration: none;}
  	a:visited { text-decoration: none;}
 
+	#searchWord{
+		font-size: 14pt;
+		width: 400px;
+		margin-right: 30px;
+	}
+	
+	#goBtn{
+		font-size: 14pt;
+		background-color: purple;
+		outline:none;
+		border: none;
+		padding: 0 40px;
+		color:white;
+	}
+	
+	form[name='searchForm']{
+		display: block;
+		padding: 50px;
+	}
 </style>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -104,13 +123,37 @@
 		
 	});
 	
+	function goSearch(){
+		var frm = document.searchForm;
+		frm.action="<%=ctxPath%>/searchList.do";
+		frm.method="get";
+		frm.submit();
+	}
 </script>
 <body>
 	<div class="Mycontainer">
 		<jsp:include page="../include/header.jsp"></jsp:include>
 		<div class="section" align="center">
 			<div class="contents">
-				
+				<c:if test="${empty productSearchWord}">
+					<div id="h3">${categoryInfo}</div>
+					
+					<div id="smallT">
+							<a href='/ShoppingMall/product/productList.do?fk_category_num=${fk_category_num}'><span class="sub">전체보기</span></a>
+						<c:forEach var="cate" items="${subcategoryList}" varStatus="status">
+							<a href='/ShoppingMall/product/productList.do?fk_category_num=${fk_category_num}&fk_subcategory_num=${cate.subcategory_num}'><span class="sub">${cate.subcategory_content}</span></a>
+							
+						</c:forEach>
+					</div>
+					<div id="list">
+						<select>
+							<option value="registerdate" >신상품순</option>
+							<option value="price" >낮은 가격순</option>   
+							<option value="priceasc" >높은 가격순</option>
+						</select>
+					</div>
+				</c:if>
+
 				<div id="h3">${categoryInfo}</div>
 				
 				<div id="smallT">
@@ -129,6 +172,20 @@
 						<option value="asc" >높은 가격순</option>
 					</select>
 				</div>
+
+				<c:if test="${not empty productSearchWord}">
+					<h1>상품검색</h1>
+					<form name="searchForm" style="border-top:solid 2px purple; border-bottom:solid 1px purple; ">
+						<div style="display: inline-block; float:left; width: 100px; font-size:14pt;">
+							<label>검색조건</label>
+						</div>
+						<div style="display: inline-block;">
+							<input type="text" name="productSearchWord" id="searchWord" value="${productSearchWord}"/>
+							<input type="button" id="goBtn" onclick="goSearch()" value="검색하기" />
+						</div>
+						
+					</form>
+				</c:if>
 				
 		<div class="productList" align="center">
 		<table>

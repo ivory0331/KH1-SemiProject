@@ -22,6 +22,7 @@ import member.model.MemberVO;
 import util.security.AES256;
 import product.model.*;
 
+
 public class IndexDAO implements InterIndexDAO{
 
 	private DataSource ds; 
@@ -133,7 +134,7 @@ public class IndexDAO implements InterIndexDAO{
 	@Override
 	public ProductVO productDetail(String idx) throws SQLException {
 		ProductVO product = null;
-		
+		List<String> imageList = new ArrayList<String>();
 		try {
 			conn = ds.getConnection();
 			String sql = " select P.product_num, P.product_name, P.price, P.sale, P.stock, P.origin, P.packing, P.unit, P.representative_img, P.explain, C.category_content , S.subcategory_content" + 
@@ -165,6 +166,18 @@ public class IndexDAO implements InterIndexDAO{
 				
 				product.setFinalPrice();
 			}
+			rs.close();
+			
+			// 해당 상품 상세 이미지 불러오기
+			sql = " select image from product_image_table where fk_product_num = ? ";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, idx);
+			rs = pstmt.executeQuery();
+			while(rs.next()) {
+				String image = rs.getString("image");
+				imageList.add(image);
+			}
+			product.setImageList(imageList);
 		}
 		finally {
 			close();
@@ -741,7 +754,7 @@ public class IndexDAO implements InterIndexDAO{
 			if(rs.next()) {
 				deliveryInfo = new HashMap<String, String>();
 				deliveryInfo.put("recipient", rs.getString("recipient"));
-				deliveryInfo.put("recipient_mobile", rs.getString("rscipient_mobile"));
+				deliveryInfo.put("recipient_mobile", rs.getString("recipient_mobile"));
 				deliveryInfo.put("recipient_postcode", rs.getString("recipient_postcode"));
 				deliveryInfo.put("recipient_address", rs.getString("recipient_address"));
 				deliveryInfo.put("recipient_detailaddress", rs.getString("recipient_detailaddress"));
@@ -751,6 +764,164 @@ public class IndexDAO implements InterIndexDAO{
 			close();
 		}
 		return deliveryInfo;
+	}
+
+	// 주문기능 및 주문된 물품 장바구니에서 지우고 주문상품테이블에 추가
+	@Override
+	public int order(MemberVO loginuser, Map<String, String> delivery, List<CartVO> cartList) throws SQLException {
+		int result = 0;
+		String seq_num="";
+		try {
+			conn = ds.getConnection();
+			conn.setAutoCommit(false);
+			String sql = " select last_number from user_sequences where SEQUENCE_NAME = 'SEQ_ORDER_TABLE' ";
+			pstmt = conn.prepareStatement(sql);
+			rs = pstmt.executeQuery();
+			if(rs.next()) {
+				seq_num = rs.getString(1);
+				System.out.println("시퀀스 현재값 : "+seq_num);
+			}
+			rs.close();
+			
+			sql = " insert into order_table(order_num, recipient, recipient_mobile, "
+					   + " recipient_postcode, recipient_address, recipient_detailaddress, "
+					   + " price, memo, fk_member_num, fk_category_num ) "
+					   + " values(seq_order_table.nextval, ?, ?, ?, ?, ?, ?, ?, ?,'1') ";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, delivery.get("receiver"));
+			pstmt.setString(2, delivery.get("reciverMobbile"));
+			pstmt.setString(3, delivery.get("postcode"));
+			pstmt.setString(4, delivery.get("mainAddress"));
+			pstmt.setString(5, delivery.get("subAddress"));
+			pstmt.setString(6, delivery.get("totalPrice"));
+			pstmt.setString(7, delivery.get("deliveryMemo"));
+			pstmt.setInt(8, loginuser.getMember_num());
+			
+			result = pstmt.executeUpdate();
+			
+			if(result == 1) {
+				sql = " insert into order_product_table(product_count, fk_order_num, fk_product_num, price)"
+					+ " values(?, ?, ?, ?)";
+				pstmt = conn.prepareStatement(sql);
+				for(int i=0; i<cartList.size(); i++) {
+					pstmt.setInt(1, cartList.get(i).getProduct_count());
+					pstmt.setString(2, seq_num);
+					pstmt.setInt(3, cartList.get(i).getProd().getProduct_num());
+					pstmt.setInt(4, cartList.get(i).getProd().getFinalPrice());
+					result+=pstmt.executeUpdate();
+				}
+				
+				if(result==cartList.size()+1) {
+					sql = " delete from basket_table where fk_member_num = ? ";
+					pstmt = conn.prepareStatement(sql);
+					pstmt.setInt(1, loginuser.getMember_num());
+					result += pstmt.executeUpdate();
+					if(result == (2*cartList.size())+1) {
+						conn.commit();
+					}
+				}
+				else {
+					result = 0;
+					conn.rollback();
+				}
+			}
+			else {
+				conn.rollback();
+			}
+		}
+		finally {
+			close();
+		}
+		return result;
+	}
+
+	// 상품검색 기능 조회
+	@Override
+	public List<ProductVO> selectPagingProduct(HashMap<String, String> paraMap) throws SQLException {
+		List<ProductVO> productList = new ArrayList<>();
+		String sql ="";
+		
+		try {
+			conn = ds.getConnection();
+			
+			sql = " select RNO, product_num, product_name, price, sale, representative_img " + 
+				  " from " + 
+				  " ( " + 
+				  "    select rownum AS RNO, product_num, product_name, price, sale, representative_img " + 
+				  "    from " + 
+				  "     ( " + 
+				  "        select  product_num, product_name, price , sale, representative_img, fk_category_num " + 
+				  "        from product_table " +
+				  " 	   where product_name like '%'||?||'%' or explain like '%'||?||'%' ";
+			
+				
+			
+				 
+				sql += "    ) P " + 
+					   " ) T " + 
+					   " where  T.RNO between ? and ? ";
+				
+				pstmt = conn.prepareStatement(sql);
+				int currentShowPageNo = Integer.parseInt(paraMap.get("currentShowPageNo"));
+				pstmt.setString(1, paraMap.get("productSearchWord"));
+				pstmt.setString(2, paraMap.get("productSearchWord"));
+				pstmt.setInt(3, (currentShowPageNo * 9) - (9 - 1) ); // 공식
+				pstmt.setInt(4, (currentShowPageNo * 9) ); // 공식
+				
+			
+	
+				rs = pstmt.executeQuery();
+				
+				while(rs.next()) {
+					ProductVO pvo = new ProductVO();
+					pvo.setProduct_num(rs.getInt("product_num"));
+					pvo.setProduct_name(rs.getString("product_name"));
+					pvo.setPrice(rs.getInt("price"));
+					pvo.setSale(rs.getInt("sale"));
+					pvo.setRepresentative_img(rs.getString("representative_img"));
+					pvo.setFinalPrice();
+					
+					productList.add(pvo);
+				}
+
+			pstmt = conn.prepareStatement(sql);
+			
+			
+		} finally {
+			close();
+		}
+		
+		return productList;
+	}
+
+	// 상품 검색 기능으로 나온 전체 결과물 수 조회
+	@Override
+	public int getTotalpage(HashMap<String, String> paraMap) throws SQLException {
+		int totalpage = 0;
+		String sql = "";
+		
+		try {
+			conn = ds.getConnection();
+			
+			sql = " select ceil( count(*)/9 ) AS totalPage "+
+				  " from product_table where product_name like '%'||?||'%' or explain like '%'||?||'%' ";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, paraMap.get("productSearchWord"));
+			pstmt.setString(2, paraMap.get("productSearchWord"));
+			
+			
+			rs = pstmt.executeQuery();
+			if(rs.next()) {
+				totalpage = rs.getInt("totalPage");
+			}
+			
+			
+			
+		} finally {
+			close();
+		}
+		
+		return totalpage;
 	}
 	
 }

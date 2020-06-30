@@ -39,7 +39,7 @@ public class MyPageMyInfoUpdateEndAction extends AbstractController {
 			String birthyear = request.getParameter("birthyear");
 			String birthmonth = request.getParameter("birthmonth");
 			String birthday = request.getParameter("birthday");
-			
+			System.out.println("userid:"+userid+"/pwd:"+pwd+"/name:"+name+"/email:"+email+"/mobile:"+mobile+"/gender:"+gender+"/birthyear:"+birthyear);
 			MemberVO membervo = new MemberVO();
 			membervo.setMember_num(Integer.parseInt(member_num));
 			membervo.setUserid(userid);			

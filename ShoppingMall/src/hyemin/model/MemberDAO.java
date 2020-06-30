@@ -91,19 +91,19 @@ public class MemberDAO implements InterMemberDAO {
 			 
 			 String sql = " update member_table set userid='"+membervo.getUserid()+"', pwd_change_date=sysdate ";
 			 
-			 if(membervo.getPwd() != null) {
+			 if(!membervo.getPwd().trim().isEmpty()) {
 				 sql += " , pwd='"+Sha256.encrypt(membervo.getPwd())+"' ";		// 암호를 SHA256 알고리즘으로 단방향암호화 시킨다. 
 			 }
 			 
-			 if(membervo.getName() != null) {
+			 if(!membervo.getName().trim().isEmpty()) {
 				 sql += " , name='"+membervo.getName()+"' ";
 			 }
 			 
-			 if(membervo.getEmail() != null) {
+			 if(!membervo.getEmail().trim().isEmpty()) {
 				 sql += " , email='"+aes.encrypt(membervo.getEmail())+"' ";		// 이메일을 AES256 알고리즘으로 양방향암호화 시킨다. 
 			 }
 			 
-			 if(membervo.getMobile() != null) {
+			 if(!membervo.getMobile().trim().isEmpty()) {
 				 sql += " , mobile='"+aes.encrypt(membervo.getMobile())+"' ";	// 휴대폰번호를 AES256 알고리즘으로 양방향암호화 시킨다.
 			 }
 			 
@@ -111,7 +111,7 @@ public class MemberDAO implements InterMemberDAO {
 				 sql += " , gender='"+membervo.getGender()+"' ";
 			 }
 			 
-			 if(membervo.getBirthday() != null) {
+			 if(!membervo.getBirthday().trim().isEmpty()) {
 				 sql += " , birthday='"+membervo.getBirthday()+"' ";
 			 }			 
 			 
@@ -120,7 +120,7 @@ public class MemberDAO implements InterMemberDAO {
 			 }
 			 
 			 sql += " where member_num = '"+membervo.getMember_num()+"' ";
-	
+			 System.out.println("sql:"+sql);
 			 pstmt = conn.prepareStatement(sql);
 							  
 			 result = pstmt.executeUpdate();

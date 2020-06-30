@@ -3,7 +3,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %> 
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <% String ctxPath = request.getContextPath(); %>
-<% request.setAttribute("cartList", request.getAttribute("cartList")); %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -293,145 +292,148 @@
 
 	
 	$(document).ready(function(){
-		//처음 상품 리스트 숨기기
-		$("#productList").hide();	
-		
-		console.log("${deliveryInfo}");
-		
-		//배송 메모 입력
-		$("#deliveryMemo").keyup(function(){
-			var cntMemo = $("#deliveryMemo").val().length;
-			$("#bytesMemo").val('');
-			$("#bytesMemo").text(cntMemo);
-		});
-		
-		
-		//새배송지클릭
-		$("input#selectDelivery2").click(function(){
-			$(".address_default").hide();
-			$("#btn_add").show();
-		})
-		
-		//기존배송지클릭
-		$("#selectDelivery").click(function(){
-			$(".address_default").show();
-			$("#btn_add").hide();
-			$(".address_new").hide();
-		})
-		
-		//기존배송지에 최근 기록 또는 자신의 핸드폰 번호 입력
-		if("${deliveryInfo.recipient_mobile}"!=""){
-			var mobile1 = "${deliveryInfo.recipient_mobile}".substring(0,3);
-			console.log(mobile1);
-			$("input[name='mobile']:eq(0)").val(mobile1);
+		if("${sessionScope.payResult}"==""){
+			//처음 상품 리스트 숨기기
+			$("#productList").hide();	
 			
-			var mobile2 = "${deliveryInfo.recipient_mobile}".substring(3,7);
-			$("input[name='mobile']:eq(1)").val(mobile2);
 			
-			var mobile3 = "${deliveryInfo.recipient_mobile}".substring(7);
-			$("input[name='mobile']:eq(2)").val(mobile3);
-		}
-		
-		
-		//배송지 상세주소 카운트
-		var cntAddress = "";
-		
-		// 배송 주소 전부 입력
-		var address_all = "";
-		
-		if("${deliveryInfo.recipient_address}"!=""){
-			cntAddress = $("#address_default_sub").val().length;
-			$("#bytesAddress").text(cntAddress);
 			
-			// 배송 주소 전부 입력
-			address_all = $("#address_default_main").val()+" "+$("#address_default_sub").val();
-			$("#address_all").text(address_all);
-				
-			//배송지 상세주소 재입력 카운트
-			$("input#address_default_sub").keyup(function(){
-				cntAddress = $("#address_default_sub").val().length;
-				$("#bytesAddress").val('');
-				$("#bytesAddress").text(cntAddress);
+			//배송 메모 입력
+			$("#deliveryMemo").keyup(function(){
+				var cntMemo = $("#deliveryMemo").val().length;
+				$("#bytesMemo").val('');
+				$("#bytesMemo").text(cntMemo);
 			});
 			
+			
+			//새배송지클릭
+			$("input#selectDelivery2").click(function(){
+				$(".address_default").hide();
+				$("#btn_add").show();
+			})
+			
+			//기존배송지클릭
+			$("#selectDelivery").click(function(){
+				$(".address_default").show();
+				$("#btn_add").hide();
+				$(".address_new").hide();
+			})
+			
+			//기존배송지에 최근 기록 또는 자신의 핸드폰 번호 입력
+			if("${deliveryInfo.recipient_mobile}"!=""){
+				var mobile1 = "${deliveryInfo.recipient_mobile}".substring(0,3);
+				console.log(mobile1);
+				$("input[name='mobile']:eq(0)").val(mobile1);
+				
+				var mobile2 = "${deliveryInfo.recipient_mobile}".substring(3,7);
+				$("input[name='mobile']:eq(1)").val(mobile2);
+				
+				var mobile3 = "${deliveryInfo.recipient_mobile}".substring(7);
+				$("input[name='mobile']:eq(2)").val(mobile3);
+			}
+			
+			
+			//배송지 상세주소 카운트
+			var cntAddress = "";
+			
+			// 배송 주소 전부 입력
+			var address_all = "";
+			
+			if("${deliveryInfo.recipient_address}"!=""){
+				cntAddress = $("#address_default_sub").val().length;
+				$("#bytesAddress").text(cntAddress);
+				
+				// 배송 주소 전부 입력
+				address_all = $("#address_default_main").val()+" "+$("#address_default_sub").val();
+				$("#address_all").text(address_all);
+					
+				//배송지 상세주소 재입력 카운트
+				$("input#address_default_sub").keyup(function(){
+					cntAddress = $("#address_default_sub").val().length;
+					$("#bytesAddress").val('');
+					$("#bytesAddress").text(cntAddress);
+				});
+				
+			}
+			
+			
+			// 새배송지 상세주소 카운트
+			var cntNewAddress = $("#address_new_sub").val().length;
+			$("#bytesNewAddress").text(cntNewAddress);
+			
+			$("#address_new_sub").keyup(function(){
+				var cntNewAddress2 = $("#address_new_sub").val().length;
+				$("#bytesNewAddress").val('');
+				$("#bytesNewAddress").text(cntNewAddress2);
+			});
+				
+			
+			
+			
+			
+			
+			
+			
+			//결제 정보 페이지 플로팅
+		/* 	// 기존 css에서 플로팅 배너 위치(top)값을 가져와 저장한다.
+			var floatPosition = parseInt($("#costInfo").css('top'));
+		
+			$(window).scroll(function() {
+				// 현재 스크롤 위치를 가져온다.
+				var scrollTop = $(window).scrollTop();
+				var newPosition = scrollTop + floatPosition + "px";
+		
+				// 애니메이션 없이 바로 따라감
+				$("#costInfo").css('top', newPosition);
+				 
+			}).scroll(); */
+			
+			
+		  /*   var agreeInfoHei = $('#agreeInfo').outerHeight(); //동의 전까지
+
+		    $("#paymentInfo").on('scroll', function() {
+		
+			    var sT = $(window).scrollTop();
+			    var val = $(document).height() - $(window).height() - agreeInfoHei;
+		
+			    if (sT >= val)
+			    	$('#agreeInfo').addClass('on')
+			    else
+			    	$('#agreeInfo').removeClass('on')
+		    }); 
+		     */
+		    
+		    var $w = $(window),
+		    footerHei = $('footer').outerHeight(),
+		    $banner = $('#costInfo');
+
+		  	$w.on('scroll', function() {
+
+			    var sT = $w.scrollTop();
+			    var val = $(document).height() - $w.height() - footerHei;
+		
+			    if (sT >= val)
+			        $banner.addClass('on')
+			    else
+			    	$banner.removeClass('on')
+			    	
+		   });
+		  
+		  
+
+			//일반결제 선택시 카드/할부 선택
+			$("input[type=radio]").click(function(){
+				if($("#card").prop('checked')){
+					$("#card_detail").css('display','');
+					console.log('111');
+				}else{
+					$("#card_detail").css('display','none');
+					console.log('222');
+
+				}
+			});
 		}
 		
-		
-		// 새배송지 상세주소 카운트
-		var cntNewAddress = $("#address_new_sub").val().length;
-		$("#bytesNewAddress").text(cntNewAddress);
-		
-		$("#address_new_sub").keyup(function(){
-			var cntNewAddress2 = $("#address_new_sub").val().length;
-			$("#bytesNewAddress").val('');
-			$("#bytesNewAddress").text(cntNewAddress2);
-		});
-			
-		
-		
-		
-		
-		
-		
-		
-		//결제 정보 페이지 플로팅
-	/* 	// 기존 css에서 플로팅 배너 위치(top)값을 가져와 저장한다.
-		var floatPosition = parseInt($("#costInfo").css('top'));
-	
-		$(window).scroll(function() {
-			// 현재 스크롤 위치를 가져온다.
-			var scrollTop = $(window).scrollTop();
-			var newPosition = scrollTop + floatPosition + "px";
-	
-			// 애니메이션 없이 바로 따라감
-			$("#costInfo").css('top', newPosition);
-			 
-		}).scroll(); */
-		
-		
-	  /*   var agreeInfoHei = $('#agreeInfo').outerHeight(); //동의 전까지
-
-	    $("#paymentInfo").on('scroll', function() {
-	
-		    var sT = $(window).scrollTop();
-		    var val = $(document).height() - $(window).height() - agreeInfoHei;
-	
-		    if (sT >= val)
-		    	$('#agreeInfo').addClass('on')
-		    else
-		    	$('#agreeInfo').removeClass('on')
-	    }); 
-	     */
-	    
-	    var $w = $(window),
-	    footerHei = $('footer').outerHeight(),
-	    $banner = $('#costInfo');
-
-	  	$w.on('scroll', function() {
-
-		    var sT = $w.scrollTop();
-		    var val = $(document).height() - $w.height() - footerHei;
-	
-		    if (sT >= val)
-		        $banner.addClass('on')
-		    else
-		    	$banner.removeClass('on')
-		    	
-	   });
-	  
-	  
-
-		//일반결제 선택시 카드/할부 선택
-		$("input[type=radio]").click(function(){
-			if($("#card").prop('checked')){
-				$("#card_detail").css('display','');
-				console.log('111');
-			}else{
-				$("#card_detail").css('display','none');
-				console.log('222');
-
-			}
-		});
 		
 	});
 	
@@ -548,7 +550,7 @@
 			sessionStorage.setItem("address",$("#address_new_main").val());
 		}
 		console.log(sessionStorage.getItem("recieve"));
-		var win = window.open("<%=ctxPath%>/pay.do?pay="+pay,"childFrm","left=100px, top=100px, width=400px, height=350px");
+		var win = window.open("<%=ctxPath%>/pay.do?pay="+pay,"childFrm","left=300px, top=100px, width=800px, height=700px");
 	}
 	
 	function goSubmit(){
@@ -570,6 +572,7 @@
 		<jsp:include page="../include/header.jsp"></jsp:include>
 		<div class="section" align="center">
 			<div class="contents">
+				<c:if test="${empty sessionScope.payResult}">
 				<form name="frm_payment" method='post'>
 					<!-- 0 주문서 -->						
 					<div id="header_div">
@@ -628,7 +631,7 @@
 							</tr>
 							<tr>
 								<th class="table_th">보내는분</th>
-								<td><input class=peopleInfo type = "text" value="${sessionScope.loginuser.name }" readonly></input></td>
+								<td><input class=peopleInfo type = "text" value="${sessionScope.loginuser.name}" readonly></input></td>
 							</tr>
 							<tr>
 								<c:if test="${not empty sessionScope.loginuser.mobile}">
@@ -760,9 +763,9 @@
 									<th>주소</th>
 									<td>		
 										<button type="button" id="btn_add" onclick="openPOST()">새 배송지 추가</button>	
-										<input class="input_address" id="address_new_postcode" style="display: none;">
-										<input class="input_address" id="address_new_main" style="display: none;">
-										<input class="input_address" id="address_new_sub" style="display: none;">
+										<input class="input_address" name="newPostcode" id="address_new_postcode" style="display: none;">
+										<input class="input_address" name="newMainaddress" id="address_new_main" style="display: none;">
+										<input class="input_address" name="newSubaddress" id="address_new_sub" style="display: none;">
 										<div class="address_new_bytes" style="display: none;">
 											<span id="bytesNewAddress" ></span>자 /60자
 										</div>
@@ -1009,6 +1012,10 @@
 					
 					
 				</form>
+				</c:if>
+				<c:if test="${not empty sessionScope.payResult}">
+					<h3>결제가 완료되었습니다.</h3>
+				</c:if>
 			</div>						
 		</div>
 		
