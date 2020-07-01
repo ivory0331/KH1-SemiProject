@@ -89,18 +89,27 @@ public class MyPageReviewWriteAction extends AbstractController {
 			
 			MultipartRequest multi = new MultipartRequest(request, realPath, maxsize, encoding, new DefaultFileRenamePolicy());			
 			
+			
 			String subject = multi.getParameter("subject");
 			String content = multi.getParameter("content");
-			String image = multi.getParameter("image");
+			String image = multi.getParameter("fileName");
 			String order_num = multi.getParameter("order_num");
-			String member_num = String.valueOf(loginuser.getMember_num());
+			String member_num = String.valueOf(loginuser.getMember_num());	
+			product_num = multi.getParameter("product_num");
 			
+			subject = subject.replaceAll("<", "&lt;");
+			subject = subject.replaceAll(">", "&gt;");
+			subject = subject.replaceAll("\r\n", "<br/>");
+			subject = subject.replaceAll("&","&amp;");
+			subject = subject.replaceAll("\"","&quot");
 			
 			content = content.replaceAll("<", "&lt;");
 			content = content.replaceAll(">", "&gt;");
 			content = content.replaceAll("\r\n", "<br/>");
 			content = content.replaceAll("&","&amp;");
 			content = content.replaceAll("\"","&quot");
+			
+			System.out.println(subject+"/"+content+"/"+image+"/"+order_num+"/"+member_num+"/"+product_num);
 			
 			Map<String,String> paraMap = new HashMap<String, String>();
 			paraMap.put("subject", subject);
@@ -112,7 +121,7 @@ public class MyPageReviewWriteAction extends AbstractController {
 			
 			int result = rdao.writeReview(paraMap);			
 			String message = "상품 후기가 작성되었습니다.";
-			String loc = "javascript:history.back();";
+			String loc = request.getContextPath()+"/member/myPageProductCompleteReview.do";
 			
 			if(result==0) {
 				message = "상품 후기 작성 도중 오류가 발생했습니다.";

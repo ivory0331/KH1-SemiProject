@@ -297,16 +297,16 @@ public class ReviewDAO implements InterReviewDAO {
 					return 0;
 				}
 				if(paraMap.get("image")!= null) {
-					String[] fileNameArr = paraMap.get("image").split(",");
+					String fileNameArr = paraMap.get("image");
 					sql = " insert into review_image_table (fk_review_num, image) "
 					    + " values (?,?)";
 					pstmt = conn.prepareStatement(sql);
-					for(int i=0; i<fileNameArr.length; i++) {
+					
 						pstmt.setString(1, seq_num);
-						pstmt.setString(2, fileNameArr[i]);
+						pstmt.setString(2, fileNameArr);
 						result+=pstmt.executeUpdate();
-					}
-					if(result < (fileNameArr.length+1)) {
+					
+					if(result < 2) {
 						conn.rollback();
 						return 0;
 					}

@@ -26,7 +26,7 @@ public class MyPageOrderHistoryDetailAction extends AbstractController {
 		if(loginuser == null) {
 			
 			String message = "로그인하셔야 본 서비스를 이용하실 수 있습니다.";
-			String loc = "javascript:history.back()";
+			String loc = request.getContextPath()+"/member/login.do";
 			
 			request.setAttribute("message", message);
 			request.setAttribute("loc", loc);
