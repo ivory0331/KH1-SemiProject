@@ -90,7 +90,7 @@ a:hover {
 #btn_close{
 	color: #fff;
     font-size: 9pt;
-    padding :2px 4px;
+    padding :3px 8px;
     cursor: pointer;   
     background-color: #A8A8A8;
     margin : 10px 0;
@@ -137,11 +137,11 @@ a:hover {
 											</tr>
 										
 										<c:if test="${empty orderHistoryList}">
-											<div style="margin-bottom:1px;">
-												<span class="stxt">
+											<tr style="margin-bottom:1px;">
+												<td class="stxt" colspan="6" height="1" bgcolor="#fff" align="center" style="padding: 30px;">
 										   	    	주문 내역이 없습니다.
-										   	    </span>
-											</div>		
+										   	    </td>
+											</tr>		
 										</c:if>
 										<c:if test="${not empty orderHistoryList}">					
 										<c:set var="temp" value="0" />
@@ -165,7 +165,7 @@ a:hover {
 									<div class="pagediv" align="center" style="margin-top: 30px;">									
 									<a href="/service/serviceCenterQboardWriteOrder.jsp?&amp;page=1" class="pagingBtn layout-pagination-first-page"> &lt;&lt; </a>
 									<a href="/service/serviceCenterQboardWriteOrder.jsp?&amp;page=1" class="pagingBtn layout-pagination-prev-page"> &lt; </a>
-									<strong class="pagingBtn">1</strong>
+									<strong class="pagingBtn" style="background-color:#F7F7F7;">1</strong>
 									<a href="/service/serviceCenterQboardWriteOrder.jsp?&amp;page=1" class="pagingBtn layout-pagination-next-page"> &gt;</a>
 									<a href="/service/serviceCenterQboardWriteOrder.jsp?&amp;page=1" class="pagingBtn layout-pagination-last-page"> &gt;&gt;</a> <!--  맨끝페이지로 가기 -->
 									</div>
