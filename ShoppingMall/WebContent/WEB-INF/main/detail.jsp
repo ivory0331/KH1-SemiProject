@@ -496,7 +496,7 @@
 		<jsp:include page="../include/header.jsp"></jsp:include>
 		<div class="section" align="center">
 			<div class="contents">
-				<div class="info">
+				<div class="info" style="margin-top:15px";>
 					<div class="goodsImg">
 						<img alt="상품1" src="<%=ctxPath %>/images/${product.representative_img}" />
 					</div>
@@ -559,6 +559,20 @@
 							<button class="tablinks" onclick="goTable('1')">고객 후기</button>
 							<button class="tablinks" onclick="goTable('2')" style="border-right:solid 1px black">상품 문의</button>
 						</div>
+						<div style="clear:both;"></div>
+						<div id="mainImage" style="width:100%; padding-bottom:10px; border-bottom:solid 1px black;">
+							<c:if test="${product.imageList!=null}">
+								<c:forEach var="image" items="${product.imageList}">
+									<img src="<%=ctxPath %>/images/${image}"  style="margin:20px 0;"/>
+								</c:forEach>
+							</c:if>
+							
+							<h3 >${product.product_name}</h3>
+						</div>
+						<div style="margin-top:15px; font-size: 18pt; line-height: 32px; color:gray; font-family: noto sans; font-weight: 200;">
+							${product.explain}
+						</div>
+
 						<c:if test="${not empty product.imageList}">
 							<c:forEach var="image" items="${product.imageList}">
 								<img src="<%=ctxPath %>/images/${image}" style="margin: 0 auto;"/>
@@ -566,7 +580,10 @@
 						</c:if>
 						
 						<div>${product.explain}</div>
+
 					</div>
+				
+					
 				
 					<div class="detailTablePart" id="review">
 						<div class="tab">
@@ -693,7 +710,7 @@
 						</table>
 						<div id="inqueruyPageBar"></div>
 						<p align="right">
-							<span class="writeBtn" onclick="location.href='<%=ctxPath %>/productList.do'">목록 보기</span><span class="writeBtn" onclick="goWriteQ('${product.product_num}')">문의 쓰기</span>
+							<span class="writeBtn" onclick="location.href='javascript:history.back()'">뒤로가기</span><span class="writeBtn" onclick="goWriteQ('${product.product_num}')">문의 쓰기</span>
 						</p>
 					</div>
 				</div>

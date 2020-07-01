@@ -119,8 +119,6 @@ public class ReviewDAO implements InterReviewDAO {
 							 "	, R.subject, R.content " + 
 							 " from product_table P join review_table R " + 
 							 " on P.product_num = R.fk_product_num " + 
-							 " join review_image_table RI " + 
-							 " on R.review_num = RI.fk_review_num " + 
 							 " where R.fk_member_num = ? ";
 				
 				pstmt = conn.prepareStatement(sql);
@@ -299,16 +297,16 @@ public class ReviewDAO implements InterReviewDAO {
 					return 0;
 				}
 				if(paraMap.get("image")!= null) {
-					String[] fileNameArr = paraMap.get("image").split(",");
+					String fileNameArr = paraMap.get("image");
 					sql = " insert into review_image_table (fk_review_num, image) "
 					    + " values (?,?)";
 					pstmt = conn.prepareStatement(sql);
-					for(int i=0; i<fileNameArr.length; i++) {
+					
 						pstmt.setString(1, seq_num);
-						pstmt.setString(2, fileNameArr[i]);
+						pstmt.setString(2, fileNameArr);
 						result+=pstmt.executeUpdate();
-					}
-					if(result < (fileNameArr.length+1)) {
+					
+					if(result < 2) {
 						conn.rollback();
 						return 0;
 					}

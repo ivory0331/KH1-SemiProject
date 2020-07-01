@@ -66,6 +66,9 @@ public class OrderVO {
 		this.recipient_mobile = recipient_mobile;
 	}
 	
+	public String getMobileForm() {		
+		return recipient_mobile.substring(0,3)+"-"+recipient_mobile.substring(3,7)+"-"+recipient_mobile.substring(7);
+	}
 	
 	public String getRecipient_postcode() {
 		return recipient_postcode;
