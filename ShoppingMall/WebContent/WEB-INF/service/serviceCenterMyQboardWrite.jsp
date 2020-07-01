@@ -246,7 +246,7 @@ input[type=text] {
 										<input type="text" name="fk_order_num" style="width:25%" readonly="readonly" value="">
 										<input id="bhs_order_button" type="button" class="bhs_button" value="주문조회" style="float:none; line-height:27px; width:100px;">
 										<div style="position:relative;z-index:1">
-										<iframe id="ifm_order" src="serviceCenterQboardWriteOrder.jsp"></iframe>
+										<iframe id="ifm_order" src="<%= ctxPath%>/service/serviceCenterQboardWriteOrder.do"></iframe>
 										</div>										
 										</td>
 									</tr>

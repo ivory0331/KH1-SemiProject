@@ -845,7 +845,7 @@ commit;
 
 delete from member_table;
 
-select count(*) from basket_table where fk_member_num = ;
+select count(*) from basket_table where fk_member_num = 1;
 
 
 select O.order_num

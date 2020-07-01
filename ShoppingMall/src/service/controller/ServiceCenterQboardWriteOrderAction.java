@@ -40,7 +40,7 @@ public class ServiceCenterQboardWriteOrderAction extends AbstractController {
 			request.setAttribute("orderHistoryList", orderHistoryList);
 
 			// super.setRedirect(false);
-			super.setViewPage("/WEB-INF/member/serviceCenterMyQboardWriteOrder.jsp");
+			super.setViewPage("/WEB-INF/service/serviceCenterQboardWriteOrder.jsp");
 
 		}
 
