@@ -149,10 +149,25 @@ public class ReviewDAO implements InterReviewDAO {
 					rvo.setProduct(pvo);
 														
 					completeReviewList.add(rvo);
-				}					
-
-			} catch( Exception e) {
-				e.printStackTrace();
+				}								
+				rs.close();
+				
+				if(completeReviewList.size() > 0) {
+					sql = " select image from review_image_table where fk_review_num = ? ";				
+					pstmt = conn.prepareStatement(sql);					
+					for(int i=0; i<completeReviewList.size(); i++) {								
+						pstmt.setInt(1, completeReviewList.get(i).getReview_num());						
+						rs = pstmt.executeQuery();		
+						List<String>imageList = new ArrayList<String>();
+						while(rs.next()) {
+							String image = rs.getString(1);
+							imageList.add(image);						
+						}	
+						rs.close();
+						completeReviewList.get(i).setImageList(imageList);
+					}
+				}
+			
 			} finally {
 				close();
 			}
@@ -235,25 +250,84 @@ public class ReviewDAO implements InterReviewDAO {
 		
 		// 특정 작성완료 후기 삭제하기
 		@Override
-		public int deleteReview(String review_num) throws SQLException {
-			
+		public int deleteReview(String review_num) throws SQLException {			
 			int n = 0;
+			int product_num = 0;
+			int order_num = 0;
 			
 			try {
 				conn = ds.getConnection();
+				conn.setAutoCommit(false);
 				
-				String sql = " delete from review_table " + 
-							 " where review_num = ? ";
-						   
+				// fk_product_num, fk_order_num 값 얻기 위해 select
+				String sql = " select fk_product_num, fk_order_num " + 
+						     " from review_table where review_num = ? ";
+				
 				pstmt = conn.prepareStatement(sql);
 				pstmt.setString(1, review_num);
 				
+				if(rs.next()) {
+					product_num = rs.getInt(1);
+					order_num = rs.getInt(2);
+					System.out.println("~~~~ 확인용 : product_num"+product_num);
+					System.out.println("~~~~ 확인용 : order_num"+order_num);
+				}
+				
+				rs.close();			
+				
+				// 후기 삭제
+				sql = " delete from review_table " + 
+					  " where review_num = ? ";
+						   
+				pstmt = conn.prepareStatement(sql);
+				pstmt.setString(1, review_num);
+
 				n = pstmt.executeUpdate();
+				System.out.println("~~~~ 확인용 : 첫번째 n"+n);
+				
+				if(n != 1) {
+					conn.rollback();
+					return 0;
+				}
+				
+				// 이미지 삭제
+				sql = " delete from review_image_table " + 
+					  " where fk_review_num = ? ";
+				
+				pstmt = conn.prepareStatement(sql);
+				pstmt.setString(1, review_num);
+				
+				n += pstmt.executeUpdate();
+				System.out.println("~~~~ 확인용 : 두번째 n"+n);
+				
+				if(n != 2) {
+					conn.rollback();
+					return 0;
+				}
+				
+				// 후기 작성 여부를 다시 0으로 update
+				sql = " update order_product_table set reviewFlag = 0 " + 
+					  " where fk_order_num = ? and fk_product_num = ? ";
+				
+				pstmt = conn.prepareStatement(sql);
+				pstmt.setInt(1, order_num);
+				pstmt.setInt(2, product_num);
+				
+				n += pstmt.executeUpdate();
+				System.out.println("~~~~ 확인용 : 세번째 n"+n);
+				
+				if(n != 3) {
+					conn.rollback();
+					return 0;
+				}
+				
+				conn.commit();
+				conn.setAutoCommit(true);
 				
 			} finally {
 				close();
 			}
-			
+			System.out.println("~~~~ 확인용 : 최종 n"+n);
 			return n;
 			
 		}
