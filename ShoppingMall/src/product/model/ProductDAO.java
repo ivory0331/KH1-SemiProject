@@ -243,7 +243,7 @@ public class ProductDAO implements InterProductDAO {
 		return productList;
 	}
 
-	// 페이징 처리를 위한 제품목록 페이지갯수 알아오기
+	// 페이징 처리를 위한 제품목록 페이지개수 알아오기
 	@Override
 	public int getTotalpage(HashMap<String, String> paraMap) throws SQLException {
 		int totalpage = 0;

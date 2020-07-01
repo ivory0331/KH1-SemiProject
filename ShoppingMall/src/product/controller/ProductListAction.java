@@ -97,6 +97,7 @@ public class ProductListAction extends AbstractController {
 		request.setAttribute("subcategoryList", subcategoryList);
 		request.setAttribute("fk_category_num", fk_category_num);
 		request.setAttribute("fk_subcategory_num", fk_subcategory_num);
+		request.setAttribute("optionSelect", optionSelect);
 		
 		super.setViewPage("/WEB-INF/main/productList.jsp");
 		

@@ -21,7 +21,7 @@ public interface InterProductDAO {
 	// 페이징 처리를 한 제품목록 불러오기 <안씀>
 	List<ProductVO> selectPagingProduct(HashMap<String, String> paraMap) throws SQLException;
 
-	// 페이징 처리를 위한 제품목록 페이지갯수 알아오기
+	// 페이징 처리를 위한 제품목록 페이지개수 알아오기
 	int getTotalpage(HashMap<String, String> paraMap) throws SQLException;
 
 	// 로그인한 사용자의 장바구니 목록을 조회하기
