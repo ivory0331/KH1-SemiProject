@@ -54,7 +54,11 @@
 <script type="text/javascript" src="/ShoppingMall/util/myutil.js"></script>
 <script type="text/javascript">
 $(document).ready(function(){    
-	 
+	 if("<%=searchType2%>"==""){
+		 if("<%=searchType1%>"=='subject'){
+			 
+		 }
+	 }
 	$("#searchType-<%=searchType1%>").prop("checked",true);
 	$("#searchType-<%=searchType2%>").prop("checked",true);
 	
@@ -64,15 +68,26 @@ $(document).ready(function(){
 		  }
 	});
 	
-	 // 검색
-	 function goSearch() {		  
-		  var frm = document.noticeFrm;
-		  frm.method = "GET";
-		  frm.action = "<%=ctxPath%>/service/board.do";
-		  frm.submit(); 
-	  }
 	
 });
+
+
+// 검색
+function goSearch() {		  
+	  var frm = document.noticeFrm;
+	  frm.method = "GET";
+	  frm.action = "<%=ctxPath%>/service/board.do";
+	  frm.submit(); 
+ }
+ 
+ function goDetail(num){
+	 console.log(num);
+	 
+	location.href="<%=ctxPath%>/service/boardDetail.do?notice_num="+num;
+ }
+ 
+ 
+
 </script>
 </head>
 <body>
@@ -89,7 +104,7 @@ $(document).ready(function(){
 						<h3 style="display:inline-block">공지사항</h3>
 						<span style="margin-left:10px; font-size:8pt; font-weight: bold;">새로운 소식들과 유용한 정보들을 한곳에 확인하세요.</span>
 					</div>
-					<form name="noticeFrm">
+					
 						<table style="border-top:solid 2px purple; " class="boardTable table">
 							<tr style="border-bottom:solid 1px black;">
 								<th class="txt_center">번호</th>
@@ -101,13 +116,13 @@ $(document).ready(function(){
 							<tbody>
 								<c:if test="${empty noticeList}">	
 									<tr>
-										<td colspan="5"> 자주하는 질문 게시판 준비중 입니다. </td>
+										<td colspan="5"> 공지사항 게시판 준비중 입니다. </td>
 									</tr>	
 								</c:if>
 								<c:if test="${not empty noticeList}">		
 									<c:forEach var="nvo" items="${noticeList}">
-										<tr>
-											<td class="txt_center">${nvo.notice_num}<input type="hidden" value="${nvo.notice_num}" name="notice_num" /></td>
+										<tr onclick = "goDetail('${nvo.notice_num}')">
+											<td class="txt_center">공지<input type="hidden" value="${nvo.notice_num}" name="notice_num" /></td>
 											<td class="board-title">${nvo.subject}</td>
 											<td class="txt_center">MarketKurly</td>
 											<td class="txt_center">${nvo.write_date}</td>
@@ -120,9 +135,13 @@ $(document).ready(function(){
 						
 						<div style="border-bottom:solid 1px black; text-align:center;">${pageBar}</div>
 						<div class="boardSearch">
+							<span style="float:left">
+							검색어 : <label for="search-subject">제목</label> <input type="checkbox" checked id="search-subject" value="subject" name="searchType" style="margin-right:15px;"/>
+								   <label for="search-content">내용</label> <input type="checkbox" id="search-content" value="content" name="searchType" style="margin-right:15px;"/>
+							</span>
 							<input type="text" name="searchWord" style="float:right" id="searchWord"/>
 						</div>
-					</form>
+					
 				</div>
 				<div style="clear:both;"></div>
 			</div>

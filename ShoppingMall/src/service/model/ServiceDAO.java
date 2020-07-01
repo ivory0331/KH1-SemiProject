@@ -22,6 +22,7 @@ import main.model.FAQtableVO;
 import main.model.NoticeVO;
 import main.model.OneInquiryVO;
 import member.model.MemberVO;
+import my.util.MyUtil;
 import util.security.AES256;
 
 public class ServiceDAO implements InterServiceDAO {
@@ -268,7 +269,7 @@ public class ServiceDAO implements InterServiceDAO {
 					pstmt.setString(1,searchWord);
 					pstmt.setString(2, searchWord);
 					pstmt.setString(3, category);
-					pstmt.setInt(4, (currentShowPageNo*sizePerPage)-sizePerPage+1);
+					pstmt.setInt(4, (currentShowPageNo*sizePerPage)-(sizePerPage-1));
 					pstmt.setInt(5, (currentShowPageNo*sizePerPage) );
 			    }
 			    
@@ -295,12 +296,13 @@ public class ServiceDAO implements InterServiceDAO {
 				
 				while(rs.next()) {
 					FAQtableVO fvo = new FAQtableVO();
-					fvo.setFaq_num(rs.getInt("1"));
-					fvo.setSubject(rs.getString(2));
-					fvo.setContent(rs.getString(3));
-					fvo.setWrite_date(rs.getString(4));
-					fvo.setHits(rs.getInt(5));
-					fvo.setCategory_content(rs.getString(7));
+					fvo.setCount(rs.getInt(1));
+					fvo.setFaq_num(rs.getInt(2));
+					fvo.setSubject(rs.getString(3));
+					fvo.setContent(rs.getString(4));
+					fvo.setWrite_date(rs.getString(5));
+					fvo.setHits(rs.getInt(6));
+					fvo.setCategory_content(rs.getString(8));
 					faqList.add(fvo);
 				}
 				
@@ -450,9 +452,12 @@ public class ServiceDAO implements InterServiceDAO {
 				ovo.setFk_member_num(rs.getInt(9));
 				ovo.setFk_order_num(rs.getInt(10));
 				ovo.setCategory_content(rs.getString(11));
+				
+				
 				mvo.setName(rs.getString(12));
 				mvo.setMobile(aes.decrypt(rs.getString(13)));
 				mvo.setEmail(aes.decrypt(rs.getString(14)));
+				
 				ovo.setMember(mvo);
 				oneInquiryList.add(ovo);
 			}
@@ -467,6 +472,231 @@ public class ServiceDAO implements InterServiceDAO {
 		}
 		
 		return oneInquiryList;
+	}
+
+
+	// 관리자 전용 게시글 작성 메소드
+	@Override
+	public int managerWrite(Map<String, String> paraMap) throws SQLException {
+		int result = 0;
+		try {
+			conn = ds.getConnection();
+			String sql = "";
+			if("board".equals(paraMap.get("boardType"))) {
+				sql = " insert into notice_table (notice_num, subject, content) values(seq_notice_table.nextval,?,?)";
+				pstmt = conn.prepareStatement(sql);
+				pstmt.setString(1, paraMap.get("subject"));
+				pstmt.setString(2, paraMap.get("contents"));
+			}
+			else {
+				sql = " insert into FAQ_table(FAQ_num, subject, content, fk_category_num) values(seq_FAQ_table.nextval, ?, ?, ?)";
+				pstmt = conn.prepareStatement(sql);
+				pstmt.setString(1, paraMap.get("subject"));
+				pstmt.setString(2, paraMap.get("contents"));
+				pstmt.setString(3, paraMap.get("Qboard_category"));
+			}
+			result = pstmt.executeUpdate();
+		}
+		finally {
+			close();
+		}
+		return result;
+	}
+
+
+	// 자주하는 질문 특정 글 상세조회
+	@Override
+	public FAQtableVO selectOneFAQ(String faq_num) throws SQLException {
+		FAQtableVO fvo = null;
+		try {
+			conn = ds.getConnection();
+			String sql = " select FAQ_num, subject, content, hits, fk_category_num, to_char(write_date,'yyyy-mm-dd')as write_date,"
+					   + " category_content from FAQ_table "
+					   + "join inquiry_category_table on fk_category_num = category_num "
+					   + "where FAQ_num = ?";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, faq_num);
+			rs = pstmt.executeQuery();
+			if(rs.next()) {
+				fvo = new FAQtableVO();
+				fvo.setFaq_num(rs.getInt(1));
+				fvo.setHits(rs.getInt(4));
+				fvo.setFk_category_num(rs.getInt(5));
+				fvo.setWrite_date(rs.getString(6));
+				fvo.setCategory_content(rs.getString(7));
+				
+				String subject = rs.getString(2);
+				String content = rs.getString(3);
+				subject = subject.replaceAll("&lt;", "<");
+				subject = subject.replaceAll("&gt;", ">");
+				subject = subject.replaceAll("<br>", "\r\n");
+				
+				content = content.replaceAll("&lt;", "<");
+				content = content.replaceAll("&gt;", ">");
+				content = content.replaceAll("<br>", "\r\n");
+				
+				fvo.setSubject(subject);
+				fvo.setContent(content);
+			}
+		}
+		finally {
+			close();
+		}
+		return fvo;
+	}
+
+
+	//자주하는 질문 게시판 특정 글 수정 메소드
+	@Override
+	public int FAQUpdate(Map<String, String> paraMap) throws SQLException {
+		int result = 0;
+		try {
+			conn = ds.getConnection();
+			String sql = " update FAQ_table set subject=?, content=?, fk_category_num=? where FAQ_num = ? ";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, paraMap.get("subject"));
+			pstmt.setString(2, paraMap.get("content"));
+			pstmt.setString(3, paraMap.get("category_num"));
+			pstmt.setString(4, paraMap.get("faq_num"));
+			
+			result = pstmt.executeUpdate();
+		}
+		finally {
+			
+		}
+		
+		return result;
+	}
+
+
+	@Override
+	public int FAQDelete(String faq_num) throws SQLException {
+		int result = 0;
+		try {
+			conn = ds.getConnection();
+			String sql = " delete from FAQ_table where FAQ_num = ? ";
+			pstmt=conn.prepareStatement(sql);
+			pstmt.setString(1, faq_num);
+			result = pstmt.executeUpdate();
+		}
+		finally {
+			close();
+		}
+		return result;
+	}
+
+
+	// 공지사항 특정 글 상세보기 메소드
+	@Override
+	public List<NoticeVO> boardDetail(String notice_num) throws SQLException {
+		List<NoticeVO> nvoList = new ArrayList<NoticeVO>();
+		
+		try {
+			conn = ds.getConnection();
+			String sql = " select notice_num, subject, content, to_char(write_date,'yyyy-mm-dd')as write_date, hits from notice_table where notice_num = ? order by notice_num desc ";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, notice_num);
+			rs = pstmt.executeQuery();
+			
+			if(rs.next()) {
+				NoticeVO nvo = new NoticeVO();
+				nvo.setSubject(rs.getString("subject"));
+				nvo.setNotice_num(rs.getInt("notice_num"));
+				nvo.setContent(rs.getString("content"));
+				nvo.setWrite_date(rs.getString("write_date"));
+				nvo.setHit(rs.getInt("hits"));
+				nvoList.add(nvo);
+			}
+			
+			rs.close();
+			
+			sql = " select notice_num, subject from notice_table where notice_num > ? order by notice_num ";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, notice_num);
+			rs = pstmt.executeQuery();
+			if(rs.next()) {
+				NoticeVO nvo = new NoticeVO();
+				nvo.setSubject(rs.getString("subject"));
+				nvo.setNotice_num(rs.getInt("notice_num"));
+				nvoList.add(nvo);
+			}
+			rs.close();
+			
+			sql = " select notice_num, subject from notice_table where notice_num < ? order by notice_num desc ";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, notice_num);
+			rs = pstmt.executeQuery();
+			if(rs.next()) {
+				NoticeVO nvo = new NoticeVO();
+				nvo.setSubject(rs.getString("subject"));
+				nvo.setNotice_num(rs.getInt("notice_num"));
+				nvoList.add(nvo);
+			}
+			rs.close();
+			
+		}
+		finally {
+			close();
+		}
+		return nvoList;
+	}
+
+
+	// 공지사항 게시판 특정 글 조회수 증가
+	@Override
+	public int boardHitUp(String notice_num) throws SQLException {
+		int result = 0;
+		try {
+			conn = ds.getConnection();
+			String sql = " update notice_table set hits = hits+1 where notice_num = ? ";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, notice_num);
+			result = pstmt.executeUpdate();
+		}
+		finally {
+			close();
+		}
+		
+		return result;
+	}
+
+
+	// 공지사항 게시판 특정 글 수정페이지 이동
+	@Override
+	public NoticeVO selectOneNotice(String notice_num) throws SQLException {
+		NoticeVO nvo = null;
+		try {
+			conn = ds.getConnection();
+			String sql = " select notice_num, subject, content, to_char(write_date,'yyyy-mm-dd')as write_date, hits from notice_table where notice_num = ? ";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, notice_num);
+			rs = pstmt.executeQuery();
+			if(rs.next()) {
+				nvo = new NoticeVO();
+				nvo.setNotice_num(rs.getInt("notice_num"));
+				nvo.setWrite_date(rs.getString("write_date"));
+				nvo.setHit(rs.getInt("hits"));
+				
+				String subject= rs.getString("subject");
+				String content = rs.getString("content");
+				
+				subject = subject.replaceAll("&lt;", "<");
+				subject = subject.replaceAll("&gt;", ">");
+				subject = subject.replaceAll("<br>", "\r\n");
+				
+				content = content.replaceAll("&lt;", "<");
+				content = content.replaceAll("&gt;", ">");
+				content = content.replaceAll("<br>", "\r\n");
+				
+				nvo.setSubject(subject);
+				nvo.setContent(content);
+			}
+		}
+		finally {
+			close();
+		}
+		
+		return nvo;
 	}
 
 

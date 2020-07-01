@@ -30,7 +30,7 @@ public class QboardListAction extends AbstractController {
     	 
     	paraMap.put("currentShowPageNo", currentShowPageNo);
     	paraMap.put("sizePerPage", sizePerPage);
-    	if(category != null) {paraMap.put("category", category);}
+    	if(category != null || !("0".equals(category))) {paraMap.put("category", category);}
 		
     	// 검색	    	 
 	   	String searchWord = request.getParameter("searchWord");
