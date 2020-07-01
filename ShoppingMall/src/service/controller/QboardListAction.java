@@ -23,6 +23,7 @@ public class QboardListAction extends AbstractController {
 		String currentShowPageNo = request.getParameter("currentShowPageNo");
 		String sizePerPage = "15";
 		String category = request.getParameter("favoriteQ_Category");
+		System.out.println(category);
 		if(currentShowPageNo==null) { currentShowPageNo="1"; }
 		
 		HashMap<String, String> paraMap = new HashMap<>();
@@ -30,7 +31,7 @@ public class QboardListAction extends AbstractController {
     	 
     	paraMap.put("currentShowPageNo", currentShowPageNo);
     	paraMap.put("sizePerPage", sizePerPage);
-    	if(category != null || !("0".equals(category))) {paraMap.put("category", category);}
+    	if(category != null && !("0".equals(category))) {paraMap.put("category", category);}
 		
     	// 검색	    	 
 	   	String searchWord = request.getParameter("searchWord");

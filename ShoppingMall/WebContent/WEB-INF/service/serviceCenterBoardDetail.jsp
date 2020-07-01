@@ -67,6 +67,10 @@ function goUpdate(num){
 function goDelete(num){
 	location.href="<%=ctxPath%>/service/boardDelete.do?notice_num="+num;
 }
+
+function goBoardList(){
+	location.href="<%=ctxPath%>/${sessionScope.serviceGoBackURL}";
+}
 </script>
 </head>
 <body>
@@ -110,7 +114,7 @@ function goDelete(num){
 									</td>
 								</tr>
 								<tr >
-									<td colspan="4" align="right"><span class="listBtn">목록보기</span></td>
+									<td colspan="4" align="right"><span class="listBtn" onclick="goBoardList()">목록보기</span></td>
 								</tr>
 							</table>
 						</c:if>
@@ -119,10 +123,10 @@ function goDelete(num){
 							<ul class="otherList">
 								<c:forEach var="nvo" items="${nvoList}">
 									<c:if test="${nvo.notice_num > notice_num}">
-										<li class="prev">이전글<span style="margin:0 20px">I</span>${nvo.subject}</li>
+										<li class="prev">이전글<span style="margin:0 20px">I</span><span style="cursor: pointer;" onclick="javascript:location.href='<%=ctxPath%>/service/boardDetail.do?notice_num=${nvo.notice_num}'">${nvo.subject}</span></li>
 									</c:if>
 									<c:if test="${nvo.notice_num < notice_num}">
-										<li class="next">다음글<span style="margin:0 20px">I</span>${nvo.subject}</li>
+										<li class="next">다음글<span style="margin:0 20px">I</span><span style="cursor: pointer;" onclick="javascript:location.href='<%=ctxPath%>/service/boardDetail.do?notice_num=${nvo.notice_num}'">${nvo.subject}</span></li>
 									</c:if>
 								</c:forEach>
 							</ul>

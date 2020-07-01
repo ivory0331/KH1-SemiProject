@@ -327,11 +327,12 @@
 			var mobile1 = "${deliveryInfo.recipient_mobile}".substring(0,3);
 			console.log(mobile1);
 			$("input[name='mobile']:eq(0)").val(mobile1);
-
+		}
+		
 		if("${sessionScope.payResult}"==""){
 			//처음 상품 리스트 숨기기
 			$("#productList").hide();	
-			
+		
 			
 			
 			//배송 메모 입력
