@@ -828,7 +828,7 @@ values(seq_product_table.nextval, '[매일] 바이오 플레인 요거트 2종',
 insert into product_table (product_num, product_name, price, stock, packing, unit, sale, seller, seller_phone, fk_category_num, fk_subcategory_num,  representative_img)
 values(seq_product_table.nextval, '[매일] 오리지널 우유 1.5L', '3980', '5', '냉장/종이포장', '1통','0', '이주명', '01056785678', 5, 53, '오리지널 우유 1.5L.jpg');
 insert into product_table (product_num, product_name, price, stock, packing, unit, sale, seller, seller_phone, fk_category_num, fk_subcategory_num,  representative_img)
-values(seq_product_table.nextval, '[매일] 저지방 우유 1.5L', '3980', '5', '냉장/종이포장', '1통', '0','이주명', '01056785678', 5, 53, '저지방 우유 1.5L.jpg');
+values(seq_product_table.nextval, '[매일] 저지방 우유 1.5L', '3980', '5', '냉장/종이포장', '1통', '10','이주명', '01056785678', 5, 53, '저지방 우유 1.5L.jpg');
 insert into product_table (product_num, product_name, price, stock, packing, unit, sale, seller, seller_phone, fk_category_num, fk_subcategory_num,  representative_img)
 values(seq_product_table.nextval, '[베지밀] 건강맘 두유', '14000', '10', '상온/종이포장', '1박스','10', '이주명', '01056785678', 5, 53, '건강맘 두유.jpg');
 
@@ -1003,6 +1003,8 @@ insert into one_category_table(category_num, category_content) values(11, '기�
 
 commit;
 
+update one_inquiry_table set answer='답변답변답변';
+
 create table basket_table
 (basket_num     number not null
 ,product_count  number not null -- 주문한 상품의 갯수 필수
@@ -1014,3 +1016,4 @@ create table basket_table
 );
 
 select * from basket_table;
+select * from product_inquiry_image_table where image like '%'||'search'||'%';

@@ -243,7 +243,7 @@ public class ProductDAO implements InterProductDAO {
 		return productList;
 	}
 
-	// 페이징 처리를 위한 제품목록 페이지갯수 알아오기
+	// 페이징 처리를 위한 제품목록 페이지개수 알아오기
 	@Override
 	public int getTotalpage(HashMap<String, String> paraMap) throws SQLException {
 		int totalpage = 0;
@@ -274,6 +274,13 @@ public class ProductDAO implements InterProductDAO {
 				}
 			}
 			else {
+				if("recommend".equalsIgnoreCase(paraMap.get("recommend"))) {
+					sql += " where best_point > 0 ";
+				}
+				else {
+					sql += " where sale > 0 ";
+				}
+				
 				pstmt = conn.prepareStatement(sql);
 			}
 			
@@ -459,7 +466,7 @@ public class ProductDAO implements InterProductDAO {
 				  "     ( " + 
 				  "        select  product_num, product_name, price, sale, representative_img " + 
 				  "        from product_table " + 
-				  "        order by  registerdate desc " + 
+				  "        order by registerdate desc " + 
 				  "    ) V " + 
 				  " ) T " + 
 				  " where T.RNO between ? and ? ";
@@ -545,5 +552,168 @@ public class ProductDAO implements InterProductDAO {
 		return saleprodList;
 
 	}
+
+	
+	// 선택한 옵션에 맞게 상품 리스트 보여주기
+	@Override
+	public List<ProductVO> selectOption(HashMap<String, String> paraMap) throws SQLException {
+		List<ProductVO> selectOption = new ArrayList<>();
+		String sql ="";
+		
+		try {
+			conn = ds.getConnection();
+			
+			sql = " select RNO, product_num, product_name, price, sale, representative_img " + 
+				  " from " + 
+				  " ( " + 
+				  "    select rownum AS RNO, product_num, product_name, price, sale, representative_img " + 
+				  "    from " + 
+				  "     ( " + 
+				  "        select  product_num, product_name, price , sale, representative_img, fk_category_num " + 
+				  "        from product_table " +
+				  " 	   where fk_category_num = ? ";
+			
+				
+			if(paraMap.get("fk_subcategory_num") == null ) { // 전체보기
+				
+				 if("registerdate".equalsIgnoreCase(paraMap.get("optionSelect"))) {
+					sql += " order by registerdate desc " +
+						   "    ) P " + 
+						   " ) T " + 
+						   " where T.RNO between ? and ? ";
+					
+					pstmt = conn.prepareStatement(sql);
+					int currentShowPageNo = Integer.parseInt(paraMap.get("currentShowPageNo"));
+					pstmt.setInt(1, Integer.parseInt(paraMap.get("fk_category_num")));
+					pstmt.setInt(2, (currentShowPageNo * 9) - (9 - 1) ); // 공식
+					pstmt.setInt(3, (currentShowPageNo * 9) ); // 공식
+				 }
+				 else {
+					sql += " order by price "+paraMap.get("optionSelect")+
+						   "    ) P " + 
+						   " ) T " + 
+						   " where T.RNO between ? and ? ";
+					
+					pstmt = conn.prepareStatement(sql);
+					int currentShowPageNo = Integer.parseInt(paraMap.get("currentShowPageNo"));
+					pstmt.setInt(1, Integer.parseInt(paraMap.get("fk_category_num")));
+					pstmt.setInt(2, (currentShowPageNo * 9) - (9 - 1) ); // 공식
+					pstmt.setInt(3, (currentShowPageNo * 9) ); // 공식
+				 }
+			}
+			else if(paraMap.get("fk_subcategory_num") != null ) { // 소분류 보기
+				
+				if("registerdate".equalsIgnoreCase(paraMap.get("optionSelect"))) {
+					
+					sql += " and fk_subcategory_num = ? "+
+						   " order by registerdate desc "+
+						   "    ) P " + 
+						   " ) T " + 
+						   " where T.RNO between ? and ? ";
+					
+					pstmt = conn.prepareStatement(sql);
+					int currentShowPageNo = Integer.parseInt(paraMap.get("currentShowPageNo"));
+					pstmt.setInt(1, Integer.parseInt(paraMap.get("fk_category_num")));
+					pstmt.setInt(2, Integer.parseInt(paraMap.get("fk_subcategory_num")));	
+					pstmt.setInt(3, (currentShowPageNo * 9) - (9 - 1) ); // 공식
+					pstmt.setInt(4, (currentShowPageNo * 9) ); // 공식
+				}
+				else {
+					sql += " and fk_subcategory_num = ? "+
+						   " order by price "+paraMap.get("optionSelect")+
+						   "    ) P " + 
+						   " ) T " + 
+						   " where T.RNO between ? and ? ";
+					
+					pstmt = conn.prepareStatement(sql);
+					int currentShowPageNo = Integer.parseInt(paraMap.get("currentShowPageNo"));
+					pstmt.setInt(1, Integer.parseInt(paraMap.get("fk_category_num")));
+					pstmt.setInt(2, Integer.parseInt(paraMap.get("fk_subcategory_num")));
+					pstmt.setInt(3, (currentShowPageNo * 9) - (9 - 1) ); // 공식
+					pstmt.setInt(4, (currentShowPageNo * 9) ); // 공식
+				}
+			}
+	
+				System.out.println(sql);
+				rs = pstmt.executeQuery();
+				
+				while(rs.next()) {
+					ProductVO pvo = new ProductVO();
+					pvo.setProduct_num(rs.getInt("product_num"));
+					pvo.setProduct_name(rs.getString("product_name"));
+					pvo.setPrice(rs.getInt("price"));
+					pvo.setSale(rs.getInt("sale"));
+					pvo.setRepresentative_img(rs.getString("representative_img"));
+					
+					selectOption.add(pvo);
+				}
+
+			pstmt = conn.prepareStatement(sql);
+			
+			
+		} finally {
+			close();
+		}
+		
+		return selectOption;
+
+	}
+
+	
+	// 페이징 처리를 한 추천상품 조회하기
+	@Override
+	public List<ProductVO> recommendList(HashMap<String, String> paraMap) throws SQLException {
+		
+		List<ProductVO> recommendList = new ArrayList<>();
+		String sql ="";
+		
+		try {
+			conn = ds.getConnection();
+			
+			sql = " select RNO, product_num, product_name, price, sale, representative_img " + 
+				  " from " + 
+				  " ( " + 
+				  "     select rownum AS RNO, product_num, product_name, price, sale, representative_img " + 
+				  "     from " + 
+				  "     ( " + 
+				  "        select  product_num, product_name, price, sale, representative_img " + 
+				  "        from product_table " + 
+				  "		   where best_point > 0 "+
+				  "        order by registerdate desc " + 
+				  "    ) V " + 
+				  " ) T " + 
+				  " where T.RNO between ? and ? ";
+				
+				pstmt = conn.prepareStatement(sql);
+				int currentShowPageNo = Integer.parseInt(paraMap.get("currentShowPageNo"));
+				pstmt.setInt(1, (currentShowPageNo * 9) - (9 - 1) ); // 공식
+				pstmt.setInt(2, (currentShowPageNo * 9) ); // 공식
+	
+				rs = pstmt.executeQuery();
+				
+				while(rs.next()) {
+					ProductVO pvo = new ProductVO();
+					pvo.setProduct_num(rs.getInt("product_num"));
+					pvo.setProduct_name(rs.getString("product_name"));
+					pvo.setPrice(rs.getInt("price"));
+					pvo.setSale(rs.getInt("sale"));
+					pvo.setRepresentative_img(rs.getString("representative_img"));
+					
+					recommendList.add(pvo);
+				}
+
+			pstmt = conn.prepareStatement(sql);
+			
+			
+		} finally {
+			close();
+		}
+		
+		return recommendList;
+
+	}
+
+
+
 
 }

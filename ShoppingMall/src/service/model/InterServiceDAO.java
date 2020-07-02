@@ -52,4 +52,10 @@ public interface InterServiceDAO {
 	// 공지사항 특정 글 수정페이지 이동
 	NoticeVO selectOneNotice(String notice_num)throws SQLException;
 
+	// 공지사항 특정 글 수정
+	int boardUpdate(Map<String, String> paraMap)throws SQLException;
+
+	// 공지사항 특정 글 삭제
+	int boardDelete(String notice_num)throws SQLException;
+
 }

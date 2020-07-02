@@ -8,6 +8,7 @@ import common.controller.AbstractController;
 import main.model.IndexDAO;
 import main.model.InterIndexDAO;
 import main.model.ProductVO;
+import my.util.MyUtil;
 
 public class DetailAction extends AbstractController {
 
@@ -17,6 +18,7 @@ public class DetailAction extends AbstractController {
 		String idx = request.getParameter("product_num");
 		InterIndexDAO idao = new IndexDAO();
 		ProductVO pvo = idao.productDetail(idx);
+		
 		
 		
 		if(pvo!=null) {

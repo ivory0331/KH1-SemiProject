@@ -16,12 +16,12 @@ IMP.request_pay({
     pay_method : 'card',
     merchant_uid : 'merchant_' + new Date().getTime(),
     name : '주문명:결제테스트',
-    amount : '100',
+    amount : sessionStorage.getItem("recieve"),
     buyer_email : '${sessionScope.loginuser.email}',
     buyer_name : '${sessionScope.loginuser.name}',
     buyer_tel : '${sessionScope.loginuser.mobile}',
-    buyer_addr : '${sessionScope.loginuser.address}',
-    buyer_postcode : '${sessionScope.loginuser.postcode}',
+    buyer_addr : sessionStorage.getItem("address"),
+    buyer_postcode : sessionStorage.getItem("postcode"),
     m_redirect_url : 'https://www.yourdomain.com/payments/complete'
 }, function(rsp) {
     if ( rsp.success ) {

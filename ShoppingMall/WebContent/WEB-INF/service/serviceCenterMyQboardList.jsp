@@ -63,6 +63,10 @@
 	.panel-none{
 		display: none;
 	}
+	
+	.one_content{
+		min-height: 300px;
+	}
 
 </style>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
@@ -86,6 +90,10 @@
 				$target.toggleClass("panel-none");
 			  });
 			}
+		
+		$(".writeBtn").click(function(){
+			location.href="<%=ctxPath%>/service/serviceCenterMyQboardWrite.do";
+		})
 	})
 </script>
 </head>
@@ -104,7 +112,7 @@
 						<h3 style="display:inline-block">1:1문의</h3>
 						
 					</div>
-					<table style="border-top:solid 2px purple;" class="boardTable table">
+					<table class="boardTable table" style="border-top:solid 2px purple;">
 						<tr style="border-bottom:solid 1px black;">
 							<th class="txt_center">번호</th>
 							<th class="txt_center">카테고리</th>
@@ -127,18 +135,29 @@
 								<td>${item.write_date}</td>
 							</tr>
 							<tr class="panel panel-none">
-								<td colspan="5" >${item.content}</td>
+								<td colspan="5" >
+								<div class="one_content">${item.content}</div>
+									<c:if test="${sessionScope.loginuser.member_num==item.member.member_num}">
+									<div class="userBtn" align="right">
+										<span onclick = "goUpdate('${item.one_inquiry_num}')">수정</span><span onclick = "goDelete('${item.one_inquiry_num}')">삭제</span>
+									</div>
+									</c:if>
+								</td>
 							</tr>
 							<c:if test="${not empty item.answer}">
 								<tr class="accordion">
 								<td class="txt_center">Re</td>
-								<td class="txt_center">${item.category_content}</td>
+								<td class="txt_center"></td>
 								<td>안녕하세요, 고객님 답변드립니다.</td>
 								<td>MarketKurly</td>
 								<td>${item.write_date}</td>
 							</tr>
 							<tr class="panel panel-none">
-								<td colspan="5" >${item.answer}</td>
+								<td colspan="5" >
+									<div class="one_content">
+										${item.answer}
+									</div>
+								</td>
 							</tr>
 							</c:if>
 							</c:forEach>
