@@ -110,8 +110,7 @@ public class ManagerProductListAction extends AbstractController {
 		    	 pageBar += "&nbsp;<a href='managerProductList.do?currentShowPageNo="+pageNo+"&sizePerPage="+sizePerPage+"&fk_category_num="+fk_category_num+"&fk_subcategory_num="+fk_subcategory_num+"&searchWord="+searchWord+"'>[다음]</a>&nbsp;";
 	   	 }
 	   	 
-		 super.getCategoryList(request);
-
+	   	 
 	   	 request.setAttribute("pageBar", pageBar);	  
 	   	 request.setAttribute("searchWord", searchWord);	    	 
 

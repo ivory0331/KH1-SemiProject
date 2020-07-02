@@ -193,13 +193,37 @@
 	.review {
 		text-align: left;
 	}
+
+	.button {
+		float: right;
+	}
+
+	.delete , .delete:focus {
+		border-style: none;
+		background-color: white;
+		font-size: 9pt;
+		color: #5f0080;
+		margin-right: 20px;
+		padding: 8px;
+		outline:none;
+	}
+	
+	.update , .update:focus  {
+		border: solid 1px #5f0080;
+		background-color: white;
+		font-size: 9pt;
+		color: #5f0080;
+		margin-right: 20px;
+		padding: 8px;
+		outline:none;
+	}
+	
 }
 	
 	
 </style>
 
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-<link rel="stylesheet" href="css/style.css" />
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 <script type="text/javascript" src="/ShoppingMall/js/jquery-3.3.1.min.js"></script>
@@ -247,7 +271,7 @@
 				data:{"review_num":review_num},
 				dataType:"JSON",
 				success:function(json){
-					if(json.n == 1) { // 작성한 후기를 삭제한 후 페이지이동을 해야 하는데 이동할 페이지는 페이징 처리하여 보고 있던 그 페이지로 가도록 한다. 
+					if(json.n == 3) { // 작성한 후기를 삭제한 후 페이지이동을 해야 하는데 이동할 페이지는 페이징 처리하여 보고 있던 그 페이지로 가도록 한다. 
 						location.href= "<%= request.getContextPath()%>/${goBackURL}"; 
 					}
 				},
@@ -261,7 +285,7 @@
 			alert("삭제를 취소하셨습니다.");
 		}
 
-	}// end of function goDel(cartno)---------------------------
+	}// end of function goDelete(review_num)---------------------------
 	
 </script>
 
@@ -302,28 +326,31 @@
 				<div class="reviewList">    				
 					<div class="column">
 						<div class="col" style="width:70px;">번호</div>
-						<div class="col" style="width:550px;">상품명</div>
+						<div class="col" style="width:520px;">상품명</div>
 						<div class="col" style="width:100px;">작성일</div>
-						<div class="col" style="width:39px;">조회</div>
-						<div class="col" style="width:40px;">좋아요</div>
+						<div class="col" style="width:50px;">조회</div>
+						<div class="col" style="width:60px;">좋아요</div>
 					</div>
 					
 					<c:forEach var="List" items="${completeReviewList}">
 					<div class="accordion">
 				    	<div class="col num" style="width:70px;">${List.review_num}</div>
-						<div class="col name" style="width:550px;">${List.product_name}</div>
+						<div class="col name" style="width:520px;">${List.product.getProduct_name()}</div>
 						<div class="col date" style="width:100px;">${List.write_date}</div>
-						<div class="col view" style="width:39px;">${List.hit}</div>
-						<div class="col like" style="width:40px;">${List.favorite}</div>
+						<div class="col view" style="width:50px;">${List.hit}</div>
+						<div class="col like" style="width:60px;">${List.favorite}</div>
 				    </div>
 				    <div class="panel">
-				    	<div class="title">${List.subject}</div>
+				    	<div class="title" style="margin: 10px 10px 20px 10px;">제목 : ${List.subject}</div>
 				    	<div class="image">
-				    		<img class="image" alt="해당 주문 대표 상품 이미지" src="include/images/logo.png">
+				    		<img class="image" alt="${List.subject} 이미지" src="<%=ctxPath%>/Upload/${List.imageList[0]}">
 				    	</div>
-				    	<div class="review">${List.content}</div>
-				    	<input type="button" id="delete" name="delete" value="삭제하기" onclick="goDelete('${List.review_num}')" />
-				    	<input type="button" id="update" name="update" value="수정" onclick="goUpdate('${List.review_num}')" />
+				    	<div class="review" style="margin: 20px 10px;">${List.content}</div>
+				    	<div class="button">
+					    	<input type="button" id="delete" class="delete" name="delete" value="삭제하기" onclick="goDelete('${List.review_num}')" />
+					    	<input type="button" id="update" class="update" name="update" value="수정" onclick="goUpdate('${List.review_num}')" />
+				    	</div>
+				    	<div style="clear:both;"></div>
 				    </div>
 				    
 				    </c:forEach>				    

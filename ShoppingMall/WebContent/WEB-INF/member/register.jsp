@@ -843,7 +843,7 @@ div.check_event{
                         <td class="memberCols1">이메일*</td>
                         <td class="memberCols2">
                            <input type="email" name="email" id="email" value="" maxlength="40" placeholder="예: marketkurly@kurly.com" required />
-                              <span id="email_btn" class="btnCheck email_error">이메일 중복확인</span>           
+                              <span id="email_btn" class="btnCheck email_error" onclick="chkEmail()" >이메일 중복확인</span>           
                         </td>
                      </tr>
                      
@@ -881,13 +881,13 @@ div.check_event{
                      <tr>
                         <td class="memberCols1">성별</td>
                            <td class="memberCols2">   
-                           <input type="radio" class="gender" name="gender" value="1" id="male"/>
+                           <input type="radio" class="gender" name="gender" value="0" id="male"/>
                            <label for="male" class="text_position">남자</label>
                            
-                           <input type="radio" class="gender" name="gender" value="2" id="female">
+                           <input type="radio" class="gender" name="gender" value="1" id="female">
                            <label for="female" class="text_position">여자</label>
                            
-                           <input type="radio" class="gender" name="gender" value="3" id="none" checked>
+                           <input type="radio" class="gender" name="gender" value="2" id="none" checked>
                            <label for="none" class="text_position">선택안함</label>
                              </td>
                         </tr>

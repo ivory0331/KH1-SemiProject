@@ -16,6 +16,7 @@ import javax.naming.NamingException;
 import javax.sql.DataSource;
 
 import main.model.OneInquiryVO;
+import main.model.OrderHistoryVO;
 import util.security.AES256;
 import util.security.Sha256;
 
@@ -420,4 +421,50 @@ public class MemberDAO implements InterMemberDAO {
 		}
 		return result;
 	}
+	//1:1문의 주문조회 
+	@Override
+	public List<OrderHistoryVO> selectOneMemberOrderList(int member_num) throws SQLException {
+		
+		List<OrderHistoryVO> orderHistoryList= new ArrayList<>();
+		
+		try {
+			conn = ds.getConnection();
+			
+			String sql = "select O.order_num  " + 
+						"      , to_char(O.order_date,'yyyy.mm.dd hh24:mi:ss') " + 
+						"      , O.price " + 
+						"      , P.product_name " + 
+						"      , OP.product_count " + 
+						" from order_table O join order_product_table OP " + 
+						" on O.order_num = OP.fk_order_num join product_table P " + 
+						" on OP.fk_product_num = P.product_num " + 
+						" where O.fk_member_num = ? ";
+			
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, member_num);
+			
+			rs = pstmt.executeQuery();
+
+			while(rs.next()) {
+				
+				OrderHistoryVO ohvo = new OrderHistoryVO();
+				ohvo.setOrder_num(rs.getInt(1));
+				ohvo.setOrder_date(rs.getString(2));
+				ohvo.setPrice(rs.getInt(3));
+				ohvo.setProduct_name(rs.getString(4));
+				ohvo.setProduct_cnt(5);
+				
+				orderHistoryList.add(ohvo);
+			}				
+					
+		} catch( Exception e) {
+			e.printStackTrace();
+		} finally {
+			close();
+		}
+		
+		return orderHistoryList;
+	}
+	
+	
 }

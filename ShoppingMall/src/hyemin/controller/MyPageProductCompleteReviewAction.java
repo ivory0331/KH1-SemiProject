@@ -23,8 +23,10 @@ public class MyPageProductCompleteReviewAction extends AbstractController {
 		if(!isLogIn) {
 			// 로그인을 하지 않았을 경우
 			
+			String loc = request.getContextPath()+"/member/login.do";
+			
 			request.setAttribute("message", "로그인하셔야 본 서비스를 이용하실 수 있습니다.");
-			request.setAttribute("loc", "javascript:history.back()");
+			request.setAttribute("loc", loc);
 			
 			//	super.setRedirect(false);
 			super.setViewPage("/WEB-INF/msg.jsp");

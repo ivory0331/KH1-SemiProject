@@ -306,10 +306,6 @@ create table order_product_table
 );
 select * from order_table O join order_product_table OP on O.order_num = OP.fk_order_num;
 
-
-
-
-
 -- 고객 후기 테이블 --
 create table review_table
 (review_num number not null -- 후기 번호 필수+고유 시퀀스 사용
@@ -328,8 +324,19 @@ create table review_table
 ,constraint uq_review_orderProduct UNIQUE (fk_product_num, fk_order_num)
 );
 
-select * from review_table;
+select fk_product_num, fk_order_num from review_table where review_num = 10;
+select fk_product_num, fk_order_num from review_table where review_num = 10;
+select * from review_image_table;
 
+delete from review_table where review_num = 5;
+delete from review_image_table where fk_review_num = 5;
+
+update order_product_table set reviewFlag = 0
+where fk_order_num = 2 and fk_product_num = 93;
+
+commit;
+
+select image from review_image_table where fk_review_num = 10;
 
 
 insert into review_table(review_num, subject, content, hit, favorite, fk_product_num, fk_order_num, fk_member_num)

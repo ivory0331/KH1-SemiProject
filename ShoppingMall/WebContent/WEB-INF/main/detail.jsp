@@ -572,6 +572,15 @@
 						<div style="margin-top:15px; font-size: 18pt; line-height: 32px; color:gray; font-family: noto sans; font-weight: 200;">
 							${product.explain}
 						</div>
+
+						<c:if test="${not empty product.imageList}">
+							<c:forEach var="image" items="${product.imageList}">
+								<img src="<%=ctxPath %>/images/${image}" style="margin: 0 auto;"/>
+							</c:forEach>
+						</c:if>
+						
+						<div>${product.explain}</div>
+
 					</div>
 				
 					
