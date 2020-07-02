@@ -35,18 +35,9 @@ public class SmsSendAction extends AbstractController {
 			// certificationCode ==> "swfet0933651"
 			
 			char randchar = ' ';
-			for(int i=0; i<5; i++) {
-			/*
-			    min 부터 max 사이의 값으로 랜덤한 정수를 얻으려면 
-			    int rndnum = rnd.nextInt(max - min + 1) + min;
-			       영문 소문자 'a' 부터 'z' 까지 랜덤하게 1개를 만든다.  	
-			 */
-				randchar = (char) (rnd.nextInt('z' - 'a' + 1) + 'a');
-				certificationCode += randchar;
-			}
 			
 			int randnum = 0;
-			for(int i=0; i<7; i++) {
+			for(int i=0; i<6; i++) {
 				randnum = rnd.nextInt(9 - 0 + 1) + 0;
 				certificationCode += randnum;
 			}
