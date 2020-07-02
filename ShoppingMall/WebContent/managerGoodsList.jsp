@@ -73,12 +73,12 @@
 </head>
 <body>
 	<div class="Mycontainer">
-		<jsp:include page="../include/header.jsp"></jsp:include>
-		<div class="section" align="center">
+<%-- 		<jsp:include page="../include/header.jsp"></jsp:include>
+ --%>		<div class="section" align="center">
 			<div class="contents">
 				<div class="sideMenu">
-					<jsp:include page="../include/managerSide.jsp"></jsp:include>
-				</div>
+<%-- 					<jsp:include page="../include/managerSide.jsp"></jsp:include>
+ --%>				</div>
 				<div class="memberList" align="left">
 					<div class="member-search">
 						<h4>상품관리</h4>
@@ -127,7 +127,7 @@
 				</div>
 			</div>
 		</div>
-		<jsp:include page="../include/footer.jsp"></jsp:include>
-	</div>
+<%-- 		<jsp:include page="../include/footer.jsp"></jsp:include>
+ --%>	</div>
 </body>
 </html>

@@ -431,7 +431,7 @@ public class MemberDAO implements InterMemberDAO {
 			conn = ds.getConnection();
 			
 			String sql = "select O.order_num  " + 
-						"      , to_char(O.order_date,'yyyy.mm.dd hh24:mi:ss') " + 
+						"      , to_char(O.order_date,'yyyy.mm.dd') " + 
 						"      , O.price " + 
 						"      , P.product_name " + 
 						"      , OP.product_count " + 
@@ -457,14 +457,30 @@ public class MemberDAO implements InterMemberDAO {
 				orderHistoryList.add(ohvo);
 			}				
 					
-		} catch( Exception e) {
-			e.printStackTrace();
-		} finally {
-			close();
+			rs.close();
+			
+			sql = " select count(*) from order_product_table where fk_order_num = ? ";
+			
+			pstmt = conn.prepareStatement(sql);
+			
+			for(int i=0; i<orderHistoryList.size(); i++) {		
+				
+				pstmt.setInt(1, orderHistoryList.get(i).getOrder_num());
+				
+				rs = pstmt.executeQuery();
+				
+				if(rs.next()) {
+					orderHistoryList.get(i).setProduct_cnt(rs.getInt(1));
+				}			
+			}
+
+			} catch( Exception e) {
+				e.printStackTrace();
+			} finally {
+				close();
+			}
+			
+			return orderHistoryList;
 		}
-		
-		return orderHistoryList;
-	}
-	
 	
 }

@@ -13,7 +13,7 @@ public class ProductVO {
 	private String unit;
 	private String registerdate;
 	private int sale;
-	private int fk_category_num;
+	private int fk_category_num; 
 	private int fk_subcategory_num;
 	private int category_num;
 	private String category_content;
@@ -197,7 +197,6 @@ public class ProductVO {
 	public void setFinalPrice() {
 		if(sale != 0) {
 			double salePrice = Double.valueOf(price)*(Double.valueOf(sale)/100);
-			System.out.println("sale가격:"+salePrice);
 			finalPrice = (int)(Double.valueOf(price)-salePrice);
 		}
 		else {

@@ -605,6 +605,7 @@
 							<button class="tablinks" onclick="goTable('1')">고객 후기</button>
 							<button class="tablinks" onclick="goTable('2')" style="border-right:solid 1px black">상품 문의</button>
 						</div>
+
 						<div style="clear:both;"></div>
 						<div id="mainImage" style="width:100%; padding-bottom:10px; border-bottom:solid 1px black;">
 							<c:if test="${product.imageList!=null}">
@@ -618,6 +619,7 @@
 						<div style="margin-top:15px; font-size: 18pt; line-height: 32px; color:gray; font-family: noto sans; font-weight: 200;">
 							${product.explain}
 						</div>
+
 
 						<c:if test="${not empty product.imageList}">
 							<c:forEach var="image" items="${product.imageList}">

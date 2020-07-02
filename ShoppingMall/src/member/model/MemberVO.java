@@ -1,6 +1,7 @@
 package member.model;
 
-public class MemberVO {
+public class MemberVO { 
+	
 
 	private int member_num; // 회원번호 - 필수입력 + 유일한 값(primary) + 시퀀스 사용
 	private String name; // 성명 - 필수입력

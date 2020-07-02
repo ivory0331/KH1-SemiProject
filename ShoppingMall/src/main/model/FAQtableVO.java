@@ -19,7 +19,7 @@ public class FAQtableVO {
 		this.subject = subject;
 		this.content = content;
 		this.write_date = write_date;
-		this.hits = hits;
+		this.hits = hits; 
 		this.category_content = category_content;
 	}
 	

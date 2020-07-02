@@ -17,9 +17,37 @@ public class ManagerMemberListAction extends AbstractController {
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		
 		
-		HttpSession session = request.getSession();
-		MemberVO loginuser = (MemberVO) session.getAttribute("loginuser");
 		
+		HttpSession session = request.getSession();
+	    MemberVO loginuser = (MemberVO) session.getAttribute("loginuser");
+	    
+		
+		if(!super.checkLogin(request) ) {
+	         
+	         String message = "로그인 하세요.";
+	         String loc = "javascript:history.back()";
+	         
+	         request.setAttribute("message", message);
+	         request.setAttribute("loc", loc);
+	         
+	         super.setViewPage("/WEB-INF/msg.jsp");
+	         return;
+	    
+		
+		}else if (super.checkLogin(request) && !loginuser.getUserid().equals("admin") ) {
+	         
+	         String message = "권한이 없습니다.";
+	         String loc = "javascript:history.back()";
+	         
+	         request.setAttribute("message", message);
+	         request.setAttribute("loc", loc);
+	         
+	         super.setViewPage("/WEB-INF/msg.jsp");
+	         return;
+	         
+	    }else {
+	    	
+	 
 		
 		 InterMemberDAO memberdao = new MemberDAO();
     	 
@@ -44,10 +72,6 @@ public class ManagerMemberListAction extends AbstractController {
     	 String searchType = request.getParameter("searchType");
     	 String searchWord = request.getParameter("searchWord");
     	 
-    	 
-    	 System.out.println("액션 searchType : "+searchType);
-    	 System.out.println("액션 searchWord : "+searchWord);
-    	 System.out.println("액션 sizePerPage : "+sizePerPage);
     	 
     	 if(searchWord !=null && !searchWord.trim().isEmpty()) {
     		 paraMap.put("searchType", searchType);
@@ -119,6 +143,7 @@ public class ManagerMemberListAction extends AbstractController {
 	
          super.setViewPage("/WEB-INF/manager/managerMemberList.jsp");
 
+	    }
         
 	}
 

@@ -215,12 +215,12 @@
 </head>
 <body>
 	<div class="Mycontainer">
-		<jsp:include page="../include/header.jsp"></jsp:include>
-		<div class="section" align="center">
+<%-- 		<jsp:include page="../include/header.jsp"></jsp:include>
+ --%>		<div class="section" align="center">
 			<div class="contents">
 				<div class="sideMenu">
-					<jsp:include page="../include/managerSide.jsp"></jsp:include>
-				</div>
+<%-- 					<jsp:include page="../include/managerSide.jsp"></jsp:include>
+ --%>				</div>
 				<div id="info">
 					<div id="add_area" align="right">
 							<span class="managerBtn" onclick="func_newGoodsAdd()">신규상품 추가</span>
@@ -299,7 +299,7 @@
 				
 			</div>
 		</div>
-		<jsp:include page="../include/footer.jsp"></jsp:include>
-	</div>
+<%-- 		<jsp:include page="../include/footer.jsp"></jsp:include>
+ --%>	</div>
 </body>
 </html>
