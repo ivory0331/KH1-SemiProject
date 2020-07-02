@@ -141,7 +141,6 @@
 			console.log("이미지 로딩");
 			imgView(this);
 		});
-		
 	});
 	
 	function divCheck(){
@@ -196,6 +195,11 @@
 		console.log(fullPath);
 		console.log(fileName);
 		$("#fileName").val(fileName);
+	}
+	
+	function func_deleteImg(){
+		$("#fileName").empty();
+		$("#image").empty();
 	}
 	
 </script>
@@ -255,8 +259,9 @@
 							<th class="reviewTH">사진등록</th>
 							<td class="reviewTD">	
 								<label for="image" id="choice">파일 선택</label>														
-								<input id='fileName' type='text' name='oldFileName' value="${image}" placeholder="선택된 파일 없음" readonly style="border-style: none;" />								
-								<input type="file" style="display:none;" name="image" id="image" value="${image}" accept="image/*" />
+								<input id='fileName' type='text' name='oldFileName' value="${delFileName}" placeholder="선택된 파일 없음" readonly style="border-style: none;" />								
+								<input type="file" style="display:none;" name="image" id="image" value="${delFileName}" accept="image/*" />
+								<div style="font-size: 9px;" onclick="func_deleteImg();">X삭제</div>
 								<div style="margin-left: 2px;">
 									<span style="font-size:8pt;">구매한 상품이 아니거나 캡쳐 사진을 첨부한 경우, 통보없이 삭제됩니다.</span>
 								</div>

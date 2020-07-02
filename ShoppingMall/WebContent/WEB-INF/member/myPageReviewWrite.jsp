@@ -107,6 +107,7 @@
 	    padding: 10px;
 	}
 
+	input#image:focus {outline:none;}
 	
 	
 </style>
@@ -181,6 +182,12 @@
 		$("#fileName").val(fileName);
 	}
 	
+	
+	function func_deleteImg(){
+		$("#fileName").empty();
+		$("#image").empty();
+	}
+	
 </script>
 
 </head>
@@ -236,8 +243,9 @@
 						<tr class="reviewTR image">
 							<th class="reviewTH">사진등록</th>
 							<td class="reviewTD">
-								<input type="file" name="image" id="image" accept="image/*" />
+								<input type="file" name="image" id="image" accept="image/*" style="width: 250px;"/>
 								<input type='hidden' id='fileName' name='fileName'/>
+								<div style="font-size: 9px;" onclick="func_deleteImg();">X삭제</div>
 								<span style="font-size:8pt;">구매한 상품이 아니거나 캡쳐 사진을 첨부한 경우, 통보없이 삭제됩니다.</span>
 							</td>
 						</tr>

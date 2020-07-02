@@ -91,7 +91,7 @@ public class MyPageReviewUpdateAction extends AbstractController {
 			
 			MultipartRequest multi = new MultipartRequest(request, realPath, maxsize, encoding, new DefaultFileRenamePolicy());						
 			
-			String fileName = null;
+			String fileName = "";
 			String subject = multi.getParameter("subject");
 			String content = multi.getParameter("content");			
 			String oldFileName = multi.getParameter("oldFileName");
@@ -104,8 +104,10 @@ public class MyPageReviewUpdateAction extends AbstractController {
 			// 후기 이미지 테이블에 기존에 있던 사진 조회 및 삭제
 			String delFileName = dao.ReviewImgDel(review_num, oldFileName);
 			
+			
 			//실제 경로에서도 이미지 삭제
-			realPath = context.getRealPath("Upload")+"/"+delFileName;		        
+			context = request.getSession().getServletContext();
+			realPath = context.getRealPath("Upload")+"/"+oldFileName;		        
 			File file = new File(realPath);			
 			if(file.exists()){
 				file.delete();
@@ -141,6 +143,7 @@ public class MyPageReviewUpdateAction extends AbstractController {
 			paraMap.put("review_num", review_num);
 			paraMap.put("member_num", member_num);
 			paraMap.put("product_num", product_num);
+			paraMap.put("fileName", fileName);
 			
 			int result = dao.updateReview(paraMap);		
 			
