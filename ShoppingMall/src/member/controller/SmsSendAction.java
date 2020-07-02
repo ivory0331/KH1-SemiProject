@@ -1,9 +1,11 @@
 package member.controller;
 
 import java.util.HashMap;
+import java.util.Random;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.json.simple.JSONObject;
 
@@ -25,9 +27,39 @@ public class SmsSendAction extends AbstractController {
 			Message coolsms = new Message(api_key, api_secret);
 			// net.nurigo.java_sdk.api.Message 임. 
 			// 먼저 다운 받은  javaSDK-2.2.jar 를 /MyMVC/WebContent/WEB-INF/lib/ 안에 넣어서  build 시켜야 함.
-					
+								
+			//== 인증키를 랜덤하게 생성하도록 한다. 
+			Random rnd = new Random();
+			
+			String certificationCode = "";
+			// certificationCode ==> "swfet0933651"
+			
+			char randchar = ' ';
+			for(int i=0; i<5; i++) {
+			/*
+			    min 부터 max 사이의 값으로 랜덤한 정수를 얻으려면 
+			    int rndnum = rnd.nextInt(max - min + 1) + min;
+			       영문 소문자 'a' 부터 'z' 까지 랜덤하게 1개를 만든다.  	
+			 */
+				randchar = (char) (rnd.nextInt('z' - 'a' + 1) + 'a');
+				certificationCode += randchar;
+			}
+			
+			int randnum = 0;
+			for(int i=0; i<7; i++) {
+				randnum = rnd.nextInt(9 - 0 + 1) + 0;
+				certificationCode += randnum;
+			}
+			
+			System.out.println("~~~~ 확인용 certificationCode => " + certificationCode);
+			//~~~~ 확인용 certificationCode => iogdq2204326			
+			
+			HttpSession session = request.getSession();
+			session.setAttribute("certificationCode", certificationCode); 
+			//자바에서 발급한 인증코드를 세션에 저장!! VerifyCertifivation.java
+			
 			String mobile = request.getParameter("mobile");
-			String smsContent = request.getParameter("smsContent");
+			String smsContent = certificationCode;
 			
 			// == 4개 파라미터(to, from, type, text)는 필수사항이다. == 
 			HashMap<String, String> paraMap = new HashMap<String, String>();

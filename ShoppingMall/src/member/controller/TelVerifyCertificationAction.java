@@ -4,6 +4,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.json.JSONObject;
+
 import common.controller.AbstractController;
 
 public class TelVerifyCertificationAction extends AbstractController {
@@ -12,28 +14,30 @@ public class TelVerifyCertificationAction extends AbstractController {
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		
 		//사용자가 가져온 인증코드 
-		String telCertificationCode = request.getParameter("telCertificationCode");
+		//String telCertificationCode = request.getParameter("telCertificationCode");
+		String telCertificationCode = request.getParameter("tel_confirm");
 		
 		//세션 저장된 인증코드 
 		HttpSession session = request.getSession();
 		String certificationCode = (String)session.getAttribute("certificationCode");
-		
-		String message = "";
-	 	String loc = "";
-	 	
+		//smsSendAction에 세션에 저장된 certificationCode가져와서 비교 
+			 	
+	 	int n = 0; //인증 성공여부 구분
 	 	if( certificationCode.equals(telCertificationCode) ) {// 세션저장코드 == 사용자인증코드 확인  
-	 		message = "인증성공 되었습니다.";
-	 		loc = request.getContextPath()+"/member/register.do";
+	 		n = 1;
 	 	}
-	 	else {
-	 		message = "발급된 인증코드가 아닙니다. 인증코드를 다시 발급받으세요";
-	 		loc = request.getContextPath()+"/member/register.do";
+	 	else {	 		
+	 		n = 0;
 	 	}
 		
-	 	request.setAttribute("message", message);
-	 	request.setAttribute("loc", loc);
-	 	
-	 	super.setViewPage("/WEB-INF/msg.jsp");
+	 	JSONObject jsonObj = new JSONObject();
+	    jsonObj.put("n", n);			
+	      
+	    String json = jsonObj.toString();		
+	    request.setAttribute("json", json);
+	    
+	    super.setViewPage("/WEB-INF/jsonview.jsp");
+	   
 	 	
 	 	// !!! 중요 !!! //
 	 	// 세션에 저장된 인증코드 삭제하기 !!!!  
