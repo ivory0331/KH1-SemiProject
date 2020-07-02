@@ -1,6 +1,7 @@
 package main.model;
 
 public class FAQtableVO {
+	private int rowNum;
 	private int faq_num;
 	private String subject;
 	private String content;
@@ -85,6 +86,16 @@ public class FAQtableVO {
 	public void setFk_category_num(int fk_category_num) {
 		this.fk_category_num = fk_category_num;
 	}
+
+	public int getRowNum() {
+		return rowNum;
+	}
+
+	public void setRowNum(int rowNum) {
+		this.rowNum = rowNum;
+	}
+	
+	
 	
 	
 	

@@ -81,6 +81,12 @@ public interface InterIndexDAO {
 	// 리뷰 조회수 증가
 	int reviewHitUp(String review_num)throws SQLException;
 
+	// 특정 리뷰 삭제
+	int reviewDel(String review_num)throws SQLException;
+
+	// 모든 1:1문의 조회 -관리자-
+	List<OneInquiryVO> allOneInquirySelect()throws SQLException;
+
 
 	
 

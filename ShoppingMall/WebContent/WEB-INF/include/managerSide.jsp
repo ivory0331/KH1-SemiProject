@@ -43,7 +43,7 @@ function goService(url){
 		<li class="underLine" onclick="goService('managerMemberList.do')">회원관리</li>
 		<li class="underLine" onclick="goService('')">주문관리</li>
 		<li class="underLine" onclick="goService('managerProductList.do')">상품관리</li>
-		<li class="underLine" onclick="goService('')">문의관리</li>
+		<li class="underLine" onclick="goService('managerOneInquiryList.do')">문의관리</li>
 		<li class="underLine" onclick="goService('mangerBoardWrite.do')">게시글 작성</li>
 		<li>고객센터</li>
 	</ul>

@@ -1122,5 +1122,61 @@ public class IndexDAO implements InterIndexDAO{
 		return reviewNum;
 	}
 
+	// 특정 후기 삭제
+	@Override
+	public int reviewDel(String review_num) throws SQLException {
+		int result = 0;
+		try {
+			conn = ds.getConnection();
+			String sql = " delete from review_table where review_num = ? ";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, review_num);
+			result = pstmt.executeUpdate();
+		}
+		finally {
+			close();
+		}
+		return result;
+	}
+
+	// 1:1문의 테이블 모든 행 조회
+	@Override
+	public List<OneInquiryVO> allOneInquirySelect() throws SQLException {
+		List<OneInquiryVO> oneInquiryList = new ArrayList<OneInquiryVO>();
+		try {
+			conn = ds.getConnection();
+			String sql = " select RON, one_inquiry_num, subject, content, write_date, answer, emailFlag, smsFlag, fk_member_num, fk_order_num, category_content, member_num, name, userid, email, mobile"
+					   + " from (select rownum as RON, one_inquiry_num, subject, content, write_date, answer,"
+					   + " emailFlag, smsFlag, fk_member_num, fk_order_num, fk_category_num, category_content, member_num, name, userid, email, mobile"
+					   + " from (select one_inquiry_num, subject, content, to_char(write_date,'yyyy-mm-dd') as write_date,"
+					   + " answer, emailFlag, smsFlag, fk_member_num, fk_order_num, fk_category_num, category_content, member_num, name, userid, email, mobile "
+					   + " from one_inquiry_table "
+					   + " join one_category_table on fk_category_num = category_num "
+					   + " join member_table on fk_member_num = member_num order by one_inquiry_num asc)V"
+					   + " )T";
+			pstmt = conn.prepareStatement(sql);
+			rs = pstmt.executeQuery();
+			
+			while(rs.next()) {
+				OneInquiryVO ivo = new OneInquiryVO();
+				MemberVO mvo = new MemberVO();
+				ivo.setRowNum(rs.getInt(1));
+				ivo.setOne_inquiry_num(rs.getInt(2));
+				ivo.setSubject(rs.getString(3));
+				ivo.setContent(rs.getString(4));
+				ivo.setWrite_date(rs.getString(5));
+				ivo.setAnswer(rs.getString(6));
+				ivo.setEmailFlag(rs.getString(7));
+				ivo.setSmsFlag(rs.getString(8));
+				ivo.setFk_member_num(rs.getInt(9));
+				
+			}
+		}
+		finally {
+			close();
+		}
+		return null;
+	}
+
 	
 }

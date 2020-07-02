@@ -384,7 +384,7 @@
 				}
 				if(item.fk_member_num == "${sessionScope.loginuser.member_num}"){
 					html+=" <div class='userBtn' align='right'>"
-					     +" <span>수정</span><span>삭제</span> "
+					     +" <span>수정</span><span onclick='goReviewDel("+item.review_num+")'>삭제</span> "
 					     +" </div> ";
 				}
 				html += "</td>"
@@ -401,6 +401,13 @@
 			
 		}
 	}
+	
+	function goReviewDel(num){
+		var url="/reviewDel.do";
+		var data={"review_num":num};
+		reqServer(url, data);
+	}
+	
 	
 	
 	function func_productQCall(currentPage){
@@ -505,6 +512,10 @@
 					printProductInquiry(json);
 				}
 				else if(url=="/inquiryDel.do"){
+					alert(json.message);
+					location.reload(true);
+				}
+				else if(url=="/reviewDel.do"){
 					alert(json.message);
 					location.reload(true);
 				}
