@@ -6,7 +6,7 @@
 <head>
 <meta charset="UTF-8">
 <link rel="stylesheet" href="<%= ctxPath %>/css/style.css" />
-<title>managerSales.jsp</title>
+<title>managerGoodsDetail.jsp</title>
 <!-- 차트 링크 --> 
 <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script> 
 <style type="text/css">
@@ -21,6 +21,7 @@
 		display:inline-block;
 		width: 900px;
 		margin-left:10px;
+
 		margin-top:10px;
 	}
 	
@@ -35,10 +36,10 @@
 	.goodsImg > img{
 		width:100%;
 		height:300px;
-		border-bottom: solid 1px black;
 	}
 	
 	/*상품 이미지의 옆에 나오는 상품 정보가 들어가 있는 div*/
+
 	.goodsInfo-table{
 		display: inline-block;
 		width:600px;
@@ -62,10 +63,16 @@
 		
 	}
 	
-	.goodsInfo-table input[type='text']{
-	
+	/*수량이 표시되는 input태그*/
+	.count input[type='text']{
+		text-align: center;
 	}
 	
+	/*최종 결과물인 총 결제금액이 나오는 span태그*/
+	.money{
+		font-size: 24pt;
+		font-weight: bold;
+	}
 	
 	.goodsInfo-div{
 		background-color: white;
@@ -74,6 +81,7 @@
 		border-top : solid 1px #f4f4f4;
 		border-bottom : solid 1px #f4f4f4;
 		margin-bottom: 5px;
+		
 	}
 	
 	.managerBtn{
@@ -92,20 +100,15 @@
 	
 	.detail_img{
 		display: inline-block;
-		width: 200px;
-		height: 200px;
+		width: 100px;
+		height: 100px;
 		margin-left: 50px;
 		border: solid 1px black;
-	}
-	
-	.detail_img > div{
-		height:200px;
 	}
 	
 	.btn_area{
 		margin-top:30px;
 	}
-	
 	
 </style>
 <!-- 부트스트랩 -->
@@ -134,49 +137,48 @@
 </head>
 <body>
 	<div class="Mycontainer">
-		<jsp:include page="../include/header.jsp"></jsp:include>
-		<div class="section" align="center">
+<%-- 		<jsp:include page=",,/include/header.jsp"></jsp:include>
+ --%>		<div class="section" align="center">
 			<div class="contents">
 				<div class="sideMenu">
-					<jsp:include page="../include/managerSide.jsp"></jsp:include>
-				</div>
+<%-- 					<jsp:include page=",,/include/managerSide.jsp"></jsp:include>
+ --%>				</div>
 				<div class="info">
 					<div class="goodsImg">
-						<img alt="상품1" src="include/images/logo.png"/>
-						<input type="file" id="imgFile0" accept=".gif, .jpg, .png" />
+						<img alt="상품1" src="include/images/logo.png" />
 					</div>
 					<div class="goodsInfo-table">
 						<dl>
 							<dt>상품명</dt>
-							<dd><input type="text" value="tet" /></dd>
+							<dd><input type="text" value="tet" disabled /></dd>
 						</dl>
 						<dl class="underLine">
 							<dt>대분류</dt>
-							<dd><input type="text" value="채소" /></dd>
+							<dd><input type="text" value="채소" disabled /></dd>
 						</dl>
 						<dl class="underLine">
 							<dt>소분류</dt>
-							<dd><input type="text" value="쌈" /></dd>
+							<dd><input type="text" value="쌈" disabled /></dd>
 						</dl>
 						<dl class="underLine">
 							<dt>단위 / 그램</dt>
-							<dd><input type="text" value="100g" /></dd>
+							<dd><input type="text" value="100g" disabled /></dd>
 						</dl>
 						<dl class="underLine">
 							<dt>원산지</dt>
-							<dd><input type="text" value="국내산" /></dd>
+							<dd><input type="text" value="국내산" disabled /></dd>
 						</dl>
 						<dl class="underLine">
 							<dt>구매 담당자</dt>
-							<dd><input type="text" value="OOO" /></dd>
+							<dd><input type="text" value="OOO" disabled /></dd>
 						</dl>
 						<dl class="underLine">
 							<dt>담당자 번호</dt>
-							<dd><input type="text" value="010-0000-0000" /></dd>
+							<dd><input type="text" value="010-0000-0000" disabled /></dd>
 						</dl>
 						<dl class="underLine">
 							<dt>가격</dt>
-							<dd><input type="text" value="1,000" /></dd>
+							<dd><input type="text" value="1,000" disabled /></dd>
 						</dl>
 						<dl class="underLine">
 							<dt>재고 수</dt>
@@ -184,35 +186,31 @@
 						</dl>
 						
 					</div>
-					<div class="goodsInfo-div" contenteditable="true">
+					<div class="goodsInfo-div">
 							상품 상세 설명<br/>
 							test입니다.
 					</div>
 					<div id="goodsInfo-img">
 						<div class="detail_img">
-							<div>첫번째 상세 이미지</div>
-							<input type="file" id="imgFile1" accept=".gif, .jpg, .png" />
+							첫번째 상세 이미지
 						</div>
 						<div class="detail_img">
-							<div>두번째 상세 이미지</div>
-							<input type="file" id="imgFile1" accept=".gif, .jpg, .png" />
+							두번째 상세 이미지
 						</div>
 						<div class="detail_img">
-							<div>세번째 상세 이미지</div>
-							<input type="file" id="imgFile1" accept=".gif, .jpg, .png" />
+							세번째 상세 이미지
 						</div>
 					</div>
-					<div class="btn_area" >
-							<span class="managerBtn">확인</span>
-							<span class="managerBtn">취소</span>
+					<div class="btn_area" align="right" >
+							<span class="managerBtn">수정</span>
+							<span class="managerBtn">삭제</span>
 					</div>
-					
 				</div>
-				<div style="clear:both;"></div>
 				
 			</div>
+			<div style="clear:both;"></div>
 		</div>
-		<jsp:include page="../include/footer.jsp"></jsp:include>
-	</div>
+<%-- 		<jsp:include page="../include/footer.jsp"></jsp:include>
+ --%>	</div>
 </body>
 </html>

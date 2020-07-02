@@ -32,7 +32,7 @@ public class IndexDAO implements InterIndexDAO{
 	private PreparedStatement pstmt;
 	private ResultSet rs;
 	
-	private AES256 aes = null;
+	private AES256 aes = null; 
 	
 	// 생성자 
 	public IndexDAO() {
@@ -207,16 +207,25 @@ public class IndexDAO implements InterIndexDAO{
 
 	// 특정 상품 후기 조회 //
 	@Override
-	public List<ReviewVO> reviewCall(String product_num) throws SQLException {
+	public List<ReviewVO> reviewCall(Map<String, Integer>paraMap) throws SQLException {
 		List<ReviewVO> reviewList = new ArrayList<ReviewVO>();
 		try {
 			conn = ds.getConnection();
-			String sql = " select R.review_num, R.subject, R.content, to_char(R.write_date,'yyyy-mm-dd') as write_date,"
-					   + " R.hit, R.favorite, R.fk_product_num, R.fk_order_num, R.fk_member_num, M.name"
-					   + " from review_table R join member_table M on R.fk_member_num = M.member_num where R.fk_product_num = ? ";
+			String sql = " select RON, review_num, content, write_date,"
+					   + " hit, favorite, fk_product_num, fk_order_num, fk_member_num, name"
+					   + " from "
+					   + " (select rownum as RON, review_num, subject, content, write_date,"
+					   + " hit, favorite, fk_product_num, fk_order_num, fk_member_num, name "
+					   + " from"
+					   + " 		(select R.review_num, R.subject, R.content, to_char(R.write_date,'yyyy-mm-dd') as write_date,"
+					   + " 		R.hit, R.favorite, R.fk_product_num, R.fk_order_num, R.fk_member_num, M.name"
+					   + " 		from review_table R join member_table M on R.fk_member_num = M.member_num where R.fk_product_num = ? order by review_num desc)V" 
+					   + " )T where T.RON between ? and ?";
 			
 			pstmt = conn.prepareStatement(sql);
-			pstmt.setString(1, product_num);
+			pstmt.setInt(1, paraMap.get("product_num"));
+			pstmt.setInt(2, paraMap.get("start"));
+			pstmt.setInt(3, paraMap.get("end"));
 			
 			rs = pstmt.executeQuery();
 			while(rs.next()) {
@@ -369,7 +378,6 @@ public class IndexDAO implements InterIndexDAO{
 		String product_num = orderMap.get("product_num");
 		String member_num = orderMap.get("member_num");
 		String count = orderMap.get("count");
-		String price = orderMap.get("price");
 		
 		
 		try {
@@ -925,5 +933,250 @@ public class IndexDAO implements InterIndexDAO{
 		
 		return totalpage;
 	}
+
+	// 상품문의 삭제시 같이 삭제될 업로드 사진 조회
+	@Override
+	public List<String> DelImgFind(String inquiry_num) throws SQLException {
+		List<String> delFileName = new ArrayList<String>();
+		try {
+			conn = ds.getConnection();
+			String sql = " select image from product_inquiry_image_table where fk_inquiry_num = ? ";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, inquiry_num);
+			rs = pstmt.executeQuery();
+			while(rs.next()) {
+				String image = rs.getString(1);
+				delFileName.add(image);
+			}
+		}
+		finally {
+			close();
+		}
+		return delFileName;
+	}
+
+	// 상품문의 수정
+	@Override
+	public int productQupdate(Map<String, String> paraMap) throws SQLException {
+		int result = 0;
+		String seq_num="";
+		
+		try {
+			conn = ds.getConnection();
+			conn.setAutoCommit(false);
+			
+			
+			// 상품문의 테이블 정보 insert
+			String sql = " update product_inquiry_table set subject = ?, content = ?, emailFlag = ?, smsFlag = ?, secretFlag = ?  "
+			           + " where inquiry_num = ? ";
+			
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, paraMap.get("subject"));
+			pstmt.setString(2, paraMap.get("content"));
+			pstmt.setString(3, paraMap.get("emailFlag"));
+			pstmt.setString(4, paraMap.get("smsFlag"));
+			pstmt.setString(5, paraMap.get("secretFlag"));
+			pstmt.setString(6, paraMap.get("inquiry_num"));
+			
+			result += pstmt.executeUpdate();
+			
+			if(result==0) {
+				conn.rollback();
+				return 0;
+			}
+			System.out.println("fileName="+paraMap.get("fileName"));
+			if(!paraMap.get("fileName").trim().isEmpty()) {
+				String[] fileNameArr = paraMap.get("fileName").split(",");
+				sql = " insert into product_inquiry_image_table (fk_inquiry_num, image) "
+				    + " values (?,?)";
+				pstmt = conn.prepareStatement(sql);
+				for(int i=0; i<fileNameArr.length; i++) {
+					pstmt.setString(1, paraMap.get("inquiry_num"));
+					pstmt.setString(2, fileNameArr[i]);
+					result+=pstmt.executeUpdate();
+				}
+				if(result < (fileNameArr.length+1)) {
+					conn.rollback();
+					return 0;
+				}
+			}
+			System.out.println("최종실행 sql="+sql);
+			
+			conn.commit();
+			
+			
+		}
+		finally {
+			close();
+		}
+		
+		
+		return result;
+	}
+
+	// 상품문의 수정 시 기존에 있던 이미지 DB에서 삭제
+	@Override
+	public List<String> inquiryImgDel(String inquiry_num, String[] fileNameArr) throws SQLException {
+		List<String> delFileName = new ArrayList<String>();
+		try {
+			conn = ds.getConnection();
+			String sql = " select image from product_inquiry_image_table where fk_inquiry_num = ? ";
+			
+			if(fileNameArr!=null) {
+				for(int i=0; i<fileNameArr.length; i++) {
+					sql+=" and image != ? ";
+				}
+				
+			}
+			
+			sql += " and image is null";
+			
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, inquiry_num);
+			
+			if(fileNameArr!=null) {
+				for(int i=0; i<fileNameArr.length; i++) {
+					pstmt.setString(i+2, fileNameArr[i]);
+					System.out.println((i+2)+"/"+fileNameArr[i]);
+				}
+			}
+			System.out.println(sql);
+			rs = pstmt.executeQuery();
+			while(rs.next()) {
+				String fileName = rs.getString(1);
+				delFileName.add(fileName);
+			}
+			rs.close();
+			
+			sql = " delete from product_inquiry_image_table where fk_inquiry_num = ? ";
+			
+			if(fileNameArr!=null) {
+				for(int i=0; i<fileNameArr.length; i++) {
+					sql+=" and image != ? ";
+				}
+			}
+			
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, inquiry_num);
+			
+			if(fileNameArr!=null) {
+				for(int i=0; i<fileNameArr.length; i++) {
+					pstmt.setString(i+2, fileNameArr[i]);
+				}
+			}
+			
+			pstmt.executeUpdate();
+		}
+		finally {
+			close();
+		}
+		return delFileName;
+	}
+
+	// 특정 상품 리뷰 수 조회
+	@Override
+	public int getReviewtotalPage(Map<String, Integer> paraMap) throws SQLException {
+		int result = 0;
+		try {
+			conn = ds.getConnection();
+			String sql = " select count(*) from review_table where fk_product_num = ? ";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, paraMap.get("product_num"));
+			rs = pstmt.executeQuery();
+			if(rs.next()) {
+				result = rs.getInt(1);
+			}
+		}
+		finally {
+			close();
+		}
+		return result;
+	}
+
+	// 조회수 증가
+	@Override
+	public int reviewHitUp(String review_num) throws SQLException {
+		int reviewNum = 0;
+		int result = 0;
+		try {
+			conn = ds.getConnection();
+			String sql = " update review_table set hit = hit+1 where review_num = ? ";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, review_num);
+			result = pstmt.executeUpdate();
+			
+			if(result == 1) {
+				sql = " select hit from review_table where review_num = ? ";
+				pstmt = conn.prepareStatement(sql);
+				pstmt.setString(1, review_num);
+				rs = pstmt.executeQuery();
+				
+				if(rs.next()) {
+					reviewNum = rs.getInt(1);
+				}
+			}
+		}
+		finally {
+			close();
+		}
+		return reviewNum;
+	}
+
+	// 특정 후기 삭제
+	@Override
+	public int reviewDel(String review_num) throws SQLException {
+		int result = 0;
+		try {
+			conn = ds.getConnection();
+			String sql = " delete from review_table where review_num = ? ";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, review_num);
+			result = pstmt.executeUpdate();
+		}
+		finally {
+			close();
+		}
+		return result;
+	}
+
+	// 1:1문의 테이블 모든 행 조회
+	@Override
+	public List<OneInquiryVO> allOneInquirySelect() throws SQLException {
+		List<OneInquiryVO> oneInquiryList = new ArrayList<OneInquiryVO>();
+		try {
+			conn = ds.getConnection();
+			String sql = " select RON, one_inquiry_num, subject, content, write_date, answer, emailFlag, smsFlag, fk_member_num, fk_order_num, category_content, member_num, name, userid, email, mobile"
+					   + " from (select rownum as RON, one_inquiry_num, subject, content, write_date, answer,"
+					   + " emailFlag, smsFlag, fk_member_num, fk_order_num, fk_category_num, category_content, member_num, name, userid, email, mobile"
+					   + " from (select one_inquiry_num, subject, content, to_char(write_date,'yyyy-mm-dd') as write_date,"
+					   + " answer, emailFlag, smsFlag, fk_member_num, fk_order_num, fk_category_num, category_content, member_num, name, userid, email, mobile "
+					   + " from one_inquiry_table "
+					   + " join one_category_table on fk_category_num = category_num "
+					   + " join member_table on fk_member_num = member_num order by one_inquiry_num asc)V"
+					   + " )T";
+			pstmt = conn.prepareStatement(sql);
+			rs = pstmt.executeQuery();
+			
+			while(rs.next()) {
+				OneInquiryVO ivo = new OneInquiryVO();
+				MemberVO mvo = new MemberVO();
+				ivo.setRowNum(rs.getInt(1));
+				ivo.setOne_inquiry_num(rs.getInt(2));
+				ivo.setSubject(rs.getString(3));
+				ivo.setContent(rs.getString(4));
+				ivo.setWrite_date(rs.getString(5));
+				ivo.setAnswer(rs.getString(6));
+				ivo.setEmailFlag(rs.getString(7));
+				ivo.setSmsFlag(rs.getString(8));
+				ivo.setFk_member_num(rs.getInt(9));
+				
+			}
+		}
+		finally {
+			close();
+		}
+		return null;
+	}
+
 	
 }

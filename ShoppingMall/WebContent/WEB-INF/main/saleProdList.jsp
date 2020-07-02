@@ -75,18 +75,18 @@
 									<img width="300px;" height="400px;" src="/ShoppingMall/images/${pvo.representative_img}" />
 								</a>
 								<br/>${pvo.product_name}
+								
 								<c:if test="${pvo.sale != 0}">
 									<br/><span style="text-decoration: line-through;"><fmt:formatNumber value="${pvo.price}" pattern="###,###"/> 원</span>
 									&nbsp;=>&nbsp;<fmt:formatNumber value="${pvo.finalPrice}" pattern="###,###" /> 원
 								</c:if>
-								<c:if test="${pvo.sale == 0}">
-									<br/><fmt:formatNumber value="${pvo.price}" pattern="###,###"/> 원
-								</c:if>
+								
 							</td> 
-						<c:if test="${(status.count)%3 == 0 }">
-							</tr>
-							<tr>
-						</c:if>
+							
+							<c:if test="${(status.count)%3 == 0 }">
+								</tr>
+								<tr>
+							</c:if>
 						
 						</c:forEach>
 					</tr>

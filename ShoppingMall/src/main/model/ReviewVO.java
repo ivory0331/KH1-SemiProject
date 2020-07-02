@@ -3,6 +3,7 @@ package main.model;
 import java.util.List;
 
 public class ReviewVO {
+	private int rowNum;
 	private int review_num;
 	private String subject;
 	private String content;
@@ -132,6 +133,16 @@ public class ReviewVO {
 	}
 	public void setProduct(ProductVO product) {
 		this.product = product;
+	}
+
+
+	public int getRowNum() {
+		return rowNum;
+	}
+
+
+	public void setRowNum(int rowNum) {
+		this.rowNum = rowNum;
 	}
 	
 	

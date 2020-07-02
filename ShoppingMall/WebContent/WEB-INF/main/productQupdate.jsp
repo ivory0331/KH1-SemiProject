@@ -127,12 +127,17 @@
 				func_imgCheck(idx, this);
 		});
 		
-		$("#txt_area").val('${pivo.content}');
 		
 		for(var i=0; i<<%=len%>; i++){
 			var item = $(".imgFile:eq("+i+")");
 			func_imgCheck(i, item);
 		}
+		
+		if(window.FileReader){
+            var filename = $(this)[0].files[0].name;
+            $(this).siblings('.fileName').val(filename); 
+         } 
+		
 		
 	});
 	
@@ -158,7 +163,7 @@
 
 	function func_addArea(){
 		var html="<div class='imgInput' id='imgInput"+cnt+"'>"
-		        +"<input type='file' name='imgFile' class='imgFile' id='imgFile"+cnt+"'  accept='.gif, .jpg, .png' style='margin-bottom:10px;'/>"
+		        +"<input type='file' name='imgFile"+cnt+"' class='imgFile' id='imgFile"+cnt+"'  accept='.gif, .jpg, .png' style='margin-bottom:10px;'/>"
 			    +"<input id='fileName"+cnt+"' type='hidden' name='fileName'/>"
 		        +"</div>"
 			    +"<div class='closeInput' id='close"+cnt+"' onclick='func_deleteImg(this)' align='right'>X"
@@ -195,6 +200,7 @@
 		fileName = fullPath.substring(12);
 		console.log(fileName);
 		$("#fileName"+idx).val(fileName);
+		$("#oldFileName"+idx).val(fileName);
 	}
 	
 	
@@ -228,25 +234,25 @@
 				<form name="questionWriteFrm" enctype="multipart/form-data" method="post">
 
 					<input type="hidden" name="product_num" value="${pivo.fk_product_num}" />
-
+					<input type="hidden" name="inquiry_num" value="${pivo.inquiry_num}" />
 					<table class="writeTable">
 						<tr>
 							<td class="frmTitle">작성자</td>
-							<td><input type="text" value="${sessionScope.loginuser.name}" disabled name="userName"/>
+							<td><input type="text" value="${sessionScope.loginuser.name}" readonly name="userName"/>
 								
 							</td>
 						</tr>
 						<tr>
 							<td class="frmTitle">이메일</td>
 							<td>
-								<input type="email" value="${sessionScope.loginuser.email}" disabled name="userEmail"/>
+								<input type="email" value="${sessionScope.loginuser.email}" readonly name="userEmail"/>
 								<input type="checkbox" value="1" id="emailComment" name="emailComment"/><label for="emailComment">이메일로 답변을 받겠습니다.</label>
 							</td>
 						</tr>
 						<tr>
 							<td class="frmTitle">핸드폰</td>
 							<td>
-								<input type="text" value="${sessionScope.loginuser.mobile}" disabled name="userMobile"/>
+								<input type="text" value="${sessionScope.loginuser.mobile}" readonly name="userMobile"/>
 								<input type="checkbox" value="1" id="mobileComment" name="mobileComment"/><label for="mobileComment">문자로 답변을 받겠습니다.</label>
 							</td>
 						</tr>
@@ -262,7 +268,7 @@
 						</tr>
 						<tr>
 							<td class="txt_field" colspan="2">
-								<textarea rows="30" cols="30" id="txt_area" ></textarea>
+								<textarea rows="30" cols="30" id="txt_area" >${pivo.content}</textarea>
 								<input type="hidden" name="contents" id="txt_content"/>
 							</td>
 
@@ -276,12 +282,14 @@
 							<td class='productQ-imgTable'>
 							<c:forEach var="image" items="${pivo.imageList}" varStatus="status">
 								 <div class="imgInput" id='imgInput${status.index}'>
-									<input type='file' name="imgFile" class="imgFile" id='imgFile${status.index}' value="${image}" accept='.gif, .jpg, .png' style="margin-bottom:10px;"/>
-									<input id='fileName${status.index}' type='hidden' name='fileName' value="${image}"/>
+									<input id='oldFileName${status.index}' type='text' name='oldFileName' value="${image}" readonly style=" background-color:#e6e6ff" />
+									<label for="imgFile${status.index}">찾기</label>
+									<input type='file' style="display:none;" name="imgFile${status.index}" class="imgFile" id='imgFile${status.index}' value="${image}" accept='.gif, .jpg, .png' style="margin-bottom:10px;"/>
 								</div>
 								<div class="closeInput" id="close${status.index}" align="right" onclick="func_deleteImg(this)">X</div>
 							</c:forEach>
 							</td>
+						</tr>
 					</table>
 					<div class="userBtn" align="center">
 						<span onclick="goBack()">취소</span> <span style="background-color:purple; color:white;" onclick="divCheck()">등록</span>

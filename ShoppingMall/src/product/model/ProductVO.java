@@ -12,7 +12,7 @@ public class ProductVO {
 	private String packing;
 	private String unit;
 	private String registerdate;
-	private int sale;
+	private int sale;  
 	private int best_point;
 	private String seller;
 	private String seller_phone;

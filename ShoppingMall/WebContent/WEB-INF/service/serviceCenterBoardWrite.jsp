@@ -9,6 +9,16 @@
 <meta charset="UTF-8">
 <title>serviceCenterBoardWrite.jsp</title>
 <style type="text/css">
+	.sideMenu{
+		display: inline-block;
+		width: 150px;
+		float:left;
+	}
+	
+	.mainContent{
+		display: inline-block;
+	}
+	
 	.writeTable{
 		width:1080px;
 		border-top: solid 2px purple;
@@ -181,6 +191,7 @@ function divCheck(){
 				</form>
 				<div class="userBtn" align="center">
 					<span onclick="javascript:history.back()">취소</span> <span style="background-color:purple; color:white;" onclick="divCheck()">등록</span>
+				</div>
 				</div>
 			</div>
 		</div>

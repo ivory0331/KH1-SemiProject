@@ -112,7 +112,7 @@ function divCheck(){
 					
 				</div>
 				<form name="noticeWriteFrm">
-					<input type="hidden" name="faq_num" value="${nvo.notice_num}" />
+					<input type="hidden" name="notice_num" value="${nvo.notice_num}" />
 					<table class="writeTable">
 						<tr>
 							<td class="frmTitle">작성자</td>

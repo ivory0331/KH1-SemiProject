@@ -5,9 +5,11 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import common.controller.AbstractController;
 import main.model.NoticeVO;
+import my.util.MyUtil;
 import service.model.InterServiceDAO;
 import service.model.ServiceDAO;
 
@@ -17,6 +19,7 @@ public class BoardListAction extends AbstractController {
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		InterServiceDAO dao = new ServiceDAO();
 		
+		String goBackURL = MyUtil.getCurrentURL(request);
 		String currentShowPageNo = request.getParameter("currentShowPageNo");
 		String sizePerPage = "15";
 		if(currentShowPageNo==null) { currentShowPageNo="1"; }
@@ -108,7 +111,11 @@ public class BoardListAction extends AbstractController {
 	   	 request.setAttribute("pageBar", pageBar);	  
 	   	 request.setAttribute("searchWord", searchWord);	    	 
 	   	 request.setAttribute("searchType", searchType);
-		
+	   	 
+	   	 // 리스트 경로 저장
+	   	 HttpSession session = request.getSession();
+	   	 session.setAttribute("serviceGoBackURL", goBackURL);
+	   	
 	   	
 		super.setViewPage("/WEB-INF/service/serviceCenterBoardList.jsp");
 	}
