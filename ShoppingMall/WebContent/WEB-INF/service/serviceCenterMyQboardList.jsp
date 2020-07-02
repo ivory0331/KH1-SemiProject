@@ -164,8 +164,8 @@
 						</c:if>
 					</table>
 					<div class="paging">
-						${pageBar }
-						<span class="writeBtn">글쓰기</span>
+						${pageBar}
+						<span class="writeBtn" onclick="javascript:location.href='<%= request.getContextPath()%>/service/serviceCenterMyQboardWrite.do'">글쓰기</span>
 					</div>
 				</div>
 				</form>

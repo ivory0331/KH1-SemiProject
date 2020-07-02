@@ -118,9 +118,14 @@
 <script type="text/javascript" src="/ShoppingMall/js/jquery-3.3.1.min.js"></script>
 <script type="text/javascript" src="/ShoppingMall/util/myutil.js"></script>
 <script type="text/javascript">
-	$(document).ready(function(){
-	)};	
 	
+	$(document).ready(function(){
+		$(document).on('change','#image',function(){
+			console.log("이미지 로딩");
+			imgView(this);
+		});
+		
+	});
 	
 	function divCheck(){
 	
@@ -144,12 +149,10 @@
 		}				
 		
 		// == 이미지 파일 유효성 검사 == //
-		var imgFile = $('#image').val().toLowerCase();
-		var fileForm = /(.*?)\.(jpg|jpeg|png|gif|bmp|pdf)$/;
-		var fileSize;		
+		var imgFile = $('#image').val();
+		var fileForm = /(.*?)\.(jpg|jpeg|png|gif|bmp|pdf)$/;		
 		
 		if(imgFile != "") {
-			fileSize = document.getElementById("isFile").files[0].size;
 		    
 		    if(!imgFile.match(fileForm)) {
 		    	alert("이미지 파일만 업로드 가능합니다.");
@@ -158,16 +161,26 @@
 		}
 	
 		var content = $("#content").val();
-		console.log(content);
+	//	console.log(content);
 		$("#txt_content").val(content);
-		console.log($("#txt_content").val());
+	//	console.log($("#txt_content").val());
 		var frm = document.reviewFrm;
 		frm.method = "POST";
-		frm.action = "<%=ctxPath%>/myPageReviewWrite.do";
+		frm.action = "<%=ctxPath%>/member/myPageReviewWrite.do";
 		frm.submit();
 	}		
 
 
+	function imgView(elem){
+		console.log(elem);
+		console.log(elem.value);
+		var fullPath = elem.value;
+		fileName = fullPath.substring(12);
+		console.log(fullPath);
+		console.log(fileName);
+		$("#fileName").val(fileName);
+	}
+	
 </script>
 
 </head>
@@ -207,6 +220,8 @@
 							<th class="reviewTH">제목</th>
 							<td class="reviewTD">
 								<input type="text" id="subject" name="subject" placeholder="제목을 입력해주세요." value="">
+								<input type="hidden" id="product_num" name="product_num" value="${product.product.getProduct_num()}"/>
+								<input type="hidden" id="order_num" name="order_num" value="${product.order_num}" />
 							</td>
 						</tr>
 						<tr class="reviewTR contents">
@@ -222,6 +237,7 @@
 							<th class="reviewTH">사진등록</th>
 							<td class="reviewTD">
 								<input type="file" name="image" id="image" accept="image/*" />
+								<input type='hidden' id='fileName' name='fileName'/>
 								<span style="font-size:8pt;">구매한 상품이 아니거나 캡쳐 사진을 첨부한 경우, 통보없이 삭제됩니다.</span>
 							</td>
 						</tr>

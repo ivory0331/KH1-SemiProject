@@ -31,7 +31,7 @@ public class MyUtil {
 			
 			String ctxPath = request.getContextPath();			
 			int beginIndex = currentURL.indexOf(ctxPath)+ctxPath.length();			
-			String goBackURL = currentURL.substring(beginIndex+1);//28번째부터 끝까지 shop/prodView.up?pnum=3
+			String goBackURL = currentURL.substring(beginIndex+1);//28번째부터 끝까지 shop/prodView.up? pnum=3
 			
 			return goBackURL;
 			
