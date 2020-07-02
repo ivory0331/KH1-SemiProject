@@ -925,5 +925,144 @@ public class IndexDAO implements InterIndexDAO{
 		
 		return totalpage;
 	}
+
+	// 상품문의 삭제시 같이 삭제될 업로드 사진 조회
+	@Override
+	public List<String> DelImgFind(String inquiry_num) throws SQLException {
+		List<String> delFileName = new ArrayList<String>();
+		try {
+			conn = ds.getConnection();
+			String sql = " select image from product_inquiry_image_table where fk_inquiry_num = ? ";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, inquiry_num);
+			rs = pstmt.executeQuery();
+			while(rs.next()) {
+				String image = rs.getString(1);
+				delFileName.add(image);
+			}
+		}
+		finally {
+			close();
+		}
+		return delFileName;
+	}
+
+	// 상품문의 수정
+	@Override
+	public int productQupdate(Map<String, String> paraMap) throws SQLException {
+		int result = 0;
+		String seq_num="";
+		
+		try {
+			conn = ds.getConnection();
+			conn.setAutoCommit(false);
+			
+			
+			// 상품문의 테이블 정보 insert
+			String sql = " update product_inquiry_table set subject = ?, content = ?, emailFlag = ?, smsFlag = ?, secretFlag = ?  "
+			           + " where inquiry_num = ? ";
+			
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, paraMap.get("subject"));
+			pstmt.setString(2, paraMap.get("content"));
+			pstmt.setString(3, paraMap.get("emailFlag"));
+			pstmt.setString(4, paraMap.get("smsFlag"));
+			pstmt.setString(5, paraMap.get("secretFlag"));
+			pstmt.setString(6, paraMap.get("inquiry_num"));
+			
+			result += pstmt.executeUpdate();
+			
+			if(result==0) {
+				conn.rollback();
+				return 0;
+			}
+			System.out.println("fileName="+paraMap.get("fileName"));
+			if(!paraMap.get("fileName").trim().isEmpty()) {
+				String[] fileNameArr = paraMap.get("fileName").split(",");
+				sql = " insert into product_inquiry_image_table (fk_inquiry_num, image) "
+				    + " values (?,?)";
+				pstmt = conn.prepareStatement(sql);
+				for(int i=0; i<fileNameArr.length; i++) {
+					pstmt.setString(1, paraMap.get("inquiry_num"));
+					pstmt.setString(2, fileNameArr[i]);
+					result+=pstmt.executeUpdate();
+				}
+				if(result < (fileNameArr.length+1)) {
+					conn.rollback();
+					return 0;
+				}
+			}
+			System.out.println("최종실행 sql="+sql);
+			
+			conn.commit();
+			
+			
+		}
+		finally {
+			close();
+		}
+		
+		
+		return result;
+	}
+
+	// 상품문의 수정 시 기존에 있던 이미지 DB에서 삭제
+	@Override
+	public List<String> inquiryImgDel(String inquiry_num, String[] fileNameArr) throws SQLException {
+		List<String> delFileName = new ArrayList<String>();
+		try {
+			conn = ds.getConnection();
+			String sql = " select image from product_inquiry_image_table where fk_inquiry_num = ? ";
+			
+			if(fileNameArr!=null) {
+				for(int i=0; i<fileNameArr.length; i++) {
+					sql+=" and image != ? ";
+				}
+				
+			}
+			
+			sql += " and image is null";
+			
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, inquiry_num);
+			
+			if(fileNameArr!=null) {
+				for(int i=0; i<fileNameArr.length; i++) {
+					pstmt.setString(i+2, fileNameArr[i]);
+					System.out.println((i+2)+"/"+fileNameArr[i]);
+				}
+			}
+			System.out.println(sql);
+			rs = pstmt.executeQuery();
+			while(rs.next()) {
+				String fileName = rs.getString(1);
+				delFileName.add(fileName);
+			}
+			rs.close();
+			
+			sql = " delete from product_inquiry_image_table where fk_inquiry_num = ? ";
+			
+			if(fileNameArr!=null) {
+				for(int i=0; i<fileNameArr.length; i++) {
+					sql+=" and image != ? ";
+				}
+			}
+			
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, inquiry_num);
+			
+			if(fileNameArr!=null) {
+				for(int i=0; i<fileNameArr.length; i++) {
+					pstmt.setString(i+2, fileNameArr[i]);
+				}
+			}
+			
+			pstmt.executeUpdate();
+		}
+		finally {
+			close();
+		}
+		return delFileName;
+	}
 	
 }

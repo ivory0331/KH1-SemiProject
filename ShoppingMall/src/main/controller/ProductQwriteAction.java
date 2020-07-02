@@ -1,6 +1,7 @@
 package main.controller;
 
 import java.io.File;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -81,14 +82,37 @@ public class ProductQwriteAction extends AbstractController {
 			MultipartRequest multi = new MultipartRequest(request, realPath, maxsize, encoding, new DefaultFileRenamePolicy());
 			
 			
+			
+			String fileName = null;
 			String title = multi.getParameter("title");
 			String emailFlag = multi.getParameter("emailComment");
 			String smsFlag = multi.getParameter("mobileComment");
 			String secretFlag = multi.getParameter("secretFlag");
-			String[] fileNameArr = multi.getParameterValues("fileName");
-			String fileName = null;
+			int arrCnt = multi.getParameterValues("fileName").length;
+			String[] fileNameArr = new String[arrCnt];
 			String content = multi.getParameter("contents");
 			product_num = multi.getParameter("product_num");
+			int cnt = 0;
+			
+			Enumeration<String> files= multi.getFileNames();
+			while(files.hasMoreElements()) {
+				String name = files.nextElement();
+				System.out.println("name:"+name);
+				if(multi.getFilesystemName(name) != null) {
+					fileNameArr[cnt] = multi.getFilesystemName(name);
+					System.out.println("파일명:"+fileNameArr[cnt]);
+					cnt++;
+				}
+				
+			}
+			
+			String[] resultFileNameArr = new String[cnt];
+			
+			for(int i=0; i<cnt; i++) {
+				resultFileNameArr[i] = fileNameArr[i];
+			}
+			
+			
 			
 			content = content.replaceAll("<", "&lt;");
 			content = content.replaceAll(">", "&gt;");
@@ -102,7 +126,7 @@ public class ProductQwriteAction extends AbstractController {
 			if(emailFlag==null) emailFlag="0";
 			if(smsFlag == null) smsFlag="0";
 			if(secretFlag == null) secretFlag="0";
-			if(fileNameArr != null) fileName = String.join(",", fileNameArr);
+			if(resultFileNameArr != null) fileName = String.join(",", resultFileNameArr);
 			
 			System.out.println(emailFlag+"/"+smsFlag+"/"+secretFlag+"/"+fileName+"/"+content);
 			

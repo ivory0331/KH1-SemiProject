@@ -988,6 +988,8 @@ insert into one_category_table(category_num, category_content) values(11, '기�
 
 commit;
 
+update one_inquiry_table set answer='답변답변답변';
+
 create table basket_table
 (basket_num     number not null
 ,product_count  number not null -- 주문한 상품의 갯수 필수
@@ -999,3 +1001,4 @@ create table basket_table
 );
 
 select * from basket_table;
+select * from product_inquiry_image_table where image like '%'||'search'||'%';

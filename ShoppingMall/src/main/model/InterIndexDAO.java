@@ -66,6 +66,15 @@ public interface InterIndexDAO {
 	// 상품 검색 결과 행의 갯수 조회
 	int getTotalpage(HashMap<String, String> paraMap)throws SQLException;
 
+	// 상품문의 삭제 시 같이 삭제될 업로드 이미지 조회
+	List<String> DelImgFind(String inquiry_num)throws SQLException;
+
+	// 상품문의 수정
+	int productQupdate(Map<String, String> paraMap)throws SQLException;
+
+	// 상품문의 수정 시 기존에 있던 이미지 조회 및 삭제
+	List<String> inquiryImgDel(String inquiry_num, String[] fileNameArr)throws SQLException;
+
 	
 
 	
