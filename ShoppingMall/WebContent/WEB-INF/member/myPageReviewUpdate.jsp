@@ -99,6 +99,23 @@
 		width: 100%;
 	}
 	
+	label#choice {
+		border: solid 1px gray; 
+		padding: 1.5px 7px; 
+		margin: 2px 2px;
+		background-color: #eee;
+		cursor: pointer;
+		font-weight: normal;
+		border-radius: 3px;
+		
+	}
+	
+	label#choice:hover {
+		background-color: #ddd;
+	}
+	
+	input#fileName:focus {outline:none;}
+	
 	#btnSubmit {
 	    border: 1px solid #5f0080;
 	    background-color: #5f0080;
@@ -236,10 +253,13 @@
 						</tr>
 						<tr class="reviewTR image">
 							<th class="reviewTH">사진등록</th>
-							<td class="reviewTD">
-								<input type="file" name="image" id="image" accept="image/*" value="${delFileName}" style="display:none;"/>
-								<input type='text' id='fileName' name='fileName' value="${delFileName}" readonly /><label for="image">찾기</label>
-								<span style="font-size:8pt;">구매한 상품이 아니거나 캡쳐 사진을 첨부한 경우, 통보없이 삭제됩니다.</span>
+							<td class="reviewTD">	
+								<label for="image" id="choice">파일 선택</label>														
+								<input id='fileName' type='text' name='oldFileName' value="${image}" placeholder="선택된 파일 없음" readonly style="border-style: none;" />								
+								<input type="file" style="display:none;" name="image" id="image" value="${image}" accept="image/*" />
+								<div style="margin-left: 2px;">
+									<span style="font-size:8pt;">구매한 상품이 아니거나 캡쳐 사진을 첨부한 경우, 통보없이 삭제됩니다.</span>
+								</div>
 							</td>
 						</tr>
 					</table>

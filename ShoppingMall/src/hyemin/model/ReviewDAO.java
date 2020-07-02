@@ -497,6 +497,27 @@ public class ReviewDAO implements InterReviewDAO {
 					return 0;
 				}
 				
+				System.out.println("fileName="+paraMap.get("fileName"));
+				
+				if(!paraMap.get("fileName").trim().isEmpty()) {
+					
+					sql = " insert into review_image_table (fk_review_num, image) "
+						+ " values (?,?)";
+					
+					pstmt = conn.prepareStatement(sql);
+					
+					pstmt.setString(1, paraMap.get("review_num"));
+					pstmt.setString(2, paraMap.get("fileName"));
+					
+					result += pstmt.executeUpdate();
+					
+					if(result != 2) {
+						conn.rollback();
+						return 0;
+					}					
+				}
+				System.out.println("최종 sql : "+sql);
+				
 				conn.commit();
 				conn.setAutoCommit(true);
 				
@@ -506,6 +527,59 @@ public class ReviewDAO implements InterReviewDAO {
 			}
 
 			return result;
+		}
+
+		
+		// 후기 이미지 테이블에 기존에 있던 사진 조회 및 삭제
+		@Override
+		public String ReviewImgDel(String review_num, String oldFileName) throws SQLException {
+			
+			String delFileName = "";
+			
+			try {
+				conn = ds.getConnection();
+				
+				String sql = " select image from review_image_table where fk_review_num = ? ";
+				
+				if(oldFileName != null) {
+					sql += " and image != ? ";					
+				}
+				
+				sql += " and image is null ";
+				
+				pstmt = conn.prepareStatement(sql);
+				pstmt.setString(1, review_num);
+				
+				if(oldFileName != null) {
+					pstmt.setString(2, oldFileName);
+				}						
+				System.out.println(sql);				
+				
+				rs = pstmt.executeQuery();				
+				if(rs.next()) {
+					delFileName = rs.getString(1);
+				}
+				rs.close();
+				
+				sql = " delete from review_image_table where fk_review_num = ? ";
+				
+				if(oldFileName != null) {
+					sql += " and image != ? ";
+				}
+				
+				pstmt = conn.prepareStatement(sql);
+				pstmt.setString(1, review_num);
+				
+				if(oldFileName != null) {
+					pstmt.setString(2, oldFileName);
+				}
+				
+				pstmt.executeUpdate();				
+			}
+			finally {
+				close();
+			}			
+			return delFileName;
 		}
 
 			

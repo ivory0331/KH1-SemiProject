@@ -3,6 +3,7 @@ package hyemin.controller;
 import java.io.File;
 import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.ServletContext;
@@ -75,7 +76,7 @@ public class MyPageReviewUpdateAction extends AbstractController {
 		}
 		
 		else {	// 작성페이지에서 내용 작성 후 DB등록 할 때
-			InterReviewDAO rdao = new ReviewDAO();
+			InterReviewDAO dao = new ReviewDAO();
 			ServletContext context = request.getSession().getServletContext();
 			String realPath = context.getRealPath("Upload");
 			System.out.println("실제경로:"+realPath);
@@ -90,12 +91,28 @@ public class MyPageReviewUpdateAction extends AbstractController {
 			
 			MultipartRequest multi = new MultipartRequest(request, realPath, maxsize, encoding, new DefaultFileRenamePolicy());						
 			
+			String fileName = null;
 			String subject = multi.getParameter("subject");
-			String content = multi.getParameter("content");
-			String fileName = multi.getParameter("fileName");
+			String content = multi.getParameter("content");			
+			String oldFileName = multi.getParameter("oldFileName");
 			review_num = multi.getParameter("review_num");
 			String member_num = String.valueOf(loginuser.getMember_num());	
 			product_num = multi.getParameter("product_num");
+			
+			System.out.println(oldFileName);
+			
+			// 후기 이미지 테이블에 기존에 있던 사진 조회 및 삭제
+			String delFileName = dao.ReviewImgDel(review_num, oldFileName);
+			
+			//실제 경로에서도 이미지 삭제
+			realPath = context.getRealPath("Upload")+"/"+delFileName;		        
+			File file = new File(realPath);			
+			if(file.exists()){
+				file.delete();
+			}
+			else {
+				System.out.println("이미 삭제된 파일");
+			}			
 			
 			Enumeration<String> files = multi.getFileNames();
 			if(files.hasMoreElements()) {
@@ -125,14 +142,14 @@ public class MyPageReviewUpdateAction extends AbstractController {
 			paraMap.put("member_num", member_num);
 			paraMap.put("product_num", product_num);
 			
-			int result = rdao.updateReview(paraMap);			
+			int result = dao.updateReview(paraMap);		
+			
 			String message = "상품 후기가 수정되었습니다.";
 			String loc = request.getContextPath()+"/member/myPageProductCompleteReview.do";
 			
 			if(result==0) {
 				message = "상품 후기 수정 도중 오류가 발생했습니다.";
-				loc=request.getContextPath()+"/member/myPageProductCompleteReview.do";
-				
+				loc=request.getContextPath()+"/member/myPageProductCompleteReview.do";				
 			}
 			
 			request.setAttribute("message", message);

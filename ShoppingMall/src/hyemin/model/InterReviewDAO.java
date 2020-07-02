@@ -36,6 +36,9 @@ public interface InterReviewDAO {
 	// 특정 작성완료 후기 수정하기
 	int updateReview(Map<String, String> paraMap) throws SQLException;
 
+	// 후기 이미지 테이블에 기존에 있던 사진 조회 및 삭제
+	String ReviewImgDel(String review_num, String oldFileName) throws SQLException;
+
 
 
 
