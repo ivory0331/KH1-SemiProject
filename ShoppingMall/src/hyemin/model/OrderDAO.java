@@ -73,7 +73,8 @@ public class OrderDAO implements InterOrderDAO {
 						 " join order_state_table OS " + 
 						 " on O.fk_category_num = OS.category_num join product_table P " + 
 						 " on OP.fk_product_num = P.product_num " + 
-						 " where O.fk_member_num = ? ";
+						 " where O.fk_member_num = ? " + 
+						 " order by O.order_num desc ";
 			
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setInt(1, member_num);

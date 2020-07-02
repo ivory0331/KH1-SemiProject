@@ -77,6 +77,7 @@
 		padding: 10px 5px;
 		text-align: left;
 		color: black;
+		cursor: pointer;
 	}  
 	
 	.myOrder_Name > a {  

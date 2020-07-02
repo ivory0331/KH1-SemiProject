@@ -328,11 +328,12 @@ select fk_product_num, fk_order_num from review_table where review_num = 10;
 select fk_product_num, fk_order_num from review_table where review_num = 10;
 select * from review_image_table;
 
-delete from review_table where review_num = 5;
+select * from review_table;
+delete from review_table where review_num = 11;
 delete from review_image_table where fk_review_num = 5;
 
 update order_product_table set reviewFlag = 0
-where fk_order_num = 2 and fk_product_num = 93;
+where fk_order_num = 2 and fk_product_num = 100;
 
 commit;
 
@@ -354,7 +355,14 @@ create table review_image_table
 ,image varchar2(100)
 ,constraint fk_review_image FOREIGN key (fk_review_num) REFERENCES review_table(review_num)
 );
-
+ 
+--- ==== *** 제약조건 삭제하기 *** ==== --- 
+alter table review_image_table
+drop constraint fk_review_image;
+ 
+--- ==== *** 제약조건 추가하기 *** ==== --- 
+alter table review_image_table
+add constraint fk_review_image foreign key (fk_review_num) references review_table(review_num) on delete cascade;
 
 -- 리뷰테이블에 사용할 시퀀스 생성 --
 create sequence seq_review_table
