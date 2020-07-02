@@ -305,7 +305,7 @@ create table order_product_table
 ,constraint ck_reviewFlag check (reviewFlag in (0,1))
 );
 select * from order_table O join order_product_table OP on O.order_num = OP.fk_order_num;
-
+select * from order_product_table join product_table on fk_product_num = product_num;
 -- 고객 후기 테이블 --
 create table review_table
 (review_num number not null -- 후기 번호 필수+고유 시퀀스 사용
@@ -1009,3 +1009,21 @@ create table basket_table
 
 select * from basket_table;
 select * from product_inquiry_image_table where image like '%'||'search'||'%';
+
+desc order_table;
+update order_table set fk_category_num=3;
+commit;
+
+select * from order_table join order_product_table on order_num  = fk_order_num join product_table on fk_product_num = product_num;
+
+alter table product_inquiry_table modify subject varchar2(200);
+
+desc product_inquiry_table;
+
+alter table review_image_table
+drop constraint fk_review_image;
+
+alter table review_image_table
+add constraint fk_review_image foreign key (fk_review_num) references review_table(review_num) on delete cascade;
+
+select * from one_inquiry_table where subject like '%'||'배송'||'%';
