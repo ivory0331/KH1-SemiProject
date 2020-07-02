@@ -32,7 +32,7 @@ public class IndexDAO implements InterIndexDAO{
 	private PreparedStatement pstmt;
 	private ResultSet rs;
 	
-	private AES256 aes = null;
+	private AES256 aes = null; 
 	
 	// 생성자 
 	public IndexDAO() {

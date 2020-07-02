@@ -25,20 +25,57 @@
 		margin-left: 30px;
 	}
 	.sub {
-		font-size: 15pt;
+		font-size: 12pt;
 		padding: 0px 15px;
 		cursor: pointer;
+		color: gray;
 	} 
-	#list {
-		border: solid 0px red;
-		margin-top: 80px;
-		float: right;
+	#pList {
+		border: solid 0px purple;
+		display: inline-block;
+		margin: 100px 0 40px 50px !important;
+		
 	}
 	tr, td {
 		border: solid 0px red;
 		display: inline-block;
-		padding: 30px;
 	}
+	td {
+		width: 270px;
+		height: 450px;
+		margin-bottom: 10px;
+	}
+	table {
+		text-align: center;
+	}
+
+	.sample_image img {
+	    -webkit-transform:scale(1);
+	    -moz-transform:scale(1);
+	    -ms-transform:scale(1); 
+	    -o-transform:scale(1);  
+	    transform:scale(1);
+	    -webkit-transition:.3s;
+	    -moz-transition:.3s;
+	    -ms-transition:.3s;
+	    -o-transition:.3s;
+	    transition:.3s;
+	}
+	.sample_image:hover img {
+	    -webkit-transform:scale(1.1);
+	    -moz-transform:scale(1.1);
+	    -ms-transform:scale(1.1);   
+	    -o-transform:scale(1.1);
+	    transform:scale(1.1);
+	}
+	.sample_image {
+		border: solid 0px yellow;
+		overflow: hidden;
+	}
+	.pricecolor {
+		text-align: left;
+	}
+	
 </style>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -70,21 +107,19 @@
 				<c:if test="${not empty recommendProduct}">
 					<tr>
 						<c:forEach var="pvo" items="${recommendProduct}" varStatus="status">
-							<td>
+							<td class="pricecolor">
 								<a href='/ShoppingMall/detail.do?product_num=${pvo.product_num}'>
-									<img width="300px;" height="400px;" src="/ShoppingMall/images/${pvo.representative_img}" />
+									<div style="width:250px; height:350px;" class="sample_image"><img style="width:100%; height:100%;" src="/ShoppingMall/images/${pvo.representative_img}" /></div>
 								</a>
-								<br/>${pvo.product_name}
-								
+								<br/><span style="font-size:13pt; letter-spacing: 0.6px; color:#333;">${pvo.product_name}</span>
 								<c:if test="${pvo.sale != 0}">
-									<br/><span style="text-decoration: line-through;"><fmt:formatNumber value="${pvo.price}" pattern="###,###"/> 원</span>
-									&nbsp;=>&nbsp;<fmt:formatNumber value="${pvo.finalPrice}" pattern="###,###" /> 원
+									<br/><span style="text-decoration: line-through; color: #ccc; font-weight: bold; font-size: 17px;"><fmt:formatNumber value="${pvo.price}" pattern="###,###"/> 원</span>
+									<span style="color: #5f0080; font-weight: bold; font-size: 17px;">&nbsp;→&nbsp;<fmt:formatNumber value="${pvo.finalPrice}" pattern="###,###" />원</span>
 								</c:if>
 								
 								<c:if test="${pvo.sale == 0}">
-									<br/><fmt:formatNumber value="${pvo.price}" pattern="###,###"/> 원
+									<br/><span style="color: #5f0080; font-weight: bold; font-size: 17px;"><fmt:formatNumber value="${pvo.price}" pattern="###,###"/>원</span>
 								</c:if>
-								
 							</td> 
 							
 							<c:if test="${(status.count)%3 == 0 }">

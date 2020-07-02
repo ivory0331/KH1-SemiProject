@@ -232,9 +232,14 @@
 													<a class="link_review" onclick="goReview('${OrderProductsList.product_num}')">후기 작성</a>
 												</td>							
 											</c:when>	
-											<c:otherwise>
+											<c:when test="${OrderProductsList.reviewFlag == 1 && OrderProductsList.order_state == '배송완료'}">
 												<td class="link">
 													<a class="link_review_complete">후기 작성 완료</a>
+												</td>							
+											</c:when>
+											<c:otherwise>
+												<td class="link">
+													<a class="link_review_complete">후기 작성</a>
 												</td>
 											</c:otherwise>
 										</c:choose>														

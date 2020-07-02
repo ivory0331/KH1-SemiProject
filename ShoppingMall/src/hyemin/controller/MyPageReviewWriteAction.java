@@ -1,6 +1,7 @@
 package hyemin.controller;
 
 import java.io.File;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -87,15 +88,20 @@ public class MyPageReviewWriteAction extends AbstractController {
 			int maxsize = 10*1024*1024; 
 			String encoding = "UTF-8";
 			
-			MultipartRequest multi = new MultipartRequest(request, realPath, maxsize, encoding, new DefaultFileRenamePolicy());			
-			
+			MultipartRequest multi = new MultipartRequest(request, realPath, maxsize, encoding, new DefaultFileRenamePolicy());						
 			
 			String subject = multi.getParameter("subject");
 			String content = multi.getParameter("content");
-			String image = multi.getParameter("fileName");
+			String fileName = multi.getParameter("fileName");
 			String order_num = multi.getParameter("order_num");
 			String member_num = String.valueOf(loginuser.getMember_num());	
 			product_num = multi.getParameter("product_num");
+			
+			Enumeration<String> files = multi.getFileNames();
+			if(files.hasMoreElements()) {
+				String name = files.nextElement();
+				fileName = multi.getFilesystemName(name);
+			}
 			
 			subject = subject.replaceAll("<", "&lt;");
 			subject = subject.replaceAll(">", "&gt;");
@@ -109,12 +115,12 @@ public class MyPageReviewWriteAction extends AbstractController {
 			content = content.replaceAll("&","&amp;");
 			content = content.replaceAll("\"","&quot");
 			
-			System.out.println(subject+"/"+content+"/"+image+"/"+order_num+"/"+member_num+"/"+product_num);
+			System.out.println(subject+"/"+content+"/"+fileName+"/"+order_num+"/"+member_num+"/"+product_num);
 			
 			Map<String,String> paraMap = new HashMap<String, String>();
 			paraMap.put("subject", subject);
 			paraMap.put("content",content);
-			paraMap.put("image", image);
+			paraMap.put("image", fileName);
 			paraMap.put("order_num", order_num);
 			paraMap.put("member_num", member_num);
 			paraMap.put("product_num", product_num);

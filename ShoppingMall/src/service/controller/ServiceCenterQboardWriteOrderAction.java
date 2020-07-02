@@ -6,9 +6,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import common.controller.AbstractController;
-import hyemin.model.InterOrderDAO;
-import hyemin.model.OrderDAO;
 import main.model.OrderHistoryVO;
+import member.model.InterMemberDAO;
+import member.model.MemberDAO;
 import member.model.MemberVO;
 
 
@@ -32,10 +32,10 @@ public class ServiceCenterQboardWriteOrderAction extends AbstractController {
 			HttpSession session = request.getSession();
 			MemberVO loginuser = (MemberVO) session.getAttribute("loginuser");
 
-			InterOrderDAO orderdao = new OrderDAO();
+			InterMemberDAO orderdao = new MemberDAO();
 
 			// *** 페이징처리를 안 한, 특정 회원의 모든 주문내역 보여주기 *** //
-			List<OrderHistoryVO> orderHistoryList = orderdao.selectOneMemberAllOrder(loginuser.getMember_num());
+			List<OrderHistoryVO> orderHistoryList = orderdao.selectOneMemberOrderList(loginuser.getMember_num());
 
 			request.setAttribute("orderHistoryList", orderHistoryList);
 

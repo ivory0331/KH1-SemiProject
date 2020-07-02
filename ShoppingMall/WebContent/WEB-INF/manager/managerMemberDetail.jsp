@@ -1,6 +1,10 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <% String ctxPath = request.getContextPath(); %>
+
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -116,24 +120,88 @@
 				</div>
 				<div class="memberInfo">
 					<div id="userBtn" align="right">
-						<span class="type">경고주기</span>
 						<span class="type">탈퇴</span>
 					</div>
+					
+					<!-- 1. 회원정보 -->						
 					<div class="detailTablePart" id="info">
 						<div class="tab">
 							<button class="tablinks choice" onclick="goTable('0')">회원정보</button>
 							<button class="tablinks" onclick="goTable('1')">구매내역</button>
 							<button class="tablinks" onclick="goTable('2')" style="border-right:solid 1px black">후기</button>
-							<button class="tablinks" onclick="goTable('3')" style="border-right:solid 1px black">1:1문의</button>
+							<button class="tablinks" onclick="goTable('3')" style="border-right:solid 1px black">1:1문의</button>							
+						</div>					
+							<table class="table">
+								<tr>
+									<th>회원번호</th>
+									<td>${mvo.member_num}</td>
+								</tr>
+								<tr>
+									<th>성명</th>
+									<td>${mvo.name}</td>
+								</tr>
+								<tr>
+									<th>아이디</th>
+									<td>${mvo.userid}</td>
+								</tr>
+								<tr>
+									<th>이메일</th>
+									<td>${mvo.email}</td>
+								</tr>
+								<tr>
+									<th>휴대폰 번호</th>
+									<td>${mvo.mobile}</td>
+								</tr>
+								<tr>
+									<th>우편번호</th>
+									<td>${mvo.postcode}</td>
+								</tr>
+								<tr>
+									<th>주소</th>
+									<td>${mvo.address}</td>
+								</tr>
+								<tr>
+									<th>상세주소</th>
+									<td>${mvo.detailAddress}</td>
+								</tr>
+								<tr>
+									<th>성별</th>
+									<td>
+										<c:choose>
+											<c:when test="${mvo.gender eq '1'}">
+												남자
+											</c:when>
+											<c:when test="${mvo.gender eq '2'}">
+												여자
+											</c:when>
+											<c:otherwise>
+												선택 안 함
+											</c:otherwise>
+										</c:choose>
+									</td>
+								</tr>
+								<tr>
+									<th>생일</th>
+									<td>
+										<c:choose>
+											<c:when test="${empty mvo.birthday}">
+												설정 안 함
+											</c:when>
+											<c:otherwise>
+												${mvo.birthday}
+											</c:otherwise>
+										</c:choose>
+									</td>
+								</tr>
+								<tr>
+									<th>가입날짜</th>
+									<td>${mvo.registerdate}</td>
+								</tr>							
+							</table>					
 						</div>
-						<table class="table info">
-							<tr>
-								<th style="border:none" class="tableTitle">회원정보</th>
-							</tr>
-						</table>
-					</div>
-				
-				
+
+
+					<!-- 2. 회원정보 -->
 					<div class="detailTablePart" id="sales">
 						<div class="tab">
 							<button class="tablinks" onclick="goTable('0')">회원정보</button>
@@ -152,13 +220,22 @@
 								<th>결재금액</th>
 								<th>주문상태</th>
 							</tr>
-							<tr>
-								<td>0000000</td>
-								<td>img태그 사용</td>
-								<td>한우</td>
-								<td>100,000</td>
-								<td>배송완료</td>
-							</tr>
+							<c:if test="${empty orderHistoryList} }"> <tr><td colspan="5">주문 내역이 없습니다.</td></tr></c:if>
+							<c:if test="${not empty orderHistoryList} }">
+								<c:set var="temp" value="0" /> 
+									<%-- <c:foreach var="ohvo" items="${orderHistoryList}>
+										<c:choose>
+                     						 <c:when test="${ohvo.order_num != temp}">									
+												<tr>
+													<td></td>
+												</tr>
+												
+												
+												
+												
+									</c:forEach> --%>
+							</c:if>
+							
 						</table>
 					</div>
 					

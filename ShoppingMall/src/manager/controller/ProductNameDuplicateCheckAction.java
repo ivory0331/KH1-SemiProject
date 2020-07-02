@@ -13,9 +13,10 @@ public class ProductNameDuplicateCheckAction extends AbstractController {
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		
+		String productNum = request.getParameter("productNum");
 		String productName = request.getParameter("productName");
 		InterProductDAO dao = new ProductDAO();
-		boolean isUse = dao.productNameDuplicateCheck(productName);
+		boolean isUse = dao.productNameDuplicateCheck(productName,productNum);
 		
 		JSONObject jsonObj = new JSONObject();
 		

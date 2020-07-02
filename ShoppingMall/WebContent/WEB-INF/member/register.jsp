@@ -89,7 +89,7 @@ input.tel_confirm{
 span.btn_tel{
    background-color: #ddd;
    border: 1px solid #ddd;
-    color: #fff;
+   color: #fff;
 }
 span.btn_tel_correct{
     width: 130px;
@@ -108,11 +108,10 @@ span.btn_tel_correct{
 }
 
 span.btnCheck_tel{
-     margin-top: 10px;
+    margin-top: 10px;
     background-color: #fff;
     border: 1px solid #ccc;
     color: #ccc;
-    cursor: default;
 }
 
 #address, #detailAddress{
@@ -340,12 +339,15 @@ div.check_event{
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script> 
 <script type="text/javascript" src="<%= ctxPath%>/js/jquery-3.3.1.min.js"></script>
 <script type="text/javascript" src="<%= ctxPath%>/util/myutil.js"></script>
+
 <script type="text/javascript">
    var bIdValidateCheck = false; //아이디 유효성 체크 
    var bPwValidateCheck = false; //비밀번호 유효성  체크 
    var bPwChValidateCheck = false; //비밀번호 확인 체크 
    var bIdDuplicateCheck = false; // 아이디 중복확인을 클릭여부 확인 
    var bEmailDuplicateCheck = false; //이메일 중복확인 클릭여부 확인 
+   var bTelDuplicateCheck = false; //휴대폰인증 클릭여부 확인
+   var bTelCheckDuplicateCheck = false; //휴대폰인증 확인 클릭여부 체크 
    
    $(document).ready(function(){
                
@@ -443,6 +445,7 @@ div.check_event{
       $("input#passwdCk").focus(function(){
          $(".txt_guide:eq(2)").show();
       });
+      
       $("#passwdCk").keyup(function(){
          var passwd = $("#passwd").val();
          var passwdCheck = $(this).val();
@@ -505,14 +508,98 @@ div.check_event{
       
       
       //==인증번호 받기 (인증번호 클릭하면 telCk_error나오게 )
-      $(".btn_tel").click(function(event){
+      $("#btn_tel").click(function(event){
     	  $(".txt_guide:eq(3)").show();
     	  
+    	  if($("#btn_tel").val().trim()==""){
+              alert("인증받을 휴대폰 번호를 기입하세요");
+              bTelDuplicateCheck = false;
+              return;            
+           }
+    	  
+    	  $.ajax({
+				url:"<%= ctxPath%>/member/smsSend.do",
+				type:"post",
+				data:{"mobile":$("#tel").val() /*핸드폰 번호 */
+					 }, /*문자 내용이 난수 값 : action단에서 생성해서 넘김  */
+				dataType:"json",
+				success:function(json){
+					if(json.success_count == 1) {
+						 alert("인증번호가 발송되었습니다");
+						 bTelDuplicateCheck = true;						
+					}
+					else {
+						alert("인증번호 전송이 실패되었습니다");
+						 bTelDuplicateCheck = false;
+					}
+				},
+				error: function(request, status, error){
+					alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
+			    }
+			});	
       });
       
       
-      //==인증번호 확인 
+      // == 인증번호 확인버튼 효과주기 
+      $("#tel_confirm").keyup(function(event){
+          
+          //1) 숫자만 입력(숫자이외의 글자를 치면 아예 못치게 차단)
+          var keycode = event.keyCode;
+            
+          if( !((48 <= keycode && keycode<=57) || (96<=keycode && keycode<=105)|| (keycode==8))){
+
+             var word = $(this).val().length;
+             var keyValue = $(this).val().substring(0,word-1);
+             $(this).val(keyValue);
+          }
+          
+          //2)유효성검사에 맞으면 인증번호받기 클릭가능
+          if($(this).val().length == 6) {
+               // $("#btnCheck_tel").addClass('btn_tel_correct');
+               $("#btnCheck_tel").css({"background-color":"#5f0080", "color":"#fff","border":"solid 1px #5f0080"});
+                //alert("확인!");
+          }
+          else{
+                $("#btnCheck_tel").removeClass('btn_tel_correct');
+                $("#btnCheck_tel").removeAttr("href");
+          }
+     });// end of $("#tel_confirm").keyup(function(event) ------------
+    		 
+       
+      //==인증번호 동일 한지 확인                 
+      $("#btnCheck_tel").click(function(){    	  
+    	  
+    	if($("#tel_confirm").val().trim()==""){
+            alert("인증번호를 기입하세요");
+            bTelCheckDuplicateCheck = false;
+            return;            
+         }
+    	
+    	 $.ajax({
+			url:"<%= ctxPath%>/login/telverifyCertification.do",
+			type:"post",
+			data:{"tel_confirm":$("#tel_confirm").val()},
+			dataType:"json",
+			success:function(json){
+				if(json.n == 1) {
+					 alert("인증성공 되었습니다");
+					 bTelCheckDuplicateCheck = true;					
+				}
+				else{
+					alert("발급된 인증코드가 아닙니다. 인증코드를 다시 발급받으세요");
+					$("#tel_confirm").val("");
+					bTelCheckDuplicateCheck = false;
+				}
+			},
+			error: function(request, status, error){
+				alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
+		    }
+    	 
+      	});
+    	 
+      });// end of $("#passwdCk").blur()--------------
       
+   
       
       
       //==주소검색
@@ -748,11 +835,17 @@ div.check_event{
 			return;
 		}
 		//휴대폰 번호 검사 체크여부 
-		if($("#tel").val().trim()==""){
-	           alert("휴대폰 번호를 입력하세요");
-	           return;
+		if(!bTelDuplicateCheck){
+	        alert("휴대폰 번호 인증을 해주세요");
+	        return;
 	    }
-
+		
+		//휴대폰 인증검사 체크여부 
+		if(!bTelCheckDuplicateCheck){
+	        alert("휴대폰 번호 인증을 해주세요");
+	        return;
+	    }
+		
 		//아이디 중복체크 검사 
 		if (!bIdDuplicateCheck) {
 			alert("아이디 중복확인을 해주세요");
@@ -851,10 +944,10 @@ div.check_event{
                         <td class="memberCols1">휴대폰*</td>
                         <td class="memberCols2">
                            <input type="tel"  name="mobile" id="tel" value="" maxlength="11" placeholder="숫자만 입력해주세요"/>
-                            <span class="btnCheck btn_tel ">인증번호 받기 </span>
+                            <span class="btnCheck btn_tel " id="btn_tel">인증번호 받기 </span>
                              
-                             <input type="text" class="tel_confirm" name="tel_confirm" id="tel_confirm" value="" maxlength="6" >   
-                            <span class="btnCheck btnCheck_tel ">인증번호 확인 </span>
+                             <input type="text" class="tel_confirm" name="tel_confirm" id="tel_confirm" value="" maxlength="6" />   
+                            <span class="btnCheck btnCheck_tel" id="btnCheck_tel">인증번호 확인 </span>
                              
                              <p class="txt_guide" style="display: block;">
                            <span class="txt txt_errorCk telCk_error">인증번호가 오지 않는다면, 통신사 스팸 차단 서비스 혹은 휴대폰 번호 차단 여부를 확인해주세요. (마켓컬리 1644-1107)</span>
@@ -1029,7 +1122,8 @@ div.check_event{
                      <button type="button" class="btn_submit" onclick="goRegister();">가입하기</button>
                    </div>
                         
-                 </form>      
+                 </form> 
+                 
                </div>   
             </div> 
          </div>

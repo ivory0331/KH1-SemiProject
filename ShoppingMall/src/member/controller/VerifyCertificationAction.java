@@ -12,7 +12,6 @@ public class VerifyCertificationAction extends AbstractController {
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		
 		//사용자가 가져온 인증코드 
-		//String userid = request.getParameter("userid");
 		String userCertificationCode = request.getParameter("userCertificationCode");
 		
 		//세션 저장된 인증코드 

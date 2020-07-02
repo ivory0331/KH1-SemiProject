@@ -266,13 +266,15 @@
 		if(bool) {
 			
 			$.ajax({
-				url:"/ShoppingMall/Member/myPageReviewDelete.do",
+				url:"/ShoppingMall/member/myPageReviewDelete.do",
 				type:"POST",
 				data:{"review_num":review_num},
 				dataType:"JSON",
 				success:function(json){
-					if(json.n == 3) { // 작성한 후기를 삭제한 후 페이지이동을 해야 하는데 이동할 페이지는 페이징 처리하여 보고 있던 그 페이지로 가도록 한다. 
-						location.href= "<%= request.getContextPath()%>/${goBackURL}"; 
+					if(json.n == 2) { // 작성한 후기를 삭제한 후 페이지이동을 해야 하는데 이동할 페이지는 페이징 처리하여 보고 있던 그 페이지로 가도록 한다. 
+						alert(json.message);
+						location.href= "<%= request.getContextPath()%>/member/myPageProductCompleteReview.do";
+						<%-- location.href= "<%= request.getContextPath()%>/${goBackURL}"; --%>
 					}
 				},
 				error: function(request, status, error){
@@ -286,6 +288,14 @@
 		}
 
 	}// end of function goDelete(review_num)---------------------------
+	
+	
+	// === 작성완료 후기 수정하기 === // 
+	function goUpdate(review_num) {
+		
+		location.href="<%= ctxPath%>/member/myPageReviewUpdate.do?review_num="+review_num;
+
+	}// end of function goUpdate(review_num)---------------------------
 	
 </script>
 
@@ -326,25 +336,25 @@
 				<div class="reviewList">    				
 					<div class="column">
 						<div class="col" style="width:70px;">번호</div>
-						<div class="col" style="width:520px;">상품명</div>
-						<div class="col" style="width:100px;">작성일</div>
-						<div class="col" style="width:50px;">조회</div>
-						<div class="col" style="width:60px;">좋아요</div>
+						<div class="col" style="width:550px;">상품명</div>
+						<div class="col" style="width:110px;">작성일</div>
+						<div class="col" style="width:80px;">조회</div>
 					</div>
 					
 					<c:forEach var="List" items="${completeReviewList}">
-					<div class="accordion">
+					<div class="accordion" style="cursor: pointer;">
 				    	<div class="col num" style="width:70px;">${List.review_num}</div>
-						<div class="col name" style="width:520px;">${List.product.getProduct_name()}</div>
-						<div class="col date" style="width:100px;">${List.write_date}</div>
-						<div class="col view" style="width:50px;">${List.hit}</div>
-						<div class="col like" style="width:60px;">${List.favorite}</div>
+						<div class="col name" style="width:550px;">${List.product.getProduct_name()}</div>
+						<div class="col date" style="width:110px;">${List.write_date}</div>
+						<div class="col view" style="width:80px;">${List.hit}</div>
 				    </div>
 				    <div class="panel">
 				    	<div class="title" style="margin: 10px 10px 20px 10px;">제목 : ${List.subject}</div>
-				    	<div class="image">
-				    		<img class="image" alt="${List.subject} 이미지" src="<%=ctxPath%>/Upload/${List.imageList[0]}">
-				    	</div>
+				    	<c:if test="${not empty List.imageList[0]}">
+					    	<div class="image">
+					    		<img class="image" alt="${List.subject} 이미지" src="<%=ctxPath%>/Upload/${List.imageList[0]}">
+					    	</div>
+				    	</c:if>
 				    	<div class="review" style="margin: 20px 10px;">${List.content}</div>
 				    	<div class="button">
 					    	<input type="button" id="delete" class="delete" name="delete" value="삭제하기" onclick="goDelete('${List.review_num}')" />
