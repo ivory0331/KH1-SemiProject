@@ -85,7 +85,16 @@ public interface InterIndexDAO {
 	int reviewDel(String review_num)throws SQLException;
 
 	// 모든 1:1문의 조회 -관리자-
-	List<OneInquiryVO> allOneInquirySelect()throws SQLException;
+	List<OneInquiryVO> allOneInquirySelect(HashMap<String, String> paraMap)throws SQLException;
+
+	// 1:1문의 카테고리 조회 -관리자-
+	List<Map<String, String>> oneInquiryCategroySelect()throws SQLException;
+
+	// 조회한 결과물의 총 수 조회 -관리자-
+	int getTotalPageQuiry(HashMap<String, String> paraMap)throws SQLException;
+
+	// 모든 상품문의 조회 -관리자-
+	List<ProductInquiryVO> allProductInquirySelect(HashMap<String, String> paraMap)throws SQLException;
 
 
 	

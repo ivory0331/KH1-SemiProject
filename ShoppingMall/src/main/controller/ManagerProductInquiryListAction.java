@@ -12,10 +12,11 @@ import common.controller.AbstractController;
 import main.model.IndexDAO;
 import main.model.InterIndexDAO;
 import main.model.OneInquiryVO;
+import main.model.ProductInquiryVO;
 import member.model.MemberVO;
 import my.util.MyUtil;
 
-public class ManagerOneInquiryListAction extends AbstractController {
+public class ManagerProductInquiryListAction extends AbstractController {
 
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
@@ -42,6 +43,7 @@ public class ManagerOneInquiryListAction extends AbstractController {
 		paraMap.put("sizePerPage", sizePerPage);
 		
 		String searchCategory = request.getParameter("searchCategory");
+		String searchSubcategory = request.getParameter("searchSubcategory");
 	   	String searchWord = request.getParameter("searchWord");
 	   	String searchType = request.getParameter("searchType");
 	   	
@@ -53,9 +55,13 @@ public class ManagerOneInquiryListAction extends AbstractController {
 		if(!"0".equals(searchCategory) && searchCategory != null) {
 			paraMap.put("searchCategory", searchCategory);
 		}
+		
+		if(!"0".equals(searchSubcategory) && searchSubcategory != null) {
+			paraMap.put("searchSubcategory", searchSubcategory);
+		}
 	   	
 		InterIndexDAO dao = new IndexDAO();
-		List<OneInquiryVO> inquiryList = dao.allOneInquirySelect(paraMap);
+		List<ProductInquiryVO> inquiryList = dao.allProductInquirySelect(paraMap);
 		List<Map<String,String>> categoryList = dao.oneInquiryCategroySelect();
 		
 		// 총페이지갯수 알아오기(select)	 
@@ -108,7 +114,7 @@ public class ManagerOneInquiryListAction extends AbstractController {
 		request.setAttribute("searchWord", searchWord);
 		request.setAttribute("pageBar", pageBar);
 		
-		super.setViewPage("/WEB-INF/manager/managerOneInquiry.jsp");
+		super.setViewPage("/WEB-INF/manager/managerProductInquiry.jsp");
 		
 	}
 
