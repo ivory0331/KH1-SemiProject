@@ -87,6 +87,8 @@ create table product_subcategory_table
 );
 
 
+
+
 insert into product_subcategory_table(subcategory_num, subcategory_content) values(11,'기본채소');
 insert into product_subcategory_table(subcategory_num, subcategory_content) values(12,'쌈 샐러드');
 insert into product_subcategory_table(subcategory_num, subcategory_content) values(13,'특수채소');
@@ -107,8 +109,10 @@ commit;
 select * from product_category_table;
 select * from product_subcategory_table;
 
-
-
+select * from product_table;
+  alter table product_table
+  modify product_name varchar2(200);
+  
 -- 상품 테이블 생성 --
 create table product_table
 (product_num    number not null -- 상품번호 필수+고유 시퀀스 사용
@@ -132,7 +136,51 @@ create table product_table
 ,constraint fk_product_category_num FOREIGN key(fk_category_num) REFERENCES product_category_table(category_num)
 ,constraint fk_product_subcategory_num FOREIGN key(fk_subcategory_num) REFERENCES product_subcategory_table(subcategory_num)
 );
+drop  sequence seq_product_table;
 
+show user;
+
+update product_table set fk_category_num = 5, fk_subcategory_num=51, product_name='고양이이' 
+where product_num=251;
+
+update product_table set fk_category_num = ?, fk_subcategory_num=?, product_name=?,
+unit=?,packing=?,origin=?,price=?,sale=?,best_point=?,seller=?,seller_phone=?,stock=?,explain=?
+where product_num=?;
+
+select*
+from product_table
+where product_num=251;
+
+update product_image_table set image=?
+where product_num=?;
+
+commit;
+
+select P.product_num as PRODUCT_NUM, c.category_content as CATEGORY_CONTENT, S.subcategory_content as SUBCATEGORY_CONTENT, 
+       P.product_name as PRODUCT_NAME, P.unit as unit, P.packing as packing, P.origin as origin, P.price as price, P.sale as sale,
+       P.best_point as best_point, P.seller as seller, P.seller_phone as seller_phone, P.stock as STOCK,
+       P.explain as explain, P.representative_img as representative_img
+from product_table P join product_category_table C
+on P.fk_category_num = C.category_num
+join product_subcategory_table S
+on P.fk_subcategory_num = S.subcategory_num
+where product_num=251;
+
+select image
+from product_image_table
+where fk_product_num=251;
+
+select seq_product_table.nextval AS PNUM 
+from dual;
+-- 진하
+select last_number from user_sequences where SEQUENCE_NAME = 'SEQ_PRODUCT_TABLE';
+
+select*
+from product_table
+order by product_num desc;
+
+select last_number from user_sequences where SEQUENCE_NAME = 'SEQ_PRODUCT_TABLE';
+SELECT seq_product_table.CURRVAL FROM DUAL;
 
 -- 상품 테이블에 사용할 시퀀스 생성 --
 create sequence seq_product_table
@@ -161,6 +209,20 @@ create table product_image_table
 select*
 from product_table where product_name like '%'||'오징어'||'%';
 
+select*
+from product_table
+order by product_num desc;
+
+update product_image_table set image='상세1.jpg'
+where image='고양이123.jpg';
+commit;
+
+select*
+from product_image_table;
+
+select image
+from product_image_table
+where image='고양이18.jpg';
 
 -- 상품문의 테이블 생성 --
 create table product_inquiry_table
@@ -266,7 +328,7 @@ create table order_table
 ,price  number  not null    -- 주문금액 필수
 ,memo   varchar2(200)       -- 요청사항
 ,fk_member_num  number  not null    -- 회원테이블의 회원번호를 참조하는 컬럼
-,fk_category_num number not null    -- 주문상태 케이블의 주문상태 번호를 참조하는 컬럼
+,fk_category_num number not null    -- 주문상태 테이블의 주문상태 번호를 참조하는 컬럼
 ,constraint pk_order_table  primary key(order_num)
 ,constraint fk_order_member FOREIGN key(fk_member_num) REFERENCES member_table(member_num)
 ,constraint fk_order_category foreign key(fk_category_num) references order_state_table(category_num)
@@ -274,6 +336,46 @@ create table order_table
 select * from order_table;
 select * from order_product_table;
 select * from basket_table;
+
+select*
+from member_table;
+
+-- 진하
+
+select member_num, name, userid, email, mobile, postcode, address, detailaddress,gender,birthday,to_char(registerdate,'yyyy-mm-dd')
+from member_table
+where member_num='40';
+
+-- 주문 정보 테이블
+select*
+from order_table;
+insert into order_table(order_num, recipient, recipient_mobile, recipient_postcode, recipient_address, recipient_detailaddress, price, fk_member_num, fk_category_num)
+values(1,'나나','01012345678','12345','인천 어쩌고 저쩌고','1층','12800','40','3');
+
+select member_num, name, userid, email, mobile, 
+postcode, address, detailaddress,gender,to_char(birthday,'yyyy-mm-dd') as birthday, 
+to_char(registerdate,'yyyy-mm-dd') as registerdate 
+from member_table 
+where member_num=40;
+
+-- 주문 상품 정보 테이블 (주문번호 1)
+product_count  number not null -- 주문한 상품의 갯수 필수
+,fk_order_num   number not null -- 주문정보 테이블의 주문번호를 참조하는 컬럼
+,fk_product_num number not null -- 상품테이블의 상품번호를 참조하는 컬럼
+,price          number not null -- 주문상품의 가격(할인 후)
+,reviewFlag     number(1) default 0
+
+insert into order_product_table(product_count, fk_order_num, fk_product_num, price, reviewFlag)
+values(1,1,69,12900,0);
+insert into order_product_table(product_count, fk_order_num, fk_product_num, price, reviewFlag)
+values(2,1,70,45500,0);
+select * from order_table;
+select * from order_product_table;
+-- 주문번호 대표상품명 외 1개 결제금액 배송상태
+select
+from 
+where member_num='40';
+
 
 update order_table set fk_category_num = 3
 where order_num = 1;
@@ -298,7 +400,7 @@ create table order_product_table
 (product_count  number not null -- 주문한 상품의 갯수 필수
 ,fk_order_num   number not null -- 주문정보 테이블의 주문번호를 참조하는 컬럼
 ,fk_product_num number not null -- 상품테이블의 상품번호를 참조하는 컬럼
-,price          number not null -- 주문상품의 가격
+,price          number not null -- 주문상품의 가격(할인 후)
 ,reviewFlag     number(1) default 0
 ,constraint fk_order FOREIGN key (fk_order_num) REFERENCES order_table(order_num)
 ,constraint fk_product FOREIGN key (fk_product_num ) REFERENCES product_table(product_num)
@@ -483,6 +585,10 @@ create table basket_table
 ,constraint pk_basket_num primary key (basket_num)
 );
 
+alter table basket_table
+drop column price; 
+    
+commit;
 
 select * from basket_table;
 
@@ -564,6 +670,12 @@ commit;
 select *
 from product_table;
 
+select*
+from product_image_table;
+
+delete from product_image_table where image='김곤.gif';
+commit;
+
 
 -- 소고기
 insert into product_table (product_num, product_name, price, stock, origin, packing, unit, sale, seller, seller_phone, fk_category_num, fk_subcategory_num, representative_img) 
@@ -586,23 +698,23 @@ insert into product_table (product_num, product_name, price, stock, origin, pack
 values(seq_product_table.nextval, '초이스 찜갈비 2kg(냉동)', '58000', '5', '국내산(한우)', '냉동/종이포장', '1팩', '0', '김진하', '01075653393', 4, 41, '초이스 찜갈비 2kg(냉동).png');
 
 
- select P.product_num as PRODUCT_NUM, c.category_content as CATEGORY_CONTENT,
+select P.product_num as PRODUCT_NUM, c.category_content as CATEGORY_CONTENT,
              S.subcategory_content as SUBCATEGORY_CONTENT, P.product_name as PRODUCT_NAME,
              P.price as PRICE, P.stock as STOCK, p.sale as sale
- from product_table P join product_category_table C
- on P.fk_category_num = C.category_num
- join product_subcategory_table S
- on P.fk_subcategory_num = S.subcategory_num
- where fk_category_num =4 and fk_subcategory_num = 41 ;
+from product_table P join product_category_table C
+on P.fk_category_num = C.category_num
+join product_subcategory_table S
+on P.fk_subcategory_num = S.subcategory_num
+where fk_category_num =4 and fk_subcategory_num = 41 ;
  
-  select P.product_num AS product_num, c.category_content AS category_content, 
+select P.product_num AS product_num, c.category_content AS category_content, 
              S.subcategory_content AS subcategory_content, P.product_name AS product_name,
              P.price AS price, P.stock AS stock, P.sale AS sale
- from product_table P JOIN product_category_table C 
- ON P.fk_category_num = C.category_num 
- JOIN product_subcategory_table S 
- on P.fk_subcategory_num = S.subcategory_num 
- where fk_category_num = 4 and fk_subcategory_num = 41; 
+from product_table P JOIN product_category_table C 
+ON P.fk_category_num = C.category_num 
+JOIN product_subcategory_table S 
+on P.fk_subcategory_num = S.subcategory_num 
+where fk_category_num = 4 and fk_subcategory_num = 41; 
 
 
 
@@ -995,6 +1107,8 @@ insert into one_category_table(category_num, category_content) values(11, '기�
 
 commit;
 
+update one_inquiry_table set answer='답변답변답변';
+
 create table basket_table
 (basket_num     number not null
 ,product_count  number not null -- 주문한 상품의 갯수 필수
@@ -1006,3 +1120,4 @@ create table basket_table
 );
 
 select * from basket_table;
+select * from product_inquiry_image_table where image like '%'||'search'||'%';

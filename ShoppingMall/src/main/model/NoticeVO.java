@@ -8,7 +8,7 @@ public class NoticeVO {
 	private int hit;
 	
 	
-	public NoticeVO() {}
+	public NoticeVO() {} 
 	
 	public NoticeVO(int notice_num, String subject, String content, String write_date, int hit) {
 		

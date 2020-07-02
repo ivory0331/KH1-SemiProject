@@ -156,14 +156,14 @@
 		display:none;
 		position: absolute;
 		z-index: 5;
-		min-width:170px;
+		width:170px;
 		background-color: white;
 		border:solid 1px black;
 	}
 	
 	/*전체 카테고리 하위의 navi가 되는 ul*/
 	.navi-categori{
-		width:170px;
+		width:168px;
 		display:inline-block;
 		list-style: none;
 		padding:0px;

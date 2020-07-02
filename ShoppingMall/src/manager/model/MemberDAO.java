@@ -1,6 +1,7 @@
 package manager.model;
 
 import java.io.UnsupportedEncodingException;
+import java.security.GeneralSecurityException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -14,6 +15,7 @@ import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.sql.DataSource;
 
+import main.model.OrderHistoryVO;
 import member.model.EncryptMyKey;
 import member.model.MemberVO;
 import util.security.AES256;
@@ -223,7 +225,6 @@ public class MemberDAO implements InterMemberDAO {
 				
 				totalPage = rs.getInt(1);
 				
-				System.out.println("totalPage : "+totalPage);
 				
 			}catch(Exception e){
 				e.printStackTrace();
@@ -258,6 +259,127 @@ public class MemberDAO implements InterMemberDAO {
 			
 			return result;		
 			
+		}
+
+		
+		
+		//회원 상세 보기
+		@Override
+		public MemberVO detailMember(String member_num) throws SQLException {
+			int n=0;
+			
+			MemberVO mvo = new MemberVO();
+			
+			try {		
+				
+				conn = ds.getConnection();		
+				
+				String sql = "select member_num, name, userid, email, mobile, "
+						+ " postcode, address, detailaddress,gender,to_char(birthday,'yyyy-mm-dd') as birthday, "
+						+ " to_char(registerdate,'yyyy-mm-dd') as registerdate "
+						+ " from member_table " 
+						+ " where member_num=? ";	
+				
+				pstmt = conn.prepareStatement(sql);		
+				
+				pstmt.setString(1, member_num);	
+				
+				rs = pstmt.executeQuery();
+				
+				if(rs.next()) {
+					mvo.setMember_num(rs.getInt("member_num"));
+					mvo.setName(rs.getString("name"));
+					mvo.setUserid(rs.getString("userid"));
+					mvo.setEmail(aes.decrypt(rs.getString("email")));
+					mvo.setMobile(aes.decrypt(rs.getString("mobile")));
+					mvo.setPostcode(rs.getString("postcode"));
+					mvo.setAddress(rs.getString("address"));
+					mvo.setDetailAddress(rs.getString("detailaddress"));
+					mvo.setGender(rs.getString("gender"));
+					mvo.setBirthday(rs.getString("birthday"));
+					mvo.setRegisterdate(rs.getString("registerdate"));		
+					
+				}
+				
+				
+				
+			} catch (UnsupportedEncodingException | GeneralSecurityException e) {
+				e.printStackTrace();
+			} finally {
+				close();
+			}
+			
+			return mvo;
+		}
+
+		@Override
+		public List<OrderHistoryVO> selectOneMemberAllOrder(String member_num) throws SQLException {
+			 
+		      List<OrderHistoryVO> orderHistoryList= new ArrayList<>();
+		      
+		      try {
+		         conn = ds.getConnection();
+		         
+		         String sql = " select O.order_num " + 
+		                   "      , to_char(O.order_date,'yyyy-mm-dd hh24:mi:ss') " + 
+		                   "      , O.price " + 
+		                   "      , OP.fk_product_num "+ 
+		                   "      , P.product_name " + 
+		                   "      , P.representative_img " + 
+		                   "      , OS.order_state " + 
+		                   " from order_table O " +
+		                   " join order_product_table OP " +
+		                   " on O.order_num = OP.fk_order_num " +
+		                   " join order_state_table OS " + 
+		                   " on O.fk_category_num = OS.category_num join product_table P " + 
+		                   " on OP.fk_product_num = P.product_num " + 
+		                   " where O.fk_member_num = ? " + 
+		                   " order by O.order_num desc ";
+		         
+		         pstmt = conn.prepareStatement(sql);
+		         pstmt.setString(1, member_num);
+		         
+		         rs = pstmt.executeQuery();
+
+		         while(rs.next()) {
+		            
+		            OrderHistoryVO ohvo = new OrderHistoryVO();
+		            ohvo.setOrder_num(rs.getInt(1));
+		            ohvo.setOrder_date(rs.getString(2));
+		            ohvo.setPrice(rs.getInt(3));
+		            ohvo.setFk_product_num(rs.getInt(4));
+		            ohvo.setProduct_name(rs.getString(5));
+		            ohvo.setRepresentative_img(rs.getString(6));
+		            ohvo.setOrder_state(rs.getString(7));
+
+		            orderHistoryList.add(ohvo);
+		         }   
+		         
+		      rs.close();
+		      
+		      sql = " select count(*) from order_product_table where fk_order_num = ? ";
+		      
+		      pstmt = conn.prepareStatement(sql);
+		      
+		      for(int i=0; i<orderHistoryList.size(); i++) {      
+		         
+		         pstmt.setInt(1, orderHistoryList.get(i).getOrder_num());
+		         
+		         rs = pstmt.executeQuery();
+		         
+		         if(rs.next()) {
+		            orderHistoryList.get(i).setProduct_cnt(rs.getInt(1));
+		         }         
+		      }
+
+		      } catch( Exception e) {
+		         e.printStackTrace();
+		      } finally {
+		         close();
+		      }
+		      
+		      return orderHistoryList;
+
 		}
 
 	   

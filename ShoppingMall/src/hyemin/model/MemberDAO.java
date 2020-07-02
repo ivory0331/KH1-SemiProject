@@ -17,7 +17,7 @@ public class MemberDAO implements InterMemberDAO {
 	private Connection conn;
 	private PreparedStatement pstmt;
 	private ResultSet rs;
-	
+	 
 	private AES256 aes = null;
 	
 	// 생성자 

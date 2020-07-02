@@ -29,7 +29,7 @@ public class ManagerProductInsertAction extends AbstractController {
 		if(!super.checkLogin(request)) {
 			
 			 String message = "먼저 로그인 해야 가능합니다.";
-	         String loc = "javascript:history.back()";
+	         String loc = "/ShoppingMall/member/login.do";
 	         
 	         request.setAttribute("message", message);
 	         request.setAttribute("loc", loc);
@@ -71,7 +71,9 @@ public class ManagerProductInsertAction extends AbstractController {
 	    
 	    if(!"POST".equalsIgnoreCase(method)) {
 	         // GET 이라면
-	    	  super.setViewPage("/WEB-INF/manager/managerProductInsert.jsp");	    	  
+			 int product_num = pdao.getPnumOfProduct();
+	    	 request.setAttribute("product_num", product_num);
+	    	 super.setViewPage("/WEB-INF/manager/managerProductInsert.jsp");	    	  
 	    }else {
 	    	
 			MultipartRequest mtrequest = null;// 파일업로드, 다운로드 기능을 위한 객체, cos.jar 라이브러리 넣어줌
@@ -98,8 +100,8 @@ public class ManagerProductInsertAction extends AbstractController {
 		    	  return;
 			  }
 			
-			  String representative_img = mtrequest.getFilesystemName("representative_img");
-			  //String detail_img = mtrequest.getFilesystemName("detail_img");  
+			
+			  String representative_img = mtrequest.getFilesystemName("representative_img");			  			
 			
 			  int fk_category_num = Integer.parseInt(mtrequest.getParameter("fk_category_num"));
 			  int fk_subcategory_num = Integer.parseInt(mtrequest.getParameter("fk_subcategory_num"));
@@ -141,7 +143,7 @@ public class ManagerProductInsertAction extends AbstractController {
 			  ProductVO pvo = new ProductVO();
 			  int product_num = pdao.getPnumOfProduct();
 			  
-			  pvo.setProduct_num(product_num);
+		//	  pvo.setProduct_num(product_num);
 			  pvo.setRepresentative_img(representative_img);
 			  pvo.setFk_category_num(fk_category_num);
 			  pvo.setFk_subcategory_num(fk_subcategory_num);
@@ -159,18 +161,38 @@ public class ManagerProductInsertAction extends AbstractController {
 
 			  int n = pdao.productInsert(pvo);
 			  
+			  
+			  int product_num = pdao.getPnumOfProduct();
+			  product_num -=1;
+
+			  
+			 // 상품 상세 이미지 업로드 
+			  int m = 0; 
+			  if(n==1) {
+				  int imageCount = Integer.parseInt(mtrequest.getParameter("imageCount"));
+				  for(int i=0; i<imageCount; i++) {
+					  String detail_img = mtrequest.getFilesystemName("detail_img"+(i+1));
+					  m = pdao.productImageInsert(product_num, detail_img);	 
+				  }				  
+			  }
+			 
+			  
 			  String message = "";
 			  String loc = "";
+			  
+			  if(m==1) {
+				  String message = "";
+				  String loc = "";
 			  
 			  if(n==1) {
 				  
 				  message = "제품등록 성공!!";
-				  loc = request.getContextPath()+"/manager/managerProductInsert.do";				  
+				  loc = request.getContextPath()+"/manager/managerProductList.do";				  
 				  
 			  }
 			  else {
 				  message = "제품등록 실패!!";
-				  loc = request.getContextPath()+"/manager/managerProductInsert.do";
+				  loc = request.getContextPath()+"/manager/managerProductList.do";
 			  }
 			  
 			  request.setAttribute("message", message);

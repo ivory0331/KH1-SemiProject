@@ -562,13 +562,14 @@ public class ServiceDAO implements InterServiceDAO {
 			result = pstmt.executeUpdate();
 		}
 		finally {
-			
+			close();
 		}
 		
 		return result;
 	}
 
 
+	// 자주하는 질문 게시판 특정 글 삭제
 	@Override
 	public int FAQDelete(String faq_num) throws SQLException {
 		int result = 0;
@@ -697,6 +698,46 @@ public class ServiceDAO implements InterServiceDAO {
 		}
 		
 		return nvo;
+	}
+
+
+	// 공지사항 특정 글 수정
+	@Override
+	public int boardUpdate(Map<String, String> paraMap) throws SQLException {
+		int result = 0;
+		try {
+			conn = ds.getConnection();
+			String sql = " update notice_table set subject=?, content=? where notice_num = ? ";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, paraMap.get("subject"));
+			pstmt.setString(2, paraMap.get("content"));
+			pstmt.setString(3, paraMap.get("notice_num"));
+			
+			result = pstmt.executeUpdate();
+		}
+		finally {
+			close();
+		}
+		
+		return result;
+	}
+
+
+	// 공지사항 특정 글 삭제
+	@Override
+	public int boardDelete(String notice_num) throws SQLException {
+		int result = 0;
+		try {
+			conn = ds.getConnection();
+			String sql = " delete from notice_table where notice_num = ? ";
+			pstmt=conn.prepareStatement(sql);
+			pstmt.setString(1, notice_num);
+			result = pstmt.executeUpdate();
+		}
+		finally {
+			close();
+		}
+		return result;
 	}
 
 

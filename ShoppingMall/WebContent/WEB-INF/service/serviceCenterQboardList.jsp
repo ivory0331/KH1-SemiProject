@@ -172,10 +172,10 @@
 							</c:if>
 					</table>
 					
-					<div style="border-bottom:solid 1px black; text-align:center;">${pageBar}</div>
-					<div class="boardSearch">
-						<input type="text" style="float:right" name="searchWord" />
-					</div>
+					<div style="border-bottom:solid 1px black; text-align:center; margin-bottom:20px;">${pageBar}</div>
+					<span style="float:right; border:solid 1px black;">
+							<input type="text" style="float:left; border:none;" name="searchWord"  id="searchWord" value="${searchWord}" /><span style="cursor: pointer;" onclick = "goInquiry()"><img src="<%=ctxPath%>/images/search.png" style="display:inline-block; width:25px; height: 25px; "/></span>
+					</span>
 				</div>
 				</form>
 			</div>

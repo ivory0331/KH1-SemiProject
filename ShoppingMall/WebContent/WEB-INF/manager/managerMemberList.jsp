@@ -54,6 +54,10 @@
 		color:white;
 	}
 	
+	td.click{
+		cursor: pointer;
+	}
+	
 	
 </style>
 <!-- 부트스트랩 -->
@@ -95,6 +99,17 @@
 				  goSearch();
 			  }
 		});
+		
+		
+		
+		
+		
+		// 회원 상세 보기
+		$("td.click").click(function(){
+			var member_num = $(this).siblings(".member_num").text();
+	        location.href="<%= ctxPath%>/manager/managerMemberDetail.do?member_num="+member_num;  
+		})
+		
 		
 	});
 	
@@ -188,11 +203,11 @@
 									<c:forEach var="mvo" items="${memberList}">
 										<tr>
 											<td><input type="checkbox" name="member_num" value="${mvo.member_num}" /></td>
-											<td>${mvo.member_num}</td>
-											<td>${mvo.name}</td>
-											<td>${mvo.userid}</td>
-											<td class="board-title">${mvo.address}</td>
-											<td>핸드폰번호</td>
+											<td class="click member_num">${mvo.member_num}</td>
+											<td class="click">${mvo.name}</td>
+											<td class="click">${mvo.userid}</td>
+											<td class="click board-title">${mvo.address}</td>
+											<td class="click">핸드폰번호</td>
 										</tr>
 									</c:forEach>	
 								</c:if>

@@ -81,10 +81,6 @@
 		border:solid 1px #ddd;
 	}
 	
-	#representative_img1{
-		width:100%;
-		height: 100%;
-	}
 	
 	div.detail_img{
 		align-content : center;
@@ -93,11 +89,7 @@
 		height: 180px;
 		margin:0 10px;
 	}
-	
-	.detail{
-		width:100%;
-		height:100%;
-	}
+		
 	
 	/* 파일 선택 디자인 */
 	.newProductImg label { 
@@ -147,8 +139,13 @@
 	div.upload_image_detail{
 		width:150px;
 		height:180px;
-		border:solid 1px #ddd;
 		margin-bottom: 10px;
+		border:solid 1px #ddd;		
+	}
+	
+	.detail{
+		width:150px;
+		height:180px;
 	}
 
 	
@@ -159,9 +156,6 @@
 		background-color: none;
 		margin-bottom:5px;
 	}
-	
-	
-	
 	
 	
 	.newProductInfo{
@@ -192,9 +186,45 @@
 
 	$(document).ready(function(){
 		
-				
+		
+		var image_src0="";
 		// 대표이미지 삽입
 		$('.upload_rep_image').on('change', function(){
+
+			
+			if(window.FileReader){
+				var filename = $(this)[0].files[0].name;
+			} 		
+			
+			var extn = filename.substring(filename.lastIndexOf('.') + 1).toLowerCase();			
+
+			if (extn == "gif" || extn == "png" || extn == "jpg" || extn == "jpeg") {
+				
+				$(this).siblings('.upload_name').val(filename); 
+				
+		         if (typeof (FileReader) != "undefined") {
+
+	                 var reader = new FileReader();
+	                 reader.onload = function (e) {	                   	  
+	                	 var html = "<img src='"+e.target.result+"' style='width:446px; height:300px;'>";
+	                     $(".representative_img_upload").html(html);
+	                 }
+
+	                 reader.readAsDataURL($(this)[0].files[0]);
+	             
+
+		         } else {
+		             alert("이미지 업로드에 실패하였습니다");
+		         }
+		     } else {
+		         alert("이미지 확장자 파일만 선택해주세요.");
+		     }
+			
+			
+		});		
+		
+		
+
 			if(window.FileReader){ // modern browser 
 				var filename = $(this)[0].files[0].name;
 			} 
@@ -211,13 +241,50 @@
 		$(".upload_image").each(function(index, item){
 			
 			var index = index+1;
-			
-			
+	
 			$('#image'+index+'_btn').on('change', function(){ 
 				if(window.FileReader){  
 					var filename = $(this)[0].files[0].name; 
 				}
+
+				var extn = filename.substring(filename.lastIndexOf('.') + 1).toLowerCase();			
+
+				if (extn == "gif" || extn == "png" || extn == "jpg" || extn == "jpeg") {
+					
+					$(this).siblings('.upload_name').val(filename); 
+					
+			         if (typeof (FileReader) != "undefined") {
+
+		                 var reader = new FileReader();
+		                 reader.onload = function (e) {	                    
+		                	 var html = "<img class=detail id='img"+index+"' src='"+e.target.result+"'>";
+		                     $(".detail"+index).html(html);
+		                 }
+
+		                 reader.readAsDataURL($(this)[0].files[0]);
+		             
+
+			         } else {
+			             alert("이미지 업로드에 실패하였습니다");
+			         }
+			     } else {
+			         alert("이미지 확장자 파일만 선택해주세요.");
+			     }
 			
+				
+				
+			});		
+			
+
+			$("#image"+index+"_delete").click(function(){ 
+				if($('image'+index+'_btn').val!=null){
+					$('image'+index+'_btn').val('');
+					$('#upload_name'+index).val('이미지 선택'+index); 
+					$("#img"+index).remove();
+				}
+			});
+			
+
 			$(this).siblings('#upload_image'+index).val(filename); 
 			var html = "<img src='images/"+filename+"' class = 'detail' id='image'"+index+"' alt='상세이미지 오류'/>";
 			$(".detail"+index).html(html);
@@ -266,7 +333,45 @@
 	
 	
 	
+	
+	
+	
+	// 이미지 미리보기
+	function handleImgFileSelect(e) {
+        var files = e.target.files;
+        var filesArr = Array.prototype.slice.call(files);
+
+        filesArr.forEach(function(f) {
+            if(!f.type.match("image.*")) {
+                alert("확장자는 이미지 확장자만 가능합니다.");
+                return;
+            }
+
+            sel_file = f;
+
+            var reader = new FileReader();
+            reader.onload = function(e) {
+                $("#img").attr("src", e.target.result);
+            }
+            reader.readAsDataURL(f);
+        });
+        
+	}
+	
+	
+	
+	
+	
 	function goSubmit(){
+		
+		var imageCount=0;
+		for(var i=0; i<3; i++){
+			if($("#image"+(i+1)+"_btn").val()!=""){
+				imageCount++;	
+			}			
+		}
+					
+		$("#imageCount").val(imageCount);		
 		
 		var boolSubmit = false;
 		// 1. 대표이미지 선택
@@ -294,7 +399,7 @@
 			$.ajax({
 				url:"<%= ctxPath%>/manager/productNameDuplicateCheck.do",
 				type:"post",
-				data:{"productName":$("#product_name").val()},
+				data:{"productName":$("#product_name").val(),"productNum":${product_num}},
 				dataType:"json",
 				success:function(json){
 					if(!json.isUse){
@@ -406,9 +511,9 @@
 							
 							<div class="newProductImg" align="center" id="newProductImg0">
 								<div class="representative_img">
-									<div class="representative_img_upload">								
+									<div class="representative_img_upload">	
 									</div>
-									<input class="upload_name" id="upload_name0" value="※필수※ 대표이미지 선택" disabled="disabled" style="width:200px;">
+									<input class="upload_name" id="upload_name0" value="※필수※ 대표이미지 선택" disabled style="width:200px; background-color:#e6e6ff">
 									<label for="representative_img_btn">찾기</label>
 									<input type="file" class="upload_rep_image" id="representative_img_btn" name="representative_img" />
 								</div>
@@ -416,20 +521,23 @@
 									<div class="detail_img">
 										<div class="upload_image_detail detail1">
 										</div>
+										<input class="upload_name" name="upload_name" id="upload_name1" value="이미지 선택1" disabled>																		
 										<input class="upload_name" id="upload_name1" value="이미지 선택1" disabled="disabled">																		
 										<label for="image1_btn">찾기</label>
 										<input type="file" class="upload_image" id="image1_btn" name="detail_img" />
 									</div>
 									<div class="detail_img">
-										<div class="upload_image_detail detail2">								
+										<div class="upload_image_detail detail2">	
 										</div>
+										<input class="upload_name" name="upload_name" id="upload_name2" value="이미지 선택2" disabled>
 										<input class="upload_name" id="upload_name2" value="이미지 선택2" disabled="disabled">
 										<label for="image2_btn">찾기</label>
 										<input type="file" class="upload_image" id="image2_btn" name="detail_img" />
 									</div>
 									<div class="detail_img">
-										<div class="upload_image_detail detail3">								
+										<div class="upload_image_detail detail3">	
 										</div>
+										<input class="upload_name" name="upload_name" id="upload_name3" value="이미지 선택3" disabled>
 										<input class="upload_name" id="upload_name3" value="이미지 선택3" disabled="disabled">
 										<label for="image3_btn">찾기</label>
 										<input type="file" class="upload_image" id="image3_btn" name="detail_img" />
@@ -441,8 +549,12 @@
 								
 								<ul class="newProductInfo" id="newProduct_ul">
 									<li>
+										<label>제품번호</label>
+										<input name="product_num" style="border:none; background-color: inherit ;" value="${product_num}" disabled>
+									</li>
+									<li>
 										<label>대분류</label>
-										<select id="fk_category_num" name="fk_category_num" class="bigSelect">
+										<select id="fk_category_num" name="fk_category_num" class="bigSelect" style="background-color:#e6e6ff">
 											<option value="0">※필수 대분류</option>            
 											<c:forEach var="map" items="${requestScope.categoryList}">
 								               <option value="${map.category_num}">${map.category_content}</option>
@@ -451,14 +563,13 @@
 									</li>
 									<li>
 										<label>소뷴류</label>
-										<select id="fk_subcategory_num" name="fk_subcategory_num" class="smallSelect" disabled>
-											<option value="0">※필수 소분류</option>	
-																					
+										<select id="fk_subcategory_num" name="fk_subcategory_num" class="smallSelect" style="background-color:#e6e6ff" disabled>
+											<option value="0">※필수 소분류</option>																					
 										</select>
 									</li>
 									<li>
 										<label for="product_name">상품명</label>
-										<input type="text" id="product_name" name="product_name" class="goodsName" placeholder="※필수※"/>
+										<input type="text" id="product_name" name="product_name" class="goodsName" style="background-color:#e6e6ff" placeholder="※필수※"/>
 									</li>
 									<li>
 										<label for="unit">단위</label>
@@ -474,7 +585,7 @@
 									</li>									
 									<li>
 										<label for="price">가격(원)</label>
-										<input type="text" id="price" name="price" class="goodsPrice" placeholder="※필수※  숫자로 입력 ex)10000"/>
+										<input type="text" id="price" name="price" class="goodsPrice" style="background-color:#e6e6ff" placeholder="※필수※  숫자로 입력 ex)10000"/>
 									</li>
 									<li>
 										<label for="sale">할인율(%)</label>
@@ -494,7 +605,7 @@
 									</li>
 									<li style="margin:0;">
 										<label for="stock">재고 수</label>
-										<input type="text" id="stock" name="stock" class="goodsCount" placeholder="※필수※  숫자로 입력"/>
+										<input type="text" id="stock" name="stock" class="goodsCount" style="background-color:#e6e6ff" placeholder="※필수※  숫자로 입력"/>
 									</li>
 								</ul>
 							</div>

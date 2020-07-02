@@ -120,7 +120,7 @@
 					</ul>
 				</div>
 				<div class="cc_qua">
-					<h3><span>1:1 문의</span></h3>
+					<h3><span onclick = "javascript:location.href='/ShoppingMall/service/serviceCenterMyQboardWrite.do'">1:1 문의</span></h3>
 					<ul class="cc_list">
 						<li style="color: #333 !important">24시간 접수가능</li>
 						<li>고객센터 운영시간에 순차적으로 답변드리겠습니다.</li>
