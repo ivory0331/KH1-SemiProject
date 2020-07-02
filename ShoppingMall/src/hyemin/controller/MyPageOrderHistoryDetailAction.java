@@ -9,7 +9,7 @@ import javax.servlet.http.HttpSession;
 import common.controller.AbstractController;
 import hyemin.model.InterOrderDAO;
 import hyemin.model.OrderDAO;
-import main.model.OrderProductVO;
+import main.model.OrderHistoryDetailVO;
 import main.model.OrderVO;
 import member.model.MemberVO;
 
@@ -26,7 +26,7 @@ public class MyPageOrderHistoryDetailAction extends AbstractController {
 		if(loginuser == null) {
 			
 			String message = "로그인하셔야 본 서비스를 이용하실 수 있습니다.";
-			String loc = "javascript:history.back()";
+			String loc = request.getContextPath()+"/member/login.do";
 			
 			request.setAttribute("message", message);
 			request.setAttribute("loc", loc);
@@ -57,14 +57,16 @@ public class MyPageOrderHistoryDetailAction extends AbstractController {
 		///////////////////////////////////////////////////////////////////////////
 		String order_num = request.getParameter("order_num");
 
-		InterOrderDAO odao = new OrderDAO();		
-		List<OrderProductVO> OrderProductsList = odao.OneOrderProductsDetail(order_num);
+		InterOrderDAO odao = new OrderDAO();
+		List<OrderHistoryDetailVO> OrderProductsList = odao.OneOrderProductsDetail(order_num);
 		
-		List<OrderVO> OrderInfoList = odao.OneOrderInfoDetail(order_num);		
-		
+		OrderVO OrderInfoDetail = odao.OneOrderInfoDetail(order_num);
+		String name = OrderInfoDetail.getMember().getName();
+				
 		request.setAttribute("order_num", order_num);
+		request.setAttribute("name", name);
 		request.setAttribute("OrderProductsList", OrderProductsList);
-		request.setAttribute("OrderInfoList", OrderInfoList);
+		request.setAttribute("OrderInfoDetail", OrderInfoDetail);
 		
 	//	super.setRedirect(false);
 		super.setViewPage("/WEB-INF/member/myPageOrderHistoryDetail.jsp");

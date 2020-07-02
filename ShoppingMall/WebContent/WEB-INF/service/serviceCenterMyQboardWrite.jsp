@@ -11,7 +11,7 @@
 .sideMenu {
 	display: inline-block;
 	width: 150px;
-	float: left; 
+	float: left;
 }
 
 .serviceCenter-board {
@@ -61,60 +61,70 @@
 	display: none;
 }
 
-.Mycontainer{
-    font-family: noto sans;
-    letter-spacing: 0.7;
+.Mycontainer {
+	font-family: noto sans;
+	letter-spacing: 0.7;
 }
 
 th.input_txt {
-    width: 200px;
-    padding: 30px 0 0 30px;
-    background-color: #f7f5f8;
-    border-bottom: 1px solid #e8e8e8;
-    text-align: left;
-    font-weight: 400;
-    vertical-align: middle;
-    font-size: 9pt;   
+	width: 200px;
+	padding: 30px 0 0 30px;
+	background-color: #f7f5f8;
+	border-bottom: 1px solid #e8e8e8;
+	text-align: left;
+	font-weight: 400;
+	vertical-align: middle;
+	font-size: 9pt;
 }
 
 table td {
-    width: auto;
-    padding: 15px 0 15px 10px;
-    height: 23px;
-    border-top: 1px solid #e8e8e8;
-    border-bottom: 1px solid #e8e8e8;
-    vertical-align: middle;
-    line-height: 20px;
+	width: auto;
+	padding: 15px 0 15px 10px;
+	height: 23px;
+	border-top: 1px solid #e8e8e8;
+	border-bottom: 1px solid #e8e8e8;
+	vertical-align: middle;
+	line-height: 20px;
 }
 
-.edit_area{
-	font-size : 8.5pt;
-	color : #333;
+.edit_area {
+	font-size: 8.5pt;
+	color: #333;
 }
 
-.select{
-	width : 200px;
-	height : 30px;
-	margin : 5px 0 ;
-	border : solid 1px #ccc;
-}
-input[type=text]{
-	border : solid 1px #ccc;
-	height : 30px;
+.select {
+	width: 200px;
+	height: 30px;
+	margin: 5px 0;
+	border: solid 1px #ccc;
 }
 
-.bhs_button{
-	float : right;
-	width : 150px;
-	height : 30px;
+input[type=text] {
+	border: solid 1px #ccc;
+	height: 30px;
+}
+
+.bhs_button {
+	float: right;
+	width: 150px;
+	height: 30px;
 	color: #fff;
-	background-color:#5f0080;
+	background-color: #5f0080;
 	border-style: none;
-	float : right;
+	float: right;
 	display: inline-block;
-	
 }
 
+#ifm_order {
+	display: block;
+	width: 560px;
+	height: 390.222px;
+	background-color: #fff;
+	position: absolute; 
+	left: 0px;
+	top: 0px;
+	border: 1px solid #ccc;
+}
 </style>
 <link rel="stylesheet"	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
 <script	src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -127,6 +137,12 @@ input[type=text]{
 	
 	$(document).ready(function(){
 				
+		$("#ifm_order").hide();
+		$("#bhs_order_button").click(function(){
+			
+			$("#ifm_order").show();
+			
+		});
 		
 		
 	   
@@ -228,10 +244,10 @@ input[type=text]{
 										<th class="input_txt">주문번호</th>
 										<td>
 										<input type="text" name="fk_order_num" style="width:25%" readonly="readonly" value="">
-										<input onclick="order_open()" type="button" class="bhs_button" value="주문조회" style="float:none; line-height:27px; width:100px;">
-										<div style="position:relative;">
-										<iframe id="ifm_order" style="display:none;position:absolute;width:560px;height:380px;background-color:#fff;position:absolute;left:0;top:0;border:1px solid #000"></iframe>
-										</div>
+										<input id="bhs_order_button" type="button" class="bhs_button" value="주문조회" style="float:none; line-height:27px; width:100px;">
+										<div style="position:relative;z-index:1">
+										<iframe id="ifm_order" src="<%= ctxPath%>/service/serviceCenterQboardWriteOrder.do"></iframe>
+										</div>										
 										</td>
 									</tr>
 									<tr>

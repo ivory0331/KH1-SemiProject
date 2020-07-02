@@ -30,26 +30,36 @@
 		cursor: pointer;
 	} 
 	#smallT {
-		border: solid 1px green;
+		border: solid 0px green;
 		clear: both;
 		float: left;
 	}
 	#list {
-		border: solid 1px blue;
-		margin-top: 80px;
+		border: solid 0px blue;
+		margin-top: 35px;
 		float: right;
+	}
+	#pList{
+		border: solid 0px purple;
+		display: inline-block;
+		margin-left: 50px !important;
 	}
 	tr, td {
 		border: solid 0px red;
 		display: inline-block;
-		padding: 30px;
+
+	}
+	td {
+		width: 300px;
+		height: 450px;
 	}
 	#h3{
-		border: solid 1px red;
+		border: solid 0px red;
 		width: 200px;
 		margin-top: 100px;
 		font-size: 20pt;
 		float: left;
+		font-weight: bold;
 	}
 	a:link { text-decoration: none;}
  	a:visited { text-decoration: none;}
@@ -73,6 +83,36 @@
 		display: block;
 		padding: 50px;
 	}
+	table {
+		text-align: center;
+	}
+
+	.sample_image img {
+	    -webkit-transform:scale(1);
+	    -moz-transform:scale(1);
+	    -ms-transform:scale(1); 
+	    -o-transform:scale(1);  
+	    transform:scale(1);
+	    -webkit-transition:.3s;
+	    -moz-transition:.3s;
+	    -ms-transition:.3s;
+	    -o-transition:.3s;
+	    transition:.3s;
+	}
+	.sample_image:hover img {
+	    -webkit-transform:scale(1.1);
+	    -moz-transform:scale(1.1);
+	    -ms-transform:scale(1.1);   
+	    -o-transform:scale(1.1);
+	    transform:scale(1.1);
+	}
+	.sample_image {
+		border: solid 0px yellow;
+		overflow: hidden;
+	}
+	.pricecolor {
+		text-align: left;
+	}
 </style>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -82,6 +122,12 @@
 <script type="text/javascript">
 
 	$(document).ready(function(){
+		
+		$("option").each(function(index, item){
+			if($(item).val() == "${optionSelect}"){
+				$(item).prop("selected",true);
+			}
+		})
 		
 		$(".sub").hover(function(){
 			var selectcate = $(this).index();
@@ -99,7 +145,17 @@
 		});
 		
 		
-	});
+		$("#optionSelect").change(function(){
+			 
+			var frm = document.opList;
+			frm.action="<%=ctxPath%>/product/productList.do";
+			frm.method="get";
+			frm.submit();
+		
+		}); // end of $("#list").change()----------------------------
+		
+		
+	}); // end of $(document).ready(function(){})-------------------------------
 	
 	function goSearch(){
 		var frm = document.searchForm;
@@ -123,15 +179,19 @@
 							
 						</c:forEach>
 					</div>
+					<form name="opList">
 					<div id="list">
-						<select>
+						<select name="optionSelect" id="optionSelect">
 							<option value="registerdate" >신상품순</option>
-							<option value="price" >낮은 가격순</option>   
-							<option value="priceasc" >높은 가격순</option>
+							<option value="asc" >낮은 가격순</option>   
+							<option value="desc" >높은 가격순</option>
 						</select>
 					</div>
+						<input type="hidden" name="fk_category_num" value="${fk_category_num}" />
+						<input type="hidden" name="fk_subcategory_num" value="${fk_subcategory_num}" />
+					</form>
 				</c:if>
-				
+
 				<c:if test="${not empty productSearchWord}">
 					<h1>상품검색</h1>
 					<form name="searchForm" style="border-top:solid 2px purple; border-bottom:solid 1px purple; ">
@@ -159,23 +219,25 @@
 				<c:if test="${not empty productList}">
 					<tr>
 						<c:forEach var="pvo" items="${productList}" varStatus="status">
-							<td>
+							<td class="pricecolor">
 								<a href='/ShoppingMall/detail.do?product_num=${pvo.product_num}'>
-									<img width="300px;" height="400px;" src="/ShoppingMall/images/${pvo.representative_img}" />
+									<div style="width:250px; height:350px;" class="sample_image"><img style="width:100%; height:100%;" src="/ShoppingMall/images/${pvo.representative_img}" /></div>
 								</a>
-								<br/>${pvo.product_name}
+								<br/><span style="font-family: noto sans; font-size:10pt; font-size:15pt; color:#333;">${pvo.product_name}</span>
+								
 								<c:if test="${pvo.sale != 0}">
-									<br/><span style="text-decoration: line-through;"><fmt:formatNumber value="${pvo.price}" pattern="###,###"/> 원</span>
-									&nbsp;=>&nbsp;<fmt:formatNumber value="${pvo.finalPrice}" pattern="###,###" /> 원
+									<br/><span style="text-decoration: line-through; color: #a6a6a6; font-weight: bold; font-size: 15pt;"><fmt:formatNumber value="${pvo.price}" pattern="###,###"/> 원</span>
+									<span style="color: #5f0080; font-weight: bold; font-size: 15pt;">&nbsp;→&nbsp;<fmt:formatNumber value="${pvo.finalPrice}" pattern="###,###" />원</span>
 								</c:if>
+								
 								<c:if test="${pvo.sale == 0}">
-									<br/><fmt:formatNumber value="${pvo.price}" pattern="###,###"/> 원
+									<br/><span style="color: #5f0080; font-weight: bold; font-size: 15pt;"><fmt:formatNumber value="${pvo.price}" pattern="###,###"/>원</span>
 								</c:if>
 							</td> 
-						<c:if test="${(status.count)%3 == 0 }">
-							</tr>
-							<tr>
-						</c:if>
+							<c:if test="${(status.count)%3 == 0 }">
+								</tr>
+								<tr>
+							</c:if>
 						
 						</c:forEach>
 					</tr>

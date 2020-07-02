@@ -15,7 +15,6 @@ public class OrderHistoryVO {
 	
 	public OrderHistoryVO(int order_num, String order_date, int price, int fk_product_num, String product_name,
 			String representative_img, String order_state, int product_cnt) {
-		super();
 		this.order_num = order_num;
 		this.order_date = order_date;
 		this.price = price;

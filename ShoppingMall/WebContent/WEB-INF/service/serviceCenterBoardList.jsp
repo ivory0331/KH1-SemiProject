@@ -6,7 +6,9 @@
    String[] searchType = (String[])obj;
    String searchType1 = "";
    String searchType2 = "";
+   int typeCnt = 0;
    if(searchType!=null){
+	   typeCnt = searchType.length;
 	   for(int i=0; i<searchType.length; i++){
 		   if(i==0) searchType1 = searchType[i];
 		   else searchType2 = searchType[i];
@@ -54,9 +56,12 @@
 <script type="text/javascript" src="/ShoppingMall/util/myutil.js"></script>
 <script type="text/javascript">
 $(document).ready(function(){    
-	 
-	$("#searchType-<%=searchType1%>").prop("checked",true);
-	$("#searchType-<%=searchType2%>").prop("checked",true);
+	$("#search-<%=searchType1%>").prop("checked",true);
+	$("#search-<%=searchType2%>").prop("checked",true);
+	
+	if("<%=searchType1%>"=="content"){
+		$("#search-subject").prop("checked",false);
+	}
 	
 	$("#searchWord").bind("keydown", function(event){
 		  if(event.keyCode == 13) { //엔터
@@ -64,15 +69,38 @@ $(document).ready(function(){
 		  }
 	});
 	
-	 // 검색
-	 function goSearch() {		  
-		  var frm = document.noticeFrm;
-		  frm.method = "GET";
-		  frm.action = "<%=ctxPath%>/service/board.do";
-		  frm.submit(); 
-	  }
 	
 });
+
+
+// 검색
+function goSearch() {
+	  if($("input[name='searchType']:checked").length==0){
+		  alert("검색할 타입을 선택해야 합니다.");
+		  return false;
+	  }
+	  
+	  if($("#searchWord").val().trim().length < 2){
+		  alert("최소 두 글자를 입력해야 합니다.");
+		  return false;
+	  }
+	  
+	  var frm = document.noticeFrm;
+	  frm.method = "GET";
+	  frm.action = "<%=ctxPath%>/service/board.do";
+	  frm.submit(); 
+ }
+ 
+ function goDetail(num){
+	 console.log(num); 
+	 var searchWord = $("#searchWord").val();
+	 var url = "<%=ctxPath%>/service/boardDetail.do?notice_num="+num;
+	location.href=url;
+	 
+ }
+ 
+ 
+
 </script>
 </head>
 <body>
@@ -101,13 +129,13 @@ $(document).ready(function(){
 							<tbody>
 								<c:if test="${empty noticeList}">	
 									<tr>
-										<td colspan="5"> 자주하는 질문 게시판 준비중 입니다. </td>
+										<td colspan="5"> 공지사항 게시판 준비중 입니다. </td>
 									</tr>	
 								</c:if>
 								<c:if test="${not empty noticeList}">		
 									<c:forEach var="nvo" items="${noticeList}">
-										<tr>
-											<td class="txt_center">${nvo.notice_num}<input type="hidden" value="${nvo.notice_num}" name="notice_num" /></td>
+										<tr onclick = "goDetail('${nvo.notice_num}')">
+											<td class="txt_center">공지<input type="hidden" value="${nvo.notice_num}" name="notice_num" /></td>
 											<td class="board-title">${nvo.subject}</td>
 											<td class="txt_center">MarketKurly</td>
 											<td class="txt_center">${nvo.write_date}</td>
@@ -120,9 +148,16 @@ $(document).ready(function(){
 						
 						<div style="border-bottom:solid 1px black; text-align:center;">${pageBar}</div>
 						<div class="boardSearch">
-							<input type="text" name="searchWord" style="float:right" id="searchWord"/>
+							<span style="float:left">
+							검색어 : <label for="search-subject">제목</label> <input type="checkbox" checked id="search-subject" value="subject" name="searchType" style="margin-right:15px;"/>
+								   <label for="search-content">내용</label> <input type="checkbox" id="search-content" value="content" name="searchType" style="margin-right:15px;"/>
+							</span>
+							<span style="float:right; border:solid 1px black;">
+							<input type="text" style="float:left; border:none;" name="searchWord"  id="searchWord" value="${searchWord}" /><span style="cursor: pointer;" onclick = "goSearch()"><img src="<%=ctxPath%>/images/search.png" style="display:inline-block; width:25px; height: 25px; "/></span>
+							</span>
 						</div>
 					</form>
+					
 				</div>
 				<div style="clear:both;"></div>
 			</div>

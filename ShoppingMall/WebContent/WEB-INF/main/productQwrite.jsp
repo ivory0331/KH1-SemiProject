@@ -100,99 +100,112 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 <script type="text/javascript" src="/ShoppingMall/js/jquery-3.3.1.min.js"></script>
 <script type="text/javascript" src="/ShoppingMall/util/myutil.js"></script>
+<script type="text/javascript" src="/ShoppingMall/smartEdit/js/HuskyEZCreator.js" charset="utf-8"></script>
 <script type="text/javascript">
-
-	var cnt=0;
-	$(document).ready(function(){
-		$(document).on('change','.imgFile',function(){
-				console.log("이미지 로딩");
-				var idx = $(this).prop("id").substring(7)
-				func_imgCheck(idx, this);
-		});
-		
+var cnt=0;
+$(document).ready(function(){
+	$(document).on('change','.imgFile',function(){
+			console.log("이미지 로딩");
+			var idx = $(this).prop("id").substring(7)
+			func_imgCheck(idx, this);
 	});
 	
-	function divCheck(){
-		
-		if($("input[name='title']").val().trim()==""){
-			alert("제목을 입력해주세요");
-			return;
-		}
-		
-		if($("#txt_area").val().trim() == ""){
-			alert("내용을 입력해주세요");
-			return;
-		}
-		
-		var content = $("#txt_area").val();
-		console.log(content);
-		$("#txt_content").val(content);
-		console.log($("#txt_content").val());
-		var Frm = document.questionWriteFrm;
-		Frm.action = "<%=ctxPath%>/productQwrite.do"
-		Frm.submit(); 
-		
-	}
+});
 
-	function func_addArea(){
-		var html="<div class='imgInput' id='imgInput"+cnt+"'>"
-		        +"<input type='file' name='imgFile' class='imgFile' id='imgFile"+cnt+"'  accept='.gif, .jpg, .png' style='margin-bottom:10px;'/>"
-			    +"<input id='fileName"+cnt+"' type='hidden' name='fileName'/>"
-		        +"</div>"
-			    +"<div class='closeInput' id='close"+cnt+"' onclick='func_deleteImg(this)' align='right'>X"
-			    +"</div>";
-		if($(".imgInput").length>7){
-			alert("이미지는 최대 8장 만 입력할 수 있습니다.");
+function divCheck(){
+	
+	if($("input[name='title']").val().trim()==""){
+		alert("제목을 입력해주세요");
+		return;
+	}
+	
+	if($("#txt_area").val().trim() == ""){
+		alert("내용을 입력해주세요");
+		return;
+	}
+	
+	var imgFlag = true;
+	$("input:file[name='imgFile']").each(function(index, item){
+		if(item.value == null){
+			imgFlag = false;
 			return;
 		}
-		$(".productQ-imgTable").append(html);
-		cnt++;
+	})
+	
+	if(!imgFlag){
+		alert("첨부되지 않은 파일이 있습니다.");
+		return;
 	}
 	
-	function func_imgCheck(idx, item){
-		console.log(item);
-		if(item.files && item.files[0]) {
-			var fileName = item.files[0].name;
-			var index = fileName.indexOf(".");
-			var fileType = fileName.substr(index);
-			if(fileType==".png"||fileType==".jpg"||fileType==".png"){
-				 fileView(item);
-			}
-			else{
-				alert("이미지만 올릴 수 있습니다.");
-				item.value=null;
-			}
+	var content = $("#txt_area").val();
+	console.log(content);
+	$("#txt_content").val(content);
+	console.log($("#txt_content").val());
+	var Frm = document.questionWriteFrm;
+	Frm.action = "<%=ctxPath%>/productQwrite.do"
+	Frm.submit(); 
+	
+}
+
+function func_addArea(){
+	var html="<div class='imgInput' id='imgInput"+cnt+"'>"
+	        +"<input type='file' name='imgFile"+cnt+"' class='imgFile' id='imgFile"+cnt+"'  accept='.gif, .jpg, .png' style='margin-bottom:10px;'/>"
+		    +"<input id='fileName"+cnt+"' type='hidden' name='fileName'/>"
+	        +"</div>"
+		    +"<div class='closeInput' id='close"+cnt+"' onclick='func_deleteImg(this)' align='right'>X"
+		    +"</div>";
+	if($(".imgInput").length>7){
+		alert("이미지는 최대 8장 만 입력할 수 있습니다.");
+		return;
+	}
+	$(".productQ-imgTable").prepend(html);
+	cnt++;
+}
+
+function func_imgCheck(idx, item){
+	console.log(item);
+	if(item.files && item.files[0]) {
+		var fileName = item.files[0].name;
+		var index = fileName.indexOf(".");
+		var fileType = fileName.substr(index);
+		if(fileType==".png"||fileType==".jpg"||fileType==".png"){
+			 fileView(item);
+		}
+		else{
+			alert("이미지만 올릴 수 있습니다.");
+			item.value=null;
 		}
 	}
+}
+
+function fileView(elem){
+	console.log(elem);
+	console.log(elem.value);
+	var idx = $(elem).prop("id").substring(7);
+	console.log(idx);
+	var fullPath = elem.value;
+	fileName = fullPath.substring(12);
+	console.log(fullPath);
+	console.log(fileName);
+	$("#fileName"+idx).val(fileName);
+}
+
+
+function func_deleteImg(item){
+	console.log(item);
+	var idx = $(item).prop("id").substring(5); 
+	console.log(idx);
+	$("#imgInput"+idx).remove();
+	$("#close"+idx).remove();
+	$("#fileName"+idx).remove();
+}
+
+
+function goBack(){
+	alert("작성된 내용은 저장되지 않습니다.");
+	history.back();
 	
-	function fileView(elem){
-		console.log(elem);
-		console.log(elem.value);
-		var idx = $(elem).prop("id").substring(7);
-		console.log(idx);
-		var fullPath = elem.value;
-		fileName = fullPath.substring(12);
-		console.log(fullPath);
-		console.log(fileName);
-		$("#fileName"+idx).val(fileName);
-	}
-	
-	
-	function func_deleteImg(item){
-		console.log(item);
-		var idx = $(item).prop("id").substring(5); 
-		console.log(idx);
-		$("#imgInput"+idx).remove();
-		$("#close"+idx).remove();
-		$("#fileName"+idx).remove();
-	}
-	
-	
-	function goBack(){
-		alert("작성된 내용은 저장되지 않습니다.");
-		history.back();
-		
-	}
+}
 
 </script>
 </head>
@@ -240,7 +253,7 @@
 						</tr>
 						<tr>
 							<td class="txt_field" colspan="2">
-								<textarea rows="30" cols="30" id="txt_area"></textarea>
+								<textarea rows="30" cols="30" name="weditor" id="txt_area"></textarea>
 								<input type="hidden" name="contents" id="txt_content"/>
 							</td>
 
@@ -257,6 +270,7 @@
 								<div class="closeInput" id="close0" align="right" onclick="func_deleteImg(this)">X</div>
 								 -->
 							</td>
+						</tr>
 					</table>
 					<div class="userBtn" align="center">
 						<span onclick="goBack()">취소</span> <span style="background-color:purple; color:white;" onclick="divCheck()">등록</span>

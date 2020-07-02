@@ -63,7 +63,7 @@
 					<td class="myPage_SideInnerMenu menu3"><a href="<%= ctxPath %>/member/myPageMyInfoUpdatePW.do">개인 정보 수정</a></td>
 				</tr>
 				<tr>
-					<td class="myPage_SideInnerMenu menu4"><a>1:1 문의</a></td>
+					<td class="myPage_SideInnerMenu menu4"><a href="<%= ctxPath %>/service/serviceCenterMyQboardWrite.do">1:1 문의</a></td>
 				</tr>
 			</table>
 		</div>

@@ -9,6 +9,16 @@
 <meta charset="UTF-8">
 <title>serviceCenterBoardWrite.jsp</title>
 <style type="text/css">
+	.sideMenu{
+		display: inline-block;
+		width: 150px;
+		float:left;
+	}
+	
+	.mainContent{
+		display: inline-block;
+	}
+	
 	.writeTable{
 		width:1080px;
 		border-top: solid 2px purple;
@@ -23,6 +33,7 @@
 	}
 	
 	.frmTitle{
+		width: 180px;
 		background-color: #ffe6ff;
 		padding: 10px 0 10px 10px;
 		font-size: 10pt;
@@ -55,6 +66,16 @@
 	
 	#txt_area{
 		overflow-y: scroll;
+		border:solid 1px black; 
+		margin-top:10px; 
+		height: 600px;
+		width: 100%;
+		resize: none;
+		
+	}
+	
+	#QboardSelect{
+		display: none;
 	}
 </style>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
@@ -86,7 +107,41 @@ $(document).ready(function(){
 		}
 		
 	});
+	
+	$("#boardType").bind("change",function(){
+		if($(this).val()=="board"){
+			$("#QboardSelect").hide();
+		}
+		else{
+			$("#QboardSelect").show();
+		}
+		$("input[name='boardType']").val($(this).val());
+	});
+	
+	
 });
+
+function divCheck(){
+	if($("input[name='title']").val().trim()==""){
+		alert("제목을 작성하세요");
+		return;
+	}
+	
+	if($("#txt_area").val().trim()==""){
+		alert("내용을 채워주세요");
+		return;
+	}
+	
+	if($("input[name='boardType']").val()=="Qboard" && $("#Qboard-categori").val()=="0"){
+		alert("자주하는 질문 게시글을 작성시에는 카테고리를 선택해야 합니다.");
+		return;
+	}
+	$("input[name='contents']").val($("#txt_area").val());
+	var frm = document.questionWriteFrm;
+	frm.action="<%=ctxPath%>/manager/mangerBoardWrite.do";
+	frm.method="POST";
+	frm.submit();
+}
 </script>
 </head>
 <body>
@@ -95,14 +150,32 @@ $(document).ready(function(){
 		<div class="section" align="center">
 			<div class="contents">
 				<div class="boardInfo" align="left">
-					<h3 style="display:inline-block">공지사항 작성</h3>
+					<h3 style="display:inline-block">게시글 작성</h3>
 					<span style="margin-left:10px; font-size:8pt; font-weight: bold;">새로운 소식들과 유용한 정보들을 고객에게 전달할게요.</span>
+					<div>
+						<select id="boardType">
+							<option value="board">공지사항</option>
+							<option value="Qboard">자주하는 질문</option>
+						</select>
+					</div>
 				</div>
-				<form name="questionWriteFrm">
-					<table class="writeTable">
+				<form name="questionWriteFrm" >
+						<table class="writeTable">
 						<tr>
-							<td class="frmTitle">작성자</td>
-							<td><input type="text" value="test" disabled name="userName"/></td>
+							<td class="frmTitle">작성자<input type="hidden" name="boardType" value="board"/></td>
+							<td><input type="text" value="관리자" disabled name="userName"/></td>
+						</tr>
+						<tr id="QboardSelect">
+							<td class="frmTitle">카테고리</td>
+							<td>
+								<select id="Qboard-categori" name="Qboard-categori">
+									<option value="0">선택</option>
+									<option value="1">회원문의</option>
+									<option value="2">주문/결제</option>
+									<option value="3">배송문의</option>
+									<option value="4">서비스 이용 및 기타</option>
+								</select>
+							</td>
 						</tr>
 						<tr>
 							<td class="frmTitle">제목</td>
@@ -110,19 +183,16 @@ $(document).ready(function(){
 						</tr>
 						<tr>
 							<td class="txt_field" colspan="2">
-								<div contenteditable="true" style="border:solid 1px black; margin-top:10px; height: 600px;" id="txt_area"></div>
-								<input type="hidden" name="contents"/>
+								<textarea rows="30" cols="30" id="txt_area"></textarea>
+								<input type="hidden" name="contents" id="txt_content"/>
 							</td>
 						</tr>
-						<tr>
-							<td><label for="imgFile">이미지 추가</label></td>
-							<td><input type="file" id="imgFile" accept=".gif, .jpg, .png"/></td>
-						</tr>
 					</table>
-					<div class="userBtn" align="center">
-						<span>취소</span> <span style="background-color:purple; color:white;" onclick="divCheck()">등록</span>
-					</div>
 				</form>
+				<div class="userBtn" align="center">
+					<span onclick="javascript:history.back()">취소</span> <span style="background-color:purple; color:white;" onclick="divCheck()">등록</span>
+				</div>
+				</div>
 			</div>
 		</div>
 		<jsp:include page="../include/footer.jsp"></jsp:include>

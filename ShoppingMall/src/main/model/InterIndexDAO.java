@@ -19,7 +19,7 @@ public interface InterIndexDAO {
 	List<String> product_numFind() throws SQLException;
 
 	// 특정 상품의 후기 조회
-	List<ReviewVO> reviewCall(String product_num) throws SQLException;
+	List<ReviewVO> reviewCall(Map<String, Integer> paraMap) throws SQLException;
 
 	// 특정 상품의 상품문의 조회
 	List<ProductInquiryVO> productQCall(Map<String, Integer> paraMap) throws SQLException;
@@ -65,6 +65,28 @@ public interface InterIndexDAO {
 
 	// 상품 검색 결과 행의 갯수 조회
 	int getTotalpage(HashMap<String, String> paraMap)throws SQLException;
+
+	// 상품문의 삭제 시 같이 삭제될 업로드 이미지 조회
+	List<String> DelImgFind(String inquiry_num)throws SQLException;
+
+	// 상품문의 수정
+	int productQupdate(Map<String, String> paraMap)throws SQLException;
+
+	// 상품문의 수정 시 기존에 있던 이미지 조회 및 삭제
+	List<String> inquiryImgDel(String inquiry_num, String[] fileNameArr)throws SQLException;
+
+	// 해당 상품의 리뷰 갯수 조회
+	int getReviewtotalPage(Map<String, Integer> paraMap)throws SQLException;
+
+	// 리뷰 조회수 증가
+	int reviewHitUp(String review_num)throws SQLException;
+
+	// 특정 리뷰 삭제
+	int reviewDel(String review_num)throws SQLException;
+
+	// 모든 1:1문의 조회 -관리자-
+	List<OneInquiryVO> allOneInquirySelect()throws SQLException;
+
 
 	
 

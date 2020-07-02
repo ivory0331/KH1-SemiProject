@@ -50,7 +50,7 @@ h3.txt_head{
     font-size: 20px;
     line-height: 20px;
     font-family: noto sans;
-    font-weight: 600;
+    font-weight: normal;
     color: #514859;
     letter-spacing: 0;
     margin : 0;
@@ -67,7 +67,7 @@ td.memberCols1 {
     padding: 23px 0 25px 20px;
     text-align: left;
     vertical-align: middle;
-    font-size: 13.5px;
+    font-size: 12px;
     font-weight: 700;
    /* border : solid 1px red;*/
 }
@@ -77,7 +77,7 @@ td.memberCols2 {
     padding: 13px 0 13px 30px;
     vertical-align: middle;
     text-align: left;
-    font-size: 9.5pt;
+    font-size: 9pt;
     color : #333;
 }
 
@@ -219,7 +219,7 @@ td.memberCols2 {
 							불편하셨던 점이나 불만사항을 알려주시면 적극 반영해서 고객님의 불편함을 해결해 드리도록 노력하겠습니다.<br>
 							<br>
 							■ 아울러 회원 탈퇴시의 아래 사항을 숙지하시기 바랍니다.<br>
-							1. 회원탈퇴 시 고객님의 정보는 상품 반품 및 A/S를 위해 전자상거래 등에서 소비자 보호에 관한 법률에 의거한 고객정보 보호정책에따라 관리 됩니다.<br>
+							1. 고객님의 정보는 상품반품 및 A/S를 위해 전자상거래 등에서 소비자 보호에 관한 법률에 의거한 고객정보 보호정책에따라 관리됩니다.<br>
 							2. 탈퇴 시 고객님께서 보유하셨던 적립금은 삭제 됩니다.<br>
 							3. 회원 탈퇴 후 30일간 재가입이 불가능합니다.<br>
 							4. 회원 탈퇴 시 컬리패스 해지는 별도로 고객행복센터(1644-1107)를 통해서 가능합니다. 직접 해지를 요청하지 않으면 해지 처리가 되지 않습니다.<br>

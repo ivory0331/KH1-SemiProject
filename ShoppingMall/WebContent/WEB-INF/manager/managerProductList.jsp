@@ -140,6 +140,9 @@
 					
 				});
 			}	
+			}else{
+				$("select#fk_subcategory_num").prop('disabled',true);
+			}			
 		})
 		
 		
@@ -250,6 +253,17 @@
 								</select>
 								<select id="fk_subcategory_num" name="fk_subcategory_num" disabled>
 									<option>=== 소분류 ===</option>
+								<select id="fk_category_num" name="fk_category_num">
+									<option value="0">=== 대분류 ===</option>
+									<option value="1">채소</option>
+									<option value="2">과일 견과</option>
+									<option value="3">수산 해산</option>
+									<option value="4">정육 계란</option>
+									<option value="5">음료 우유</option>
+								</select>
+								<select id="fk_subcategory_num" name="fk_subcategory_num" disabled>
+									<option value="0">=== 소분류 ===</option>
+									<option value="41">기본채소</option>
 								</select>
 							</div>
 							<input type="text" id ="searchWord" name="searchWord"/>	
@@ -260,7 +274,7 @@
 								<option value="3">3</option>
 							</select>									
 						</form>		
-						<span class="type goods-add" onclick="product_insert()">상품 추가</span>
+						<span class="type goods-add">상품 추가</span>
 					</div>
 					
 					<button type="button" id="btnAllCheck" onclick="allCheck();">전체선택</button>

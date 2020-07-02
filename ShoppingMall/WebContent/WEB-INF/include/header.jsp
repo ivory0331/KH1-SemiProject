@@ -155,14 +155,14 @@
 		display:none;
 		position: absolute;
 		z-index: 5;
-		min-width:170px;
+		width:170px;
 		background-color: white;
 		border:solid 1px black;
 	}
 	
 	/*전체 카테고리 하위의 navi가 되는 ul*/
 	.navi-categori{
-		width:170px;
+		width:168px;
 		display:inline-block;
 		list-style: none;
 		padding:0px;
@@ -454,6 +454,7 @@ $(document).ready(function(){
 							<li class="list"><a href="javascript:location.href='<%=ctxPath%>/manager/managerMemberList.do'"><span class="listType">회원관리</span></a></li>
 							<li class="list"><a href="javascript:location.href='<%=ctxPath%>/manager/managerProductList.do'"><span class="listType">상품관리</span></a></li>
 							<li class="list"><a href="javascript:location.href='<%=ctxPath%>/manager/managerMemberList.do'"><span class="listType">주문관리</span></a></li>
+							<li class="list"><a href="javascript:location.href='<%=ctxPath%>/manager/mangerBoardWrite.do'"><span class="listType">게시글 작성</span></a></li>
 							<li class="list"><a href="javascript:logout()"><span class="listType">로그아웃</span></a></li>
 						</c:if>
 						<c:if test="${sessionScope.loginuser.status=='1'}">
@@ -503,7 +504,7 @@ $(document).ready(function(){
 			</li>
 			<li><a href="javascript:location.href='<%=ctxPath%>/product/saleProduct.do'"><span class="listType">알뜰쇼핑</span></a><span class="bar">I</span></li>
 			<li><a href="javascript:location.href='<%=ctxPath%>/product/newProduct.do'"><span class="listType">신상품</span></a><span class="bar">I</span></li>
-			<li><a><span class="listType" onclick="goList()">추천쇼핑</span></a></li>
+			<li><a href="javascript:location.href='<%=ctxPath%>/product/recommendProduct.do'"><span class="listType" >추천쇼핑</span></a></li>
 			<li style="border:solid 1px gray; border-radius: 15px; padding:5px;">
 				<c:if test = "${not empty productSearchWord}">
 					<input type="text" placeholder="검색" style="border:none;" name="productSearchWord" value="${productSearchWord}"/>

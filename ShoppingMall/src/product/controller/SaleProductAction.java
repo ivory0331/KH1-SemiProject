@@ -22,6 +22,7 @@ public class SaleProductAction extends AbstractController {
 		
 		HashMap<String,String> paraMap = new HashMap<>();
 		paraMap.put("currentShowPageNo", currentShowPageNo);
+		paraMap.put("sale", "sale");
 		
 		List<ProductVO> saleProduct = productdao.selectSale(paraMap);
 		

@@ -6,7 +6,7 @@
 <head>
 <meta charset="UTF-8">
 <link rel="stylesheet" href="<%= ctxPath %>/css/style.css" />
-<title>serviceCenterBoardWrite.jsp</title>
+<title>serviceCenterBoardUpdate.jsp</title>
 <style type="text/css">
 	.writeTable{
 		width:1080px;
@@ -54,6 +54,12 @@
 	
 	#txt_area{
 		overflow-y: scroll;
+		border:solid 1px black; 
+		margin-top:10px; 
+		height: 600px;
+		width: 100%;
+		resize: none;
+		
 	}
 	
 	#Qboard-categori{
@@ -68,29 +74,31 @@
 <script type="text/javascript" src="/ShoppingMall/util/myutil.js"></script>
 <script type="text/javascript">
 $(document).ready(function(){
-	$("#imgFile").change(function(){
-		if(this.files && this.files[0]) {
-			var fileName = this.files[0].name;
-			var index = fileName.indexOf(".");
-			var fileType = fileName.substr(index);
-			if(fileType==".png"||fileType==".jpg"||fileType==".png"){
-				var reader = new FileReader;
-				reader.onload = function(data) {
-					var html = "<img src='"+data.target.result+"' />";
-					$("#txt_area").append(html);
-				}
-				 reader.readAsDataURL(this.files[0]);
-			}
-			else{
-				alert("이미지만 올릴 수 있습니다.");
-			}
-			// input[type='file'] 초기화 //
-			$("#imgFile").replaceWith( $("#imgFile").clone(true) );
-			$("#imgFile").val(""); 
-		}
+	$("option:eq('${fvo.fk_category_num}')").prop("selected",true);
 		
-	});
 });
+function divCheck(){
+	if($("input[name='title']").val().trim()==""){
+		alert("제목을 작성하세요");
+		return;
+	}
+	
+	if($("#txt_area").val().trim()==""){
+		alert("내용을 채워주세요");
+		return;
+	}
+	
+	if($("#Qboard-categori").val()=="0"){
+		alert("카테고리를 선택해주세요");
+		return;
+	}
+	$("input[name='contents']").val($("#txt_area").val().trim());
+	var frm = document.noticeWriteFrm;
+	frm.action="<%=ctxPath%>/service/boardUpdate.do";
+	frm.method="POST";
+	frm.submit();
+}
+
 </script>
 </head>
 <body>
@@ -99,44 +107,31 @@ $(document).ready(function(){
 		<div class="section" align="center">
 			<div class="contents">
 				<div class="boardInfo" align="left">
-					<h3 style="display:inline-block">자주하는 질문 작성</h3>
-					<span style="margin-left:10px; font-size:8pt; font-weight: bold;">고객님들께서 가장 많이하는 질문들은 모두 모았습니다.</span>
+					<h3 style="display:inline-block">공지사항</h3>
+					<span style="margin-left:10px; font-size:8pt; font-weight: bold;">새로운 소식들과 유용한 정보들을 고객에게 전달할게요.</span>
 					
 				</div>
-				<form name="questionWriteFrm">
+				<form name="noticeWriteFrm">
+					<input type="hidden" name="notice_num" value="${nvo.notice_num}" />
 					<table class="writeTable">
 						<tr>
 							<td class="frmTitle">작성자</td>
-							<td><input type="text" value="test" disabled name="userName"/></td>
-						</tr>
-						<tr>
-							<td class="frmTitle">카테고리</td>
-							<td>
-								<select id="Qboard-categori">
-									<option>선택</option>
-									<option>회원문의</option>
-									<option>주문/결제</option>
-									<option>배송문의</option>
-								</select>
-							</td>
+							<td><input type="text" value="관리자" disabled name="userName"/></td>
 						</tr>
 						<tr>
 							<td class="frmTitle">제목</td>
-							<td><input type="text" value=""  name="title"/></td>
+							<td><input type="text" value="${nvo.subject}"  name="title"/></td>
 						</tr>
 						<tr>
 							<td class="txt_field" colspan="2">
-								<div contenteditable="true" style="border:solid 1px black; margin-top:10px; height: 600px;" id="txt_area"></div>
-								<input type="hidden" name="contents"/>
+								<textarea rows="30" cols="30" id="txt_area">${nvo.content}</textarea>
+								<input type="hidden"  name="contents" id="txt_content"/>
 							</td>
 						</tr>
-						<tr>
-							<td><label for="imgFile">이미지 추가</label></td>
-							<td><input type="file" id="imgFile" accept=".gif, .jpg, .png"/></td>
-						</tr>
+		
 					</table>
 					<div class="userBtn" align="center">
-						<span>취소</span> <span style="background-color:purple; color:white;" onclick="divCheck()">등록</span>
+						<span onclick="javascript:histroy.back();">취소</span> <span style="background-color:purple; color:white;" onclick="divCheck()">등록</span>
 					</div>
 				</form>
 			</div>

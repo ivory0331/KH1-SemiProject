@@ -5,6 +5,7 @@ import java.util.List;
 import member.model.MemberVO;
 
 public class OneInquiryVO {
+	private int rowNum;
 	private int one_inquiry_num;
 	private String subject;
 	private String content;
@@ -129,7 +130,7 @@ public class OneInquiryVO {
 		this.imageList = imageList;
 	}
 
-
+ 
 	public MemberVO getMember() {
 		return member;
 	}
@@ -148,6 +149,15 @@ public class OneInquiryVO {
 		this.fk_category_num = fk_category_num;
 	}
 
+	public int getRowNum() {
+		return rowNum;
+	}
+
+	public void setRowNum(int rowNum) {
+		this.rowNum = rowNum;
+	}
+
+	
 	
 	
 	

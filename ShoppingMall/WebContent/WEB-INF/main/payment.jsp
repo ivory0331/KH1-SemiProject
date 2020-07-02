@@ -17,11 +17,10 @@
 		font-family : noto sans, sans-serif, malgun gothic;
 	}
 	
-	.content input{
+	.contents input{
 		height:35px;
 		vertical-align: middle;
 		margin-right:10px;
-		padding-left:7px;
 		border: solid 1px #949296; /* 회색 */
 	}
 	
@@ -62,8 +61,7 @@
 	
 	/* 테이블 전체 설정 */
 	.contents table{
-		border-bottom: solid 1px #ddd;	
-		width : 100%;		
+		border-bottom: solid 1px #ddd;		
 	}
 	
 	 .contents th,  .contents td{
@@ -294,45 +292,11 @@
 
 	
 	$(document).ready(function(){
-
-		//처음 상품 리스트 숨기기
-		$("#productList").hide();	
-		
-		console.log("${deliveryInfo}");
-		
-		//배송 메모 입력
-		$("#deliveryMemo").keyup(function(){
-			var cntMemo = $("#deliveryMemo").val().length;
-			$("#bytesMemo").val('');
-			$("#bytesMemo").text(cntMemo);
-		});
-		
-		
-		//새배송지클릭
-		$("input#selectDelivery2").click(function(){
-			$(".address_default").hide();
-			$("#btn_add").show();
-		})
-		
-		//기존배송지클릭
-		$("#selectDelivery").click(function(){
-			$(".address_default").show();
-			$("#btn_add").hide();
-			$(".address_new").hide();
-		})
-		
-		
-		//기존배송지에 최근 기록 또는 자신의 핸드폰 번호 입력
-		if("${deliveryInfo.recipient_mobile}"!=""){
-			var mobile1 = "${deliveryInfo.recipient_mobile}".substring(0,3);
-			console.log(mobile1);
-			$("input[name='mobile']:eq(0)").val(mobile1);
-
 		if("${sessionScope.payResult}"==""){
 			//처음 상품 리스트 숨기기
 			$("#productList").hide();	
-			
-			
+		
+		}
 			
 			//배송 메모 입력
 			$("#deliveryMemo").keyup(function(){
@@ -404,40 +368,6 @@
 			});
 				
 			
-			
-			
-			
-			
-			
-			
-			//결제 정보 페이지 플로팅
-		/* 	// 기존 css에서 플로팅 배너 위치(top)값을 가져와 저장한다.
-			var floatPosition = parseInt($("#costInfo").css('top'));
-		
-			$(window).scroll(function() {
-				// 현재 스크롤 위치를 가져온다.
-				var scrollTop = $(window).scrollTop();
-				var newPosition = scrollTop + floatPosition + "px";
-		
-				// 애니메이션 없이 바로 따라감
-				$("#costInfo").css('top', newPosition);
-				 
-			}).scroll(); */
-			
-			
-		  /*   var agreeInfoHei = $('#agreeInfo').outerHeight(); //동의 전까지
-
-		    $("#paymentInfo").on('scroll', function() {
-		
-			    var sT = $(window).scrollTop();
-			    var val = $(document).height() - $(window).height() - agreeInfoHei;
-		
-			    if (sT >= val)
-			    	$('#agreeInfo').addClass('on')
-			    else
-			    	$('#agreeInfo').removeClass('on')
-		    }); 
-		     */
 		    
 		    var $w = $(window),
 		    footerHei = $('footer').outerHeight(),
@@ -468,7 +398,6 @@
 
 				}
 			});
-		}
 		
 		
 	});

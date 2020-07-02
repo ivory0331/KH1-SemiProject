@@ -11,6 +11,7 @@ public class MyUtil {
 			if(param != null) {
 				result = result.replaceAll("<", "&lt;");
 				result = result.replaceAll(">", "&gt;");
+				result = result.replaceAll("\r\n", "<br>");
 			//	result = result.replaceAll("&", "&amp;");
 			//	result = result.replaceAll("\"", "&quot;");
 			}
@@ -30,7 +31,7 @@ public class MyUtil {
 			
 			String ctxPath = request.getContextPath();			
 			int beginIndex = currentURL.indexOf(ctxPath)+ctxPath.length();			
-			String goBackURL = currentURL.substring(beginIndex+1);//28번째부터 끝까지 shop/prodView.up?pnum=3
+			String goBackURL = currentURL.substring(beginIndex+1);//28번째부터 끝까지 shop/prodView.up? pnum=3
 			
 			return goBackURL;
 			

@@ -239,6 +239,40 @@
 		$(".numPrice").val(money);
 		$(".money").html(func_comma(money));
 		
+		$(document).on("click", ".review .accordion", function(){
+			var $target = $(this).next();
+			var $other = $target.siblings();
+			$other.each(function(index, item){
+				if($(item).hasClass("panel")){
+					$(item).addClass("panel-none");	
+				}
+			});
+			if($target.hasClass("panel-none")){
+				var num = $(this).children().first().text();
+				console.log(num);
+				var writer = $(this).find(".writer").val();
+				var hit = $(this).find(".hit");
+				console.log(hit);
+				console.log(writer);
+				if(writer != "${sessionScope.loginuser.member_num}"){
+					$.ajax({
+						url:"<%=ctxPath%>/reviewHitUp.do",
+						data:{"review_num":num},
+						dataType:"JSON",
+						success:function(json){
+							console.log(json.review_num);
+							hit.html(json.review_num);
+						},
+						error:function(e){
+							
+						}
+						
+					});
+				}
+				
+			}
+			$target.toggleClass("panel-none");
+		})
 		
 		
 		for(var i=0; i<$(".detailTablePart").length; i++){
@@ -321,43 +355,44 @@
 	
 	function func_reviewCall(){
 		var url = "/reviewCall.do";
-		var data = {"product_num":"${product.product_num}"};
+		var data = {"product_num":"${product.product_num}",
+				    "pagePerNum":"5",
+			   	    "currentPage":reivew_currentPage,
+			   	    "totalPage":rivew_totalPage		   
+				   };
 		reqServer(url, data);
 	}
 	
 	function printReview(json){
-		if(json.length > 0){
-			for(var i=0; i<json.length; i++){
-				var html = "<tr class='accordion'>"
-				         + "<td>"+json[i].getReview_num()+"</td>"
-				         + "<td class='content-title'>"+json[i].getSubject()+"</td>"
-				         + "<td>"+json[i].getName()+"</td>"
-				         + "<td>"+json[i].getWrite_date()+"</td>"
-				         + "<td>"+json[i].getHit()+"</td>"
-				         + "</tr>"
+		if(json.reviewList.length > 0){
+			console.log(json.reviewList);
+			var html = "";
+			$(json.reviewList).each(function(index, item){
+					html += "<tr class='accordion'>"
+			         	 + "<td>"+item.review_num+"<input type='hidden' class='writer' value='"+item.fk_member_num+"' /></td>"
+			         	 + "<td class='content-title'>"+item.subject+"</td>"
+			         	 + "<td>"+item.name+"</td>"
+			         	 + "<td>"+item.write_date+"</td>"
+			         	 + "<td class='hit'>"+item.hit+"</td>"
+			         	 + "</tr>"
 				         + "<tr class='panel panel-none'>"
-				         + "<td colspan='5' class='review_content'>"+json[i].getContent();
-				for(var j=0; j<json[i].getImageList().length; j++){
-					var imageFileName = decodeURIComponent(json[i].getImageList.get(j));
-					var imageFile = "<%=ctxPath%>/images/"+imageFileName;
-					html+="<img src='"+imageFile+"' style='display:block;'/>";	
+				         + "<td colspan='5' class='review_content'>"+item.content;
+				if(item.imageList.length>0){
+					 $(item.imageList).each(function(index2, item2){
+						  html+="<div><img src='<%=ctxPath%>/Upload/"+item2+"' / style='margin-bottom:10px;'></div>";
+					  });
 				}
-				
-				if(json[i].getMember_name() == "${sessionScope.user.name}"){
+				if(item.fk_member_num == "${sessionScope.loginuser.member_num}"){
 					html+=" <div class='userBtn' align='right'>"
-					     +" <span>수정</span><span>삭제</span> "
+					     +" <span>수정</span><span onclick='goReviewDel("+item.review_num+")'>삭제</span> "
 					     +" </div> ";
 				}
-				else{
-					html+=" <div class='userBtn' align='right'>"
-					     +" <span>좋아요♡</span> "
-					     +" </div> ";
-				}
-				
 				html += "</td>"
 			         + "</tr>";
-			}
+			         	 
+			});
 			$("#review tbody").html(html);
+			$("#reviewPageBar").html(json.pageBar);
 		}
 		else{
 			var html = "<td colspan='5'><div class='' align='center'><h3>작성된 후기가 없습니다.</h3></div></td>";
@@ -366,6 +401,13 @@
 			
 		}
 	}
+	
+	function goReviewDel(num){
+		var url="/reviewDel.do";
+		var data={"review_num":num};
+		reqServer(url, data);
+	}
+	
 	
 	
 	function func_productQCall(currentPage){
@@ -473,6 +515,10 @@
 					alert(json.message);
 					location.reload(true);
 				}
+				else if(url=="/reviewDel.do"){
+					alert(json.message);
+					location.reload(true);
+				}
 			},
 			error:function(e){
 				console.log(e);
@@ -496,7 +542,7 @@
 		<jsp:include page="../include/header.jsp"></jsp:include>
 		<div class="section" align="center">
 			<div class="contents">
-				<div class="info">
+				<div class="info" style="margin-top:15px";>
 					<div class="goodsImg">
 						<img alt="상품1" src="<%=ctxPath %>/images/${product.representative_img}" />
 					</div>
@@ -559,6 +605,22 @@
 							<button class="tablinks" onclick="goTable('1')">고객 후기</button>
 							<button class="tablinks" onclick="goTable('2')" style="border-right:solid 1px black">상품 문의</button>
 						</div>
+
+						<div style="clear:both;"></div>
+						<div id="mainImage" style="width:100%; padding-bottom:10px; border-bottom:solid 1px black;">
+							<c:if test="${product.imageList!=null}">
+								<c:forEach var="image" items="${product.imageList}">
+									<img src="<%=ctxPath %>/images/${image}"  style="margin:20px 0;"/>
+								</c:forEach>
+							</c:if>
+							
+							<h3 >${product.product_name}</h3>
+						</div>
+						<div style="margin-top:15px; font-size: 18pt; line-height: 32px; color:gray; font-family: noto sans; font-weight: 200;">
+							${product.explain}
+						</div>
+
+
 						<c:if test="${not empty product.imageList}">
 							<c:forEach var="image" items="${product.imageList}">
 								<img src="<%=ctxPath %>/images/${image}" style="margin: 0 auto;"/>
@@ -566,7 +628,10 @@
 						</c:if>
 						
 						<div>${product.explain}</div>
+
 					</div>
+				
+					
 				
 					<div class="detailTablePart" id="review">
 						<div class="tab">
@@ -627,6 +692,7 @@
 								</tr>
 							</tbody>
 						</table>
+						<div id="reviewPageBar"></div>
 						<p align="right">
 							<span class="writeBtn" onclick="goReview('${product.product_num}')">후기 쓰기</span>
 						</p>
@@ -693,7 +759,7 @@
 						</table>
 						<div id="inqueruyPageBar"></div>
 						<p align="right">
-							<span class="writeBtn" onclick="location.href='<%=ctxPath %>/productList.do'">목록 보기</span><span class="writeBtn" onclick="goWriteQ('${product.product_num}')">문의 쓰기</span>
+							<span class="writeBtn" onclick="location.href='javascript:history.back()'">뒤로가기</span><span class="writeBtn" onclick="goWriteQ('${product.product_num}')">문의 쓰기</span>
 						</p>
 					</div>
 				</div>

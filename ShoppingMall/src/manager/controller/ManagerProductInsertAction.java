@@ -77,6 +77,7 @@ public class ManagerProductInsertAction extends AbstractController {
 	    }else {
 	    	
 			MultipartRequest mtrequest = null;// 파일업로드, 다운로드 기능을 위한 객체, cos.jar 라이브러리 넣어줌
+
 	    	
 		   
 			// 1. 첨부되어진 파일의 업로드 경로 설정
@@ -100,8 +101,8 @@ public class ManagerProductInsertAction extends AbstractController {
 			  }
 			
 			
-			  String representative_img = mtrequest.getFilesystemName("representative_img");
-			  			
+			  String representative_img = mtrequest.getFilesystemName("representative_img");			  			
+			
 			  int fk_category_num = Integer.parseInt(mtrequest.getParameter("fk_category_num"));
 			  int fk_subcategory_num = Integer.parseInt(mtrequest.getParameter("fk_subcategory_num"));
 			  String product_name = mtrequest.getParameter("product_name");
@@ -111,12 +112,19 @@ public class ManagerProductInsertAction extends AbstractController {
 			  int price = Integer.parseInt(mtrequest.getParameter("price"));
 			  
 			  String getSale = mtrequest.getParameter("sale");
+			  System.out.println("겟세일 null : "+getSale);
+			  System.out.println("겟세일 길이 : " + getSale.length());
+			  System.out.println(getSale.isEmpty());
 			  
 			  if("".equals(getSale)) {
 				  getSale="0";
 			  }
+			  System.out.println("겟세일 0 : "+getSale);
 
-			  int sale = Integer.parseInt(getSale);			  
+			  int sale = Integer.parseInt(getSale);
+			  
+			  System.out.println("세일 0 : "+getSale);
+
 			  
 			  String getBest_point = mtrequest.getParameter("best_point");
 			  if(getBest_point.isEmpty()) {
@@ -131,9 +139,9 @@ public class ManagerProductInsertAction extends AbstractController {
 	
 			  explain =  MyUtil.replaceParameter(explain);			
 			  explain = explain.replaceAll("\r\n", "<br/>");
-			  
 	
 			  ProductVO pvo = new ProductVO();
+			  int product_num = pdao.getPnumOfProduct();
 			  
 		//	  pvo.setProduct_num(product_num);
 			  pvo.setRepresentative_img(representative_img);
@@ -157,7 +165,6 @@ public class ManagerProductInsertAction extends AbstractController {
 			  int product_num = pdao.getPnumOfProduct();
 			  product_num -=1;
 
-			//  int product_num = Integer.parseInt(mtrequest.getParameter("product_num"));					  
 			  
 			 // 상품 상세 이미지 업로드 
 			  int m = 0; 
@@ -174,6 +181,10 @@ public class ManagerProductInsertAction extends AbstractController {
 			  String loc = "";
 			  
 			  if(m==1) {
+				  String message = "";
+				  String loc = "";
+			  
+			  if(n==1) {
 				  
 				  message = "제품등록 성공!!";
 				  loc = request.getContextPath()+"/manager/managerProductList.do";				  
@@ -184,7 +195,6 @@ public class ManagerProductInsertAction extends AbstractController {
 				  loc = request.getContextPath()+"/manager/managerProductList.do";
 			  }
 			  
-			  super.getCategoryList(request);
 			  request.setAttribute("message", message);
 			  request.setAttribute("loc", loc);
 			  

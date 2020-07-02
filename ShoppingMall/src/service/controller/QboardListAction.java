@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import common.controller.AbstractController;
 import main.model.FAQtableVO;
-import main.model.NoticeVO;
+
 import service.model.InterServiceDAO;
 import service.model.ServiceDAO;
 
@@ -22,10 +22,12 @@ public class QboardListAction extends AbstractController {
 	 
 	
 		InterServiceDAO dao = new ServiceDAO();
-		
+
+
 		String currentShowPageNo = request.getParameter("currentShowPageNo");
 		String sizePerPage = "15";
 		String category = request.getParameter("favoriteQ_Category");
+		System.out.println(category);
 		if(currentShowPageNo==null) { currentShowPageNo="1"; }
 		
 		HashMap<String, String> paraMap = new HashMap<>();
@@ -33,7 +35,7 @@ public class QboardListAction extends AbstractController {
     	 
     	paraMap.put("currentShowPageNo", currentShowPageNo);
     	paraMap.put("sizePerPage", sizePerPage);
-    	if(category != null) {paraMap.put("category", category);}
+    	if(category != null && !("0".equals(category))) {paraMap.put("category", category);}
 		
     	// 검색	    	 
 	   	String searchWord = request.getParameter("searchWord");

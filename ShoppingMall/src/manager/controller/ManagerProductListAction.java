@@ -107,6 +107,13 @@ public class ManagerProductListAction extends AbstractController {
 		    int loop = 1; // 페이지 순서 증가 1 2 3 ...
 		   	 
 		    int blockSize = 10; // 페이지바 크기
+	   	 
+	   	 request.setAttribute("pageBar", pageBar);	  
+	   	 request.setAttribute("searchWord", searchWord);	    	 
+
+	   	
+	     super.setViewPage("/WEB-INF/manager/managerProductList.jsp");
+	        
 		    
 		    
 		    pageNo = ((Integer.parseInt(currentShowPageNo)-1)/blockSize)*blockSize+1;	    	 

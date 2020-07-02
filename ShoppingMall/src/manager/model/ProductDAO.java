@@ -542,8 +542,7 @@ public class ProductDAO implements InterProductDAO {
 			return result;
 		}
 
-
-		
+	
 		
 		// 제품 상세 보기
 		@Override
