@@ -295,8 +295,8 @@
 		if("${sessionScope.payResult}"==""){
 			//처음 상품 리스트 숨기기
 			$("#productList").hide();	
+		
 		}
-			
 			
 			//배송 메모 입력
 			$("#deliveryMemo").keyup(function(){
@@ -368,40 +368,6 @@
 			});
 				
 			
-			
-			
-			
-			
-			
-			
-			//결제 정보 페이지 플로팅
-		/* 	// 기존 css에서 플로팅 배너 위치(top)값을 가져와 저장한다.
-			var floatPosition = parseInt($("#costInfo").css('top'));
-		
-			$(window).scroll(function() {
-				// 현재 스크롤 위치를 가져온다.
-				var scrollTop = $(window).scrollTop();
-				var newPosition = scrollTop + floatPosition + "px";
-		
-				// 애니메이션 없이 바로 따라감
-				$("#costInfo").css('top', newPosition);
-				 
-			}).scroll(); */
-			
-			
-		  /*   var agreeInfoHei = $('#agreeInfo').outerHeight(); //동의 전까지
-
-		    $("#paymentInfo").on('scroll', function() {
-		
-			    var sT = $(window).scrollTop();
-			    var val = $(document).height() - $(window).height() - agreeInfoHei;
-		
-			    if (sT >= val)
-			    	$('#agreeInfo').addClass('on')
-			    else
-			    	$('#agreeInfo').removeClass('on')
-		    }); 
-		     */
 		    
 		    var $w = $(window),
 		    footerHei = $('footer').outerHeight(),
@@ -432,7 +398,6 @@
 
 				}
 			});
-		}
 		
 		
 	});

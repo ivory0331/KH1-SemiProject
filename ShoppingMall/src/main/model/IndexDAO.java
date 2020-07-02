@@ -207,16 +207,25 @@ public class IndexDAO implements InterIndexDAO{
 
 	// 특정 상품 후기 조회 //
 	@Override
-	public List<ReviewVO> reviewCall(String product_num) throws SQLException {
+	public List<ReviewVO> reviewCall(Map<String, Integer>paraMap) throws SQLException {
 		List<ReviewVO> reviewList = new ArrayList<ReviewVO>();
 		try {
 			conn = ds.getConnection();
-			String sql = " select R.review_num, R.subject, R.content, to_char(R.write_date,'yyyy-mm-dd') as write_date,"
-					   + " R.hit, R.favorite, R.fk_product_num, R.fk_order_num, R.fk_member_num, M.name"
-					   + " from review_table R join member_table M on R.fk_member_num = M.member_num where R.fk_product_num = ? ";
+			String sql = " select RON, review_num, content, write_date,"
+					   + " hit, favorite, fk_product_num, fk_order_num, fk_member_num, name"
+					   + " from "
+					   + " (select rownum as RON, review_num, subject, content, write_date,"
+					   + " hit, favorite, fk_product_num, fk_order_num, fk_member_num, name "
+					   + " from"
+					   + " 		(select R.review_num, R.subject, R.content, to_char(R.write_date,'yyyy-mm-dd') as write_date,"
+					   + " 		R.hit, R.favorite, R.fk_product_num, R.fk_order_num, R.fk_member_num, M.name"
+					   + " 		from review_table R join member_table M on R.fk_member_num = M.member_num where R.fk_product_num = ? order by review_num desc)V" 
+					   + " )T where T.RON between ? and ?";
 			
 			pstmt = conn.prepareStatement(sql);
-			pstmt.setString(1, product_num);
+			pstmt.setInt(1, paraMap.get("product_num"));
+			pstmt.setInt(2, paraMap.get("start"));
+			pstmt.setInt(3, paraMap.get("end"));
 			
 			rs = pstmt.executeQuery();
 			while(rs.next()) {
@@ -1063,5 +1072,55 @@ public class IndexDAO implements InterIndexDAO{
 		}
 		return delFileName;
 	}
+
+	// 특정 상품 리뷰 수 조회
+	@Override
+	public int getReviewtotalPage(Map<String, Integer> paraMap) throws SQLException {
+		int result = 0;
+		try {
+			conn = ds.getConnection();
+			String sql = " select count(*) from review_table where fk_product_num = ? ";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, paraMap.get("product_num"));
+			rs = pstmt.executeQuery();
+			if(rs.next()) {
+				result = rs.getInt(1);
+			}
+		}
+		finally {
+			close();
+		}
+		return result;
+	}
+
+	// 조회수 증가
+	@Override
+	public int reviewHitUp(String review_num) throws SQLException {
+		int reviewNum = 0;
+		int result = 0;
+		try {
+			conn = ds.getConnection();
+			String sql = " update review_table set hit = hit+1 where review_num = ? ";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, review_num);
+			result = pstmt.executeUpdate();
+			
+			if(result == 1) {
+				sql = " select hit from review_table where review_num = ? ";
+				pstmt = conn.prepareStatement(sql);
+				pstmt.setString(1, review_num);
+				rs = pstmt.executeQuery();
+				
+				if(rs.next()) {
+					reviewNum = rs.getInt(1);
+				}
+			}
+		}
+		finally {
+			close();
+		}
+		return reviewNum;
+	}
+
 	
 }
