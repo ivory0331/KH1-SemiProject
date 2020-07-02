@@ -61,6 +61,16 @@
 		color:white;
 	}
 	
+	td#product_click{
+		cursor:pointer;
+	}
+	
+	
+	.img{
+		width:80px;
+		height:100px;
+	}
+	
 	
 </style>
 <!-- 부트스트랩 -->
@@ -72,10 +82,44 @@
 <script type="text/javascript">
 	$(document).ready(function(){
 		
-		// 소분류 활성화	
-		$("select#fk_category_num").bind("change", function(){
-			if($("select#fk_category_num").val()!=0){
+		
+		
+		
+		// 검색 상황 유지
+		if("${searchWord}" != "") {
+			$("input#searchWord").val("${searchWord}");
+		}		
+				
+		$("option.bigSelect").each(function(index,item){
+			if($(item).val()==0){
+				$("select#fk_subcategory_num").prop('disabled',true);
+			}
+			else if($(item).val()=="${fk_category_num}"){
+				
+				$(item).prop("selected",true);		
 				$("select#fk_subcategory_num").prop('disabled',false);
+				
+				
+			}
+		})
+		
+		
+		$("option.smallSelect").each(function(index,item){
+			if($(item).val()=="${fk_subcategory_num}"){
+				$(item).prop("selected",true);				
+			}
+		})
+				
+		
+		// 소분류 	변경
+		$("select#fk_category_num").bind("change", function(){
+			
+			if($("select#fk_category_num").val()==0){
+				var html="<option class='smallSelect' value='0'>===소분류===</option>";
+				$("#fk_subcategory_num").html(html); 	
+				$("select#fk_subcategory_num").prop('disabled',true);
+			}else{
+			
 				$.ajax({
 					url:"<%= ctxPath%>/manager/getSubCategoryList.do",
 					type:"post",
@@ -83,29 +127,23 @@
 					dataType:"json",
 					success:function(json){	
 						$("select#fk_subcategory_num").prop('disabled',false);
-						var html='<option value="0">전체</option>';
+						var html="<option class='smallSelect' value='0'>전체</option>";
 						for(var i=0; i<json.length;i++){
-							html +="<option value='"+json[i].subcategory_num+"'>"+json[i].subcategory_content+"</option>";
+							html +="<option class='smallSelect' value='"+json[i].subcategory_num+"'>"+json[i].subcategory_content+"</option>";
 						}
-						$("#fk_subcategory_num").html(html); 						
+						$("#fk_subcategory_num").html(html); 	
+						
 					},						
 					error: function(request, status, error){
 						alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
 					}
 					
 				});
-			}else{
-				$("select#fk_subcategory_num").prop('disabled',true);
-			}			
+			}	
 		})
 		
 		
-		// 검색 상황 유지
-		if("${searchWord}" != "") {
-			$("select#fk_category_num").val("${fk_category_num}");
-			$("input#searchWord").val("${searchWord}");
-		}			
-		  
+		
 		// 페이지처리
 		$("#sizePerPage").val("${sizePerPage}");	  
 		
@@ -122,9 +160,21 @@
 				goSearch();
 			}
 		});
+		
+		
+		
+		// 상품 상세 보기
+		$("td#product_click").click(function(){
+			var product_num = $(this).siblings(".product_num").text();
+	        location.href="<%= ctxPath%>/manager/managerProductDetail.do?product_num="+product_num;  
+		})
 
 		
+		
 	});
+	
+	
+	
 	
 	
 	// 검색 버튼 전송
@@ -169,6 +219,8 @@
 		}
 	}
 	
+	
+	// 상품 신규 등록
 	function product_insert(){
 		location.href="<%=ctxPath%>/manager/managerProductInsert.do";
 	}
@@ -191,13 +243,13 @@
 						<form name="manager_productFrm">
 							<div>
 								<select id="fk_category_num" name="fk_category_num" class="bigSelect">
-									<option value="0">=== 대분류 ===</option>
+									<option class="bigSelect" value="0">=== 대분류 ===</option>
 									<c:forEach var="map" items="${requestScope.categoryList}">
-								    	<option value="${map.category_num}">${map.category_content}</option>
+								    	<option class="bigSelect" value="${map.category_num}">${map.category_content}</option>
 								    </c:forEach>	
 								</select>
 								<select id="fk_subcategory_num" name="fk_subcategory_num" disabled>
-									<option value="0">=== 소분류 ===</option>
+									<option>=== 소분류 ===</option>
 								</select>
 							</div>
 							<input type="text" id ="searchWord" name="searchWord"/>	
@@ -238,11 +290,11 @@
 								<c:forEach var="pvo" items="${productList}">
 									<tr>
 										<td><input type="checkbox" class="goodsList_check" name="product_num" value="${pvo.product_num}"></td>
-										<td>${pvo.product_num}</td>
+										<td class="product_num">${pvo.product_num}</td>
 										<td style="text-align: left;">${pvo.category_content}</td>
 										<td style="text-align: left;">${pvo.subcategory_content}</td>
-										<td><img src="" alt="사진"></td>								
-										<td style="text-align: left;">${pvo.product_name}</td>
+										<td><img class="img" src="/ShoppingMall/images/${pvo.representative_img}" alt="사진"/></td>								
+										<td style="text-align: left;" id="product_click">${pvo.product_name}</td>
 										<td style="text-align: right;"><fmt:formatNumber value="${pvo.price}" pattern="###,###"/></td>
 										<td>${pvo.stock}</td>
 									</tr>

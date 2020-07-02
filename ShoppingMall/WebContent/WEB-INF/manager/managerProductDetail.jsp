@@ -7,7 +7,7 @@
 <head>
 <meta charset="UTF-8">
 <link rel="stylesheet" href="<%= ctxPath %>/css/style.css" />
-<title>ProductInsert.jsp</title>
+<title>ProductUpdate.jsp</title>
 <!-- 차트 링크 --> 
 <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script> 
 <style type="text/css">
@@ -81,6 +81,10 @@
 		border:solid 1px #ddd;
 	}
 	
+	#img0{
+		width : 446px;
+		height: 300px;
+	}
 	
 	div.detail_img{
 		align-content : center;
@@ -89,7 +93,6 @@
 		height: 180px;
 		margin:0 10px;
 	}
-		
 	
 	/* 파일 선택 디자인 */
 	.newProductImg label{ 
@@ -140,11 +143,11 @@
 	div.upload_image_detail{
 		width:150px;
 		height:180px;
+		border:solid 1px #ddd;
 		margin-bottom: 10px;
-		border:solid 1px #ddd;		
 	}
 	
-	.detail{
+	.detail_img{
 		width:150px;
 		height:180px;
 	}
@@ -157,6 +160,9 @@
 		background-color: none;
 		margin-bottom:5px;
 	}
+	
+	
+	
 	
 	
 	.newProductInfo{
@@ -187,8 +193,16 @@
 
 	$(document).ready(function(){
 		
+		// 상세 이미지 빈칸 시 설정
+		$(".upload_name").each(function(index,item){
+			
+			if($("#upload_name"+index).val()==""){
+				$("#upload_name"+index).val("이미지 선택"+index);
+			}			
+		})
 		
-		var image_src0="";
+		
+		
 		// 대표이미지 삽입
 		$('.upload_rep_image').on('change', function(){
 			
@@ -205,13 +219,11 @@
 		         if (typeof (FileReader) != "undefined") {
 
 	                 var reader = new FileReader();
-	                 reader.onload = function (e) {	                   	  
-	                	 var html = "<img src='"+e.target.result+"' style='width:446px; height:300px;'>";
-	                     $(".representative_img_upload").html(html);
+	                 reader.onload = function (e) {	 
+	                	 $("#img0").prop("src",e.target.result);
 	                 }
 
-	                 reader.readAsDataURL($(this)[0].files[0]);
-	             
+	                 reader.readAsDataURL($(this)[0].files[0]);	             
 
 		         } else {
 		             alert("이미지 업로드에 실패하였습니다");
@@ -245,7 +257,7 @@
 
 		                 var reader = new FileReader();
 		                 reader.onload = function (e) {	                    
-		                	 var html = "<img class=detail id='img"+index+"' src='"+e.target.result+"'>";
+		                     var html = "<img class='detail_img' id='img"+index+"' src='"+e.target.result+"'>";
 		                     $(".detail"+index).html(html);
 		                 }
 
@@ -277,65 +289,62 @@
 		
 		
 		
-		 
-		// 소분류 활성화	
-		$("select#fk_category_num").bind("change", function(){
-			if($("select#fk_category_num").val()!=0){
-				$.ajax({
-					url:"<%= ctxPath%>/manager/getSubCategoryList.do",
-					type:"post",
-					data:{"fk_category_num":$("#fk_category_num").val()},
-					dataType:"json",
-					success:function(json){	
-						$("select#fk_subcategory_num").prop('disabled',false);
-						var html='';
-						for(var i=0; i<json.length;i++){
-							html +="<option value='"+json[i].subcategory_num+"'>"+json[i].subcategory_content+"</option>";
-						}
-						$("#fk_subcategory_num").html(html); 
-					},						
-					error: function(request, status, error){
-						alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
+		
+		// 소분류 불러오기
+		$.ajax({
+			url:"<%= ctxPath%>/manager/getSubCategoryList.do",
+			type:"post",
+			data:{"fk_category_num":$("#fk_category_num").val()},
+			dataType:"json",
+			success:function(json){	
+				var html='';
+				for(var i=0; i<json.length;i++){
+					html +="<option value='"+json[i].subcategory_num+"'";
+
+					if(json[i].subcategory_num==$("#subcategory_num").val()){
+						html += " selected ";
 					}
 					
-				});
-			} else{
-				$("select#fk_subcategory_num").prop('disabled',true);
-			}			
+					html +=">"+json[i].subcategory_content+"</option>";
+				}
+				$("#fk_subcategory_num").html(html); 
+			},						
+			error: function(request, status, error){
+				alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
+			}
+			
+		});
+
+		
+		
+		
+		// 대분류 변경 시
+		$("select#fk_category_num").bind("change", function(){
+			
+			$.ajax({
+				url:"<%= ctxPath%>/manager/getSubCategoryList.do",
+				type:"post",
+				data:{"fk_category_num":$("#fk_category_num").val()},
+				dataType:"json",
+				success:function(json){	
+					$("select#fk_subcategory_num").prop('disabled',false);
+					var html='';
+					for(var i=0; i<json.length;i++){
+						html +="<option value='"+json[i].subcategory_num+"'>"+json[i].subcategory_content+"</option>";
+					}
+					$("#fk_subcategory_num").html(html); 
+				},						
+				error: function(request, status, error){
+					alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
+				}
+				
+			});
+					
 		})
 		
-		
 	});
+		
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	// 이미지 미리보기
-	function handleImgFileSelect(e) {
-        var files = e.target.files;
-        var filesArr = Array.prototype.slice.call(files);
-
-        filesArr.forEach(function(f) {
-            if(!f.type.match("image.*")) {
-                alert("확장자는 이미지 확장자만 가능합니다.");
-                return;
-            }
-
-            sel_file = f;
-
-            var reader = new FileReader();
-            reader.onload = function(e) {
-                $("#img").attr("src", e.target.result);
-            }
-            reader.readAsDataURL(f);
-        });
-        
-	}
 	
 	
 	
@@ -354,7 +363,7 @@
 		
 		var boolSubmit = false;
 		// 1. 대표이미지 선택
-		if($(".upload_rep_image").val()==""){
+		if($(".upload_name").val()==""){
 			alert("대표이미지를 등록해주세요.");
 			return;
 		}		 
@@ -378,7 +387,7 @@
 			$.ajax({
 				url:"<%= ctxPath%>/manager/productNameDuplicateCheck.do",
 				type:"post",
-				data:{"productName":$("#product_name").val(),"productNum":${product_num}},
+				data:{"productName":$("#product_name").val(),"productNum":$("#product_num").val()},
 				dataType:"json",
 				success:function(json){
 					if(!json.isUse){
@@ -451,7 +460,7 @@
 						
 						var frm = document.productInsert;
 						frm.method="post";
-						frm.action="managerProductInsert.do";
+						frm.action="managerProductUpdate.do";
 						frm.enctype="multipart/form-data";
 						frm.submit();		
 						 
@@ -465,8 +474,10 @@
 	
 		}
 		
-		
 	}
+	
+	
+	
 	
 </script>
 </head>
@@ -485,14 +496,15 @@
 					<form name="productInsert" >
 						<div class="newGoodsAdd" id="newGoodsAdd0" align="left">
 							<div class="newGoodsTitle" id="newGoodsTitle0">
-								<h4>신규 상품 추가 폼</h4>
+								<h4>상품 상세페이지</h4>
 							</div>
 							
 							<div class="newProductImg" align="center" id="newProductImg0">
 								<div class="representative_img">
 									<div class="representative_img_upload">	
+										<img id="img0" src="/ShoppingMall/images/${pvo.representative_img}">							
 									</div>
-									<input class="upload_name" id="upload_name0" value="※필수※ 대표이미지 선택" disabled style="width:200px; background-color:#e6e6ff">
+									<input class="upload_name" id="upload_name0" value="${pvo.representative_img}" disabled style="width:200px;">
 									<label for="representative_img_btn">찾기</label>
 									<input type="file" class="upload_rep_image" id="representative_img_btn" name="representative_img" />
 								</div>
@@ -500,24 +512,36 @@
 								<div class="detailImgDiv">
 									<div class="detail_img">
 										<div class="upload_image_detail detail1">
+											<c:if test="${not empty pvo.imageList[0] }">
+												<img class="detail_img" id="img1" src="/ShoppingMall/images/${pvo.imageList[0]}">
+											</c:if>
 										</div>
-										<input class="upload_name" name="upload_name" id="upload_name1" value="이미지 선택1" disabled>																		
+										<input class="upload_name" name="upload_name1" id="upload_name1" value="${pvo.imageList[0]}" readonly>
+										<input type="hidden" class="old_name" name="old_name1" id="old_name1" value="${pvo.imageList[0]}">
 										<label for="image1_btn">찾기</label>
-										<input type="file" class="upload_image" id="image1_btn" name="detail_img1" />
+										<input type="file" class="upload_image" id="image1_btn" name="detail_img1" />`	
 										<label class="image_delete" id="image1_delete">삭제</label>
 									</div>
 									<div class="detail_img">
 										<div class="upload_image_detail detail2">	
+											<c:if test="${not empty pvo.imageList[1] }">
+												<img class="detail_img" id="img2" src="/ShoppingMall/images/${pvo.imageList[1]}">
+											</c:if>
 										</div>
-										<input class="upload_name" name="upload_name" id="upload_name2" value="이미지 선택2" disabled>
+										<input class="upload_name" name="upload_name2" id="upload_name2" value="${pvo.imageList[1]}" readonly>
+										<input type="hidden" class="old_name" name="old_name2" id="old_name2" value="${pvo.imageList[1]}">
 										<label for="image2_btn">찾기</label>
 										<input type="file" class="upload_image" id="image2_btn" name="detail_img2" />
 										<label class="image_delete" id="image2_delete">삭제</label>										
 									</div>
 									<div class="detail_img">
-										<div class="upload_image_detail detail3">	
+										<div class="upload_image_detail detail3">
+											<c:if test="${not empty pvo.imageList[2] }">
+												<img class="detail_img" id="img3" src="/ShoppingMall/images/${pvo.imageList[2]}">
+											</c:if>																		
 										</div>
-										<input class="upload_name" name="upload_name" id="upload_name3" value="이미지 선택3" disabled>
+										<input class="upload_name" name="upload_name3" id="upload_name3" value="${pvo.imageList[2]}" readonly>
+										<input type="hidden" class="old_name" name="old_name3" id="old_name3" value="${pvo.imageList[2]}">
 										<label for="image3_btn">찾기</label>
 										<input type="file" class="upload_image" id="image3_btn" name="detail_img3" />
 										<label class="image_delete" id="image3_delete">삭제</label>
@@ -530,69 +554,69 @@
 								
 								<ul class="newProductInfo" id="newProduct_ul">
 									<li>
-										<label>제품번호</label>
-										<input name="product_num" style="border:none; background-color: inherit ;" value="${product_num}" disabled>
+										<label for="product_num">제품번호</label>
+										<input type="text" id="product_num" name="product_num" value="${pvo.product_num}"class="goodsNum" readonly/>
 									</li>
 									<li>
 										<label>대분류</label>
-										<select id="fk_category_num" name="fk_category_num" class="bigSelect" style="background-color:#e6e6ff">
-											<option value="0">※필수 대분류</option>            
+										<select id="fk_category_num" name="fk_category_num" class="bigSelect">
 											<c:forEach var="map" items="${requestScope.categoryList}">
-								               <option value="${map.category_num}">${map.category_content}</option>
-								            </c:forEach>								
+								               <option value="${map.category_num}"
+								                 <c:if test="${map.category_num==pvo.fk_category_num}">selected</c:if>>${map.category_content}</option>
+								            </c:forEach>	
 										</select>									
 									</li>
 									<li>
 										<label>소뷴류</label>
-										<select id="fk_subcategory_num" name="fk_subcategory_num" class="smallSelect" style="background-color:#e6e6ff" disabled>
-											<option value="0">※필수 소분류</option>																					
+										<input type="hidden" id="subcategory_num" value="${pvo.fk_subcategory_num}">
+										<select id="fk_subcategory_num" name="fk_subcategory_num" class="smallSelect">																					
 										</select>
 									</li>
 									<li>
 										<label for="product_name">상품명</label>
-										<input type="text" id="product_name" name="product_name" class="goodsName" style="background-color:#e6e6ff" placeholder="※필수※"/>
+										<input type="text" id="product_name" name="product_name" value="${pvo.product_name}" class="goodsName" placeholder="※필수※"/>
 									</li>
 									<li>
 										<label for="unit">단위</label>
-										<input type="text" id="unit" name="unit" class="goddsUnit"/>
+										<input type="text" id="unit" name="unit" value="${pvo.unit}"class="goddsUnit"/>
 									</li>
 									<li>
 										<label for="packing">포장타입</label>
-										<input type="text" id="packing" name="packing" class="packageType"/>
+										<input type="text" id="packing" name="packing" value="${pvo.packing}" class="packageType"/>
 									</li>
 									<li>
 										<label for="origin">원산지</label>
-										<input type="text" id="origin" name="origin" class="goodsOrigin"/>
+										<input type="text" id="origin" name="origin" value="${pvo.origin}" class="goodsOrigin"/>
 									</li>									
 									<li>
 										<label for="price">가격(원)</label>
-										<input type="text" id="price" name="price" class="goodsPrice" style="background-color:#e6e6ff" placeholder="※필수※  숫자로 입력 ex)10000"/>
+										<input type="text" id="price" name="price" value="${pvo.price}" class="goodsPrice" placeholder="※필수※  숫자로 입력 ex)10000"/>
 									</li>
 									<li>
 										<label for="sale">할인율(%)</label>
-										<input type="text" id="sale" name="sale" class="goodsPrice" placeholder="숫자로 입력 ex)10"/>
+										<input type="text" id="sale" name="sale" value="${pvo.sale}" class="goodsPrice" placeholder="숫자로 입력 ex)10"/>
 									</li>
 									<li>
 										<label for="best_point">추천지수</label>
-										<input type="text" id="best_point" name="best_point" class="goodsPrice" placeholder="숫자로 입력 ex)10"/>
+										<input type="text" id="best_point" name="best_point" value="${pvo.best_point}" class="goodsPrice" placeholder="숫자로 입력 ex)10"/>
 									</li>
 									<li>
 										<label for="seller">판매자</label>
-										<input type="text" id="seller" name="seller" class="goodsPrice"/>
+										<input type="text" id="seller" name="seller" value="${pvo.seller}" class="goodsPrice"/>
 									</li>
 									<li>
 										<label for="seller_phone">판매자 번호</label>
-										<input type="text" id="seller_phone" name="seller_phone" class="goodsPrice"/>
+										<input type="text" id="seller_phone" name="seller_phone" value="${pvo.seller_phone}" class="goodsPrice"/>
 									</li>
 									<li style="margin:0;">
 										<label for="stock">재고 수</label>
-										<input type="text" id="stock" name="stock" class="goodsCount" style="background-color:#e6e6ff" placeholder="※필수※  숫자로 입력"/>
+										<input type="text" id="stock" name="stock" value="${pvo.stock}" class="goodsCount" placeholder="※필수※  숫자로 입력"/>
 									</li>
 								</ul>
 							</div>
 							<div align="center">
 								<label>상품 상세 설명</label>
-								<textarea style="width:95%; height:150px; " name="explain"></textarea>
+								<textarea style="width:95%; height:150px;" name="explain" >${pvo.explain}</textarea>
 							</div>
 							
 							

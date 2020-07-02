@@ -25,7 +25,7 @@ public abstract class AbstractController implements InterCommand {
        
        
              ※ URL 주소를 변경하여 페이지 이동시키고자 한다라면
-             즉, sendRedirect 를 하고자 한다라면    
+             즉, sendRedirect 를 하고자 한다라면      
              자식클래스에서는 부모클래스에서 생성해둔 메소드 호출시 아래와 같이 하면 되게끔 한다.
              
        super.setRedirect(true);

@@ -1,3 +1,4 @@
+
 package service.controller;
 
 import java.util.HashMap;
@@ -19,8 +20,8 @@ public class QboardListAction extends AbstractController {
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		super.setViewPage("/WEB-INF/service/serviceCenterQboardList.jsp");
 	 
-	}
-InterServiceDAO dao = new ServiceDAO();
+	
+		InterServiceDAO dao = new ServiceDAO();
 		
 		String currentShowPageNo = request.getParameter("currentShowPageNo");
 		String sizePerPage = "15";
@@ -37,8 +38,6 @@ InterServiceDAO dao = new ServiceDAO();
     	// 검색	    	 
 	   	String searchWord = request.getParameter("searchWord");
 	   
-	   	System.out.println("액션 searchWord : "+searchWord);
-	   	System.out.println("액션 sizePerPage : "+sizePerPage);
 	   	
 	   	if(searchWord !=null && !searchWord.trim().isEmpty()) {
 	   		paraMap.put("searchWord", searchWord);
@@ -107,3 +106,4 @@ InterServiceDAO dao = new ServiceDAO();
 
 	}
 }
+

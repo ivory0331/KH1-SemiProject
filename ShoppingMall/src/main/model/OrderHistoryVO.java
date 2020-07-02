@@ -10,7 +10,7 @@ public class OrderHistoryVO {
 	private String representative_img;
 	private String order_state;
 	private int product_cnt;
-	
+	 
 	public OrderHistoryVO() { }
 	
 	public OrderHistoryVO(int order_num, String order_date, int price, int fk_product_num, String product_name,

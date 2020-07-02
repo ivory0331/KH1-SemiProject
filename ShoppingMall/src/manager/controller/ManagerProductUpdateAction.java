@@ -1,9 +1,6 @@
 package manager.controller;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
@@ -14,12 +11,13 @@ import com.oreilly.servlet.MultipartRequest;
 import com.oreilly.servlet.multipart.DefaultFileRenamePolicy;
 
 import common.controller.AbstractController;
+import manager.model.InterProductDAO;
+import manager.model.ProductDAO;
+import member.model.MemberVO;
 import my.util.MyUtil;
 import product.model.ProductVO;
-import manager.model.*;
-import member.model.MemberVO;
 
-public class ManagerProductInsertAction extends AbstractController {
+public class ManagerProductUpdateAction extends AbstractController {
 
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
@@ -37,9 +35,9 @@ public class ManagerProductInsertAction extends AbstractController {
 	         super.setRedirect(false);
 	         super.setViewPage("/WEB-INF/msg.jsp");
 	         
-	         return;
-	         
+	         return;	         
 		}
+		
 		//2. 관리자로 로그인 해야 가능
 		else {
 	    	 HttpSession session = request.getSession();
@@ -59,35 +57,32 @@ public class ManagerProductInsertAction extends AbstractController {
 	            return;
 	         }
 	         
-	      }
+	      }			
 		
+		String method = request.getMethod();
 		
-	    super.getCategoryList(request);	
-	    
-	    String method = request.getMethod();
-	    
-	    InterProductDAO pdao = new ProductDAO();
-
-	    
-	    if(!"POST".equalsIgnoreCase(method)) {
-	         // GET 이라면
-			 int product_num = pdao.getPnumOfProduct();
-	    	 request.setAttribute("product_num", product_num);
-	    	 super.setViewPage("/WEB-INF/manager/managerProductInsert.jsp");	    	  
-	    }else {
-	    	
-			MultipartRequest mtrequest = null;// 파일업로드, 다운로드 기능을 위한 객체, cos.jar 라이브러리 넣어줌
-	    	
-		   
-			// 1. 첨부되어진 파일의 업로드 경로 설정
-			HttpSession sesssion = request.getSession();
+		if(!"POST".equalsIgnoreCase(method)) { 
 			
-			ServletContext svlCtx = sesssion.getServletContext();
-			String imagesDir = svlCtx.getRealPath("/images");// 웹경로
-			// 절대경로 => C:\myjsp\.metadata\.plugins\org.eclipse.wst.server.core\tmp0\wtpwebapps\ShoppingMall\images
+			String message = "비정상적인 경로입니다.";
+	        String loc = "javascript:history.back()";
+	         
+	        request.setAttribute("message", message);
+	        request.setAttribute("loc", loc);
+	         
+	        super.setViewPage("/WEB-INF/msg.jsp");
+	        return;
+	        
+	        
+	        
+		}else {
 			
+			  MultipartRequest mtrequest = null;
+			  HttpSession sesssion = request.getSession();
 			
-			try {	
+			  ServletContext svlCtx = sesssion.getServletContext();
+			  String imagesDir = svlCtx.getRealPath("/images");
+			
+			  try {	
 				  // 파일 업로드
 				  mtrequest = new MultipartRequest(request, imagesDir, 10*1024*1024, "UTF-8", new DefaultFileRenamePolicy() );
 				
@@ -101,7 +96,8 @@ public class ManagerProductInsertAction extends AbstractController {
 			
 			
 			  String representative_img = mtrequest.getFilesystemName("representative_img");
-			  			
+
+			  int product_num = Integer.parseInt(mtrequest.getParameter("product_num"));
 			  int fk_category_num = Integer.parseInt(mtrequest.getParameter("fk_category_num"));
 			  int fk_subcategory_num = Integer.parseInt(mtrequest.getParameter("fk_subcategory_num"));
 			  String product_name = mtrequest.getParameter("product_name");
@@ -132,10 +128,10 @@ public class ManagerProductInsertAction extends AbstractController {
 			  explain =  MyUtil.replaceParameter(explain);			
 			  explain = explain.replaceAll("\r\n", "<br/>");
 			  
-	
+			  InterProductDAO pdao = new ProductDAO();
 			  ProductVO pvo = new ProductVO();
 			  
-		//	  pvo.setProduct_num(product_num);
+			  pvo.setProduct_num(product_num);
 			  pvo.setRepresentative_img(representative_img);
 			  pvo.setFk_category_num(fk_category_num);
 			  pvo.setFk_subcategory_num(fk_subcategory_num);
@@ -151,36 +147,84 @@ public class ManagerProductInsertAction extends AbstractController {
 			  pvo.setStock(stock);
 			  pvo.setExplain(explain);
 
-			  int n = pdao.productInsert(pvo);
-			  
-			  
-			  int product_num = pdao.getPnumOfProduct();
-			  product_num -=1;
-
-			//  int product_num = Integer.parseInt(mtrequest.getParameter("product_num"));					  
+			  int n = pdao.productUpdate(pvo);
+			  			  
 			  
 			 // 상품 상세 이미지 업로드 
 			  int m = 0; 
+			  /*
+			  int imageCount = Integer.parseInt(mtrequest.getParameter("imageCount"));
+
 			  if(n==1) {
-				  int imageCount = Integer.parseInt(mtrequest.getParameter("imageCount"));
-				  for(int i=0; i<imageCount; i++) {
-					  String detail_img = mtrequest.getFilesystemName("detail_img"+(i+1));
-					  m = pdao.productImageInsert(product_num, detail_img);	 
-				  }				  
+				  if(imageCount!=0) {
+					  for(int i=0; i<imageCount; i++) {
+						  if(mtrequest.getParameter("detail_img")+(i+1)!="") {
+							  String detail_img = mtrequest.getFilesystemName("detail_img"+(i+1));
+							  m = pdao.productImageUpdate(product_num, detail_img);	
+						  }else {
+							  String detail_img = mtrequest.getParameter("upload_name"+(i+1));
+							  m = pdao.productImageUpdate(product_num, detail_img);	
+						  }
+					  }
+				  }else {
+					  m=2;
+				  }
+			  }		
+			  */	  
+
+			  
+			  if(n==1) {
+				  for(int i=0; i<3; i++) {
+					  System.out.println("=========="+mtrequest.getFilesystemName("detail_img"+(i+1)));
+					  
+					  if(mtrequest.getFilesystemName("detail_img"+(i+1))!=null) {
+						  String detail_img = mtrequest.getFilesystemName("detail_img"+(i+1));
+						  String old_name = mtrequest.getParameter("old_name"+(i+1));
+						  System.out.println(">>>>>>> 올드네임"+old_name);
+						  
+						
+						  if("".equals(old_name)) { 
+							  System.out.println("############# 확인용 => i : " + i); 
+							  old_name = "noimage"; 
+							  System.out.println("############# old_name : " + old_name); 
+						  }
+						  
+						  // 교체
+						  if(!"noimage".equals(old_name)&&old_name!=null) {
+							  m = pdao.productImageReplace(detail_img, old_name);	
+						  }
+						  // 새등록
+						  else if("noimage".equals(old_name)) {
+							  m = pdao.productImageInsert(product_num, detail_img);
+						  }
+					  }else { //삭제
+						  System.out.println("삭제 여기");
+						  System.out.println("이미지 선택"+(i+1));
+						  System.out.println(mtrequest.getParameter("upload_name"+(i+1)));
+						  if(("이미지 선택"+(i+1)).equals(mtrequest.getParameter("upload_name"+(i+1)))) {
+							  String old_name = mtrequest.getParameter("old_name"+(i+1));
+							  System.out.println("ㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁ 삭제해야될 이미지 이름 : "+old_name);
+							  m= pdao.productImageDelete(old_name);
+						  }
+						  
+					  }
+					  
+				  }
+			  }else {
+				  m=2;		  
 			  }
-			 
 			  
 			  String message = "";
 			  String loc = "";
 			  
-			  if(m==1) {
+			  if(n==1) {
 				  
-				  message = "제품등록 성공!!";
+				  message = "제품 수정 성공!!";
 				  loc = request.getContextPath()+"/manager/managerProductList.do";				  
 				  
 			  }
 			  else {
-				  message = "제품등록 실패!!";
+				  message = "제품 수정 실패!!";
 				  loc = request.getContextPath()+"/manager/managerProductList.do";
 			  }
 			  
@@ -189,8 +233,14 @@ public class ManagerProductInsertAction extends AbstractController {
 			  request.setAttribute("loc", loc);
 			  
 			  super.setViewPage("/WEB-INF/msg.jsp");
-	    }
-	   		  
+			
+			  
+		
+		}
+		
+		
+		
+		
 		
 	}
 

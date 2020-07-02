@@ -19,7 +19,7 @@ public class AES256 {
     private Key keySpec;
 
     /**
-     * 16자리의 키값을 입력하여 객체를 생성한다.
+     * 16자리의 키값을 입력하여 객체를 생성한다.  
      * @param key 암호화/복호화를 위한 키값
      * @throws UnsupportedEncodingException 키값의 길이가 16이하일 경우 발생
      */
