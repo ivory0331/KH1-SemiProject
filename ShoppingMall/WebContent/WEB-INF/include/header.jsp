@@ -34,7 +34,7 @@
 	
 	
 	.loginLink a:hover{
-		color: purple;
+		color: #5F0080;
 	}
 	
 	/*고객센터 영역*/
@@ -81,8 +81,8 @@
 	}
 	
 	.logo img{
-		width: 110px;
-		height: 100px;
+		width: 103px;
+		height: 79px;
 	}
 	
 	/*상단에 고정해야 하는 navigation이 있을 영역*/
@@ -100,7 +100,8 @@
 		list-style: none;
 		border:solid 0px blue;
 		margin-top: 10px;
-		margin-bottom: 0;
+		margin-bottom: 0px;
+		padding-bottom: 5px;
 	}
 	
 	.header-naviList > li{
@@ -122,14 +123,14 @@
 		display: inline-block;
 		margin: 0px 10px;
 		font-weight: bold;
-		color:black;
+		color:#333;
 		font-size: 12pt;
 		width: 150px;
 		height: 30px;
 	}
 	
 	.listType:hover{
-		color:purple;
+		color: #5F0080;
 		text-decoration:underline;
 		cursor: pointer;
 	}
@@ -216,7 +217,7 @@
 		width: 20px;
 		height: 20px;
 		border-radius: 50%;
-		background-color: purple;
+		background-color: #5F0080;
 		color:white;
 		cursor: pointer;
 		display: none;
@@ -325,7 +326,7 @@ $(document).ready(function(){
 	});
 	
 	
-	if(${sessionScope.loginuser!=null}){
+	if( ${sessionScope.loginuser!=null} ) {
 		func_basketCnt();
 	}
 	
@@ -441,7 +442,7 @@ $(document).ready(function(){
 	<div class="logo_login" align="center">
 		<div class="loginLink">
 			 <c:if test="${sessionScope.loginuser == null }">
-			 	 <a href="javascript:location.href='<%=ctxPath%>/member/register.do'">회원가입</a> |
+			 	 <a href="javascript:location.href='<%=ctxPath%>/member/register.do'"><span style="color:#5f0080;">회원가입</span></a> |
 			 	 <a href="javascript:location.href='<%=ctxPath%>/member/login.do'">로그인</a> | 
 			 </c:if>
 			 <c:if test="${sessionScope.loginuser != null }">
@@ -483,9 +484,9 @@ $(document).ready(function(){
 		</div>	
 	</div>
 	<div class="header-navi" align="center" >
-		<ul class="header-naviList" style="border-bottom:solid 1px purple;">
+		<ul class="header-naviList" style="border-bottom: solid 1px #f2f2f2;">
 			<li class="navi-dropdown">
-				<span class="listType dropbtn">전체 카테고리</span>
+				<span class="listType dropbtn">≡ 전체 카테고리</span>
 				<span class="bar">I</span><br/>
 				<div class="navi-dropdown-content" align="left">
 					<ul class="navi-categori">
@@ -514,7 +515,7 @@ $(document).ready(function(){
 				</c:if>
 			<img src="<%=ctxPath %>/images/search.png" onclick="searchList()" style="display:inline-block; width:20px; height:20px; cursor: pointer"/></li>
 			<li>
-				<span class="navi-basket" style="position:relative; ">
+				<span class="navi-basket" style="position:relative; padding-left: 5px;">
 					<img src="<%=ctxPath %>/images/basket.jpg" onclick="goBasket()"/>
 					
 					<div id="basketCnt" onclick="goBasket()"></div>
