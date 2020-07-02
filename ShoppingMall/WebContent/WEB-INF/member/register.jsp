@@ -346,6 +346,7 @@ div.check_event{
    var bPwChValidateCheck = false; //비밀번호 확인 체크 
    var bIdDuplicateCheck = false; // 아이디 중복확인을 클릭여부 확인 
    var bEmailDuplicateCheck = false; //이메일 중복확인 클릭여부 확인 
+   var bTelDuplicateCheck = false; //휴대폰인증 클릭여부 확인
    
    $(document).ready(function(){
                
@@ -508,11 +509,50 @@ div.check_event{
       $(".btn_tel").click(function(event){
     	  $(".txt_guide:eq(3)").show();
     	  
+    	  $.ajax({
+				url:"<%= ctxPath%>/member/smsSend.up",
+				type:"post",
+				data:{"mobile":"${mvo.hp1}${mvo.hp2}${mvo.hp3}"
+					 ,"smsContent":$("#smsContent").val()},
+				dataType:"json",
+				success:function(json){
+					if(json.success_count == 1) {
+						 alert("인증번호가 발송되었습니다");
+						 bTelDuplicateCheck = true;
+						
+					}
+					else if(json.error_count != 0) {
+						alert("인증번호 전송이  실패되었습니다");
+						 bTelDuplicateCheck = false;
+					}
+				},
+				error: function(request, status, error){
+					alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
+			    }
+			});	
+		
+		<%--버튼을 누르면 url주소로 포스트 방식으로 간다. 전화번호와 smsContent의 val값을 가지고 json형식으로 받아왓음 
+			action단에서 해시맵으로 담아 json형식으로 저장해 보낸다
+			json.키값 -> 1이면 문자전송 성공 알림 --%> 
+    	  
+    	  
       });
       
       
-      //==인증번호 확인 
+      //==인증번호 동일 한지 확인           
       
+      $(".btnCheck_tel").click(function(){    	  
+    	  
+    	var frm = document.verifyCertificationFrm;
+    	frm.telCertificationCode.value = $("#tel_confirm").val();
+    		
+    	frm.action = "<%= ctxPath%>/login/telverifyCertification.do";
+    	frm.method = "POST";
+    	frm.submit();
+    	 
+      });// end of $("#passwdCk").blur()--------------
+      
+   
       
       
       //==주소검색
@@ -748,8 +788,8 @@ div.check_event{
 			return;
 		}
 		//휴대폰 번호 검사 체크여부 
-		if($("#tel").val().trim()==""){
-	           alert("휴대폰 번호를 입력하세요");
+		if(!bTelDuplicateCheck){
+	           alert("휴대폰 번호 인증을 해주세요");
 	           return;
 	    }
 
@@ -1029,7 +1069,12 @@ div.check_event{
                      <button type="button" class="btn_submit" onclick="goRegister();">가입하기</button>
                    </div>
                         
-                 </form>      
+                 </form> 
+                 
+                 <form name="verifyCertificationFrm">
+						<input type="hidden" name="userid" />
+						<input type="hidden" name="telCertificationCode" />
+				</form>     
                </div>   
             </div> 
          </div>

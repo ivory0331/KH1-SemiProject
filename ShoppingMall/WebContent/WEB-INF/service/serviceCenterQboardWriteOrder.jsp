@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>  
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <% String ctxPath = request.getContextPath(); %>
 <!DOCTYPE html>
 <html>
@@ -31,12 +32,16 @@
 
 </script>
 <style type="text/css">
+#content{
+	width : 98%;
+	margin : 0 auto;
+}
+
 #content table{
 	width : 100%;
 	height: 100% ;
 	cellpadding: 0;	
 	cellspacing: 0;
-	border : solid 1px #ccc;
 	align:center;
 }
 
@@ -50,6 +55,7 @@ body{
 td.stxt {
 	height: 100%;
 	valign: top;
+	font : normal 8.5pt 돋움; 
 }
 
 .pagingBtn {
@@ -66,7 +72,7 @@ td.stxt {
     padding-top:4px;
 }
 .pagediv{
-	border: solid 1px #ccc;
+	border: solid 0px #ccc;
 	margin : 0 auto;
 }
 
@@ -82,9 +88,10 @@ a:hover {
 }
 
 .stxt {
-    color: gray;
+    color: #A8A8A8;
     letter-spacing: -1px;
-    font-size: 8.5pt;
+    padding : 10px 0 0px 2px;
+    font : normal 8.5pt 돋움; 
 }
 
 #btn_close{
@@ -96,6 +103,7 @@ a:hover {
     margin : 10px 0;
     border-style:none;
     outline : 0;
+    
 }
 </style>
 </head>
@@ -118,9 +126,9 @@ a:hover {
 									</table>
 									<table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-top: 10px;">
 										<colgroup>
-											<col width="20%">
-											<col width="12%">
-											<col width="36%">
+											<col width="13%">
+											<col width="13%">
+											<col width="40%">
 											<col width="10%">
 											<col width="15%">
 											<col width="7%">
@@ -128,9 +136,9 @@ a:hover {
 										<tbody>
 										
 											<tr height="19" bgcolor="#A8A8A8">
-												<th style="font: bold 8pt 돋움; color: #FFFFFF">주문번호</th>
+												<th style="font: bold 8pt 돋움; color: #FFFFFF; padding: 4px; padding-left:10px" >주문번호</th>
 												<th style="font: bold 8pt 돋움; color: #FFFFFF">주문일자</th>
-												<th style="font: bold 8pt 돋움; color: #FFFFFF">상품명</th>
+												<th style="font: bold 8pt 돋움; color: #FFFFFF" align="center">상품명</th>
 												<th style="font: bold 8pt 돋움; color: #FFFFFF">수량</th>
 												<th style="font: bold 8pt 돋움; color: #FFFFFF">주문금액</th>
 												<th style="font: bold 8pt 돋움; color: #FFFFFF">선택</th>
@@ -145,22 +153,32 @@ a:hover {
 										</c:if>
 										<c:if test="${not empty orderHistoryList}">					
 										<c:set var="temp" value="0" />
-										<c:forEach var="ohvo" items="${orderHistoryList}">																
+										<c:forEach var="ohvo" items="${orderHistoryList}">	
+										<c:choose>
+										<c:when test="${ohvo.order_num != temp}">															
 											<tr height="25" align="center" style="border: solid 1px #ccc;">
-												<td style="font: bold 8pt 돋움; color: #A8A8A8" >${ohvo.order_num}</td>
-												<td style="font: bold 8pt 돋움; color: #A8A8A8" >${ohvo.order_date}</td>
-												<td style="font: bold 8pt 돋움; color: #A8A8A8" >${ohvo.product_name}..외 ${ohvo.product_cnt-1}건</td>
-												<td style="font: bold 8pt 돋움; color: #A8A8A8" align="right">${ohvo.product_cnt}</td>
-												<td style="font: bold 8pt 돋움; color: #A8A8A8" align="right">${ohvo.price}원</td>
+												<td style="font: normal 8pt 돋움; color: #A8A8A8" >${ohvo.order_num}</td>
+												<td style="font: normal 8pt 돋움; color: #A8A8A8" >${ohvo.order_date}</td>
+												<td style="font: normal 8pt 돋움; color: #A8A8A8" >${ohvo.product_name}..
+													<c:if test="${ohvo.product_cnt != 1}">외 ${ohvo.product_cnt-1}건</c:if></td>
+												<td style="font: normal 8pt 돋움; color: #A8A8A8" align="right">${ohvo.product_cnt}개</td>
+												<td style="font: normal 8pt 돋움; color: #A8A8A8" align="right"><fmt:formatNumber value="${ohvo.price}" pattern="###,###"/>원</td>
 												<td><input type="radio" name="ordernoSelect" onclick="parent.order_put('order_num')"></td>
-											</tr>
-																						
+											</tr>									
 											<tr>
 												<td colspan="6" height="1" bgcolor="E5E5E5"></td>
 											</tr>
-										</c:forEach>
-										</c:if>
-										</tbody>
+										
+										<c:set var="temp" value="${ohvo.order_num}" />
+										</c:when>
+											<c:otherwise>
+												<c:set var="temp" value="${ohvo.order_num}" />
+											</c:otherwise>
+										</c:choose>
+										
+									</c:forEach>
+									</c:if>
+									</tbody>
 									</table>
 									<div class="pagediv" align="center" style="margin-top: 30px;">									
 									<a href="/service/serviceCenterQboardWriteOrder.jsp?&amp;page=1" class="pagingBtn layout-pagination-first-page"> &lt;&lt; </a>
@@ -172,7 +190,7 @@ a:hover {
 								</td>
 							</tr>
 							<tr>								
-								<td height="19" align="right">
+								<td height="19" align="right" >
 								<span id="btn_close">CLOSE</span></td>
 							</tr>
 						</tbody>

@@ -106,11 +106,8 @@ commit;
 
 select * from product_category_table;
 select * from product_subcategory_table;
-
 select * from product_table;
-  alter table product_table
-  modify product_name varchar2(200);
-  
+
 -- 상품 테이블 생성 --
 create table product_table
 (product_num    number not null -- 상품번호 필수+고유 시퀀스 사용
