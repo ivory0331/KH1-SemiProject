@@ -21,48 +21,54 @@
 		display: inline-block;
 		margin: 30px;
 	}
-	.contents h3{
-		margin-left: 30px;
+	.contents {
+		border: solid 0px blue;
 	}
 	.sub {
-		font-size: 15pt;
+		font-size: 12pt;
 		padding: 0px 15px;
 		cursor: pointer;
+		color: gray;
 	} 
-	#smallT {
-		border: solid 0px green;
+	.smallT {
+		border: solid 0px blue;
 		clear: both;
 		float: left;
+		margin-left: 160px;
 	}
 	#list {
 		border: solid 0px blue;
-		margin-top: 35px;
+		margin-right: 130px;
 		float: right;
 	}
 	#pList{
-		border: solid 0px purple;
 		display: inline-block;
-		margin-left: 50px !important;
+		margin: 0 0 40px 50px !important;
 	}
 	tr, td {
 		border: solid 0px red;
 		display: inline-block;
-
 	}
 	td {
-		width: 300px;
+		width: 270px;
 		height: 450px;
+		margin-bottom: 10px;
 	}
 	#h3{
 		border: solid 0px red;
 		width: 200px;
-		margin-top: 100px;
-		font-size: 20pt;
+		margin-top: 50px;
 		float: left;
+		margin-left: 120px;
+		margin-bottom: 10px;
+	}
+	#catefont {
+		font-size: 14pt;
 		font-weight: bold;
 	}
-	a:link { text-decoration: none;}
- 	a:visited { text-decoration: none;}
+	
+	.smallT>a :hover { text-decoration: none !important; 
+			  border-bottom: solid 2px purple !important;}
 
 	#searchWord{
 		font-size: 14pt;
@@ -113,6 +119,10 @@
 	.pricecolor {
 		text-align: left;
 	}
+	#optionSelect {
+		height: 20px;
+		font-size: 9pt;
+	}
 </style>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -122,6 +132,7 @@
 <script type="text/javascript">
 
 	$(document).ready(function(){
+	
 		
 		$("option").each(function(index, item){
 			if($(item).val() == "${optionSelect}"){
@@ -129,22 +140,20 @@
 			}
 		})
 		
-		$(".sub").hover(function(){
-			var selectcate = $(this).index();
-			console.log(selectcate); 
-			// 2 3 4
-			$(this).css('color','purple');
-		},function(){
-			$(".sub").css('color','black');
+		$(".sub").each(function(index,item){
+			var idvar = $(this).prop("id").substring(7);
+		//	console.log(idvar);
+			if(idvar == "${fk_subcategory_num}"){ // 5 51 전체보기 소분류
+				$(item).css({'color':'purple','font-weight':'bold','border-bottom':'solid 2px purple'});
+				$(".subb").css({'color':'gray','font-weight':'normal','border-bottom':'solid 0px purple'});
+			}
+			else if(idvar == "${fk_category_num}") {
+				// 5 전체보기
+				$(item).css({'color':'purple','font-weight':'bold','border-bottom':'solid 2px purple'});
+			}
+	
 		});
-		
-		$(".sub").click(function(){
-			$(".sub").css('border-bottom','solid 0px purple');
-			$(this).css('border-bottom','solid 2px purple');
-			
-		});
-		
-		
+
 		$("#optionSelect").change(function(){
 			 
 			var frm = document.opList;
@@ -152,7 +161,7 @@
 			frm.method="get";
 			frm.submit();
 		
-		}); // end of $("#list").change()----------------------------
+		}); // end of $("#optionSelect").change()----------------------------
 		
 		
 	}); // end of $(document).ready(function(){})-------------------------------
@@ -170,12 +179,12 @@
 		<div class="section" align="center">
 			<div class="contents">
 				<c:if test="${empty productSearchWord}">
-					<div id="h3">${categoryInfo}</div>
+					<div id="h3"><img alt="대분류사진" style="width:50px; height:50px;" src="/ShoppingMall/images/${categoryInfo}.png"><span id="catefont">${categoryInfo}</span></div>
 					
-					<div id="smallT">
-							<a href='/ShoppingMall/product/productList.do?fk_category_num=${fk_category_num}'><span class="sub">전체보기</span></a>
+					<div class="smallT">
+							<a href='/ShoppingMall/product/productList.do?fk_category_num=${fk_category_num}'><span class="sub subb" id="cateNum${fk_category_num}">전체보기</span></a>
 						<c:forEach var="cate" items="${subcategoryList}" varStatus="status">
-							<a href='/ShoppingMall/product/productList.do?fk_category_num=${fk_category_num}&fk_subcategory_num=${cate.subcategory_num}'><span class="sub">${cate.subcategory_content}</span></a>
+							<a href='/ShoppingMall/product/productList.do?fk_category_num=${fk_category_num}&fk_subcategory_num=${cate.subcategory_num}'><span class="sub" id="cateNum${cate.subcategory_num}">${cate.subcategory_content}</span></a>
 							
 						</c:forEach>
 					</div>
@@ -223,15 +232,14 @@
 								<a href='/ShoppingMall/detail.do?product_num=${pvo.product_num}'>
 									<div style="width:250px; height:350px;" class="sample_image"><img style="width:100%; height:100%;" src="/ShoppingMall/images/${pvo.representative_img}" /></div>
 								</a>
-								<br/><span style="font-family: noto sans; font-size:10pt; font-size:15pt; color:#333;">${pvo.product_name}</span>
-								
+								<br/><span style="font-size:13pt; letter-spacing: 0.6px; color:#333;">${pvo.product_name}</span>
 								<c:if test="${pvo.sale != 0}">
-									<br/><span style="text-decoration: line-through; color: #a6a6a6; font-weight: bold; font-size: 15pt;"><fmt:formatNumber value="${pvo.price}" pattern="###,###"/> 원</span>
-									<span style="color: #5f0080; font-weight: bold; font-size: 15pt;">&nbsp;→&nbsp;<fmt:formatNumber value="${pvo.finalPrice}" pattern="###,###" />원</span>
+									<br/><span style="text-decoration: line-through; color: #ccc; font-weight: bold; font-size: 17px;"><fmt:formatNumber value="${pvo.price}" pattern="###,###"/> 원</span>
+									<span style="color: #5f0080; font-weight: bold; font-size: 17px;">&nbsp;→&nbsp;<fmt:formatNumber value="${pvo.finalPrice}" pattern="###,###" />원</span>
 								</c:if>
 								
 								<c:if test="${pvo.sale == 0}">
-									<br/><span style="color: #5f0080; font-weight: bold; font-size: 15pt;"><fmt:formatNumber value="${pvo.price}" pattern="###,###"/>원</span>
+									<br/><span style="color: #5f0080; font-weight: bold; font-size: 17px;"><fmt:formatNumber value="${pvo.price}" pattern="###,###"/>원</span>
 								</c:if>
 							</td> 
 							<c:if test="${(status.count)%3 == 0 }">
