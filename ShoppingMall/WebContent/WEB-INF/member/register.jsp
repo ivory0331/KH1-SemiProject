@@ -185,10 +185,11 @@ button.btn_address{
     float: right;
     margin-left: 2px;
     border-radius: 3px;  
-
+	padding-top : 4px;
 }
-
-
+.email_error{
+	padding-top : 0px;
+}
 .bthCheck_tel{
    cursor: pointer;
 }
@@ -348,6 +349,7 @@ div.check_event{
    var bEmailDuplicateCheck = false; //이메일 중복확인 클릭여부 확인 
    var bTelDuplicateCheck = false; //휴대폰인증 클릭여부 확인
    var bTelCheckDuplicateCheck = false; //휴대폰인증 확인 클릭여부 체크 
+   var bBirthDuplicateCheck = false; //생년월일 유효성 검사 
    
    $(document).ready(function(){
                
@@ -387,9 +389,15 @@ div.check_event{
         
         if($("#userid").val().trim()==""){
            alert("아이디를 입력하세요");
-           bIdValidateCheck = false;
+           bIdValidateCheck = false;           
            return;
-        }$.ajax({
+        }else if(!bIdValidateCheck){
+        	alert("아이디를 바르게 입력해주세요");
+        	
+        }else if(bIdValidateCheck){
+        
+        	$.ajax({
+        
             url:"<%=ctxPath%>/member/idDuplicateCheck.do",
             type:"get",
             data:{"userid":$("#userid").val()},
@@ -413,7 +421,7 @@ div.check_event{
                alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
             }
          });
-         
+        } 
       });// end of $("#idcheck").click()------------
    
       
@@ -511,12 +519,11 @@ div.check_event{
       $("#btn_tel").click(function(event){
     	  $(".txt_guide:eq(3)").show();
     	  
-    	  if($("#btn_tel").val().trim()==""){
+    	  if($("#tel").val().trim() == ""){
               alert("인증받을 휴대폰 번호를 기입하세요");
               bTelDuplicateCheck = false;
               return;            
            }
-    	  
     	  $.ajax({
 				url:"<%= ctxPath%>/member/smsSend.do",
 				type:"post",
@@ -556,12 +563,13 @@ div.check_event{
           //2)유효성검사에 맞으면 인증번호받기 클릭가능
           if($(this).val().length == 6) {
                // $("#btnCheck_tel").addClass('btn_tel_correct');
-               $("#btnCheck_tel").css({"background-color":"#5f0080", "color":"#fff","border":"solid 1px #5f0080"});
+               $("#btnCheck_tel").css({"background-color":"#5f0080", "color":"#fff","border":"solid 1px #5f0080","cursor":"pointer"});
                 //alert("확인!");
           }
           else{
-                $("#btnCheck_tel").removeClass('btn_tel_correct');
-                $("#btnCheck_tel").removeAttr("href");
+        	  $("#btnCheck_tel").css({"background-color":"#fff", "color":"#ccc","border":"solid 1px #ccc","cursor":"default"});
+              $("#btnCheck_tel").removeAttr("href");
+                      	   		  
           }
      });// end of $("#tel_confirm").keyup(function(event) ------------
     		 
@@ -598,8 +606,6 @@ div.check_event{
       	});
     	 
       });// end of $("#passwdCk").blur()--------------
-      
-   
       
       
       //==주소검색
@@ -768,6 +774,7 @@ div.check_event{
 		if (!yearRegex.test(yearValue)) {
 			// error 표시 후 리턴
 			$("#txt_birth_error").html("태어난 연도를 정확하게 입력해주세요").addClass('wrong');
+			bBirthDuplicateCheck = false; 
 			return;
 		}
 
@@ -776,6 +783,7 @@ div.check_event{
 		if (!monthRegex.test(monthValue)) {
 			// error , return
 			$("#txt_birth_error").html("태어난 월을 정확하게 입력해주세요").addClass('wrong');
+			bBirthDuplicateCheck = false; 
 			return;
 		}
 
@@ -784,6 +792,7 @@ div.check_event{
 		if (!dateRegex.test(dateValue)) {
 			// error , return
 			$("#txt_birth_error").html("태어난 일을 정확하게 입력해주세요").addClass('wrong');
+			bBirthDuplicateCheck = false; 
 			return;
 		}
 
@@ -793,27 +802,27 @@ div.check_event{
 		var userInputDate = new Date(userYearInt, userMonthInt, userDayInt);
 		var today = new Date();
 
-		var userAge = Math.floor((today - userInputDate)
-				/ (1000 * 60 * 60 * 24 * 365));
-		console.log('userAge', userAge);
+		var userAge = Math.floor((today - userInputDate) / (1000 * 60 * 60 * 24 * 365));
+		//console.log('userAge', userAge);
 
 		// 4. 미래를 입력했는지?
 		if (userAge < 0) {
 			// error, return
 			$("#txt_birth_error").html("생년월일이 미래로 입력되었어요.").addClass('wrong');
+			bBirthDuplicateCheck = false; 
 			return;
 		}
 
 		// 5. 14세 이상인지?
 		if (userAge <= 14) {
 			// error , return
-			$("#txt_birth_error").html("만 14세 미만은 가입이 불가합니다.")
-					.addClass('wrong');
+			$("#txt_birth_error").html("만 14세 미만은 가입이 불가합니다.").addClass('wrong');
+			bBirthDuplicateCheck = false; 
 			return;
 		}
 		// 1,2,3,4,5가 모두 맞으면
 		$("#txt_birth_error").html("").addClass('wrong');
-
+		bBirthDuplicateCheck = true; 
 	}
 
 	//== submit 가입하기 클릭시  ==
@@ -834,6 +843,11 @@ div.check_event{
 			alert("동일한 비밀번호 형식을 입력해주세요");
 			return;
 		}
+		//이름 기입여부 확인
+		if($("#name").val().trim()==""){
+	         alert("이름을 입력하세요");
+	         return;
+	    }
 		//휴대폰 번호 검사 체크여부 
 		if(!bTelDuplicateCheck){
 	        alert("휴대폰 번호 인증을 해주세요");
@@ -846,6 +860,11 @@ div.check_event{
 	        return;
 	    }
 		
+		//생년월일 인증검사 체크 
+		if(!bBirthDuplicateCheck){
+			alert("정확한 생년월일을 기입해주세요")
+			return;
+		}
 		//아이디 중복체크 검사 
 		if (!bIdDuplicateCheck) {
 			alert("아이디 중복확인을 해주세요");

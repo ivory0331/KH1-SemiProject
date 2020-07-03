@@ -69,7 +69,10 @@
 	
 	.smallT>a :hover { text-decoration: none !important; 
 			  border-bottom: solid 2px purple !important;}
-
+	a:hover {
+		text-decoration: none !important;
+	}
+	
 	#searchWord{
 		font-size: 14pt;
 		width: 400px;
@@ -77,8 +80,10 @@
 	}
 	
 	#goBtn{
+		width: 175px;
+		height: 45px;
 		font-size: 14pt;
-		background-color: purple;
+		background-color: #5f0080;
 		outline:none;
 		border: none;
 		padding: 0 40px;
@@ -202,10 +207,13 @@
 				</c:if>
 
 				<c:if test="${not empty productSearchWord}">
-					<h1>상품검색</h1>
-					<form name="searchForm" style="border-top:solid 2px purple; border-bottom:solid 1px purple; ">
+					<div style="margin: 50px 0 ;">
+						<h1 style="padding-bottom: 15px;">상품검색</h1>
+						<span style="color: #999; font-size: 16px;">신선한 컬리의 상품을 검색해보세요.</span>
+					</div>
+					<form name="searchForm" style="border-top:solid 2px #5f0080; border-bottom:solid 1px #5f0080;">
 						<div style="display: inline-block; float:left; width: 100px; font-size:14pt;">
-							<label>검색조건</label>
+							<label style="margin-top: 10px;">검색조건</label>
 						</div>
 						<div style="display: inline-block;">
 							<input type="text" name="productSearchWord" id="searchWord" value="${productSearchWord}"/>
@@ -231,16 +239,16 @@
 							<td class="pricecolor">
 								<a href='/ShoppingMall/detail.do?product_num=${pvo.product_num}'>
 									<div style="width:250px; height:350px;" class="sample_image"><img style="width:100%; height:100%;" src="/ShoppingMall/images/${pvo.representative_img}" /></div>
+									<br/><span style="font-size:13pt; letter-spacing: 0.6px; color:#333;">${pvo.product_name}</span>
+									<c:if test="${pvo.sale != 0}">
+										<br/><span style="text-decoration: line-through; color: #ccc; font-weight: bold; font-size: 17px;"><fmt:formatNumber value="${pvo.price}" pattern="###,###"/> 원</span>
+										<span style="color: #5f0080; font-weight: bold; font-size: 17px;">&nbsp;→&nbsp;<fmt:formatNumber value="${pvo.finalPrice}" pattern="###,###" />원</span>
+									</c:if>
+									
+									<c:if test="${pvo.sale == 0}">
+										<br/><span style="color: #5f0080; font-weight: bold; font-size: 17px;"><fmt:formatNumber value="${pvo.price}" pattern="###,###"/>원</span>
+									</c:if>
 								</a>
-								<br/><span style="font-size:13pt; letter-spacing: 0.6px; color:#333;">${pvo.product_name}</span>
-								<c:if test="${pvo.sale != 0}">
-									<br/><span style="text-decoration: line-through; color: #ccc; font-weight: bold; font-size: 17px;"><fmt:formatNumber value="${pvo.price}" pattern="###,###"/> 원</span>
-									<span style="color: #5f0080; font-weight: bold; font-size: 17px;">&nbsp;→&nbsp;<fmt:formatNumber value="${pvo.finalPrice}" pattern="###,###" />원</span>
-								</c:if>
-								
-								<c:if test="${pvo.sale == 0}">
-									<br/><span style="color: #5f0080; font-weight: bold; font-size: 17px;"><fmt:formatNumber value="${pvo.price}" pattern="###,###"/>원</span>
-								</c:if>
 							</td> 
 							<c:if test="${(status.count)%3 == 0 }">
 								</tr>
@@ -256,6 +264,9 @@
 	    <div>
 	    	${pageBar}
 	    </div>	
+	    <div>
+	    	<a style="display:scroll;position:fixed;bottom:10px;right:10px;margin:10px;" href="#" title=”맨위로"><img style="width:60px; height:55px;" src="/ShoppingMall/images/topBtn.png"></a>
+	    </div>
 				</div>
 			</div>
 		

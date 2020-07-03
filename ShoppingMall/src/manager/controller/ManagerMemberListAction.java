@@ -25,7 +25,7 @@ public class ManagerMemberListAction extends AbstractController {
 		if(!super.checkLogin(request) ) {
 	         
 	         String message = "로그인 하세요.";
-	         String loc = "javascript:history.back()";
+	         String loc = "/ShoppingMall/member/login.do";
 	         
 	         request.setAttribute("message", message);
 	         request.setAttribute("loc", loc);
@@ -37,7 +37,7 @@ public class ManagerMemberListAction extends AbstractController {
 		}else if (super.checkLogin(request) && !loginuser.getUserid().equals("admin") ) {
 	         
 	         String message = "권한이 없습니다.";
-	         String loc = "javascript:history.back()";
+	         String loc = "/ShoppingMall/index.do";
 	         
 	         request.setAttribute("message", message);
 	         request.setAttribute("loc", loc);

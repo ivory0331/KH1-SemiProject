@@ -99,16 +99,17 @@
 				$(item).prop("selected",true);		
 				$("select#fk_subcategory_num").prop('disabled',false);
 				
-				
 			}
 		})
 		
-		
+
 		$("option.smallSelect").each(function(index,item){
 			if($(item).val()=="${fk_subcategory_num}"){
 				$(item).prop("selected",true);				
 			}
 		})
+		
+		
 				
 		
 		// 소분류 	변경
@@ -127,7 +128,7 @@
 					dataType:"json",
 					success:function(json){	
 						$("select#fk_subcategory_num").prop('disabled',false);
-						var html="<option class='smallSelect' value='0'>전체</option>";
+						var html="<option class='smallSelect' value='0'>===소분류===</option>";
 						for(var i=0; i<json.length;i++){
 							html +="<option class='smallSelect' value='"+json[i].subcategory_num+"'>"+json[i].subcategory_content+"</option>";
 						}
@@ -140,9 +141,6 @@
 					
 				});
 			}	
-			}else{
-				$("select#fk_subcategory_num").prop('disabled',true);
-			}			
 		})
 		
 		
@@ -175,9 +173,6 @@
 		
 		
 	});
-	
-	
-	
 	
 	
 	// 검색 버튼 전송
@@ -252,18 +247,10 @@
 								    </c:forEach>	
 								</select>
 								<select id="fk_subcategory_num" name="fk_subcategory_num" disabled>
-									<option>=== 소분류 ===</option>
-								<select id="fk_category_num" name="fk_category_num">
-									<option value="0">=== 대분류 ===</option>
-									<option value="1">채소</option>
-									<option value="2">과일 견과</option>
-									<option value="3">수산 해산</option>
-									<option value="4">정육 계란</option>
-									<option value="5">음료 우유</option>
-								</select>
-								<select id="fk_subcategory_num" name="fk_subcategory_num" disabled>
 									<option value="0">=== 소분류 ===</option>
-									<option value="41">기본채소</option>
+									<c:forEach var="map" items="${subCategoryList}">
+								    	<option class="smallSelect" value="${map.subcategory_num}">${map.subcategory_content}</option>
+								    </c:forEach>	
 								</select>
 							</div>
 							<input type="text" id ="searchWord" name="searchWord"/>	
@@ -274,7 +261,7 @@
 								<option value="3">3</option>
 							</select>									
 						</form>		
-						<span class="type goods-add">상품 추가</span>
+						<span class="type goods-add" onclick="product_insert()">상품 추가</span>
 					</div>
 					
 					<button type="button" id="btnAllCheck" onclick="allCheck();">전체선택</button>

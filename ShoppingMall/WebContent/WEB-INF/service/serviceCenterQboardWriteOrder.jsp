@@ -8,29 +8,6 @@
 <head>
 <meta charset="UTF-8">
 <title>주문조회</title>
-
-<link rel="stylesheet" href="<%= ctxPath %>/css/style.css" />
-<link rel="stylesheet"	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-<script	src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<script	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-<script type="text/javascript" src="/ShoppingMall/js/jquery-3.3.1.min.js"></script>
-<script type="text/javascript" src="/ShoppingMall/util/myutil.js"></script>
-<script type="text/javascript">
-	
-
-	$(document).ready(function(){
-				
-		$("#btn_close").click(function(){
-			
-			parent.$('#ifm_order').hide();
-			
-		});
-	   
-	});//end of $(document).ready(function(){})------------------------
-    	
-	
-
-</script>
 <style type="text/css">
 #content{
 	width : 98%;
@@ -106,6 +83,34 @@ a:hover {
     
 }
 </style>
+<link rel="stylesheet" href="<%= ctxPath %>/css/style.css" />
+<link rel="stylesheet"	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+<script	src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="/ShoppingMall/js/jquery-3.3.1.min.js"></script>
+<script type="text/javascript" src="/ShoppingMall/util/myutil.js"></script>
+<script type="text/javascript">
+	
+
+	$(document).ready(function(){
+				
+		$("#btn_close").click(function(){
+			
+			parent.$('#ifm_order').hide();
+			
+		});
+	   
+	});//end of $(document).ready(function(){})------------------------
+    	
+	function goWriteOrderNum(orderNum){
+		
+		parent.goWriteOrderNumToText(orderNum);
+		parent.$('#ifm_order').hide();
+	}
+	
+
+</script>
+
 </head>
 <body>
 <div id="content">
@@ -157,13 +162,13 @@ a:hover {
 										<c:choose>
 										<c:when test="${ohvo.order_num != temp}">															
 											<tr height="25" align="center" style="border: solid 1px #ccc;">
-												<td style="font: normal 8pt 돋움; color: #A8A8A8" >${ohvo.order_num}</td>
+												<td style="font: normal 8pt 돋움; color: #A8A8A8" ><span>${ohvo.order_num}</span></td>
 												<td style="font: normal 8pt 돋움; color: #A8A8A8" >${ohvo.order_date}</td>
 												<td style="font: normal 8pt 돋움; color: #A8A8A8" >${ohvo.product_name}..
-													<c:if test="${ohvo.product_cnt != 1}">외 ${ohvo.product_cnt-1}건</c:if></td>
-												<td style="font: normal 8pt 돋움; color: #A8A8A8" align="right">${ohvo.product_cnt}개</td>
+													<c:if test="${ohvo.product_cnt != 0}">외 ${ohvo.product_cnt}건</c:if></td>
+												<td style="font: normal 8pt 돋움; color: #A8A8A8" align="right">${ohvo.product_cnt+1}개</td>
 												<td style="font: normal 8pt 돋움; color: #A8A8A8" align="right"><fmt:formatNumber value="${ohvo.price}" pattern="###,###"/>원</td>
-												<td><input type="radio" name="ordernoSelect" onclick="parent.order_put('order_num')"></td>
+												<td><input type="radio" name="ordernoSelect" onclick="goWriteOrderNum('${ohvo.order_num}')"></td>
 											</tr>									
 											<tr>
 												<td colspan="6" height="1" bgcolor="E5E5E5"></td>
@@ -180,18 +185,20 @@ a:hover {
 									</c:if>
 									</tbody>
 									</table>
+									 <%-- 
 									<div class="pagediv" align="center" style="margin-top: 30px;">									
 									<a href="/service/serviceCenterQboardWriteOrder.jsp?&amp;page=1" class="pagingBtn layout-pagination-first-page"> &lt;&lt; </a>
 									<a href="/service/serviceCenterQboardWriteOrder.jsp?&amp;page=1" class="pagingBtn layout-pagination-prev-page"> &lt; </a>
-									<strong class="pagingBtn" style="background-color:#F7F7F7;">1</strong>
+									<span class="pagingBtn" style="background-color:#F7F7F7;"></span>
 									<a href="/service/serviceCenterQboardWriteOrder.jsp?&amp;page=1" class="pagingBtn layout-pagination-next-page"> &gt;</a>
 									<a href="/service/serviceCenterQboardWriteOrder.jsp?&amp;page=1" class="pagingBtn layout-pagination-last-page"> &gt;&gt;</a> <!--  맨끝페이지로 가기 -->
-									</div>
+									</div>--%>
+									<div class="pagediv" align="center" style="margin-top: 30px;">${pageBar}</div>
 								</td>
 							</tr>
 							<tr>								
-								<td height="19" align="right" >
-								<span id="btn_close">CLOSE</span></td>
+								<td height="10" align="right" >
+								<span id="btn_close" >CLOSE</span></td>					
 							</tr>
 						</tbody>
 					</table>
