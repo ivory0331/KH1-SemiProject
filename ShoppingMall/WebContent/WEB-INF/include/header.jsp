@@ -458,10 +458,11 @@ $(document).ready(function(){
 				<div class="mypage-dropdown-content" align="left">
 					<ul class="mypage-categori">
 						<c:if test="${sessionScope.loginuser.status=='2'}">
-							<li class="list"><a href="javascript:location.href='<%=ctxPath%>/service/board.do'"><span class="listType">매출관리</span></a></li>
+							<li class="list"><a href="javascript:location.href='<%=ctxPath%>/manager/managerSale.do'"><span class="listType">매출관리</span></a></li>
 							<li class="list"><a href="javascript:location.href='<%=ctxPath%>/manager/managerMemberList.do'"><span class="listType">회원관리</span></a></li>
 							<li class="list"><a href="javascript:location.href='<%=ctxPath%>/manager/managerProductList.do'"><span class="listType">상품관리</span></a></li>
 							<li class="list"><a href="javascript:location.href='<%=ctxPath%>/manager/managerMemberList.do'"><span class="listType">주문관리</span></a></li>
+							<li class="list"><a href="javascript:location.href='<%=ctxPath%>/manager/managerOneInquiryList.do'"><span class="listType">문의관리</span></a></li>
 							<li class="list"><a href="javascript:location.href='<%=ctxPath%>/manager/mangerBoardWrite.do'"><span class="listType">게시글 작성</span></a></li>
 							<li class="list"><a href="javascript:logout()"><span class="listType">로그아웃</span></a></li>
 						</c:if>
