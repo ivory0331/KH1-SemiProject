@@ -3,6 +3,7 @@ package hyemin.controller;
 import java.io.File;
 import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.ServletContext;
@@ -19,23 +20,24 @@ import hyemin.model.ReviewDAO;
 import main.model.IndexDAO;
 import main.model.InterIndexDAO;
 import main.model.OrderProductVO;
+import main.model.ReviewVO;
 import member.model.MemberVO;
 
-public class MyPageReviewWriteAction extends AbstractController {
+public class MyPageReviewUpdateAction extends AbstractController {
 
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		String method = request.getMethod();
 		String product_num = request.getParameter("product_num");
+		String review_num = request.getParameter("review_num");
 		
 		HttpSession session = request.getSession();
 		MemberVO loginuser = (MemberVO) session.getAttribute("loginuser");
 		
 		
 		
-		if("get".equalsIgnoreCase(method)) { //작성페이지로 이동할 때
+		if("get".equalsIgnoreCase(method)) { //수정페이지로 이동할 때
 			System.out.println("확인용 => product_num:"+product_num);
-			InterIndexDAO dao = new IndexDAO();
 			
 			String message = "로그인이 필요한 기능입니다.";
 			String loc = request.getContextPath()+"/member/login.do";
@@ -51,15 +53,13 @@ public class MyPageReviewWriteAction extends AbstractController {
 				return;
 			}
 			
-			// 로그인 되었을 경우
+			// 로그인 되었을 경우									
+			InterReviewDAO rdao = new ReviewDAO();
+			ReviewVO review = rdao.ReviewFind(review_num);
+			String delFileName = rdao.selectReviewFileName(review_num);
 			
-			Map<String, String> paraMap = new HashMap<String, String>();
-			paraMap.put("member_num", String.valueOf(loginuser.getMember_num()));
-			paraMap.put("product_num", product_num);
-			OrderProductVO product = dao.productReviewFind(paraMap);
-			
-			if(product == null) {
-				message = "후기는 상품을 구매하고 배송완료된 상품만 가능합니다.";
+			if(review == null) {
+				message = "작성 완료 후기만 수정 가능합니다.";
 				loc = "javascript:history.back();";
 				
 				request.setAttribute("message", message);
@@ -68,14 +68,15 @@ public class MyPageReviewWriteAction extends AbstractController {
 				return;
 			}
 			else {				
-				request.setAttribute("product", product);
-				super.setViewPage("/WEB-INF/member/myPageReviewWrite.jsp");
+				request.setAttribute("review", review);
+				request.setAttribute("delFileName", delFileName);
+				super.setViewPage("/WEB-INF/member/myPageReviewUpdate.jsp");
 	
 			}
 		}
 		
 		else {	// 작성페이지에서 내용 작성 후 DB등록 할 때
-			InterReviewDAO rdao = new ReviewDAO();
+			InterReviewDAO dao = new ReviewDAO();
 			ServletContext context = request.getSession().getServletContext();
 			String realPath = context.getRealPath("Upload");
 			System.out.println("실제경로:"+realPath);
@@ -90,12 +91,30 @@ public class MyPageReviewWriteAction extends AbstractController {
 			
 			MultipartRequest multi = new MultipartRequest(request, realPath, maxsize, encoding, new DefaultFileRenamePolicy());						
 			
+			String fileName = "";
 			String subject = multi.getParameter("subject");
-			String content = multi.getParameter("content");
-			String fileName = multi.getParameter("fileName");
-			String order_num = multi.getParameter("order_num");
+			String content = multi.getParameter("content");			
+			String oldFileName = multi.getParameter("oldFileName");
+			review_num = multi.getParameter("review_num");
 			String member_num = String.valueOf(loginuser.getMember_num());	
 			product_num = multi.getParameter("product_num");
+			
+			System.out.println(oldFileName);
+			
+			// 후기 이미지 테이블에 기존에 있던 사진 조회 및 삭제
+			String delFileName = dao.ReviewImgDel(review_num, oldFileName);
+			
+			
+			//실제 경로에서도 이미지 삭제
+			context = request.getSession().getServletContext();
+			realPath = context.getRealPath("Upload")+"/"+oldFileName;		        
+			File file = new File(realPath);			
+			if(file.exists()){
+				file.delete();
+			}
+			else {
+				System.out.println("이미 삭제된 파일");
+			}			
 			
 			Enumeration<String> files = multi.getFileNames();
 			if(files.hasMoreElements()) {
@@ -115,24 +134,25 @@ public class MyPageReviewWriteAction extends AbstractController {
 			content = content.replaceAll("&","&amp;");
 			content = content.replaceAll("\"","&quot");
 			
-			System.out.println(subject+"/"+content+"/"+fileName+"/"+order_num+"/"+member_num+"/"+product_num);
+			System.out.println(subject+"/"+content+"/"+fileName+"/"+review_num+"/"+member_num+"/"+product_num);
 			
 			Map<String,String> paraMap = new HashMap<String, String>();
 			paraMap.put("subject", subject);
 			paraMap.put("content",content);
 			paraMap.put("image", fileName);
-			paraMap.put("order_num", order_num);
+			paraMap.put("review_num", review_num);
 			paraMap.put("member_num", member_num);
 			paraMap.put("product_num", product_num);
+			paraMap.put("fileName", fileName);
 			
-			int result = rdao.writeReview(paraMap);			
-			String message = "상품 후기가 작성되었습니다.";
+			int result = dao.updateReview(paraMap);		
+			
+			String message = "상품 후기가 수정되었습니다.";
 			String loc = request.getContextPath()+"/member/myPageProductCompleteReview.do";
 			
 			if(result==0) {
-				message = "상품 후기 작성 도중 오류가 발생했습니다.";
-				loc="javascript:history.go(0)";
-				
+				message = "상품 후기 수정 도중 오류가 발생했습니다.";
+				loc=request.getContextPath()+"/member/myPageProductCompleteReview.do";				
 			}
 			
 			request.setAttribute("message", message);

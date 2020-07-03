@@ -6,7 +6,7 @@
 <head>
 <meta charset="UTF-8">
 <link rel="stylesheet" href="<%= ctxPath %>/css/style.css" />
-<title>마이페이지 상품후기</title>
+<title>마이페이지 상품후기 수정</title>
 
 <style type="text/css">
 	.contents {
@@ -99,6 +99,23 @@
 		width: 100%;
 	}
 	
+	label#choice {
+		border: solid 1px gray; 
+		padding: 1.5px 7px; 
+		margin: 2px 2px;
+		background-color: #eee;
+		cursor: pointer;
+		font-weight: normal;
+		border-radius: 3px;
+		
+	}
+	
+	label#choice:hover {
+		background-color: #ddd;
+	}
+	
+	input#fileName:focus {outline:none;}
+	
 	#btnSubmit {
 	    border: 1px solid #5f0080;
 	    background-color: #5f0080;
@@ -107,7 +124,6 @@
 	    padding: 10px;
 	}
 
-	input#image:focus {outline:none;}
 	
 	
 </style>
@@ -125,7 +141,6 @@
 			console.log("이미지 로딩");
 			imgView(this);
 		});
-		
 	});
 	
 	function divCheck(){
@@ -167,7 +182,7 @@
 	//	console.log($("#txt_content").val());
 		var frm = document.reviewFrm;
 		frm.method = "POST";
-		frm.action = "<%=ctxPath%>/member/myPageReviewWrite.do";
+		frm.action = "<%=ctxPath%>/member/myPageReviewUpdate.do";
 		frm.submit();
 	}		
 
@@ -181,7 +196,6 @@
 		console.log(fileName);
 		$("#fileName").val(fileName);
 	}
-	
 	
 	function func_deleteImg(){
 		$("#fileName").empty();
@@ -209,11 +223,11 @@
 						<table class="myOrder_Desc">
 							<tr class="list">
 								<td class="image">
-									<img alt="해당 주문 대표 상품 이미지" src="<%=ctxPath %>/images/${product.product.representative_img}">
+									<img alt="해당 주문 대표 상품 이미지" src="<%=ctxPath %>/images/${review.product.representative_img}">
 								</td>
 								<td class="info">
 									<div class="name">
-										<span class="productName">${product.product.getProduct_name()}</span>
+										<span class="productName">${review.product.product_name}</span>
 									</div>
 								</td>	
 							</tr>
@@ -226,27 +240,31 @@
 						<tr class="reviewTR title">
 							<th class="reviewTH">제목</th>
 							<td class="reviewTD">
-								<input type="text" id="subject" name="subject" placeholder="제목을 입력해주세요." value="">
-								<input type="hidden" id="product_num" name="product_num" value="${product.product.getProduct_num()}"/>
+								<input type="text" id="subject" name="subject" placeholder="제목을 입력해주세요." value="${review.subject}">
+								<input type="hidden" id="product_num" name="product_num" value="${review.fk_product_num}"/>
 								<input type="hidden" id="order_num" name="order_num" value="${product.order_num}" />
+								<input type="hidden" id="review_num" name="review_num" value="${review.review_num}" />
 							</td>
 						</tr>
 						<tr class="reviewTR contents">
 							<th class="reviewTH">후기작성</th>
 							<td class="reviewTD">
 								<div class="field_cmt">
-									<textarea id="content" name="content" cols="100" rows="10" placeholder="최소 10글자 이상 작성 가능합니다."></textarea>									
+									<textarea id="content" name="content" cols="100" rows="10" placeholder="최소 10글자 이상 작성 가능합니다.">${review.content}</textarea>									
 									<input type="hidden" name="content" id="txt_content"/>
 								</div>
 							</td>
 						</tr>
 						<tr class="reviewTR image">
 							<th class="reviewTH">사진등록</th>
-							<td class="reviewTD">
-								<input type="file" name="image" id="image" accept="image/*" style="width: 250px;"/>
-								<input type='hidden' id='fileName' name='fileName'/>
+							<td class="reviewTD">	
+								<label for="image" id="choice">파일 선택</label>														
+								<input id='fileName' type='text' name='oldFileName' value="${delFileName}" placeholder="선택된 파일 없음" readonly style="border-style: none;" />								
+								<input type="file" style="display:none;" name="image" id="image" value="${delFileName}" accept="image/*" />
 								<div style="font-size: 9px;" onclick="func_deleteImg();">X삭제</div>
-								<span style="font-size:8pt;">구매한 상품이 아니거나 캡쳐 사진을 첨부한 경우, 통보없이 삭제됩니다.</span>
+								<div style="margin-left: 2px;">
+									<span style="font-size:8pt;">구매한 상품이 아니거나 캡쳐 사진을 첨부한 경우, 통보없이 삭제됩니다.</span>
+								</div>
 							</td>
 						</tr>
 					</table>

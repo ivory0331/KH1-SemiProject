@@ -20,12 +20,28 @@ public interface InterReviewDAO {
 
 	// 특정 회원의 작성완료 후기 내역 개수 알아보기
 	int selectCompleteReviewCount(int member_num) throws SQLException;
+	
+	// 후기 작성하기
+	int writeReview(Map<String, String> paraMap) throws SQLException;
 
+	// 특정 작성완료 후기 첨부이미지명 알아오기
+	String selectReviewFileName(String review_num) throws SQLException;
+	
 	// 특정 작성완료 후기 삭제하기
 	int deleteReview(String review_num) throws SQLException;
 
-	// 후기 작성하기
-	int writeReview(Map<String, String> paraMap) throws SQLException;
+	// 수정 가능한 작성완료 후기인지 알아보기
+	ReviewVO ReviewFind(String review_num) throws SQLException;
+
+	// 특정 작성완료 후기 수정하기
+	int updateReview(Map<String, String> paraMap) throws SQLException;
+
+	// 후기 이미지 테이블에 기존에 있던 사진 조회 및 삭제
+	String ReviewImgDel(String review_num, String oldFileName) throws SQLException;
+
+
+
+
 
 	
 	

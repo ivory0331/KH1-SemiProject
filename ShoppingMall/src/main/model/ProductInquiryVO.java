@@ -18,6 +18,8 @@ public class ProductInquiryVO {
 	private String name;
 	private List<String> imageList;
 	private MemberVO member;
+	private String product_name;
+	private int rowNum;
 	
 	
 	
@@ -148,6 +150,32 @@ public class ProductInquiryVO {
 	public void setImageList(List<String> imageList) {
 		this.imageList = imageList;
 	}
+
+
+
+	public String getProduct_name() {
+		return product_name;
+	}
+
+
+
+	public void setProduct_name(String product_name) {
+		this.product_name = product_name;
+	}
+
+
+
+	public int getRowNum() {
+		return rowNum;
+	}
+
+
+
+	public void setRowNum(int rowNum) {
+		this.rowNum = rowNum;
+	}
+	
+	
 	
 	
 	
