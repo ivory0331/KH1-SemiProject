@@ -690,34 +690,48 @@ public class ReviewDAO implements InterReviewDAO {
 		
 		// 페이징처리를 한, 특정 회원의 모든 작성완료 후기내역 보여주기
 		@Override
-		public List<OrderProductVO> selectPagingCompleteReview(HashMap<String, String> paraMap, int member_num) throws SQLException {
+		public List<ReviewVO> selectPagingCompleteReview(HashMap<String, String> paraMap, int member_num) throws SQLException {
 			
 			List<ReviewVO> completeReviewList= new ArrayList<>();
 			
 			try {
 				conn = ds.getConnection();
 				
-				String sql = " select R.review_num, P.product_name, to_char(R.write_date,'yyyy-mm-dd'), R.hit, R.favorite " + 
-							 "	, R.subject, R.content " + 
-							 " from product_table P join review_table R " + 
-							 " on P.product_num = R.fk_product_num " + 
-							 " where R.fk_member_num = ? " + 
-							 " order by R.review_num desc ";
+				String sql = " select RNO, review_num, product_name, write_date, hit, favorite, subject, content " + 
+							 " from " + 
+							 " ( " + 
+							 "    select rownum AS RNO, review_num, product_name, write_date, hit, favorite, subject, content " + 
+							 "    from " + 
+							 "    ( " + 
+							 "    select R.review_num, P.product_name, to_char(R.write_date,'yyyy-mm-dd') as write_date, R.hit, R.favorite, R.subject, R.content " + 
+							 "    from product_table P join review_table R " + 
+							 "    on P.product_num = R.fk_product_num " + 
+							 "    where R.fk_member_num = ? " + 
+							 "    order by R.review_num desc " + 
+							 "    ) V " + 
+							 " ) T " + 
+							 " where T.RNO between ? and ? ";
 				
+				int currentShowPageNo = Integer.parseInt(paraMap.get("currentShowPageNo"));
+				int sizePerPage = Integer.parseInt(paraMap.get("sizePerPage"));
+	
 				pstmt = conn.prepareStatement(sql);
+				
 				pstmt.setInt(1, member_num);
+				pstmt.setInt(2, (currentShowPageNo * sizePerPage) - (sizePerPage - 1) ); // 공식
+				pstmt.setInt(3, (currentShowPageNo * sizePerPage) ); // 공식 
 				
 				rs = pstmt.executeQuery();
 
 				while(rs.next()) {
 					
-					int review_num = rs.getInt(1);
-					String product_name = rs.getString(2);
-					String write_date = rs.getString(3);
-					int hit = rs.getInt(4);
-					int favorite = rs.getInt(5);
-					String subject = rs.getString(6);
-					String content = rs.getString(7);										
+					int review_num = rs.getInt(2);
+					String product_name = rs.getString(3);
+					String write_date = rs.getString(4);
+					int hit = rs.getInt(5);
+					int favorite = rs.getInt(6);
+					String subject = rs.getString(7);
+					String content = rs.getString(8);										
 					
 					ProductVO pvo = new ProductVO();
 					pvo.setProduct_name(product_name);
@@ -736,17 +750,22 @@ public class ReviewDAO implements InterReviewDAO {
 				rs.close();
 				
 				if(completeReviewList.size() > 0) {
-					sql = " select image from review_image_table where fk_review_num = ? ";				
-					pstmt = conn.prepareStatement(sql);					
+					sql = " select image from review_image_table where fk_review_num = ? ";	
+					
+					pstmt = conn.prepareStatement(sql);	
+					
 					for(int i=0; i<completeReviewList.size(); i++) {								
 						pstmt.setInt(1, completeReviewList.get(i).getReview_num());						
 						rs = pstmt.executeQuery();		
+						
 						List<String>imageList = new ArrayList<String>();
+						
 						while(rs.next()) {
 							String image = rs.getString(1);
 							imageList.add(image);						
 						}	
 						rs.close();
+						
 						completeReviewList.get(i).setImageList(imageList);
 					}
 				}
@@ -757,7 +776,41 @@ public class ReviewDAO implements InterReviewDAO {
 			
 			return completeReviewList;
 			
-			return null;
+		}
+
+		
+		// 페이징처리를 위한 특정 회원의 모든 작성완료 후기내역에 대한 총페이지갯수 알아오기(select)
+		@Override
+		public int getCompleteReviewTotalPage(HashMap<String, String> paraMap, int member_num) throws SQLException {
+
+			int totalPage = 0;
+			
+			try {
+				conn = ds.getConnection();
+				
+				String sql = " select ceil( count(*)/? ) from( select R.review_num, P.product_name, to_char(R.write_date,'yyyy-mm-dd') as write_date, R.hit, R.favorite, R.subject, R.content " + 
+							 "    from product_table P join review_table R " + 
+							 "    on P.product_num = R.fk_product_num " + 
+							 "    where R.fk_member_num = ? " + 
+							 "    order by R.review_num desc ) ";
+				
+				pstmt = conn.prepareStatement(sql);
+				
+				pstmt.setInt(1, Integer.parseInt(paraMap.get("sizePerPage")) );
+				pstmt.setInt(2, member_num);
+				
+				rs = pstmt.executeQuery();
+					
+				rs.next();
+				
+				totalPage = rs.getInt(1);	
+				
+			} finally {
+				close();
+			}
+			
+			return totalPage;
+
 		}
 
 			

@@ -1248,9 +1248,18 @@ from
 ) T
 where T.RNO between 1 and 3;
 
-select R.review_num, P.product_name, to_char(R.write_date,'yyyy-mm-dd'), R.hit, R.favorite
-, R.subject, R.content
-from product_table P join review_table R
-on P.product_num = R.fk_product_num 
-where R.fk_member_num = 1
-order by R.review_num desc
+
+select RNO, review_num, product_name, to_char(write_date,'yyyy-mm-dd'), hit, favorite, subject, content
+from
+(    
+    select rownum AS RNO, review_num, product_name, to_char(write_date,'yyyy-mm-dd'), hit, favorite, subject, content
+    from
+    (
+    select R.review_num, P.product_name, to_char(R.write_date,'yyyy-mm-dd'), R.hit, R.favorite, R.subject, R.content
+    from product_table P join review_table R
+    on P.product_num = R.fk_product_num 
+    where R.fk_member_num = 1
+    order by R.review_num desc
+    ) V
+) T   
+where T.RNO between 1 and 3;

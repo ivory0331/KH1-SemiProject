@@ -75,7 +75,6 @@ public class MyPageProductPossibleReviewAction extends AbstractController {
 			// 특정 회원의 작성완료 후기 내역 개수 알아보기
 			int cReviewCount = rdao.selectCompleteReviewCount(loginuser.getMember_num());
 		
-			request.setAttribute("possibleReviewList", possibleReviewList);
 			request.setAttribute("pReviewCount", pReviewCount);
 			request.setAttribute("cReviewCount", cReviewCount);
 			
@@ -88,20 +87,22 @@ public class MyPageProductPossibleReviewAction extends AbstractController {
 			
 			pageNo = ( (Integer.parseInt(currentShowPageNo) - 1)/blockSize )*blockSize + 1;
 			
-			String pageBar = "";
+		      String pageBar = "<nav aria-label='Page navigation'>"
+			                  + "<ul class='pagination'>"
+			                  + "<li class=disabled>";
 			
 			// *** [이전] 만들기 *** //
 			if( pageNo != 1 ) {
-				pageBar += "&nbsp;<a href='myPageProductPossibleReview.do?currentShowPageNo="+(pageNo-1)+"&sizePerPage="+sizePerPage+"'>[이전]</a>&nbsp;";
+				pageBar += "&nbsp;<a aria-label='Previous' href='myPageProductPossibleReview.do?currentShowPageNo="+(pageNo-1)+"&sizePerPage="+sizePerPage+"'><span aria-hidden='true'>«</span></a></li>&nbsp;";
 			}
 			
 			while( !(loop > blockSize || pageNo > totalPage) ) {
 				
 				if(pageNo == Integer.parseInt(currentShowPageNo) ) {
-					pageBar += "&nbsp;<span style='color: red; border: solid 1px gray; padding: 2px 4px;'>"+pageNo+"</span>&nbsp;";	
+					pageBar += "&nbsp;<li class='active'><span style='color:#5F0080; border: solid 0.5px #e6e6e6; background-color:#f2f2f2;'>"+pageNo+"</span></li>&nbsp;";	
 				}
 				else {
-					pageBar += "&nbsp;<a href='myPageProductPossibleReview.do?currentShowPageNo="+pageNo+"&sizePerPage="+sizePerPage+"'>"+pageNo+"</a>&nbsp;";
+					pageBar += "&nbsp;<li><a href='myPageProductPossibleReview.do?currentShowPageNo="+pageNo+"&sizePerPage="+sizePerPage+"'><span style='color:#333;'>"+pageNo+"</span></a></li>&nbsp;";
 				}
 				
 				pageNo++;
@@ -110,8 +111,10 @@ public class MyPageProductPossibleReviewAction extends AbstractController {
 			
 			// *** [다음] 만들기 *** //
 			if( !(pageNo > totalPage) ) {
-				pageBar += "&nbsp;<a href='myPageProductPossibleReview.do?currentShowPageNo="+pageNo+"&sizePerPage="+sizePerPage+"'>[다음]</a>&nbsp;";
+				pageBar += "&nbsp;<li><a aria-label='Next' href='myPageProductPossibleReview.do?currentShowPageNo="+pageNo+"&sizePerPage="+sizePerPage+"'><span aria-hidden='true'>»</span></a></li>&nbsp;";
 			}
+			
+			pageBar += "</li></ul></nav>";
 			
 			request.setAttribute("pageBar", pageBar);
 			

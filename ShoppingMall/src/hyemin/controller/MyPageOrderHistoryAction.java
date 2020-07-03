@@ -1,5 +1,6 @@
 package hyemin.controller;
 
+import java.util.HashMap;
 import java.util.List;
 
 import javax.servlet.ServletContext;
@@ -42,9 +43,72 @@ public class MyPageOrderHistoryAction extends AbstractController {
 			InterOrderDAO orderdao = new OrderDAO();			
 			
 			// *** 페이징처리를 안 한, 특정 회원의 모든 주문내역 보여주기 *** //
-			List<OrderHistoryVO> orderHistoryList = orderdao.selectOneMemberAllOrder(loginuser.getMember_num());
+		//	List<OrderHistoryVO> orderHistoryList = orderdao.selectOneMemberAllOrder(loginuser.getMember_num());
 		
+			
+			// *** 페이징처리를 한, 특정 회원의 모든 주문내역 보여주기 *** //
+			String currentShowPageNo = request.getParameter("currentShowPageNo");
+
+			String sizePerPage = request.getParameter("sizePerPage");
+			
+			if(currentShowPageNo == null)
+				currentShowPageNo = "1";
+			
+			if(sizePerPage == null)
+				sizePerPage = "3";	
+			
+			int member_num = loginuser.getMember_num();
+			
+			HashMap<String,String> paraMap = new HashMap<>();			
+			paraMap.put("currentShowPageNo", currentShowPageNo);
+			paraMap.put("sizePerPage", sizePerPage);
+			
+			///////////////////////////////////////////////////////////////	
+			
+			List<OrderHistoryVO> orderHistoryList = orderdao.selectPagingOneMemberAllOrder(paraMap, member_num);
+			
 			request.setAttribute("orderHistoryList", orderHistoryList);
+			request.setAttribute("sizePerPage", sizePerPage);
+			
+			// 페이징처리를 위한 특정 회원의 모든 주문내역에 대한 총페이지갯수 알아오기(select)
+			int totalPage = orderdao.getPossibleReviewTotalPage(paraMap, member_num);
+			
+			int pageNo = 1;
+			int blockSize = 10;
+			int loop = 1;
+			
+			pageNo = ( (Integer.parseInt(currentShowPageNo) - 1)/blockSize )*blockSize + 1;
+			
+		    String pageBar = "<nav aria-label='Page navigation'>"
+			                  + "<ul class='pagination'>"
+			                  + "<li class=disabled>";
+			
+		    // *** [이전] 만들기 *** //
+ 			if( pageNo != 1 ) {
+ 				pageBar += "&nbsp;<a aria-label='Previous' href='myPageOrderHistory.do?currentShowPageNo="+(pageNo-1)+"&sizePerPage="+sizePerPage+"'><span aria-hidden='true'>«</span></a></li>&nbsp;";
+ 			}
+ 			
+ 			while( !(loop > blockSize || pageNo > totalPage) ) {
+	
+				if(pageNo == Integer.parseInt(currentShowPageNo) ) {
+					pageBar += "&nbsp;<li class='active'><span style='color:#5F0080; border: solid 0.5px #e6e6e6; background-color:#f2f2f2;'>"+pageNo+"</span></li>&nbsp;";	
+				}
+				else {
+					pageBar += "&nbsp;<li><a href='myPageOrderHistory.do?currentShowPageNo="+pageNo+"&sizePerPage="+sizePerPage+"'><span style='color:#333;'>"+pageNo+"</span></a></li>&nbsp;";
+				}
+				
+				pageNo++;
+				loop++;				
+			}
+			
+			// *** [다음] 만들기 *** //
+			if( !(pageNo > totalPage) ) {
+				pageBar += "&nbsp;<li><a aria-label='Next' href='myPageOrderHistory.do?currentShowPageNo="+pageNo+"&sizePerPage="+sizePerPage+"'><span aria-hidden='true'>»</span></a></li>&nbsp;";
+			}
+			
+			pageBar += "</li></ul></nav>";
+			
+			request.setAttribute("pageBar", pageBar);
 			
 		//	super.setRedirect(false);	
 			super.setViewPage("/WEB-INF/member/myPageOrderHistory.jsp");

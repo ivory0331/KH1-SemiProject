@@ -47,7 +47,10 @@ public interface InterReviewDAO {
 	int getPossibleReviewTotalPage(HashMap<String, String> paraMap, int member_num) throws SQLException;
 
 	// 페이징처리를 한, 특정 회원의 모든 작성완료 후기내역 보여주기
-	List<OrderProductVO> selectPagingCompleteReview(HashMap<String, String> paraMap, int member_num) throws SQLException;
+	List<ReviewVO> selectPagingCompleteReview(HashMap<String, String> paraMap, int member_num) throws SQLException;
+
+	// 페이징처리를 위한 특정 회원의 모든 작성완료 후기내역에 대한 총페이지갯수 알아오기(select)
+	int getCompleteReviewTotalPage(HashMap<String, String> paraMap, int member_num) throws SQLException;
 
 
 

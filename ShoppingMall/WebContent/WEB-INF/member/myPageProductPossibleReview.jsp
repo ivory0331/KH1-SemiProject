@@ -247,7 +247,7 @@
 						
 					</div>		
 				</div>	
-				<div style="border-bottom:solid 1px black; text-align:center;">${pageBar}</div>			
+				<div style="border-bottom:solid 0px black; text-align:center;">${pageBar}</div>			
 			</div>						
 			</div>
 			<div style="clear:both;"></div>

@@ -213,7 +213,7 @@
 								<div class="myOrder_Goods">
 									<div class="myOrder_Name">
 										<a class="myOrder_Name">${ohvo.product_name}&nbsp;
-											<c:if test="${ohvo.product_cnt != 1}">외 ${ohvo.product_cnt-1}건</c:if>
+											<c:if test="${ohvo.product_cnt != 0}">외 ${ohvo.product_cnt}건</c:if>
 											<input type="hidden" class="order_num" value="${ohvo.order_num}"/>
 										</a>
 									</div>
@@ -256,7 +256,7 @@
 					</c:forEach>
 					</c:if>
 				</div>	
-				<div style="border-bottom:solid 1px black; text-align:center;">페이징 처리</div>			
+				<div style="border-bottom:solid 0px black; text-align:center;">${pageBar}</div>			
 			</div>						
 			</div>
 			<div style="clear:both;"></div>

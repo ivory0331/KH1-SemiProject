@@ -4,6 +4,7 @@ import java.io.UnsupportedEncodingException;
 import java.security.GeneralSecurityException;
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.naming.*;
@@ -226,6 +227,126 @@ public class OrderDAO implements InterOrderDAO {
 		}
 		
 		return ovo;
+	}
+
+	
+	// 페이징처리를 한, 특정 회원의 모든 주문내역 보여주기
+	@Override
+	public List<OrderHistoryVO> selectPagingOneMemberAllOrder(HashMap<String, String> paraMap, int member_num) throws SQLException {
+		
+		List<OrderHistoryVO> orderHistoryList= new ArrayList<>();
+		
+		try {
+			conn = ds.getConnection();
+			
+	        String sql= " select RNO, order_num, order_date, price, order_state " + 
+		                " from " + 
+		                " (  " + 
+		                "    select rownum AS RNO, order_num, order_date, price, order_state " + 
+		                "    from " + 
+		                "    (select O.order_num " + 
+		                "          , to_char(O.order_date,'yyyy.mm.dd hh24:mi:ss') as order_date " + 
+		                "          , O.price, OS.order_state " + 
+		                " 	  from order_table O join order_state_table OS " + 
+		                " 	  on O.fk_category_num = OS.category_num " + 
+		                "	  where fk_member_num = ? " + 
+		                "	  order by order_num desc " + 
+		                "    ) V " + 
+		                " ) T " + 
+		                " where T.RNO between ? and ? ";
+			
+	        int currentShowPageNo = Integer.parseInt(paraMap.get("currentShowPageNo"));
+			int sizePerPage = Integer.parseInt(paraMap.get("sizePerPage"));	        
+	        
+			pstmt = conn.prepareStatement(sql);
+			
+			pstmt.setInt(1, member_num);
+			pstmt.setInt(2, (currentShowPageNo * sizePerPage) - (sizePerPage - 1) ); // 공식
+			pstmt.setInt(3, (currentShowPageNo * sizePerPage) ); // 공식 
+			
+			rs = pstmt.executeQuery();
+
+			while(rs.next()) {
+				
+				OrderHistoryVO ohvo = new OrderHistoryVO();
+				ohvo.setOrder_num(rs.getInt(2));
+				ohvo.setOrder_date(rs.getString(3));
+				ohvo.setPrice(rs.getInt(4));
+				ohvo.setOrder_state(rs.getString(5));			
+
+				orderHistoryList.add(ohvo);
+			}	
+			
+		rs.close();
+		
+		sql = " select P.product_name, P.representative_img "
+			+ " from order_product_table OP join product_table P "
+			+ " on OP.fk_product_num = P.product_num "
+			+ " where OP.fk_order_num = ? ";
+		
+		pstmt = conn.prepareStatement(sql);
+		
+		System.out.println(orderHistoryList.size());
+		for(int i=0; i<orderHistoryList.size(); i++) {		
+			
+			pstmt.setInt(1, orderHistoryList.get(i).getOrder_num());
+			
+			rs = pstmt.executeQuery();
+			
+			int count = 0;
+			if(rs.next()) {
+				orderHistoryList.get(i).setProduct_name(rs.getString(1));
+				orderHistoryList.get(i).setRepresentative_img(rs.getString(2));
+			}	
+			while (rs.next()) {
+	            count++;
+	        }
+			orderHistoryList.get(i).setProduct_cnt(count);
+		}
+
+		} catch( Exception e) {
+			e.printStackTrace();
+		} finally {
+			close();
+		}
+		
+		return orderHistoryList;
+	}
+
+	
+	// 페이징처리를 위한 특정 회원의 모든 주문내역에 대한 총페이지갯수 알아오기(select)
+	@Override
+	public int getPossibleReviewTotalPage(HashMap<String, String> paraMap, int member_num) throws SQLException {
+		
+		int totalpage = 0;
+		String sql = "";
+		   
+	    try {
+	        conn = ds.getConnection();
+	      
+	        sql = " select ceil( count(*)/? ) from( select O.order_num " + 
+	        		"	, to_char(O.order_date,'yyyy.mm.dd hh24:mi:ss') as order_date " + 
+	        		"	, O.price " + 
+	        		"	from order_table O " + 
+	        		"	where O.fk_member_num = ? " + 
+	        		"	order by O.order_num desc ) ";
+	         
+	        pstmt = conn.prepareStatement(sql);
+	        pstmt.setInt(1, Integer.parseInt(paraMap.get("sizePerPage")) );
+	        pstmt.setInt(2, member_num);
+	                                 
+	        rs = pstmt.executeQuery();
+	      
+	        rs.next();
+	      
+	        totalpage = rs.getInt(1);
+	      
+	    } finally {
+	      close();
+	    }
+	   
+	   return totalpage;
+		
 	}
 
 		
