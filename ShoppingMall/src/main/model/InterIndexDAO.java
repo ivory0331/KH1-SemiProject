@@ -108,6 +108,9 @@ public interface InterIndexDAO {
 	// 특정 문의 글에 답변 작성
 	int answerWrite(Map<String, String> paraMap)throws SQLException;
 
+	// 날짜별 매출 조회
+	List<Map<String, String>> allSalesSelect(String type)throws SQLException;
+
 
 	
 

@@ -1626,5 +1626,39 @@ public class IndexDAO implements InterIndexDAO{
 		return result;
 	}
 
+	// 날짜별 매출 조회
+	@Override
+	public List<Map<String, String>> allSalesSelect(String type) throws SQLException {
+		List<Map<String, String>> salesList = new ArrayList<Map<String,String>>();
+		try {
+			conn = ds.getConnection();
+			String sql = "";
+			if("year".equals(type)) {
+				sql = " select sum(price), to_char(order_date, 'yyyy-mm')as order_date "
+						   + " from order_table group by to_char(order_date, 'yyyy-mm') " 
+						   + " order by order_date asc ";
+			}
+			else {
+				sql = " select sum(price), to_char(order_date, 'yyyy-mm-dd')as order_date "
+						   + " from order_table group by to_char(order_date, 'yyyy-mm-dd') " 
+						   + " order by order_date asc ";
+			}
+			
+			pstmt = conn.prepareStatement(sql);
+			rs = pstmt.executeQuery();
+			while(rs.next()) {
+				Map<String, String>sales = new HashMap<String, String>();
+				sales.put("price", rs.getString(1));
+				sales.put("date", rs.getString(2));
+				salesList.add(sales);
+			}
+			
+		}
+		finally {
+			close();
+		}
+		return salesList;
+	}
+
 	
 }
