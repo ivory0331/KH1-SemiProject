@@ -11,6 +11,7 @@ import product.model.*;
 
 public class SaleProductAction extends AbstractController {
 
+
    @Override
    public void execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
       

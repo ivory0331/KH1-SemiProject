@@ -44,7 +44,7 @@
 		float:left;
 		position: relative;
 		margin-right:20px;
-		
+		cursor: pointer;
 		
 		
 	}
@@ -195,7 +195,7 @@
 	
 	// 상세보기 url 이동
 	function goDetail(product_num){
-		console.log(product_num);
+		//console.log(product_num);
 		location.href="<%=ctxPath%>/detail.do?product_num="+product_num;
 	} // end of goDetail(idx)----------------------------------------------------
 	
@@ -219,9 +219,8 @@
 	            		console.log(item.sale);
 	            		var imgFileName = decodeURIComponent(item.representative_img);
 	            		var html="<img alt='상품1' src='<%=ctxPath %>/images/"+imgFileName+"' onclick = 'goDetail("+item.product_num+")'>"
-            	        +"<a href='#'>"
-            	        +"<span style='font-size:16px; color:#333;'>"+item.product_name+"<span>"
-            	        +"</a><br/>";
+            	        +"<span style='font-size:16px; color:#333;' onclick = 'goDetail("+item.product_num+")'>"+item.product_name+"<span>"
+            	        +"<br/>";
             	        if(item.sale==0){
             	        	html+="<span style='color: #333; font-weight: bold; font-size: 16px;'>"+func_comma(""+item.price)+"원</span>";
             	        }
@@ -239,9 +238,8 @@
 	            		console.log(item.sale);
 	            		var imgFileName = decodeURIComponent(item.representative_img);
 	            		var html="<img alt='상품1' src='<%=ctxPath %>/images/"+imgFileName+"' onclick = 'goDetail("+item.product_num+")'>"
-            	        +"<a href='#'>"
-            	        +"<span style='font-size:16px; color:#333;'>"+item.product_name+"<span>"
-            	        +"</a><br/>";
+            	        +"<span style='font-size:16px; color:#333;' onclick = 'goDetail("+item.product_num+")'>"+item.product_name+"<span>"
+            	        +"<br/>";
             	        if(item.sale==0){
             	        	html+="<span style='color: #333; font-weight: bold; font-size: 16px;'>"+func_comma(""+item.price)+"원</span>";
             	        }
@@ -258,9 +256,8 @@
 	            		console.log(item.sale);
 	            		var imgFileName = decodeURIComponent(item.representative_img);
 	            		var html="<img alt='상품1' src='<%=ctxPath %>/images/"+imgFileName+"' onclick = 'goDetail("+item.product_num+")'>"
-            	        +"<a href='#'>"
-            	        +"<span style='font-size:16px; color:#333;'>"+item.product_name+"<span>"
-            	        +"</a><br/>";
+            	        +"<span style='font-size:16px; color:#333;' onclick = 'goDetail("+item.product_num+")'>"+item.product_name+"<span>"
+            	        +"<br/>";
             	        if(item.sale==0){
             	        	html+="<span style='color: #333; font-weight: bold; font-size: 16px;'>"+func_comma(""+item.price)+"원</span>";
             	        }
@@ -278,9 +275,8 @@
 	            		console.log(item.sale);
 	            		var imgFileName = decodeURIComponent(item.representative_img);
 	            		var html="<img alt='상품1' src='<%=ctxPath %>/images/"+imgFileName+"' onclick = 'goDetail("+item.product_num+")'>"
-            	        +"<a href='#'>"
-            	        +"<span style='font-size:16px; color:#333;'>"+item.product_name+"<span>"
-            	        +"</a><br/>";
+            	        +"<span style='font-size:16px; color:#333;' onclick = 'goDetail("+item.product_num+")'>"+item.product_name+"<span>"
+            	        +"<br/>";
             	        if(item.sale==0){
             	        	html+="<span style='color: #333; font-weight: bold; font-size: 16px;'>"+func_comma(""+item.price)+"원</span>";
             	        }

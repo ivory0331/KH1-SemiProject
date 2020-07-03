@@ -62,7 +62,12 @@ public class ManagerProductInquiryListAction extends AbstractController {
 	   	
 		InterIndexDAO dao = new IndexDAO();
 		List<ProductInquiryVO> inquiryList = dao.allProductInquirySelect(paraMap);
-		List<Map<String,String>> categoryList = dao.oneInquiryCategroySelect();
+		List<Map<String,String>> categoryList = dao.productInquiryCategroySelect();
+		List<Map<String,String>> subCategoryList = null;
+		
+		if(searchCategory!=null && !"0".equals(searchCategory)) {
+			subCategoryList = dao.productInquirySubcategroySelect(searchCategory);
+		}
 		
 		// 총페이지갯수 알아오기(select)	 
 	   	 int totalPage = dao.getTotalPageQuiry(paraMap);
@@ -109,10 +114,20 @@ public class ManagerProductInquiryListAction extends AbstractController {
 		
 		request.setAttribute("inquiryList", inquiryList);
 		request.setAttribute("categoryList", categoryList);
-		request.setAttribute("searchCategory", searchCategory);
 		request.setAttribute("searchType", searchType);
 		request.setAttribute("searchWord", searchWord);
 		request.setAttribute("pageBar", pageBar);
+		
+		if(searchSubcategory!=null && !"0".equals(searchSubcategory)) {
+			request.setAttribute("searchSubcategory", searchSubcategory);
+		}
+		
+		if(searchCategory!=null && !"0".equals(searchCategory)) {
+			request.setAttribute("searchCategory", searchCategory);
+			request.setAttribute("subcategoryList", subCategoryList);
+			request.setAttribute("searchSubcategory", searchSubcategory);
+			
+		}
 		
 		super.setViewPage("/WEB-INF/manager/managerProductInquiry.jsp");
 		

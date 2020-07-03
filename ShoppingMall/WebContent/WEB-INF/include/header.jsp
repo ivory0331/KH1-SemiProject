@@ -12,6 +12,12 @@
 <meta charset="UTF-8">
 <title>header.jsp</title>
 <style type="text/css">
+
+@import url(//fonts.googleapis.com/earlyaccess/notosanskr.css);
+	body {
+  	font-family: "Noto Sans KR", sans-serif !important;
+	}
+
 	/*로고와 링크가 있는 영역*/
 	.logo_login{
 		width:1080px;
@@ -122,19 +128,18 @@
 	.navi-categori .listType, .header-naviList .listType {
 		display: inline-block;
 		margin: 0px 10px;
-		font-weight: bold;
-		color:#333;
-		font-size: 12pt;
+		font-weight: 700;
+		color:#4c4c4c;
+		font-size: 16px;
 		width: 150px;
 		height: 30px;
 	}
 	
 	.listType:hover{
 		color: #5F0080;
-		text-decoration:underline;
+		text-decoration:none;
 		cursor: pointer;
 	}
-	
 	/*navi에 들어가는 li태그에서 input태그가 있는 영역(span)*/
 	.search{
 		width: 200px;
@@ -175,6 +180,7 @@
 	/*하위 navi가 되는 ul 두번째*/
 	.navi-categori2{
 		width:168px;
+		height: 157px;
 		display:none;
 		list-style: none;
 		padding:0px;
@@ -207,18 +213,19 @@
 		width:40px;
 		heigth:40px;
 		cursor: pointer;
+		margin-bottom: 10px;
 	}
 	
 	#basketCnt{
 		position: absolute;
-		top: -9px;
-		left: 18px;
+		top: -7px;
+		left: 22px;
 		border:solid 1px white;
-		width: 20px;
-		height: 20px;
+		width: 18px;
+		height: 18px;
 		border-radius: 50%;
 		background-color: #5F0080;
-		color:white;
+		color: white;
 		cursor: pointer;
 		display: none;
 	}
@@ -451,10 +458,11 @@ $(document).ready(function(){
 				<div class="mypage-dropdown-content" align="left">
 					<ul class="mypage-categori">
 						<c:if test="${sessionScope.loginuser.status=='2'}">
-							<li class="list"><a href="javascript:location.href='<%=ctxPath%>/service/board.do'"><span class="listType">매출관리</span></a></li>
+							<li class="list"><a href="javascript:location.href='<%=ctxPath%>/manager/managerSale.do'"><span class="listType">매출관리</span></a></li>
 							<li class="list"><a href="javascript:location.href='<%=ctxPath%>/manager/managerMemberList.do'"><span class="listType">회원관리</span></a></li>
 							<li class="list"><a href="javascript:location.href='<%=ctxPath%>/manager/managerProductList.do'"><span class="listType">상품관리</span></a></li>
 							<li class="list"><a href="javascript:location.href='<%=ctxPath%>/manager/managerMemberList.do'"><span class="listType">주문관리</span></a></li>
+							<li class="list"><a href="javascript:location.href='<%=ctxPath%>/manager/managerOneInquiryList.do'"><span class="listType">문의관리</span></a></li>
 							<li class="list"><a href="javascript:location.href='<%=ctxPath%>/manager/mangerBoardWrite.do'"><span class="listType">게시글 작성</span></a></li>
 							<li class="list"><a href="javascript:logout()"><span class="listType">로그아웃</span></a></li>
 						</c:if>
