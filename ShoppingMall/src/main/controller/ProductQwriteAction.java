@@ -18,6 +18,7 @@ import main.model.IndexDAO;
 import main.model.InterIndexDAO;
 import main.model.ProductVO;
 import member.model.MemberVO;
+import my.util.MyUtil;
 
 public class ProductQwriteAction extends AbstractController {
 
@@ -88,37 +89,43 @@ public class ProductQwriteAction extends AbstractController {
 			String emailFlag = multi.getParameter("emailComment");
 			String smsFlag = multi.getParameter("mobileComment");
 			String secretFlag = multi.getParameter("secretFlag");
-			int arrCnt = multi.getParameterValues("fileName").length;
-			String[] fileNameArr = new String[arrCnt];
+			int arrCnt = 0;
+			
 			String content = multi.getParameter("contents");
 			product_num = multi.getParameter("product_num");
 			int cnt = 0;
 			
-			Enumeration<String> files= multi.getFileNames();
-			while(files.hasMoreElements()) {
-				String name = files.nextElement();
-				System.out.println("name:"+name);
-				if(multi.getFilesystemName(name) != null) {
-					fileNameArr[cnt] = multi.getFilesystemName(name);
-					System.out.println("파일명:"+fileNameArr[cnt]);
-					cnt++;
+			if(multi.getParameterValues("fileName")!=null) arrCnt = multi.getParameterValues("fileName").length;
+			System.out.println("확인용 새로운 파일타입 input갯수 : "+arrCnt);
+			
+			String[] fileNameArr = null;
+			if(arrCnt > 0) fileNameArr = new String[arrCnt];
+			
+			if(fileNameArr != null) {
+				Enumeration<String> files= multi.getFileNames();
+				while(files.hasMoreElements()) {
+					String name = files.nextElement();
+					System.out.println("name:"+name);
+					if(multi.getFilesystemName(name) != null) {
+						fileNameArr[cnt] = multi.getFilesystemName(name);
+						System.out.println("파일명:"+fileNameArr[cnt]);
+						cnt++;
+					}
+					
 				}
 				
+				String[] resultFileNameArr = new String[cnt];
+				
+				for(int i=0; i<cnt; i++) {
+					resultFileNameArr[i] = fileNameArr[i];
+				}
+				if(resultFileNameArr != null) fileName = String.join(",", resultFileNameArr);
 			}
 			
-			String[] resultFileNameArr = new String[cnt];
-			
-			for(int i=0; i<cnt; i++) {
-				resultFileNameArr[i] = fileNameArr[i];
-			}
 			
 			
 			
-			content = content.replaceAll("<", "&lt;");
-			content = content.replaceAll(">", "&gt;");
-			content = content.replaceAll("\r\n", "<br/>");
-			content = content.replaceAll("&","&amp;");
-			content = content.replaceAll("\"","&quot");
+			content = MyUtil.replaceParameter(content);
 			
 			
 			System.out.println(content);
@@ -126,7 +133,7 @@ public class ProductQwriteAction extends AbstractController {
 			if(emailFlag==null) emailFlag="0";
 			if(smsFlag == null) smsFlag="0";
 			if(secretFlag == null) secretFlag="0";
-			if(resultFileNameArr != null) fileName = String.join(",", resultFileNameArr);
+			
 			
 			System.out.println(emailFlag+"/"+smsFlag+"/"+secretFlag+"/"+fileName+"/"+content);
 			

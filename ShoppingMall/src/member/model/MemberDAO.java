@@ -413,74 +413,113 @@ public class MemberDAO implements InterMemberDAO {
 	         pstmt.setString(5, oneInQueryVO.getSmsFlag());
 	         pstmt.setInt(6, oneInQueryVO.getFk_member_num());
 	         
-	         
 	         result = pstmt.executeUpdate();
-			
+	         
 		} finally {
 			close();
 		}
 		return result;
 	}
-	//1:1문의 주문조회 
+	//1:1문의 주문조회 (페이징처리) 
 	@Override
-	public List<OrderHistoryVO> selectOneMemberOrderList(int member_num) throws SQLException {
+	public List<OrderHistoryVO> selectOneMemberOrderList(HashMap<String, String> paraMap) throws SQLException {
 		
 		List<OrderHistoryVO> orderHistoryList= new ArrayList<>();
 		
 		try {
 			conn = ds.getConnection();
 			
-			String sql = "select O.order_num  " + 
-						"      , to_char(O.order_date,'yyyy.mm.dd') " + 
-						"      , O.price " + 
-						"      , P.product_name " + 
-						"      , OP.product_count " + 
-						" from order_table O join order_product_table OP " + 
-						" on O.order_num = OP.fk_order_num join product_table P " + 
-						" on OP.fk_product_num = P.product_num " + 
-						" where O.fk_member_num = ? ";
+			String sql= " select RNO, order_num, order_date, price " + 
+						" from " + 
+						" (  " + 
+						"    select rownum AS RNO, order_num, order_date, price " + 
+						"    from " + 
+						"    (select order_num " + 
+						"          , to_char(order_date,'yyyy.mm.dd') as order_date " + 
+						"          , price " + 
+						"     from order_table   " + 
+						"     where fk_member_num = ? " + 
+						"    ) V " + 
+						" ) T " + 
+						" where T.RNO between ? and ? ";
 			
 			pstmt = conn.prepareStatement(sql);
-			pstmt.setInt(1, member_num);
+			int currentShowPageNo = Integer.parseInt(paraMap.get("currentShowPageNo"));
+			int loginuserGetMemberNum = Integer.parseInt(paraMap.get("loginuserGetMemberNum"));
+			
+			pstmt.setInt(1, loginuserGetMemberNum);
+			pstmt.setInt(2, (currentShowPageNo * 5) - (5 - 1) );
+			pstmt.setInt(3, (currentShowPageNo * 5) ); // 공식
 			
 			rs = pstmt.executeQuery();
 
 			while(rs.next()) {
 				
 				OrderHistoryVO ohvo = new OrderHistoryVO();
-				ohvo.setOrder_num(rs.getInt(1));
-				ohvo.setOrder_date(rs.getString(2));
-				ohvo.setPrice(rs.getInt(3));
-				ohvo.setProduct_name(rs.getString(4));
-				ohvo.setProduct_cnt(5);
+				ohvo.setOrder_num(rs.getInt("order_num"));
+				ohvo.setOrder_date(rs.getString("order_date"));
+				ohvo.setPrice(rs.getInt("price"));
 				
 				orderHistoryList.add(ohvo);
-			}				
-					
+			}			
 			rs.close();
 			
-			sql = " select count(*) from order_product_table where fk_order_num = ? ";
+			sql = " select product_name "
+				+ " from order_product_table join product_table "
+				+ " on fk_product_num = product_num "
+				+ " where fk_order_num = ? ";
 			
 			pstmt = conn.prepareStatement(sql);
-			
-			for(int i=0; i<orderHistoryList.size(); i++) {		
-				
-				pstmt.setInt(1, orderHistoryList.get(i).getOrder_num());
-				
-				rs = pstmt.executeQuery();
-				
-				if(rs.next()) {
-					orderHistoryList.get(i).setProduct_cnt(rs.getInt(1));
-				}			
-			}
 
-			} catch( Exception e) {
-				e.printStackTrace();
-			} finally {
-				close();
+			for (int i = 0; i < orderHistoryList.size(); i++) {
+				pstmt.setInt(1, orderHistoryList.get(i).getOrder_num());
+				rs = pstmt.executeQuery();
+				int count = 0;
+				if (rs.next()) {
+					orderHistoryList.get(i).setProduct_name(rs.getString(1));
+
+				}
+				while (rs.next()) {
+					count++;
+				}
+				orderHistoryList.get(i).setProduct_cnt(count);
 			}
-			
-			return orderHistoryList;
+					
+		} catch( Exception e) {
+			e.printStackTrace();
+		} finally {
+			close();
 		}
+		return orderHistoryList;
+	}
+	
+	// 페이징 처리를 위한 제품목록 페이지개수 알아오기
+	@Override
+	public int getTotalpage(HashMap<String, String> paraMap) throws SQLException {
+		int totalpage = 0;
+		String sql = "";
+		
+		try {
+			conn = ds.getConnection();
+			
+			sql = " select ceil( count(*)/5 ) AS totalPage "+
+				  " from order_table " + 
+				  " where fk_member_num = ? ";
+				
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, Integer.parseInt(paraMap.get("loginuserGetMemberNum")));
+												
+			rs = pstmt.executeQuery();
+			
+			rs.next();
+			
+			totalpage = rs.getInt("totalPage");
+			
+		} finally {
+			close();
+		}
+		
+		return totalpage;
+	}
 	
 }

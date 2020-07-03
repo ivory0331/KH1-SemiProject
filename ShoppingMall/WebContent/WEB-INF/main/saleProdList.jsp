@@ -75,7 +75,9 @@
 	.pricecolor {
 		text-align: left;
 	}
-	
+	a:hover {
+		text-decoration: none !important;
+	}	
 </style>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -110,13 +112,13 @@
 							<td class="pricecolor">
 								<a href='/ShoppingMall/detail.do?product_num=${pvo.product_num}'>
 									<div style="width:250px; height:350px;" class="sample_image"><img style="width:100%; height:100%;" src="/ShoppingMall/images/${pvo.representative_img}" /></div>
+									
+									<br/><span style="font-size:13pt; letter-spacing: 0.6px; color:#333;">${pvo.product_name}</span>
+									<c:if test="${pvo.sale != 0}">
+										<br/><span style="text-decoration: line-through; color: #ccc; font-weight: bold; font-size: 17px;"><fmt:formatNumber value="${pvo.price}" pattern="###,###"/> 원</span>
+										<span style="color: #5f0080; font-weight: bold; font-size: 17px;">&nbsp;→&nbsp;<fmt:formatNumber value="${pvo.finalPrice}" pattern="###,###" />원</span>
+									</c:if>
 								</a>
-								<br/><span style="font-size:13pt; letter-spacing: 0.6px; color:#333;">${pvo.product_name}</span>
-								<c:if test="${pvo.sale != 0}">
-									<br/><span style="text-decoration: line-through; color: #ccc; font-weight: bold; font-size: 17px;"><fmt:formatNumber value="${pvo.price}" pattern="###,###"/> 원</span>
-									<span style="color: #5f0080; font-weight: bold; font-size: 17px;">&nbsp;→&nbsp;<fmt:formatNumber value="${pvo.finalPrice}" pattern="###,###" />원</span>
-								</c:if>
-								
 							</td> 
 							
 							<c:if test="${(status.count)%3 == 0 }">
@@ -133,6 +135,9 @@
 	    <div>
 	    	${pageBar}
 	    </div>	
+	    <div>
+	    	<a style="display:scroll;position:fixed;bottom:10px;right:10px;margin:10px;" href="#" title=”맨위로"><img style="width:60px; height:55px;" src="/ShoppingMall/images/topBtn.png"></a>
+	    </div>
 				</div>
 			</div>
 		

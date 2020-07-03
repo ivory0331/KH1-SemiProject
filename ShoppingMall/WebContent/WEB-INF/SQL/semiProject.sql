@@ -1021,9 +1021,66 @@ where O.fk_member_num = ?
 +
 select count(*) from order_product_table where fk_order_num = ?
 
+-- 주문내역 조회 페이징 처리 (으네)
+select RNO, order_num, order_date, price, product_name, product_count
+from
+ (   
+    select rownum AS RNO, order_num, order_date, price, product_name, product_count 
+    from 
+    (select O.order_num  
+          , to_char(O.order_date,'yyyy.mm.dd') as order_date
+          , O.price 
+          , P.product_name 
+          , OP.product_count 
+     from order_table O join order_product_table OP 
+     on O.order_num = OP.fk_order_num join product_table P 
+     on OP.fk_product_num = P.product_num
+     where O.fk_member_num = 1
+    ) V
+) T
+where T.RNO between 1 and 10;
+
+select product_name from order_product_table join product_table on fk_product_num = product_num where fk_order_num = 1;
+ 
+ select RNO, order_num, order_date, price 
+ from 
+ (  
+    select rownum AS RNO, order_num, order_date, price 
+    from 
+    (select order_num 
+          , to_char(order_date,'yyyy.mm.dd') as order_date 
+          , price 
+     from order_table   
+     where fk_member_num = 1
+    ) V 
+ ) T 
+ where T.RNO between 1 and 5; 
 
 
 
+select ceil( count(*)/5 ) AS totalPage
+from order_table
+where fk_member_num = 1;
+
+select *
+from order_table
+where fk_member_num = 1;
+
+commit;
+
+
+ select RNO, product_num, product_name, price, sale, representative_img 
+ from 
+ ( 
+     select rownum AS RNO, product_num, product_name, price, sale, representative_img 
+     from 
+     ( 
+        select  product_num, product_name, price, sale, representative_img 
+        from product_table 
+        where sale > 0 
+    ) V 
+ ) T 
+ where T.RNO between 1 and 10;
 
 select  RNO, PRODUCT_NUM, CATEGORY_CONTENT, SUBCATEGORY_CONTENT, PRODUCT_NAME, PRICE, STOCK 
 from 
@@ -1110,8 +1167,8 @@ join product_category_table PC on P.fk_category_num = PC.category_num
 join product_subcategory_table PS on P.fk_subcategory_num = PS.subcategory_num
 where OP.reviewFlag = 0 and O.fk_category_num = 1;
 
-select * from order_table;
-
+select * from order_table
+select * from one_category_table;
 insert into one_category_table(category_num, category_content) values(1, '배송지연/불만');
 insert into one_category_table(category_num, category_content) values(2, '컬리패스(무료배송)');
 insert into one_category_table(category_num, category_content) values(3, '반품문의');

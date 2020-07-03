@@ -21,7 +21,11 @@ public class BasketCntAction extends AbstractController {
 		
 		MemberVO loginuser = (MemberVO) session.getAttribute("loginuser");
 		
-		int basketCnt = dao.basketCnt(loginuser.getMember_num());
+		int basketCnt = 0;
+		if(loginuser!=null) {
+			basketCnt = dao.basketCnt(loginuser.getMember_num());
+		}
+		
 		
 		JSONObject obj = new JSONObject();
 		obj.put("basketCnt", basketCnt);

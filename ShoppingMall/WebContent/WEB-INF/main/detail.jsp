@@ -19,20 +19,21 @@
 		float:left;
 		display: inline-block;
 		width: 350px;
-		border:solid 1px black;
+		border:solid 0px black;
 	}
 	
 	.goodsImg > img{
-		width:100%;
-		height:440px;
+		width: 430px;
+		height:552px;
+		margin-bottom: 30px;
 	}
 	
 	/*상품 이미지의 옆에 나오는 상품 정보가 들어가 있는 div*/
 	.goodsInfo{
 		display: inline-block;
 		width:600px;
-		margin-right:30px;
 		text-align: left;
+		margin: 30px 0 0 100px;
 	}
 	
 	/*상품 정보가 나열된 리스트에서 각각의 항목 부분의 태그*/
@@ -81,15 +82,30 @@
 	/*장바구니 담기 버튼*/
 	.basket{
 		display: inline-block;
-		width: 240px;
-		padding:10px 0px;
+		width: 278px;
+		height: 52px;
+		padding-top: 17px;
 		text-align: center;
-		background-color: purple;
+		background-color: #5f0080;
 		color: white;
-		font-size: 18pt;
-		border-radius: 10px;
-		margin-top: 5px;
+		font-size: 15px;
+		font-weight: 600;
+		border-radius: 5px;
+		margin-top: 20px;
 		cursor: pointer;
+	}
+	.fakebtn {
+		display: inline-block;
+		width: 128px;
+		height: 54px;
+		padding-top: 17px;
+		text-align: center;
+		color: #ddd;
+		border: solid 1px #ddd;
+		font-size: 15px;
+		font-weight: 600;
+		border-radius: 5px;
+		margin: 20px 10px 0 0;
 	}
 	
 	.detailTablePart{
@@ -108,19 +124,19 @@
 	.tab {
 	  overflow: hidden;
 	  background-color: white;
-	  border-bottom: solid 2px purple;
+	  border-bottom: solid 1px #bfbfbf;
 	  margin-bottom: 5px;
 	}
 	
 	/* Style the buttons inside the tab */
 	.tab a{
 		text-decoration: none;
-		color:black;
+		color: #4C4C4C;
 	}
 	
 	.choice{
-		background-color: purple;
-		color:white;
+		background-color: #FFFFFF;
+		color: #4C4C4C;
 		font-weight: bold;
 	}
 	
@@ -131,15 +147,13 @@
 	  transition: 0.3s;
 	  font-size: 17px;
 	  border:none;
-	  border-top: solid 1px purple;
+	  border-top: solid 1px #bfbfbf;
 	  outline: none;
-	  border-left:solid 1px purple;
+	  border-left:solid 1px #bfbfbf;
 	}
-	
-	
-	
 	 .tableTitle{
 		font-size: 18pt;
+		color: #4C4C4C;
 	} 
 	
 	 .accordion {
@@ -158,12 +172,10 @@
 	}
 	
 	.panel {
-	  
 	  background-color: white;
 	  overflow: hidden;
 	  text-align: left;
-	  margin : 0px ; 
-	
+	  margin : 0px ;
 	}
 	
 	.panel-none{
@@ -185,9 +197,9 @@
 		padding : 10 0px;
 		margin-right:5px;
 		width:60px;
-		border: solid 1px purple;
+		border: solid 1px #5f0080;
 		background-color: #f1f1f1;
-		color: purple;
+		color: #5f0080;
 		font-size: 12pt;
 		cursor: pointer;
 		
@@ -195,27 +207,27 @@
 
 	.writeBtn{
 		display: inline-block;
-		width: 100px;
-		padding:15px 0px;
-		background-color: purple;
+		width: 130px;
+		height: 32px;
+		padding-top: 5px;
+		background-color: #795B8F;
 		color: white;
-		font-size: 12pt;
-		font-weight: bolder;
+		font-size: 13px;
+		font-weight: 400;
 		text-align: center;
-		border-radius: 10px;
 		cursor: pointer;
 		margin-left: 5px;
-		border: solid 1px purple;
+		border: solid 1px #5f0080;
 	}
 
 	.tab a:hover{
 		color:white;
 		font-weight: bold;
-		background-color: purple;
+		background-color: #5f0080;
 	}
 	
 	.writeBtn:hover{
-		color: purple;
+		color: #5f0080;
 		background-color: white;
 	}
 
@@ -395,7 +407,7 @@
 			$("#reviewPageBar").html(json.pageBar);
 		}
 		else{
-			var html = "<td colspan='5'><div class='' align='center'><h3>작성된 후기가 없습니다.</h3></div></td>";
+			var html = "<td colspan='5'><div class='' align='center'><h5>작성된 후기가 없습니다.</h5></div></td>";
 			$("#review tbody").html("<tr>"+html+"</tr>");
 			$(".review").css("border-bottom","none");
 			
@@ -450,7 +462,7 @@
 			$("#inqueruyPageBar").html(json.pageBar);
 		}
 		else{
-			var html = "<td colspan='5'><div class='' align='center'><h3>작성된 상품문의가 없습니다.</h3></div></td>";
+			var html = "<td colspan='5'><div class='' align='center'><h5>작성된 상품문의가 없습니다.</h5></div></td>";
 			$("#question tbody").html("<tr>"+html+"</tr>");
 			$(".goodsQ").css("border-bottom","none");
 			
@@ -547,16 +559,17 @@
 						<img alt="상품1" src="<%=ctxPath %>/images/${product.representative_img}" />
 					</div>
 					<div class="goodsInfo">
-						<h2><strong>${product.product_name}</strong></h2>
+						<span style="color: #333; font-size: 24px;">${product.product_name}</span>
 						
 						<dl>
 							<c:if test = "${product.sale != 0 }">
-								<h4>할인가격&nbsp;&nbsp;<span style="color:orange; font-size: 16pt">${product.sale}%</span></h4>
-								<span style="font-size: 10pt; color:gary; text-decoration: line-through;"><fmt:formatNumber value="${product.price}" pattern="###,###" />원</span>
-								<dt style="font-size:16pt">&nbsp;=>&nbsp;<fmt:formatNumber value="${product.finalPrice}" pattern="###,###" />원</dt>
+								<dt style="font-size:28px; margin-top: 20px;"><fmt:formatNumber value="${product.finalPrice}" pattern="###,###" />원
+								&nbsp;<span style="color: #FA622F;">${product.sale}%</span>
+								<br/><span style="font-size: 15px; color: #CCC !important; text-decoration: line-through;"><fmt:formatNumber value="${product.price}" pattern="###,###" />원</span>
+								</dt>
 							</c:if>
 							<c:if test = "${product.sale == 0 }">
-								<dt style="font-size:16pt"><fmt:formatNumber value="${product.finalPrice}" pattern="###,###" />원</dt>
+								<dt style="font-size:28px"><fmt:formatNumber value="${product.finalPrice}" pattern="###,###" />원</dt>
 							</c:if>
 							
 						</dl>
@@ -587,12 +600,13 @@
 						</c:if>
 						<dl class="underLine">
 							<dt>구매수량</dt>
-							<dd><spna class="count"><button onclick="cntMynus()">-</button><input type="text" value="1" size="3" readonly id="count"/><button onclick="cntPlus()">+</button></spna></dd>
+							<dd><span class="count"><button onclick="cntMynus()">-</button><input type="text" value="1" size="3" readonly id="count"/><button onclick="cntPlus()">+</button></span></dd>
 						</dl>
 						<div class="price" align="right" >
 							총 상품금액 : <span class="money"></span>원
 							<input type="hidden" class="numPrice" />
 							<br />
+							<span class="fakebtn">재입고 알림</span>
 							<span class="basket" onclick="inBasket()">장바구니 담기</span>
 						</div>
 					</div>
@@ -603,11 +617,11 @@
 						<div class="tab">
 							<button class="tablinks choice" onclick="goTable('0')">상품 정보</button>
 							<button class="tablinks" onclick="goTable('1')">고객 후기</button>
-							<button class="tablinks" onclick="goTable('2')" style="border-right:solid 1px black">상품 문의</button>
+							<button class="tablinks" onclick="goTable('2')" style="border-right:solid 1px #bfbfbf">상품 문의</button>
 						</div>
 
 						<div style="clear:both;"></div>
-						<div id="mainImage" style="width:100%; padding-bottom:10px; border-bottom:solid 1px black;">
+						<div id="mainImage" style="width:100%; padding-bottom:10px; border-bottom:solid 1px #bfbfbf;">
 							<c:if test="${product.imageList!=null}">
 								<c:forEach var="image" items="${product.imageList}">
 									<img src="<%=ctxPath %>/images/${image}"  style="margin:20px 0;"/>
@@ -637,9 +651,9 @@
 						<div class="tab">
 							<button class="tablinks" onclick="goTable('0')">상품 정보</button>
 							<button class="tablinks choice" onclick="goTable('1')">고객 후기</button>
-							<button class="tablinks" onclick="goTable('2')" style="border-right:solid 1px black">상품 문의</button>
+							<button class="tablinks" onclick="goTable('2')" style="border-right:solid 1px #bfbfbf">상품 문의</button>
 						</div>
-						<table class="table review" style="border-bottom:solid 1px gray;">
+						<table class="table review" style="border-bottom:solid 1px #bfbfbf;">
 							<thead>
 								<tr>
 									<th style="border:none" class="tableTitle">고객 후기</th>
@@ -703,9 +717,9 @@
 						<div class="tab">
 							<button class="tablinks" onclick="goTable('0')">상품 정보</button>
 							<button class="tablinks" onclick="goTable('1')">고객 후기</button>
-							<button class="tablinks choice" onclick="goTable('2')" style="border-right:solid 1px black">상품 문의</button>
+							<button class="tablinks choice" onclick="goTable('2')" style="border-right:solid 1px #bfbfbf">상품 문의</button>
 						</div>
-						<table class="table goodsQ" style="border-bottom:solid 1px black;">
+						<table class="table goodsQ" style="border-bottom:solid 1px #bfbfbf;">
 							<thead>
 								<tr>
 									<th style="border:none" class="tableTitle">상품 문의</th>
