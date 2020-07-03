@@ -1,6 +1,7 @@
 package hyemin.model;
 
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -38,6 +39,15 @@ public interface InterReviewDAO {
 
 	// 후기 이미지 테이블에 기존에 있던 사진 조회 및 삭제
 	String ReviewImgDel(String review_num, String oldFileName) throws SQLException;
+
+	// 페이징처리를 한, 특정 회원의 모든 작성가능 후기내역 보여주기
+	List<OrderProductVO> selectPagingPossibleReview(HashMap<String, String> paraMap, int member_num) throws SQLException;
+
+	// 페이징처리를 위한 특정 회원의 작성가능 후기 내역에 대한 총페이지갯수 알아오기(select)
+	int getPossibleReviewTotalPage(HashMap<String, String> paraMap, int member_num) throws SQLException;
+
+	// 페이징처리를 한, 특정 회원의 모든 작성완료 후기내역 보여주기
+	List<OrderProductVO> selectPagingCompleteReview(HashMap<String, String> paraMap, int member_num) throws SQLException;
 
 
 
