@@ -111,6 +111,15 @@ public interface InterIndexDAO {
 	// 날짜별 매출 조회
 	List<Map<String, String>> allSalesSelect(String type)throws SQLException;
 
+	// 모든 회원의 주문 조회
+	List<OrderVO> selectOrder(HashMap<String, String> paraMap)throws SQLException;
+
+	// 배송상태 조회
+	List<Map<String, String>> getOrderStateList()throws SQLException;
+
+	// 주문관리 주문테이블 행의 총 갯수
+	int getTotalPageOrder(HashMap<String, String> paraMap)throws SQLException;
+
 
 	
 

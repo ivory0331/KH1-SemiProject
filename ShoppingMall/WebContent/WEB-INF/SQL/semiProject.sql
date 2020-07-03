@@ -316,6 +316,9 @@ on OP.fk_product_num = P.product_num
 where O.fk_member_num = 1 and OP.reviewFlag = 0 and O.fk_category_num = 3);
 
 
+select*
+from member_table;
+
 -- 주문 정보 테이블 생성 --
 create table order_table
 (order_num  number  not null    -- 주문번호 필수+고유 시퀀스 사용
@@ -1147,3 +1150,11 @@ alter table review_image_table
 add constraint fk_review_image foreign key (fk_review_num) references review_table(review_num) on delete cascade;
 
 select * from one_inquiry_table where subject like '%'||'배송'||'%';
+select * from product_inquiry_table;
+
+delete from product_inquiry_table;
+commit;
+
+desc order_table;
+select sum(price), to_char(order_date, 'yyyy-mm-dd')as order_date from order_table group by to_char(order_date, 'yyyy-mm-dd')
+order by order_date desc;
