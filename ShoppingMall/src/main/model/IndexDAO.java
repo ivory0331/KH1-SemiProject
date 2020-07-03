@@ -514,8 +514,8 @@ public class IndexDAO implements InterIndexDAO{
 				conn = ds.getConnection();
 				String sql = " select PI.inquiry_num, PI.subject, PI.content, to_char(PI.write_date,'yyyy-mm-dd') as write_date,"
 						   + " PI.fk_member_num, PI.fk_product_num, PI.emailFlag, PI.smsFlag, PI.secretFlag,"
-						   + " M.name, M.userid, M.email, M.mobile "
-						   + " from product_inquiry_table PI join member_table M on PI.fk_member_num = M.member_num where PI.inquiry_num = ? ";
+						   + " M.name, M.userid, M.email, M.mobile, product_name, answer "
+						   + " from product_inquiry_table PI join member_table M on PI.fk_member_num = M.member_num join product_table on fk_product_num = product_num where PI.inquiry_num = ? ";
 				pstmt = conn.prepareStatement(sql);
 				pstmt.setString(1, inquiry_num);
 				rs = pstmt.executeQuery();
@@ -535,6 +535,17 @@ public class IndexDAO implements InterIndexDAO{
 					mvo.setUserid(rs.getString(11));
 					mvo.setEmail(aes.decrypt(rs.getString(12)));
 					mvo.setMobile(aes.decrypt(rs.getString(13)));
+					pivo.setProduct_name(rs.getString(14));
+					
+					String answer = rs.getString(15);
+					if(answer!=null) {
+						answer = answer.replaceAll("&lt;", "<");
+						answer = answer.replaceAll("&gt;", ">");
+						answer = answer.replaceAll("<br>", "\r\n");
+					}
+					
+					pivo.setAnswer(answer);
+					
 					pivo.setMember(mvo);
 				}
 			rs.close();
@@ -985,7 +996,7 @@ public class IndexDAO implements InterIndexDAO{
 				return 0;
 			}
 			System.out.println("fileName="+paraMap.get("fileName"));
-			if(!paraMap.get("fileName").trim().isEmpty()) {
+			if(paraMap.get("fileName")!=null &&!paraMap.get("fileName").trim().isEmpty()) {
 				String[] fileNameArr = paraMap.get("fileName").split(",");
 				sql = " insert into product_inquiry_image_table (fk_inquiry_num, image) "
 				    + " values (?,?)";
@@ -1352,14 +1363,14 @@ public class IndexDAO implements InterIndexDAO{
 		List<String> imageList = new ArrayList<String>();
 		try {
 			conn = ds.getConnection();
-			String sql = " select RON, inquiry_num, subject, content, to_char(write_date,'yyyy-mm-dd')as write_date,"
-					   + " answer, fk_member_num, fk_product_num, emailFlag, smsFlag, secretFlag"
+			String sql = " select RON, inquiry_num, subject, content, write_date,"
+					   + " answer, fk_member_num, fk_product_num, emailFlag, smsFlag, secretFlag, "
 					   + " product_name, member_num, name, userid, email, mobile"
-					   + " from (select rownum as RON, inquiry_num, subject, content, to_char(write_date,'yyyy-mm-dd')as write_date,"
-					   + " answer, fk_member_num, fk_product_num, emailFlag, smsFlag, secretFlag"
+					   + " from (select rownum as RON, inquiry_num, subject, content, write_date,"
+					   + " answer, fk_member_num, fk_product_num, emailFlag, smsFlag, secretFlag, "
 					   + " product_name, member_num, name, userid, email, mobile"
 					   + " from (select inquiry_num, subject, content, to_char(write_date,'yyyy-mm-dd')as write_date, "
-					   + " answer, fk_member_num, fk_product_num, emailFlag, smsFlag, secretFlag "
+					   + " answer, fk_member_num, fk_product_num, emailFlag, smsFlag, secretFlag, "
 					   + " product_name, member_num, name, userid, email, mobile"
 					   + " from product_inquiry_table PI "
 					   + " join product_table P on PI.fk_product_num = P.product_num "
@@ -1371,7 +1382,7 @@ public class IndexDAO implements InterIndexDAO{
 			String searchType = paraMap.get("searchType");
 			if((searchWord != null && !searchWord.trim().isEmpty()) && (category != null && !category.trim().isEmpty())) {      
 					sql += " where "+searchType+" like '%'||?||'%' and fk_category_num = ? ";   
-					if(subcategory != null && !subcategory.trim().isEmpty()) sql += " and P.fk_sub_category_num = ? ";
+					if(subcategory != null && !subcategory.trim().isEmpty()) sql += " and P.fk_subcategory_num = ? ";
 		    }
 		    
 			else if(searchWord != null && !searchWord.trim().isEmpty()) {
@@ -1380,7 +1391,7 @@ public class IndexDAO implements InterIndexDAO{
 			
 			else if(category != null && !category.trim().isEmpty()){
 				sql += " where P.fk_category_num = ? ";
-				if(subcategory != null && !subcategory.trim().isEmpty()) sql += " and P.fk_sub_category_num = ? ";
+				if(subcategory != null && !subcategory.trim().isEmpty()) sql += " and P.fk_subcategory_num = ? ";
 			}
 			
 			
@@ -1394,6 +1405,9 @@ public class IndexDAO implements InterIndexDAO{
 			
 			int currentShowPageNo = Integer.parseInt(paraMap.get("currentShowPageNo"));
 			int sizePerPage = Integer.parseInt(paraMap.get("sizePerPage"));
+			
+			System.out.println("sql확인:"+sql);
+			System.out.println(searchWord+"/"+searchType+"/"+category+"/"+currentShowPageNo+"/"+sizePerPage);
 			
 			if((searchWord != null && !searchWord.trim().isEmpty()) && (category != null && !category.trim().isEmpty())) {      
 				pstmt.setString(1,searchWord);
@@ -1474,7 +1488,6 @@ public class IndexDAO implements InterIndexDAO{
 				rs = pstmt.executeQuery();
 				while(rs.next()) {
 					String image = rs.getString(1);
-					System.out.println("imageList요소:"+image);
 					imageList.add(image);
 				}
 				productInquiryList.get(i).setImageList(imageList);
@@ -1492,6 +1505,125 @@ public class IndexDAO implements InterIndexDAO{
 			close();
 		}
 		return productInquiryList;
+	}
+
+	// 상품 1차 분류 항목 조회
+	@Override
+	public List<Map<String, String>> productInquiryCategroySelect() throws SQLException {
+		List<Map<String, String>> categoryList = new ArrayList<Map<String,String>>();
+		try {
+			conn = ds.getConnection();
+			String sql = " select category_num, category_content from product_category_table ";
+			pstmt = conn.prepareStatement(sql);
+			rs = pstmt.executeQuery();
+			while(rs.next()) {
+				Map<String, String>category = new HashMap<String, String>();
+				category.put("num",rs.getString(1));
+				category.put("content",rs.getString(2));
+				categoryList.add(category);
+			}
+		}
+		finally {
+			close();
+		}
+		return categoryList;
+	}
+
+	// 상품 2차 분류 항목 조회
+	@Override
+	public List<Map<String, String>> productInquirySubcategroySelect(String searchCategory) throws SQLException {
+		List<Map<String, String>> subCategoryList = new ArrayList<Map<String,String>>();
+		try {
+			conn = ds.getConnection();
+			String sql = " select subcategory_num, subcategory_content from product_subcategory_table where subcategory_num like ?||'_' ";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, searchCategory);
+			rs = pstmt.executeQuery();
+			while(rs.next()) {
+				Map<String, String>category = new HashMap<String, String>();
+				category.put("num",rs.getString(1));
+				category.put("content",rs.getString(2));
+				subCategoryList.add(category);
+			}
+		}
+		finally {
+			close();
+		}
+		return subCategoryList;
+	}
+
+	// 특정 1:1문의 조회
+	@Override
+	public OneInquiryVO oneInquirySelect(String quiry_num) throws SQLException {
+		OneInquiryVO ovo = null;
+		try {
+			conn = ds.getConnection();
+			String sql = " select one_inquiry_num, subject, content, to_char(write_date,'yyyy-mm-dd')as write_date,"
+					   + " answer, emailFlag, smsFlag, fk_member_num, fk_order_num, fk_category_num, category_content, name, userid"
+					   + " from one_inquiry_table join one_category_table on fk_category_num = category_num join member_table on fk_member_num = member_num where one_inquiry_num = ? ";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, quiry_num);
+			rs = pstmt.executeQuery();
+			if(rs.next()) {
+				MemberVO mvo = new MemberVO();
+				ovo = new OneInquiryVO();
+				ovo.setOne_inquiry_num(rs.getInt(1));
+				ovo.setSubject(rs.getString(2));
+				ovo.setContent(rs.getString(3));
+				ovo.setWrite_date(rs.getString(4));
+				
+				ovo.setEmailFlag(rs.getString(6));
+				ovo.setSmsFlag(rs.getString(7));
+				ovo.setFk_member_num(rs.getInt(8));
+				ovo.setFk_order_num(rs.getInt(9));
+				ovo.setFk_category_num(rs.getInt(10));
+				ovo.setCategory_content(rs.getString(11));
+				
+				mvo.setName(rs.getString(12));
+				mvo.setUserid(rs.getString(13));
+				
+				String answer = rs.getString(5);
+				if(answer!=null) {
+					answer = answer.replaceAll("&lt;", "<");
+					answer = answer.replaceAll("&gt;", ">");
+					answer = answer.replaceAll("<br>", "\r\n");
+				}
+				
+				
+				ovo.setAnswer(answer);
+				
+				ovo.setMember(mvo);
+			}
+		}
+		finally {
+			close();
+		}
+		return ovo;
+	}
+
+	// 특정 문의 글에 답변 작성
+	@Override
+	public int answerWrite(Map<String, String> paraMap) throws SQLException {
+		int result = 0;
+		String sql = "";
+		try {
+			conn = ds.getConnection();
+			if("product".equals(paraMap.get("type"))) {
+				sql = " update product_inquiry_table set answer = ? where inquiry_num = ? ";
+			}
+			else {
+				sql = " update one_inquiry_table set answer = ? where one_inquiry_num = ? ";	
+			}
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, paraMap.get("answer"));
+			pstmt.setString(2, paraMap.get("quiry_num"));
+			result = pstmt.executeUpdate();
+		}
+		finally {
+			close();
+		}
+		
+		return result;
 	}
 
 	

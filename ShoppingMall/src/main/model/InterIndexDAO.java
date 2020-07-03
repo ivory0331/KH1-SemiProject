@@ -96,6 +96,18 @@ public interface InterIndexDAO {
 	// 모든 상품문의 조회 -관리자-
 	List<ProductInquiryVO> allProductInquirySelect(HashMap<String, String> paraMap)throws SQLException;
 
+	// 1차분류 항목 조회
+	List<Map<String, String>> productInquiryCategroySelect()throws SQLException;
+
+	// 2차분류 항목 조회
+	List<Map<String, String>> productInquirySubcategroySelect(String searchCategory)throws SQLException;
+
+	// 특정 1:1문의 조회
+	OneInquiryVO oneInquirySelect(String quiry_num)throws SQLException;
+
+	// 특정 문의 글에 답변 작성
+	int answerWrite(Map<String, String> paraMap)throws SQLException;
+
 
 	
 

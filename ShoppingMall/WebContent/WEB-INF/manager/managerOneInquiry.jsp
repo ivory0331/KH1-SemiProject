@@ -88,6 +88,46 @@
 		color: #5f0080 !important;	
 	}
 	
+	.panel {
+	  
+	  background-color: white;
+	  overflow: hidden;
+	  text-align: left;
+	  margin : 0px ; 
+	
+	}
+	
+	.panel-none{
+		display: none;
+	}
+	
+	.inquiry_content{
+		min-height: 200px;
+	}
+	
+	.answerZone{
+		font-size: 12pt;
+		cursor: pointer;
+	}
+	
+	.accordion{
+		cursor: pointer;
+	}
+	
+	.userBtn > span{
+		display: inline-block;
+		text-align: center;
+		padding : 10 0px;
+		margin-right:5px;
+		width:80px;
+		border: solid 1px purple;
+		background-color: #f1f1f1;
+		color: purple;
+		font-size: 12pt;
+		cursor: pointer;
+		
+	}
+	
 	
 </style>
 <!-- 부트스트랩 -->
@@ -102,9 +142,7 @@
 		$("option[value='${searchType}']").prop("selected",true);
 		
 		$("#category").bind("change",function(event){
-			
 			goSubmit();
-			
 		});
 		
 		$("#searchWord").bind("keydown", function(event){
@@ -112,6 +150,30 @@
 				  goSearch();
 			  }
 		});
+		
+		var acc = document.getElementsByClassName("accordion");
+
+		for (i = 0; i < acc.length; i++) {
+			  acc[i].addEventListener("click", function(event) {
+				var $target = $(this).next();
+				console.log($target);
+				var $other = $target.siblings();
+				$other.each(function(index, item){
+					if($(item).hasClass("panel")){
+						$(item).addClass("panel-none");	
+					}
+				});
+				$target.toggleClass("panel-none");
+			  });
+			}
+		
+		$(".answerZone").each(function(index, item){
+			$(item).bind("click",function(){
+				$target=$(this).next();
+				console.log($target);
+				$target.toggleClass("panel-none");
+			});
+		});	
 		
 	});
 	
@@ -125,7 +187,8 @@
 	}
 	
 	function goSearch(){
-		if($("input[name='searchWord']").val().trim().length < 2){
+		console.log("goSearch")
+		if($("#searchWord").val().trim().length < 2){
 			  alert("최소 두 글자를 입력해야 합니다.");
 			  return false;
 		  }
@@ -133,6 +196,10 @@
 		frm.action = "<%=ctxPath%>/manager/managerOneInquiryList.do";
 		frm.method = "get";
 		frm.submit();
+	}
+	
+	function goAnswer(num, type, action){
+		location.href="<%=ctxPath%>/manager/quiryAnswer.do?quiry_num="+num+"&type="+type;
 	}
 	
 </script>
@@ -162,7 +229,7 @@
 							
 							<div style="clear:both; height:10px;"></div>								
 						</div>		
-						검색 : <input type="text" name="searchWord" value="${searchWord}"/>
+						검색 : <input type="text" id="searchWord" name="searchWord" value="${searchWord}"/>
 						<select name="searchType">
 							<option value="name">작성자</option>
 							<option value="subject">제목</option>
@@ -197,7 +264,7 @@
 							<td>답변유무</td>
 						</tr>
 						<c:forEach var="item" items="${inquiryList}">
-							<tr align="center">
+							<tr align="center" class="accordion" >
 								<td>${item.one_inquiry_num }</td>
 								<td>${item.category_content }</td>
 								<td>${item.subject }</td>
@@ -217,6 +284,27 @@
 								<c:if test="${item.answer != null}">
 									<td>O</td>
 								</c:if>
+							</tr>
+							<tr class="panel panel-none">
+								<td colspan="7" >
+									<div class="inquiry_content">${item.content}</div>
+									<c:if test="${item.answer == null}">
+										<div class='userBtn' align='right'>
+							     			<span onclick='goAnswer("${item.one_inquiry_num}","one")'>답변쓰기</span>
+							   		 	</div>
+									</c:if>
+									<c:if test="${item.answer != null}">
+										<div class='answerZone userBtn' >
+							     			<span>답변보기</span>
+							   		 	</div>
+							   		 	<div class = "panel-none" style="border-top:solid 1px purple; margin-top:10px;">
+							   		 		${item.answer}
+							   		 		<div class='userBtn' align='right' >
+							     				<span onclick="goAnswer('${item.one_inquiry_num}','one')">수정하기</span>
+							   		 		</div>
+							   		 	</div>
+									</c:if>
+								</td>
 							</tr>
 						</c:forEach>
 						</c:if>
