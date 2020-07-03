@@ -107,6 +107,31 @@
 	    padding: 10px;
 	}
 
+	label#choice {
+		border: solid 1px gray; 
+		padding: 1.5px 7px; 
+		margin: 2px 2px;
+		background-color: #eee;
+		cursor: pointer;
+		font-weight: normal;
+		border-radius: 3px;
+		
+	}
+	
+	label#choice:hover {
+		background-color: #ddd;
+	}	
+
+	input#fileName {
+		display: inline-block;
+	}
+	
+	input#fileName:focus {outline:none;}
+	
+	#delBtn {
+		display: inline-block;
+	}
+
 	input#image:focus {outline:none;}
 	
 	
@@ -184,8 +209,8 @@
 	
 	
 	function func_deleteImg(){
-		$("#fileName").empty();
-		$("#image").empty();
+		$("#fileName").val("");
+		$("#image").val("");
 	}
 	
 </script>
@@ -243,10 +268,13 @@
 						<tr class="reviewTR image">
 							<th class="reviewTH">사진등록</th>
 							<td class="reviewTD">
-								<input type="file" name="image" id="image" accept="image/*" style="width: 250px;"/>
-								<input type='hidden' id='fileName' name='fileName'/>
-								<div style="font-size: 9px;" onclick="func_deleteImg();">X삭제</div>
-								<span style="font-size:8pt;">구매한 상품이 아니거나 캡쳐 사진을 첨부한 경우, 통보없이 삭제됩니다.</span>
+								<label for="image" id="choice">파일 선택</label>
+								<input id='fileName' type='text' name='fileName' value="${image}" placeholder="선택된 파일 없음" readonly style="border-style: none;" />
+								<input type="file" style="display:none;" name="image" id="image" accept="image/*" value="${image}"/>
+								<div style="font-size: 9px; cursor: pointer;" id="delBtn" onclick="func_deleteImg();">X삭제</div>
+								<div style="margin-left: 2px;">
+									<span style="font-size:8pt;">구매한 상품이 아니거나 캡쳐 사진을 첨부한 경우, 통보없이 삭제됩니다.</span>
+								</div>
 							</td>
 						</tr>
 					</table>

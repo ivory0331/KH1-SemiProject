@@ -1,4 +1,4 @@
-package member.controller;
+package hyemin.controller;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -8,7 +8,7 @@ import org.json.JSONObject;
 
 import common.controller.AbstractController;
 
-public class TelVerifyCertificationAction extends AbstractController {
+public class MyPageTelVerifyCertificationAction extends AbstractController {
 
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws Exception {

@@ -499,7 +499,7 @@ public class ReviewDAO implements InterReviewDAO {
 				
 				System.out.println("fileName="+paraMap.get("fileName"));
 				
-				if(!paraMap.get("fileName").trim().isEmpty()) {
+				if( paraMap.get("fileName")!=null && !paraMap.get("fileName").trim().isEmpty()) {
 					
 					sql = " insert into review_image_table (fk_review_num, image) "
 						+ " values (?,?)";
@@ -534,47 +534,51 @@ public class ReviewDAO implements InterReviewDAO {
 		@Override
 		public String ReviewImgDel(String review_num, String oldFileName) throws SQLException {
 			
+			int n = 0;
 			String delFileName = "";
 			
 			try {
 				conn = ds.getConnection();
 				
-				String sql = " select image from review_image_table where fk_review_num = ? ";
+				String sql = " select image " + 
+						     " from review_image_table " + 
+						     " where fk_review_num = ? ";
 				
-				if(oldFileName != null) {
+				if(oldFileName != null && !oldFileName.trim().isEmpty()) {
 					sql += " and image != ? ";					
 				}
 				
-				sql += " and image is null ";
+				
 				
 				pstmt = conn.prepareStatement(sql);
 				pstmt.setString(1, review_num);
 				
-				if(oldFileName != null) {
+				if(oldFileName != null && !oldFileName.trim().isEmpty()) {
 					pstmt.setString(2, oldFileName);
 				}						
 				System.out.println(sql);				
 				
-				rs = pstmt.executeQuery();				
+				rs = pstmt.executeQuery();					
 				if(rs.next()) {
 					delFileName = rs.getString(1);
 				}
 				rs.close();
 				
-				sql = " delete from review_image_table where fk_review_num = ? ";
+				sql = " delete from review_image_table " + 
+					  " where fk_review_num = ? ";
 				
-				if(oldFileName != null) {
+				if(oldFileName != null && !oldFileName.trim().isEmpty()) {
 					sql += " and image != ? ";
 				}
 				
 				pstmt = conn.prepareStatement(sql);
 				pstmt.setString(1, review_num);
 				
-				if(oldFileName != null) {
+				if(oldFileName != null && !oldFileName.trim().isEmpty()) {
 					pstmt.setString(2, oldFileName);
 				}
 				
-				pstmt.executeUpdate();				
+				n = pstmt.executeUpdate();				
 			}
 			finally {
 				close();

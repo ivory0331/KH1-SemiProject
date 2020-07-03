@@ -114,12 +114,20 @@
 		background-color: #ddd;
 	}
 	
+	input#fileName {
+		display: inline-block;
+	}
+	
 	input#fileName:focus {outline:none;}
+	
+	#delBtn {
+		display: inline-block;
+	}
 	
 	#btnSubmit {
 	    border: 1px solid #5f0080;
 	    background-color: #5f0080;
-	    color: white;
+	    color: white;	    
 	    width: 200px;
 	    padding: 10px;
 	}
@@ -198,8 +206,8 @@
 	}
 	
 	function func_deleteImg(){
-		$("#fileName").empty();
-		$("#image").empty();
+		$("#fileName").val("");
+		$("#image").val("");
 	}
 	
 </script>
@@ -214,7 +222,7 @@
 			<jsp:include page="../include/myPageSideMenu.jsp"></jsp:include>			
 			<div id="myPage_Contents">		
 				<div id="myProductReview_Header">
-					<h2 id="myProductReview_Title">후기 작성</h2>
+					<h2 id="myProductReview_Title">후기 수정</h2>
 					<div id="line" style="clear:both;"></div>										
 				</div>			
 				
@@ -261,7 +269,7 @@
 								<label for="image" id="choice">파일 선택</label>														
 								<input id='fileName' type='text' name='oldFileName' value="${delFileName}" placeholder="선택된 파일 없음" readonly style="border-style: none;" />								
 								<input type="file" style="display:none;" name="image" id="image" value="${delFileName}" accept="image/*" />
-								<div style="font-size: 9px;" onclick="func_deleteImg();">X삭제</div>
+								<div style="font-size: 9px; cursor: pointer;" id="delBtn" onclick="func_deleteImg();">X삭제</div>
 								<div style="margin-left: 2px;">
 									<span style="font-size:8pt;">구매한 상품이 아니거나 캡쳐 사진을 첨부한 경우, 통보없이 삭제됩니다.</span>
 								</div>
