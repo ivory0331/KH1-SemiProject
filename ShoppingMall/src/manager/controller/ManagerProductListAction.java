@@ -25,7 +25,7 @@ public class ManagerProductListAction extends AbstractController {
 		// 1. 로그인 해야 가능		
 		if(!super.checkLogin(request)) {
 			
-			 String message = "먼저 로그인 해야 가능합니다.";
+			 String message = "로그인 하세요.";
 	         String loc = "/ShoppingMall/member/login.do";
 	         
 	         request.setAttribute("message", message);
@@ -40,8 +40,8 @@ public class ManagerProductListAction extends AbstractController {
 		//2. 관리자로 로그인 해야 가능
 		else if(super.checkLogin(request) && loginuser.getStatus()!=2){
 	    	       
-            String message = "관리자만 접근이 가능합니다.";
-            String loc = "javascript:history.back()";
+            String message = "권한이 없습니다.";
+            String loc = "/ShoppingMall/index.do";
             
             request.setAttribute("message", message);
             request.setAttribute("loc", loc);
@@ -84,19 +84,24 @@ public class ManagerProductListAction extends AbstractController {
 		   	if(fk_subcategory_num ==null) {
 		   		fk_subcategory_num = "0";
 		    }
+		   	
 		    paraMap.put("fk_subcategory_num", fk_subcategory_num);
+		    
+		    
 	
-	
+		    
 		    if(searchWord==null) {
 		    	searchWord="";
 		    }
 		    paraMap.put("searchWord", searchWord);
 
 		    
-		    List<ProductVO> productList = productDAO.selectPagingProduct(paraMap);
+		    List<ProductVO> productList = productDAO.selectPagingProduct(paraMap);		
+		    List<HashMap<String, String>> subCategoryList = productDAO.getSubCategoryList(fk_category_num);
 		    
 		    
 			request.setAttribute("productList", productList);
+			request.setAttribute("subCategoryList", subCategoryList);
 			request.setAttribute("sizePerPage", sizePerPage);     	  
 						 
 		    
@@ -108,13 +113,6 @@ public class ManagerProductListAction extends AbstractController {
 		   	 
 		    int blockSize = 10; // 페이지바 크기
 	   	 
-	   	 request.setAttribute("pageBar", pageBar);	  
-	   	 request.setAttribute("searchWord", searchWord);	    	 
-
-	   	
-	     super.setViewPage("/WEB-INF/manager/managerProductList.jsp");
-	        
-		    
 		    
 		    pageNo = ((Integer.parseInt(currentShowPageNo)-1)/blockSize)*blockSize+1;	    	 
 		   	 

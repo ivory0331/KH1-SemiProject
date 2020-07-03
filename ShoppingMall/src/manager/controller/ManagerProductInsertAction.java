@@ -47,8 +47,8 @@ public class ManagerProductInsertAction extends AbstractController {
 	         int status = loginuser.getStatus();
 	         
 	         if(status!=2) {
-	            String message = "관리자만 접근이 가능합니다.";
-	            String loc = "javascript:history.back()";
+	        	String message = "권한이 없습니다.";
+	            String loc = "/ShoppingMall/index.do";
 	            
 	            request.setAttribute("message", message);
 	            request.setAttribute("loc", loc);
@@ -112,19 +112,12 @@ public class ManagerProductInsertAction extends AbstractController {
 			  int price = Integer.parseInt(mtrequest.getParameter("price"));
 			  
 			  String getSale = mtrequest.getParameter("sale");
-			  System.out.println("겟세일 null : "+getSale);
-			  System.out.println("겟세일 길이 : " + getSale.length());
-			  System.out.println(getSale.isEmpty());
 			  
 			  if("".equals(getSale)) {
 				  getSale="0";
 			  }
-			  System.out.println("겟세일 0 : "+getSale);
 
 			  int sale = Integer.parseInt(getSale);
-			  
-			  System.out.println("세일 0 : "+getSale);
-
 			  
 			  String getBest_point = mtrequest.getParameter("best_point");
 			  if(getBest_point.isEmpty()) {
@@ -141,9 +134,7 @@ public class ManagerProductInsertAction extends AbstractController {
 			  explain = explain.replaceAll("\r\n", "<br/>");
 	
 			  ProductVO pvo = new ProductVO();
-			  int product_num = pdao.getPnumOfProduct();
 			  
-		//	  pvo.setProduct_num(product_num);
 			  pvo.setRepresentative_img(representative_img);
 			  pvo.setFk_category_num(fk_category_num);
 			  pvo.setFk_subcategory_num(fk_subcategory_num);
@@ -180,11 +171,7 @@ public class ManagerProductInsertAction extends AbstractController {
 			  String message = "";
 			  String loc = "";
 			  
-			  if(m==1) {
-				  String message = "";
-				  String loc = "";
-			  
-			  if(n==1) {
+			  if(m==1) {		
 				  
 				  message = "제품등록 성공!!";
 				  loc = request.getContextPath()+"/manager/managerProductList.do";				  

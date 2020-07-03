@@ -1,5 +1,7 @@
 package main.model;
 
+import java.util.List;
+
 public class OrderHistoryVO {
 
 	private int order_num;
@@ -10,7 +12,14 @@ public class OrderHistoryVO {
 	private String representative_img;
 	private String order_state;
 	private int product_cnt;
-	 
+	private List<OrderProductVO> orderProductList;
+	
+	private String recipient; 
+	private String recipient_mobile; 
+	private String recipient_postcode; 
+	private String recipient_address; 
+	private String recipient_detailaddress; 
+	
 	public OrderHistoryVO() { }
 	
 	public OrderHistoryVO(int order_num, String order_date, int price, int fk_product_num, String product_name,
@@ -87,5 +96,64 @@ public class OrderHistoryVO {
 	public void setProduct_cnt(int product_cnt) {
 		this.product_cnt = product_cnt;
 	}
+
+	public List<OrderProductVO> getOrderProductList() {
+		return orderProductList;
+	}
+
+	public void setOrderProductList(List<OrderProductVO> orderProductList) {
+		this.orderProductList = orderProductList;
+	}
+
+	
+	
+	
+	
+	public String getRecipient() {
+		return recipient;
+	}
+
+	public void setRecipient(String recipient) {
+		this.recipient = recipient;
+	}
+
+	public String getRecipient_mobile() {
+		return recipient_mobile;
+	}
+
+	public void setRecipient_mobile(String recipient_mobile) {
+		this.recipient_mobile = recipient_mobile;
+	}
+
+	public String getRecipient_postcode() {
+		return recipient_postcode;
+	}
+
+	public void setRecipient_postcode(String recipient_postcode) {
+		this.recipient_postcode = recipient_postcode;
+	}
+
+	public String getRecipient_address() {
+		return recipient_address;
+	}
+
+	public void setRecipient_address(String recipient_address) {
+		this.recipient_address = recipient_address;
+	}
+
+	public String getRecipient_detailaddress() {
+		return recipient_detailaddress;
+	}
+
+	public void setRecipient_detailaddress(String recipient_detailaddress) {
+		this.recipient_detailaddress = recipient_detailaddress;
+	}
+	
+	
+	
+	
+	
+	
+	
 
 }

@@ -29,7 +29,6 @@ public class GetSubCategoryListAction extends AbstractController {
 		  
 		  List<HashMap<String,String>> subCategoryList = dao.getSubCategoryList(fk_category_num);
 		  
-		  System.out.println("subCategoryList 결과 " + subCategoryList);
 		  
 		  Gson gson = new Gson();
 		  

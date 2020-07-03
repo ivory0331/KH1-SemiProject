@@ -7,7 +7,9 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import common.controller.AbstractController;
+import main.model.OneInquiryVO;
 import main.model.OrderHistoryVO;
+import main.model.ReviewVO;
 import manager.model.*;
 import member.model.MemberVO;
 
@@ -20,7 +22,7 @@ public class ManagerMemberDetailAction extends AbstractController {
 		// 1. 로그인 해야 가능		
 		if(!super.checkLogin(request)) {
 			
-			 String message = "먼저 로그인 해야 가능합니다.";
+			 String message = "로그인 하세요.";
 	         String loc = "/ShoppingMall/member/login.do";
 	         
 	         request.setAttribute("message", message);
@@ -41,8 +43,8 @@ public class ManagerMemberDetailAction extends AbstractController {
 	         int status = loginuser.getStatus();
 	         
 	         if(status!=2) {
-	            String message = "관리자만 접근이 가능합니다.";
-	            String loc = "javascript:history.back()";
+	        	String message = "권한이 없습니다.";
+	            String loc = "/ShoppingMall/index.do";
 	            
 	            request.setAttribute("message", message);
 	            request.setAttribute("loc", loc);
@@ -64,17 +66,6 @@ public class ManagerMemberDetailAction extends AbstractController {
 		MemberVO mvo = mdao.detailMember(member_num);		
 		request.setAttribute("mvo",mvo);
 		
-		
-		// 2. 주문정보
-		List<OrderHistoryVO> ovo = mdao.selectOneMemberAllOrder(member_num);
-		
-		
-		
-		// 3. 후기정보
-		
-		
-		
-		// 4. 1대1문의
 		
 		
 		
