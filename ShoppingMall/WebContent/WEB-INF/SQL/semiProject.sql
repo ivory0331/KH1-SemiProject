@@ -109,8 +109,10 @@ commit;
 select * from product_category_table;
 select * from product_subcategory_table;
 
-
-
+select * from product_table;
+  alter table product_table
+  modify product_name varchar2(200);
+  
 -- 상품 테이블 생성 --
 create table product_table
 (product_num    number not null -- 상품번호 필수+고유 시퀀스 사용
@@ -134,7 +136,9 @@ create table product_table
 ,constraint fk_product_category_num FOREIGN key(fk_category_num) REFERENCES product_category_table(category_num)
 ,constraint fk_product_subcategory_num FOREIGN key(fk_subcategory_num) REFERENCES product_subcategory_table(subcategory_num)
 );
+drop  sequence seq_product_table;
 
+show user;
 
 update product_table set fk_category_num = 5, fk_subcategory_num=51, product_name='고양이이' 
 where product_num=251;
@@ -500,7 +504,7 @@ create table order_product_table
 ,constraint ck_reviewFlag check (reviewFlag in (0,1))
 );
 select * from order_table O join order_product_table OP on O.order_num = OP.fk_order_num;
-
+select * from order_product_table join product_table on fk_product_num = product_num;
 -- 고객 후기 테이블 --
 create table review_table
 (review_num number not null -- 후기 번호 필수+고유 시퀀스 사용
@@ -523,11 +527,12 @@ select fk_product_num, fk_order_num from review_table where review_num = 10;
 select fk_product_num, fk_order_num from review_table where review_num = 10;
 select * from review_image_table;
 
-delete from review_table where review_num = 5;
+select * from review_table;
+delete from review_table where review_num = 11;
 delete from review_image_table where fk_review_num = 5;
 
 update order_product_table set reviewFlag = 0
-where fk_order_num = 2 and fk_product_num = 93;
+where fk_order_num = 2 and fk_product_num = 100;
 
 commit;
 
@@ -549,7 +554,14 @@ create table review_image_table
 ,image varchar2(100)
 ,constraint fk_review_image FOREIGN key (fk_review_num) REFERENCES review_table(review_num)
 );
-
+ 
+--- ==== *** 제약조건 삭제하기 *** ==== --- 
+alter table review_image_table
+drop constraint fk_review_image;
+ 
+--- ==== *** 제약조건 추가하기 *** ==== --- 
+alter table review_image_table
+add constraint fk_review_image foreign key (fk_review_num) references review_table(review_num) on delete cascade;
 
 -- 리뷰테이블에 사용할 시퀀스 생성 --
 create sequence seq_review_table
@@ -1122,9 +1134,66 @@ where O.fk_member_num = ?
 +
 select count(*) from order_product_table where fk_order_num = ?
 
+-- 주문내역 조회 페이징 처리 (으네)
+select RNO, order_num, order_date, price, product_name, product_count
+from
+ (   
+    select rownum AS RNO, order_num, order_date, price, product_name, product_count 
+    from 
+    (select O.order_num  
+          , to_char(O.order_date,'yyyy.mm.dd') as order_date
+          , O.price 
+          , P.product_name 
+          , OP.product_count 
+     from order_table O join order_product_table OP 
+     on O.order_num = OP.fk_order_num join product_table P 
+     on OP.fk_product_num = P.product_num
+     where O.fk_member_num = 1
+    ) V
+) T
+where T.RNO between 1 and 10;
+
+select product_name from order_product_table join product_table on fk_product_num = product_num where fk_order_num = 1;
+ 
+ select RNO, order_num, order_date, price 
+ from 
+ (  
+    select rownum AS RNO, order_num, order_date, price 
+    from 
+    (select order_num 
+          , to_char(order_date,'yyyy.mm.dd') as order_date 
+          , price 
+     from order_table   
+     where fk_member_num = 1
+    ) V 
+ ) T 
+ where T.RNO between 1 and 5; 
 
 
 
+select ceil( count(*)/5 ) AS totalPage
+from order_table
+where fk_member_num = 1;
+
+select *
+from order_table
+where fk_member_num = 1;
+
+commit;
+
+
+ select RNO, product_num, product_name, price, sale, representative_img 
+ from 
+ ( 
+     select rownum AS RNO, product_num, product_name, price, sale, representative_img 
+     from 
+     ( 
+        select  product_num, product_name, price, sale, representative_img 
+        from product_table 
+        where sale > 0 
+    ) V 
+ ) T 
+ where T.RNO between 1 and 10;
 
 select  RNO, PRODUCT_NUM, CATEGORY_CONTENT, SUBCATEGORY_CONTENT, PRODUCT_NAME, PRICE, STOCK 
 from 
@@ -1211,8 +1280,8 @@ join product_category_table PC on P.fk_category_num = PC.category_num
 join product_subcategory_table PS on P.fk_subcategory_num = PS.subcategory_num
 where OP.reviewFlag = 0 and O.fk_category_num = 1;
 
-select * from order_table;
-
+select * from order_table
+select * from one_category_table;
 insert into one_category_table(category_num, category_content) values(1, '배송지연/불만');
 insert into one_category_table(category_num, category_content) values(2, '컬리패스(무료배송)');
 insert into one_category_table(category_num, category_content) values(3, '반품문의');
@@ -1241,3 +1310,21 @@ create table basket_table
 
 select * from basket_table;
 select * from product_inquiry_image_table where image like '%'||'search'||'%';
+
+desc order_table;
+update order_table set fk_category_num=3;
+commit;
+
+select * from order_table join order_product_table on order_num  = fk_order_num join product_table on fk_product_num = product_num;
+
+alter table product_inquiry_table modify subject varchar2(200);
+
+desc product_inquiry_table;
+
+alter table review_image_table
+drop constraint fk_review_image;
+
+alter table review_image_table
+add constraint fk_review_image foreign key (fk_review_num) references review_table(review_num) on delete cascade;
+
+select * from one_inquiry_table where subject like '%'||'배송'||'%';

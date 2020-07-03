@@ -44,16 +44,16 @@
 		float:left;
 		position: relative;
 		margin-right:20px;
-		
+		cursor: pointer;
 		
 		
 	}
 	
 	.item_list > li > img{
 		display: block;
-		border: solid 1px black;
+		border: solid 0px black;
 		width: 100%;
-		height:440px;
+		height: 360px;
 	}
 	
 	/*footer.jsp가 include되는 영역*/
@@ -95,18 +95,23 @@
 		display: inline-block;
 		padding: 10px 20px;
 		font-size: 12pt;
-		background-color: #f4f4f4;
+		background-color: #f7f7f6;
 		border-radius: 20px;
 		margin-right: 10px;
 		cursor: pointer;
+		font-weight: 600;
 	}
 	
 	.select_MDbest{
-		background-color: purple !important;
+		background-color: #5f0081 !important;
 		color:white;
+	}
+	.item>img {
+		height: 200px;
 	}
 	
 </style>
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
@@ -190,7 +195,7 @@
 	
 	// 상세보기 url 이동
 	function goDetail(product_num){
-		console.log(product_num);
+		//console.log(product_num);
 		location.href="<%=ctxPath%>/detail.do?product_num="+product_num;
 	} // end of goDetail(idx)----------------------------------------------------
 	
@@ -214,15 +219,14 @@
 	            		console.log(item.sale);
 	            		var imgFileName = decodeURIComponent(item.representative_img);
 	            		var html="<img alt='상품1' src='<%=ctxPath %>/images/"+imgFileName+"' onclick = 'goDetail("+item.product_num+")'>"
-            	        +"<a href='#'>"
-            	        +item.product_name
-            	        +"</a><br/>";
+            	        +"<span style='font-size:16px; color:#333;' onclick = 'goDetail("+item.product_num+")'>"+item.product_name+"<span>"
+            	        +"<br/>";
             	        if(item.sale==0){
-            	        	html+="<span>"+func_comma(""+item.price)+"원</span>";
+            	        	html+="<span style='color: #333; font-weight: bold; font-size: 16px;'>"+func_comma(""+item.price)+"원</span>";
             	        }
             	        else{
-            	        	html+="<span style='text-decoration:line-through;'>"+func_comma(""+item.price)+"</span>"
-            	        	html+="&nbsp;=>&nbsp;<span>"+func_comma(""+item.finalPrice)+"원</span>"
+            	        	html+="<span style='color: #333; font-weight: bold; font-size: 16px;'>"+func_comma(""+item.finalPrice)+"원</span>"
+            	        	html+="<br/><span style='text-decoration:line-through; color: #ccc; font-weight: bold; font-size: 14px;'>"+func_comma(""+item.price)+"</span>"
             	        }
             	        
             			$("#new_item"+index).html(html);
@@ -234,15 +238,14 @@
 	            		console.log(item.sale);
 	            		var imgFileName = decodeURIComponent(item.representative_img);
 	            		var html="<img alt='상품1' src='<%=ctxPath %>/images/"+imgFileName+"' onclick = 'goDetail("+item.product_num+")'>"
-            	        +"<a href='#'>"
-            	        +item.product_name
-            	        +"</a><br/>";
+            	        +"<span style='font-size:16px; color:#333;' onclick = 'goDetail("+item.product_num+")'>"+item.product_name+"<span>"
+            	        +"<br/>";
             	        if(item.sale==0){
-            	        	html+="<span>"+func_comma(""+item.price)+"원</span>";
+            	        	html+="<span style='color: #333; font-weight: bold; font-size: 16px;'>"+func_comma(""+item.price)+"원</span>";
             	        }
             	        else{
-            	        	html+="<span style='text-decoration:line-through;'>"+func_comma(""+item.price)+"</span>"
-            	        	html+="&nbsp;=>&nbsp;<span>"+func_comma(""+item.finalPrice)+"원</span>"
+            	        	html+="<span style='color: #333; font-weight: bold; font-size: 16px;'>"+func_comma(""+item.finalPrice)+"원</span>"
+            	        	html+="<br/><span style='text-decoration:line-through; color: #ccc; font-weight: bold; font-size: 14px;'>"+func_comma(""+item.price)+"</span>"
             	        }
             	        
             			$("#MDbest_item"+index).html(html);
@@ -253,15 +256,14 @@
 	            		console.log(item.sale);
 	            		var imgFileName = decodeURIComponent(item.representative_img);
 	            		var html="<img alt='상품1' src='<%=ctxPath %>/images/"+imgFileName+"' onclick = 'goDetail("+item.product_num+")'>"
-            	        +"<a href='#'>"
-            	        +item.product_name
-            	        +"</a><br/>";
+            	        +"<span style='font-size:16px; color:#333;' onclick = 'goDetail("+item.product_num+")'>"+item.product_name+"<span>"
+            	        +"<br/>";
             	        if(item.sale==0){
-            	        	html+="<span>"+func_comma(""+item.price)+"원</span>";
+            	        	html+="<span style='color: #333; font-weight: bold; font-size: 16px;'>"+func_comma(""+item.price)+"원</span>";
             	        }
             	        else{
-            	        	html+="<span style='text-decoration:line-through;'>"+func_comma(""+item.price)+"</span>"
-            	        	html+="&nbsp;=>&nbsp;<span>"+func_comma(""+item.finalPrice)+"원</span>"
+            	        	html+="<span style='color: #333; font-weight: bold; font-size: 16px;'>"+func_comma(""+item.finalPrice)+"원</span>"
+            	        	html+="<br/><span style='text-decoration:line-through; color: #ccc; font-weight: bold; font-size: 14px;'>"+func_comma(""+item.price)+"</span>"
             	        }
             	        
             			$("#sale_item"+index).html(html);
@@ -273,15 +275,14 @@
 	            		console.log(item.sale);
 	            		var imgFileName = decodeURIComponent(item.representative_img);
 	            		var html="<img alt='상품1' src='<%=ctxPath %>/images/"+imgFileName+"' onclick = 'goDetail("+item.product_num+")'>"
-            	        +"<a href='#'>"
-            	        +item.product_name
-            	        +"</a><br/>";
+            	        +"<span style='font-size:16px; color:#333;' onclick = 'goDetail("+item.product_num+")'>"+item.product_name+"<span>"
+            	        +"<br/>";
             	        if(item.sale==0){
-            	        	html+="<span>"+func_comma(""+item.price)+"원</span>";
+            	        	html+="<span style='color: #333; font-weight: bold; font-size: 16px;'>"+func_comma(""+item.price)+"원</span>";
             	        }
             	        else{
-            	        	html+="<span style='text-decoration:line-through;'>"+func_comma(""+item.price)+"</span>"
-            	        	html+="&nbsp;=>&nbsp;<span>"+func_comma(""+item.finalPrice)+"원</span>"
+            	        	html+="<span style='color: #333; font-weight: bold; font-size: 16px;'>"+func_comma(""+item.finalPrice)+"원</span>"
+            	        	html+="<br/><span style='text-decoration:line-through; color: #ccc; font-weight: bold; font-size: 14px;'>"+func_comma(""+item.price)+"</span>"
             	        }
             	        
             			$("#random_item"+index).html(html);
@@ -300,6 +301,41 @@
 	
 	<div class="Mycontainer">
 		<jsp:include page="../include/header.jsp"></jsp:include>
+		
+	<div id="myCarousel" class="carousel slide" data-ride="carousel">
+    <!-- Indicators -->
+    <ol class="carousel-indicators">
+      <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+      <li data-target="#myCarousel" data-slide-to="1"></li>
+      <li data-target="#myCarousel" data-slide-to="2"></li>
+    </ol>
+
+    <!-- Wrapper for slides -->
+    <div class="carousel-inner" style="margin-bottom: 50px !important;">
+      <div class="item active">
+        <img src="<%=ctxPath %>/images/allpaper.png" alt="종이박스" style="width:100%;">
+      </div>
+
+      <div class="item">
+        <img src="<%=ctxPath %>/images/banchan.png" alt="매일반찬" style="width:100%;">
+      </div>
+    
+      <div class="item">
+        <img src="<%=ctxPath %>/images/jarang.png" alt="장바구니자랑" style="width:100%;">
+      </div>
+    </div>
+
+    <!-- Left and right controls -->
+    <a class="left carousel-control" href="#myCarousel" data-slide="prev">
+      <span class="glyphicon glyphicon-chevron-left"></span>
+      <span class="sr-only">Previous</span>
+    </a>
+    <a class="right carousel-control" href="#myCarousel" data-slide="next">
+      <span class="glyphicon glyphicon-chevron-right"></span>
+      <span class="sr-only">Next</span>
+    </a>
+  </div>
+  
 		<div class="section" align="center">
 			<div class="contents">
 				<div id="best">

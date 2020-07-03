@@ -43,8 +43,8 @@ public class DropoutMemberAction extends AbstractController {
 				int n = mbrvo.dropoutMember(loginuser.getUserid());
 				System.out.println("회원 정보 n " + n);
 				if(n==1) { //회원삭제 완료 
-					
-					request.setAttribute("message","회원탈퇴가 되었습니다. 안녕히 가십쇼");
+					session.removeAttribute("loginuser");
+					request.setAttribute("message","회원탈퇴가 되었습니다. 다음에 또 뵙겠습니다 :) ");
 					request.setAttribute("loc", request.getContextPath()+"/index.do");
 					
 					super.setViewPage("/WEB-INF/msg.jsp");

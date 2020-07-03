@@ -514,8 +514,8 @@ public class IndexDAO implements InterIndexDAO{
 				conn = ds.getConnection();
 				String sql = " select PI.inquiry_num, PI.subject, PI.content, to_char(PI.write_date,'yyyy-mm-dd') as write_date,"
 						   + " PI.fk_member_num, PI.fk_product_num, PI.emailFlag, PI.smsFlag, PI.secretFlag,"
-						   + " M.name, M.userid, M.email, M.mobile "
-						   + " from product_inquiry_table PI join member_table M on PI.fk_member_num = M.member_num where PI.inquiry_num = ? ";
+						   + " M.name, M.userid, M.email, M.mobile, product_name, answer "
+						   + " from product_inquiry_table PI join member_table M on PI.fk_member_num = M.member_num join product_table on fk_product_num = product_num where PI.inquiry_num = ? ";
 				pstmt = conn.prepareStatement(sql);
 				pstmt.setString(1, inquiry_num);
 				rs = pstmt.executeQuery();
@@ -535,6 +535,17 @@ public class IndexDAO implements InterIndexDAO{
 					mvo.setUserid(rs.getString(11));
 					mvo.setEmail(aes.decrypt(rs.getString(12)));
 					mvo.setMobile(aes.decrypt(rs.getString(13)));
+					pivo.setProduct_name(rs.getString(14));
+					
+					String answer = rs.getString(15);
+					if(answer!=null) {
+						answer = answer.replaceAll("&lt;", "<");
+						answer = answer.replaceAll("&gt;", ">");
+						answer = answer.replaceAll("<br>", "\r\n");
+					}
+					
+					pivo.setAnswer(answer);
+					
 					pivo.setMember(mvo);
 				}
 			rs.close();
@@ -985,7 +996,7 @@ public class IndexDAO implements InterIndexDAO{
 				return 0;
 			}
 			System.out.println("fileName="+paraMap.get("fileName"));
-			if(!paraMap.get("fileName").trim().isEmpty()) {
+			if(paraMap.get("fileName")!=null &&!paraMap.get("fileName").trim().isEmpty()) {
 				String[] fileNameArr = paraMap.get("fileName").split(",");
 				sql = " insert into product_inquiry_image_table (fk_inquiry_num, image) "
 				    + " values (?,?)";
@@ -1141,20 +1152,71 @@ public class IndexDAO implements InterIndexDAO{
 
 	// 1:1문의 테이블 모든 행 조회
 	@Override
-	public List<OneInquiryVO> allOneInquirySelect() throws SQLException {
+	public List<OneInquiryVO> allOneInquirySelect(HashMap<String, String> paraMap) throws SQLException {
 		List<OneInquiryVO> oneInquiryList = new ArrayList<OneInquiryVO>();
 		try {
 			conn = ds.getConnection();
-			String sql = " select RON, one_inquiry_num, subject, content, write_date, answer, emailFlag, smsFlag, fk_member_num, fk_order_num, category_content, member_num, name, userid, email, mobile"
+			String sql = " select RON, one_inquiry_num, subject, content, write_date, answer, emailFlag, smsFlag, fk_member_num, fk_order_num, fk_category_num, category_content, member_num, name, userid, email, mobile"
 					   + " from (select rownum as RON, one_inquiry_num, subject, content, write_date, answer,"
 					   + " emailFlag, smsFlag, fk_member_num, fk_order_num, fk_category_num, category_content, member_num, name, userid, email, mobile"
-					   + " from (select one_inquiry_num, subject, content, to_char(write_date,'yyyy-mm-dd') as write_date,"
-					   + " answer, emailFlag, smsFlag, fk_member_num, fk_order_num, fk_category_num, category_content, member_num, name, userid, email, mobile "
-					   + " from one_inquiry_table "
-					   + " join one_category_table on fk_category_num = category_num "
-					   + " join member_table on fk_member_num = member_num order by one_inquiry_num asc)V"
-					   + " )T";
+					   + " from (select OI.one_inquiry_num, OI.subject, OI.content, to_char(OI.write_date,'yyyy-mm-dd') as write_date,"
+					   + " OI.answer, OI.emailFlag, OI.smsFlag, OI.fk_member_num, OI.fk_order_num, OI.fk_category_num, OC.category_content, M.member_num, M.name, M.userid, M.email, M.mobile "
+					   + " from one_inquiry_table OI "
+					   + " join one_category_table OC on OI.fk_category_num = OC.category_num "
+					   + " join member_table M on OI.fk_member_num = M.member_num ";
+			
+			String searchWord = paraMap.get("searchWord");
+			String category = paraMap.get("searchCategory");	
+			String searchType = paraMap.get("searchType");
+			if((searchWord != null && !searchWord.trim().isEmpty()) && (category != null && !category.trim().isEmpty())) {      
+					sql += " where "+searchType+" like '%'||?||'%' and fk_category_num = ? ";                          
+		    }
+		    
+			else if(searchWord != null && !searchWord.trim().isEmpty()) {
+				sql += " where "+searchType+" like '%'||?||'%'  ";
+			}
+			
+			else if(category != null && !category.trim().isEmpty()){
+				sql += " where fk_category_num = ? ";
+			}
+			
+			
+			sql += " order by one_inquiry_num asc)V"
+				+ " )T"
+				+" where T.RON between ? and ? ";  
+			
 			pstmt = conn.prepareStatement(sql);
+			System.out.println("sql확인:"+sql);
+			System.out.println(searchWord+"/"+searchType+"/"+category);
+			
+			int currentShowPageNo = Integer.parseInt(paraMap.get("currentShowPageNo"));
+			int sizePerPage = Integer.parseInt(paraMap.get("sizePerPage"));
+			
+			if((searchWord != null && !searchWord.trim().isEmpty()) && (category != null && !category.trim().isEmpty())) {      
+				pstmt.setString(1,searchWord);
+				pstmt.setString(2, category);
+				pstmt.setInt(3, (currentShowPageNo*sizePerPage)-(sizePerPage-1));
+				pstmt.setInt(4, (currentShowPageNo*sizePerPage) );
+		    }
+		    
+			else if(searchWord != null && !searchWord.trim().isEmpty()) {
+				pstmt.setString(1,searchWord);
+				pstmt.setInt(2, (currentShowPageNo*sizePerPage)-sizePerPage+1);
+				pstmt.setInt(3, (currentShowPageNo*sizePerPage) );
+			}
+			
+			else if(category != null && !category.trim().isEmpty()){
+				pstmt.setString(1, category);
+				pstmt.setInt(2, (currentShowPageNo*sizePerPage)-sizePerPage+1);
+				pstmt.setInt(3, (currentShowPageNo*sizePerPage) );
+			}
+			
+			else {
+				pstmt.setInt(1, (currentShowPageNo*sizePerPage)-sizePerPage+1);
+				pstmt.setInt(2, (currentShowPageNo*sizePerPage) );
+			}
+			
+			
 			rs = pstmt.executeQuery();
 			
 			while(rs.next()) {
@@ -1169,13 +1231,433 @@ public class IndexDAO implements InterIndexDAO{
 				ivo.setEmailFlag(rs.getString(7));
 				ivo.setSmsFlag(rs.getString(8));
 				ivo.setFk_member_num(rs.getInt(9));
+				if(rs.getString(10)!=null) {
+					ivo.setFk_order_num(rs.getInt(10));
+				}
+				ivo.setFk_category_num(rs.getInt(11));
+				ivo.setCategory_content(rs.getString(12));
 				
+				mvo.setMember_num(rs.getInt(13));
+				mvo.setName(rs.getString(14));
+				mvo.setUserid(rs.getString(15));
+				mvo.setEmail(aes.decrypt(rs.getString(16)));
+				mvo.setMobile(aes.decrypt(rs.getString(17)));
+				
+				ivo.setMember(mvo);
+				
+				oneInquiryList.add(ivo);
+			}
+		}
+		catch(UnsupportedEncodingException | GeneralSecurityException e) {
+	         e.printStackTrace();
+		}
+		finally {
+			close();
+		}
+		return oneInquiryList;
+	}
+
+	// 1:1문의 카테고리 조회
+	@Override
+	public List<Map<String, String>> oneInquiryCategroySelect() throws SQLException {
+		List<Map<String, String>>categoryList = new ArrayList<Map<String,String>>();
+		try {
+			conn = ds.getConnection();
+			String sql = " select category_num, category_content from one_category_table ";
+			
+			pstmt = conn.prepareStatement(sql);
+			rs = pstmt.executeQuery();
+			
+			while(rs.next()) {
+				Map<String, String> category = new HashMap<String, String>();
+				category.put("num",rs.getString("category_num"));
+				category.put("content", rs.getString("category_content"));
+				categoryList.add(category);
 			}
 		}
 		finally {
 			close();
 		}
-		return null;
+		
+		return categoryList;
+	}
+
+	// 1:1문의 게시글 수 조회
+	@Override
+	public int getTotalPageQuiry(HashMap<String, String> paraMap) throws SQLException {
+		int totalPage = 0;
+		int sizePerPage = Integer.parseInt(paraMap.get("sizePerPage"));
+		try {
+			conn=ds.getConnection();
+			
+			String sql = " select ceil(count(*)/?) as totalPage "
+						+" from one_inquiry_table ";
+			
+			String searchWord = paraMap.get("searchWord");
+			String category = paraMap.get("category");
+			String searchType = paraMap.get("searchType");
+			
+			
+			if((searchWord != null && !searchWord.trim().isEmpty()) && (category != null && !category.trim().isEmpty())) {      
+				sql += " where ? like '%'||?||'%'  and fk_category_num = ? ";                          
+			}
+	    
+			else if(searchWord != null && !searchWord.trim().isEmpty()) {
+				sql += " where ? like '%'||?||'%' ";
+			}
+			
+			else if(category != null && !category.trim().isEmpty()){
+				sql += " where fk_category_num = ? ";
+			}
+			
+			
+			
+			pstmt = conn.prepareStatement(sql);
+			
+			
+
+			if((searchWord != null && !searchWord.trim().isEmpty()) && (category != null && !category.trim().isEmpty())) {      
+				pstmt.setInt(1,sizePerPage);
+				pstmt.setString(2, searchType);
+				pstmt.setString(3, searchWord);
+				pstmt.setString(4, category);
+			}
+	    
+			else if(searchWord != null && !searchWord.trim().isEmpty()) {
+				pstmt.setInt(1,sizePerPage);
+				pstmt.setString(2, searchType);
+				pstmt.setString(3, searchWord);
+			}
+			
+			else if(category != null && !category.trim().isEmpty()){
+				pstmt.setInt(1,sizePerPage);
+				pstmt.setString(2, category);
+			}
+			else {
+				pstmt.setInt(1,sizePerPage);
+			}
+			
+			
+			rs = pstmt.executeQuery();
+			
+			rs.next();
+			
+			totalPage = rs.getInt(1);
+			
+			System.out.println("totalPage : "+totalPage);
+			
+		}catch(Exception e){
+			e.printStackTrace();
+		} finally {
+			close();
+		}
+		
+		
+		return totalPage;
+	}
+
+	// 모든 상품문의 조회 //
+	@Override
+	public List<ProductInquiryVO> allProductInquirySelect(HashMap<String, String> paraMap) throws SQLException {
+		List<ProductInquiryVO> productInquiryList = new ArrayList<ProductInquiryVO>();
+		List<String> imageList = new ArrayList<String>();
+		try {
+			conn = ds.getConnection();
+			String sql = " select RON, inquiry_num, subject, content, write_date,"
+					   + " answer, fk_member_num, fk_product_num, emailFlag, smsFlag, secretFlag, "
+					   + " product_name, member_num, name, userid, email, mobile"
+					   + " from (select rownum as RON, inquiry_num, subject, content, write_date,"
+					   + " answer, fk_member_num, fk_product_num, emailFlag, smsFlag, secretFlag, "
+					   + " product_name, member_num, name, userid, email, mobile"
+					   + " from (select inquiry_num, subject, content, to_char(write_date,'yyyy-mm-dd')as write_date, "
+					   + " answer, fk_member_num, fk_product_num, emailFlag, smsFlag, secretFlag, "
+					   + " product_name, member_num, name, userid, email, mobile"
+					   + " from product_inquiry_table PI "
+					   + " join product_table P on PI.fk_product_num = P.product_num "
+					   + " join member_table M on PI.fk_member_num = M.member_num ";
+			
+			String searchWord = paraMap.get("searchWord");
+			String category = paraMap.get("searchCategory");	
+			String subcategory = paraMap.get("searchSubcategory");
+			String searchType = paraMap.get("searchType");
+			if((searchWord != null && !searchWord.trim().isEmpty()) && (category != null && !category.trim().isEmpty())) {      
+					sql += " where "+searchType+" like '%'||?||'%' and fk_category_num = ? ";   
+					if(subcategory != null && !subcategory.trim().isEmpty()) sql += " and P.fk_subcategory_num = ? ";
+		    }
+		    
+			else if(searchWord != null && !searchWord.trim().isEmpty()) {
+				sql += " where "+searchType+" like '%'||?||'%'  ";
+			}
+			
+			else if(category != null && !category.trim().isEmpty()){
+				sql += " where P.fk_category_num = ? ";
+				if(subcategory != null && !subcategory.trim().isEmpty()) sql += " and P.fk_subcategory_num = ? ";
+			}
+			
+			
+			sql += " order by inquiry_num asc)V"
+				+ " )T"
+				+" where T.RON between ? and ? ";  
+			
+			pstmt = conn.prepareStatement(sql);
+			System.out.println("sql확인:"+sql);
+			System.out.println(searchWord+"/"+searchType+"/"+category);
+			
+			int currentShowPageNo = Integer.parseInt(paraMap.get("currentShowPageNo"));
+			int sizePerPage = Integer.parseInt(paraMap.get("sizePerPage"));
+			
+			System.out.println("sql확인:"+sql);
+			System.out.println(searchWord+"/"+searchType+"/"+category+"/"+currentShowPageNo+"/"+sizePerPage);
+			
+			if((searchWord != null && !searchWord.trim().isEmpty()) && (category != null && !category.trim().isEmpty())) {      
+				pstmt.setString(1,searchWord);
+				pstmt.setString(2, category);
+				if(subcategory != null && !subcategory.trim().isEmpty()) {
+					pstmt.setString(3, subcategory);
+					pstmt.setInt(4, (currentShowPageNo*sizePerPage)-(sizePerPage-1));
+					pstmt.setInt(5, (currentShowPageNo*sizePerPage) );
+				}
+				else {
+					pstmt.setInt(3, (currentShowPageNo*sizePerPage)-(sizePerPage-1));
+					pstmt.setInt(4, (currentShowPageNo*sizePerPage) );
+				}
+				
+		    }
+		    
+			else if(searchWord != null && !searchWord.trim().isEmpty()) {
+				pstmt.setString(1,searchWord);
+				pstmt.setInt(2, (currentShowPageNo*sizePerPage)-sizePerPage+1);
+				pstmt.setInt(3, (currentShowPageNo*sizePerPage) );
+			}
+			
+			else if(category != null && !category.trim().isEmpty()){
+				pstmt.setString(1, category);
+				if(subcategory != null && !subcategory.trim().isEmpty()) {
+					pstmt.setString(2, subcategory);
+					pstmt.setInt(3, (currentShowPageNo*sizePerPage)-(sizePerPage-1));
+					pstmt.setInt(4, (currentShowPageNo*sizePerPage) );
+				}
+				else {
+					pstmt.setInt(2, (currentShowPageNo*sizePerPage)-(sizePerPage-1));
+					pstmt.setInt(3, (currentShowPageNo*sizePerPage) );
+				}
+				
+			}
+			
+			else {
+				pstmt.setInt(1, (currentShowPageNo*sizePerPage)-sizePerPage+1);
+				pstmt.setInt(2, (currentShowPageNo*sizePerPage) );
+			}
+			
+			
+			rs = pstmt.executeQuery();
+			
+			while(rs.next()) {
+				ProductInquiryVO pvo = new ProductInquiryVO();
+				MemberVO mvo = new MemberVO();
+				pvo.setRowNum(rs.getInt(1));
+				pvo.setInquiry_num(rs.getInt(2));
+				pvo.setSubject(rs.getString(3));
+				pvo.setContent(rs.getString(4));
+				pvo.setWrite_date(rs.getString(5));
+				pvo.setAnswer(rs.getString(6));
+				pvo.setFk_member_num(rs.getInt(7));
+				pvo.setFk_product_num(rs.getInt(8));
+				pvo.setEmailFlag(rs.getInt(9));
+				pvo.setSmsFlag(rs.getInt(10));
+				pvo.setSecretFlag(rs.getInt(11));
+				pvo.setProduct_name(rs.getString(12));
+				
+				mvo.setMember_num(rs.getInt(13));
+				mvo.setName(rs.getString(14));
+				mvo.setUserid(rs.getString(15));
+				mvo.setEmail(aes.decrypt(rs.getString(16)));
+				mvo.setMobile(aes.decrypt(rs.getString(17)));
+				
+				pvo.setMember(mvo);
+				productInquiryList.add(pvo);
+			}
+			rs.close();
+			
+			
+			
+			for(int i=0; i<productInquiryList.size(); i++) {
+				sql = " select image from product_inquiry_image_table where fk_inquiry_num = ? ";
+				pstmt = conn.prepareStatement(sql);
+				pstmt.setInt(1, productInquiryList.get(i).getInquiry_num());
+				rs = pstmt.executeQuery();
+				while(rs.next()) {
+					String image = rs.getString(1);
+					imageList.add(image);
+				}
+				productInquiryList.get(i).setImageList(imageList);
+				rs.close();
+			}
+			
+			
+			
+			
+		}
+		catch(UnsupportedEncodingException | GeneralSecurityException e) {
+	         e.printStackTrace();
+		}
+		finally {
+			close();
+		}
+		return productInquiryList;
+	}
+
+	// 상품 1차 분류 항목 조회
+	@Override
+	public List<Map<String, String>> productInquiryCategroySelect() throws SQLException {
+		List<Map<String, String>> categoryList = new ArrayList<Map<String,String>>();
+		try {
+			conn = ds.getConnection();
+			String sql = " select category_num, category_content from product_category_table ";
+			pstmt = conn.prepareStatement(sql);
+			rs = pstmt.executeQuery();
+			while(rs.next()) {
+				Map<String, String>category = new HashMap<String, String>();
+				category.put("num",rs.getString(1));
+				category.put("content",rs.getString(2));
+				categoryList.add(category);
+			}
+		}
+		finally {
+			close();
+		}
+		return categoryList;
+	}
+
+	// 상품 2차 분류 항목 조회
+	@Override
+	public List<Map<String, String>> productInquirySubcategroySelect(String searchCategory) throws SQLException {
+		List<Map<String, String>> subCategoryList = new ArrayList<Map<String,String>>();
+		try {
+			conn = ds.getConnection();
+			String sql = " select subcategory_num, subcategory_content from product_subcategory_table where subcategory_num like ?||'_' ";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, searchCategory);
+			rs = pstmt.executeQuery();
+			while(rs.next()) {
+				Map<String, String>category = new HashMap<String, String>();
+				category.put("num",rs.getString(1));
+				category.put("content",rs.getString(2));
+				subCategoryList.add(category);
+			}
+		}
+		finally {
+			close();
+		}
+		return subCategoryList;
+	}
+
+	// 특정 1:1문의 조회
+	@Override
+	public OneInquiryVO oneInquirySelect(String quiry_num) throws SQLException {
+		OneInquiryVO ovo = null;
+		try {
+			conn = ds.getConnection();
+			String sql = " select one_inquiry_num, subject, content, to_char(write_date,'yyyy-mm-dd')as write_date,"
+					   + " answer, emailFlag, smsFlag, fk_member_num, fk_order_num, fk_category_num, category_content, name, userid"
+					   + " from one_inquiry_table join one_category_table on fk_category_num = category_num join member_table on fk_member_num = member_num where one_inquiry_num = ? ";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, quiry_num);
+			rs = pstmt.executeQuery();
+			if(rs.next()) {
+				MemberVO mvo = new MemberVO();
+				ovo = new OneInquiryVO();
+				ovo.setOne_inquiry_num(rs.getInt(1));
+				ovo.setSubject(rs.getString(2));
+				ovo.setContent(rs.getString(3));
+				ovo.setWrite_date(rs.getString(4));
+				
+				ovo.setEmailFlag(rs.getString(6));
+				ovo.setSmsFlag(rs.getString(7));
+				ovo.setFk_member_num(rs.getInt(8));
+				ovo.setFk_order_num(rs.getInt(9));
+				ovo.setFk_category_num(rs.getInt(10));
+				ovo.setCategory_content(rs.getString(11));
+				
+				mvo.setName(rs.getString(12));
+				mvo.setUserid(rs.getString(13));
+				
+				String answer = rs.getString(5);
+				if(answer!=null) {
+					answer = answer.replaceAll("&lt;", "<");
+					answer = answer.replaceAll("&gt;", ">");
+					answer = answer.replaceAll("<br>", "\r\n");
+				}
+				
+				
+				ovo.setAnswer(answer);
+				
+				ovo.setMember(mvo);
+			}
+		}
+		finally {
+			close();
+		}
+		return ovo;
+	}
+
+	// 특정 문의 글에 답변 작성
+	@Override
+	public int answerWrite(Map<String, String> paraMap) throws SQLException {
+		int result = 0;
+		String sql = "";
+		try {
+			conn = ds.getConnection();
+			if("product".equals(paraMap.get("type"))) {
+				sql = " update product_inquiry_table set answer = ? where inquiry_num = ? ";
+			}
+			else {
+				sql = " update one_inquiry_table set answer = ? where one_inquiry_num = ? ";	
+			}
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, paraMap.get("answer"));
+			pstmt.setString(2, paraMap.get("quiry_num"));
+			result = pstmt.executeUpdate();
+		}
+		finally {
+			close();
+		}
+		
+		return result;
+	}
+
+	// 날짜별 매출 조회
+	@Override
+	public List<Map<String, String>> allSalesSelect(String type) throws SQLException {
+		List<Map<String, String>> salesList = new ArrayList<Map<String,String>>();
+		try {
+			conn = ds.getConnection();
+			String sql = "";
+			if("year".equals(type)) {
+				sql = " select sum(price), to_char(order_date, 'yyyy-mm')as order_date "
+						   + " from order_table group by to_char(order_date, 'yyyy-mm') " 
+						   + " order by order_date asc ";
+			}
+			else {
+				sql = " select sum(price), to_char(order_date, 'yyyy-mm-dd')as order_date "
+						   + " from order_table group by to_char(order_date, 'yyyy-mm-dd') " 
+						   + " order by order_date asc ";
+			}
+			
+			pstmt = conn.prepareStatement(sql);
+			rs = pstmt.executeQuery();
+			while(rs.next()) {
+				Map<String, String>sales = new HashMap<String, String>();
+				sales.put("price", rs.getString(1));
+				sales.put("date", rs.getString(2));
+				salesList.add(sales);
+			}
+			
+		}
+		finally {
+			close();
+		}
+		return salesList;
 	}
 
 	

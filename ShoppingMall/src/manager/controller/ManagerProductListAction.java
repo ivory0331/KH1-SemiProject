@@ -42,7 +42,7 @@ public class ManagerProductListAction extends AbstractController {
 	    	       
             String message = "권한이 없습니다.";
             String loc = "/ShoppingMall/index.do";
-            
+   
             request.setAttribute("message", message);
             request.setAttribute("loc", loc);
             
@@ -149,12 +149,11 @@ public class ManagerProductListAction extends AbstractController {
 		   	 request.setAttribute("fk_category_num", fk_category_num);
 		   	 request.setAttribute("fk_subcategory_num", fk_subcategory_num);
 
-			   	
-		     super.setViewPage("/WEB-INF/manager/managerProductList.jsp");
-		    
-	     }
-	    
-	    
-	}
+           super.setViewPage("/WEB-INF/manager/managerProductList.jsp");
+          
+        }
+       
+       
+   }
 
 }

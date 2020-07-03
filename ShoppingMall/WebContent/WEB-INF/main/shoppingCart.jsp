@@ -16,9 +16,7 @@
 	min-width: 1700px;
 	border: solid 1px black;
 }
-#shoppingBasket {
-	border-top: solid 2px #5F0080;
-}
+
 img.imgsmall {
 	width: 60px;
 	height: 70px;
@@ -49,16 +47,24 @@ img.imgsmall {
 	border-bottom: solid 2px #d9d9d9;
 }
 #jumunBtn {
-	background-color: #5F0080; 
-	color: white;
+	width: 200px;
+	height: 50px;
+	cursor: pointer;
 }
 .bottomList {
-	color: #737373;
+	color: #666;
 	font-weight: bold;
 }
 .longtd {
 	border: solid 0px red;
 	width: 120px;
+}
+.selectDel {
+	border: 1px solid #5f0080;
+	background-color: rgba(0,0,0,0);
+	color: #5f0080;
+	padding: 10px;
+	font-size: 12px;
 }
 </style>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
@@ -205,41 +211,75 @@ img.imgsmall {
 		var bCkecked = false;
 		var cartListArr = ('${cartList}').split(",");
 		
-		for(var i=0; i<cartListArr.length; i++){
+		$(".allCheckOrNone").each(function(){
+			bCkecked = $(this).prop("checked");
+		});
+		
+		if(bCkecked){ //true
 			
-			bCkecked = document.getElementById('product_cknum'+[i]+'').checked;
-			// 체크가 되어있다면 true로 나옴
-			if(bCkecked) { 
+			for(var i=0; i<cartListArr.length; i++){
 				var cartno = $("#product_cknum"+[i]+"").parent().find("#product_num"+[i]+"").val();
-				var pname = $("#product_cknum"+[i]+"").parent().parent().find(".cart_pname").text();
+			}
+			var bool = confirm("모든 상품을 장바구니에서 제거하시는 것이 맞습니까?");
+			
+			if(bool) {
 				
-				var bool = confirm(pname+"을 장바구니에서 제거하시는 것이 맞습니까?");
-				
-				if(bool) {
-					
-					$.ajax({
-						url:"/ShoppingMall/product/cartDel.do",
-						type:"POST",
-						data:{"cartno":cartno},
-						dataType:"JSON",
-						success:function(json){
-							if(json.n == 1) { // 특정 제품을 장바구니에서 비운후 페이지이동을 해야 하는데 이동할 페이지는 페이징 처리하여 보고 있던 그 페이지로 가도록 한다. 
-								location.href= "<%= request.getContextPath()%>/${goBackURL}";
-							}
-						},
-						error: function(request, status, error){
-							alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
+				$.ajax({
+					url:"/ShoppingMall/product/cartDel.do",
+					type:"POST",
+					data:{"cartno":cartno},
+					dataType:"JSON",
+					success:function(json){
+						if(json.n == 1) { // 특정 제품을 장바구니에서 비운후 페이지이동을 해야 하는데 이동할 페이지는 페이징 처리하여 보고 있던 그 페이지로 가도록 한다. 
+							location.href= "<%= request.getContextPath()%>/${goBackURL}";
 						}
-					});
+					},
+					error: function(request, status, error){
+						alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
+					}
+				});
+				
+			}
+			else {
+				alert("장바구니에서 모든 제품 삭제를 취소하셨습니다.");
+			}
+			
+		} else { // false
+			
+			for(var i=0; i<cartListArr.length; i++){
+				
+				bCkecked = document.getElementById('product_cknum'+[i]+'').checked;
+				// 체크가 되어있다면 true로 나옴
+				if(bCkecked) { 
+					var cartno = $("#product_cknum"+[i]+"").parent().find("#product_num"+[i]+"").val();
+					var pname = $("#product_cknum"+[i]+"").parent().parent().find(".cart_pname").text();
 					
-				}
-				else {
-					alert("장바구니에서 "+pname+" 제품 삭제를 취소하셨습니다.");
+					var bool = confirm(pname+"을 장바구니에서 제거하시는 것이 맞습니까?");
+					
+					if(bool) {
+						
+						$.ajax({
+							url:"/ShoppingMall/product/cartDel.do",
+							type:"POST",
+							data:{"cartno":cartno},
+							dataType:"JSON",
+							success:function(json){
+								if(json.n == 1) { // 특정 제품을 장바구니에서 비운후 페이지이동을 해야 하는데 이동할 페이지는 페이징 처리하여 보고 있던 그 페이지로 가도록 한다. 
+									location.href= "<%= request.getContextPath()%>/${goBackURL}";
+								}
+							},
+							error: function(request, status, error){
+								alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
+							}
+						});
+						
+					}
+					else {
+						alert("장바구니에서 "+pname+" 제품 삭제를 취소하셨습니다.");
+					}
 				}
 			}
 		}
-		
-		
 	} // function cancelProduct()---------------------------------------------------------------------------
 	
 	function order(){
@@ -263,36 +303,33 @@ img.imgsmall {
 		<div class="section" align="center">
 			<div class="contents">
 			
-			<h1 style="font-weight : bold; margin-top: 50px;">장바구니</h1>
-			<h5 style="margin-bottom: 30px;">주문하실 상품명 및 수량을 정확하게 확인해 주세요.</h5>
+			<h1 style="font-weight : 800; margin-top: 50px; color: #333;">장바구니</h1>
+			<h5 style="margin-bottom: 50px; color: #999;">주문하실 상품명 및 수량을 정확하게 확인해 주세요.</h5>
 		
 			<form name="frmData">
 				<table id="shoppingBasket" class="table">
 				<tr align="center" class="bottomList" >
-					<td class="td1" align="left">
+					<td class="td1" align="left"  style="border-top: solid 2px #5f0080;">
 						<input type="checkbox" class="allCheckOrNone" id="all2" /><label for="all2" class="j">전체 선택</label>
 					</td>
-					<td>
-						제품이미지
-					</td>
-					<td>
+					<td style="border-top: solid 2px #5f0080;">
 						제품정보
 					</td>
-					<td>
+					<td style="border-top: solid 2px #5f0080;">
 						수량
 					</td>
-					<td align="left">
+					<td align="left" style="border-top: solid 2px #5f0080;">
 						상품금액
 					</td>
-					<td>
-						삭제
+					<td style="border-top: solid 2px #5f0080;">
+						
 					</td>
 				</tr>
 				
 				<tbody>
 					<c:if test="${empty cartList}">
 						<tr>
-							<td colspan="6">
+							<td colspan="5">
 								<span style="color: red; font-weight: bold;">
 									장바구니에 담긴 상품이 없습니다.
 								</span>
@@ -306,19 +343,16 @@ img.imgsmall {
 							<td class="longtd"> <%--체크박스 및 제품번호 --%>
 							 	<input type="checkbox" name="product_num" class="chkboxpnum" id="product_cknum${status.index}" value="${cartvo.product_num}" />
 							 	<input type="hidden" class="basketNum" name="product_num" id="product_num${status.index}" value="${cartvo.basket_num}" />
-							</td>
-							<td align="center"> <%-- 제품이미지 --%>
 								<a href='/ShoppingMall/detail.do?product_num=${cartvo.product_num}'>
-
-									<img src="/ShoppingMall/images/${cartvo.prod.representative_img}" width="60px" height="80px" />
+									<img class="j" src="/ShoppingMall/images/${cartvo.prod.representative_img}" width="60px" height="80px" />
 									<input type="hidden" name="product_img" value="${cartvo.prod.representative_img}"/>
 								</a>
 							</td>
-							<td align="center"> <%-- 제품정보 --%>
+							<td align="left"> <%-- 제품정보 --%>
 								<span style="font-weight: bold;" class="cart_pname">${cartvo.prod.product_name}</span>
 								<c:if test="${cartvo.prod.sale != 0}">
-									<br/><span style="text-decoration: line-through;"><fmt:formatNumber value="${cartvo.prod.price}" pattern="###,###"/> 원</span>
-									&nbsp;=>&nbsp;<fmt:formatNumber value="${cartvo.prod.finalPrice}" pattern="###,###" /> 원
+									<br/><fmt:formatNumber value="${cartvo.prod.finalPrice}" pattern="###,###" /> 원
+									&nbsp;<span style="text-decoration: line-through; color:#777"><fmt:formatNumber value="${cartvo.prod.price}" pattern="###,###"/> 원</span>
 								</c:if>
 								<c:if test="${cartvo.prod.sale == 0}">
 									<br/><fmt:formatNumber value="${cartvo.prod.price}" pattern="###,###"/> 원
@@ -344,8 +378,8 @@ img.imgsmall {
 				</tbody>
 				
 				<tr>
-					<td>
-						<input type="checkbox" class="allCheckOrNone" id="all1"/><label for="all1" class="j" style="color : #737373;">전체 선택</label>
+					<td style="padding-top: 17px;">
+						<input type="checkbox" class="allCheckOrNone" id="all1"/><label for="all1" class="j" style="color : #666;">전체 선택</label>
 					</td>
 					<td>
 						<input type="button" class="selectDel" onClick="cancelProduct();" value="선택 삭제"/>
@@ -379,7 +413,7 @@ img.imgsmall {
 					</tr>
 				</table>
 				<span id="jumun">
-					<input type="button" id="jumunBtn" value="주문하기" onClick="order()"/>
+					<img id="jumunBtn" alt="주문버튼" src="/ShoppingMall/images/jumunha1.png" onClick="order()">
 				</span>
 			</form>
 		</div>

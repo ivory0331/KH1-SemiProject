@@ -12,6 +12,12 @@
 <meta charset="UTF-8">
 <title>header.jsp</title>
 <style type="text/css">
+
+@import url(//fonts.googleapis.com/earlyaccess/notosanskr.css);
+	body {
+  	font-family: "Noto Sans KR", sans-serif !important;
+	}
+
 	/*로고와 링크가 있는 영역*/
 	.logo_login{
 		width:1080px;
@@ -34,7 +40,7 @@
 	
 	
 	.loginLink a:hover{
-		color: purple;
+		color: #5F0080;
 	}
 	
 	/*고객센터 영역*/
@@ -81,8 +87,8 @@
 	}
 	
 	.logo img{
-		width: 110px;
-		height: 100px;
+		width: 103px;
+		height: 79px;
 	}
 	
 	/*상단에 고정해야 하는 navigation이 있을 영역*/
@@ -100,7 +106,8 @@
 		list-style: none;
 		border:solid 0px blue;
 		margin-top: 10px;
-		margin-bottom: 0;
+		margin-bottom: 0px;
+		padding-bottom: 5px;
 	}
 	
 	.header-naviList > li{
@@ -121,19 +128,18 @@
 	.navi-categori .listType, .header-naviList .listType {
 		display: inline-block;
 		margin: 0px 10px;
-		font-weight: bold;
-		color:black;
-		font-size: 12pt;
+		font-weight: 700;
+		color:#4c4c4c;
+		font-size: 16px;
 		width: 150px;
 		height: 30px;
 	}
 	
 	.listType:hover{
-		color:purple;
-		text-decoration:underline;
+		color: #5F0080;
+		text-decoration:none;
 		cursor: pointer;
 	}
-	
 	/*navi에 들어가는 li태그에서 input태그가 있는 영역(span)*/
 	.search{
 		width: 200px;
@@ -174,6 +180,7 @@
 	/*하위 navi가 되는 ul 두번째*/
 	.navi-categori2{
 		width:168px;
+		height: 157px;
 		display:none;
 		list-style: none;
 		padding:0px;
@@ -206,18 +213,19 @@
 		width:40px;
 		heigth:40px;
 		cursor: pointer;
+		margin-bottom: 10px;
 	}
 	
 	#basketCnt{
 		position: absolute;
-		top: -9px;
-		left: 18px;
+		top: -7px;
+		left: 22px;
 		border:solid 1px white;
-		width: 20px;
-		height: 20px;
+		width: 18px;
+		height: 18px;
 		border-radius: 50%;
-		background-color: purple;
-		color:white;
+		background-color: #5F0080;
+		color: white;
 		cursor: pointer;
 		display: none;
 	}
@@ -325,7 +333,7 @@ $(document).ready(function(){
 	});
 	
 	
-	if(${sessionScope.loginuser!=null}){
+	if( ${sessionScope.loginuser!=null} ) {
 		func_basketCnt();
 	}
 	
@@ -441,7 +449,7 @@ $(document).ready(function(){
 	<div class="logo_login" align="center">
 		<div class="loginLink">
 			 <c:if test="${sessionScope.loginuser == null }">
-			 	 <a href="javascript:location.href='<%=ctxPath%>/member/register.do'">회원가입</a> |
+			 	 <a href="javascript:location.href='<%=ctxPath%>/member/register.do'"><span style="color:#5f0080;">회원가입</span></a> |
 			 	 <a href="javascript:location.href='<%=ctxPath%>/member/login.do'">로그인</a> | 
 			 </c:if>
 			 <c:if test="${sessionScope.loginuser != null }">
@@ -450,10 +458,11 @@ $(document).ready(function(){
 				<div class="mypage-dropdown-content" align="left">
 					<ul class="mypage-categori">
 						<c:if test="${sessionScope.loginuser.status=='2'}">
-							<li class="list"><a href="javascript:location.href='<%=ctxPath%>/service/board.do'"><span class="listType">매출관리</span></a></li>
+							<li class="list"><a href="javascript:location.href='<%=ctxPath%>/manager/managerSale.do'"><span class="listType">매출관리</span></a></li>
 							<li class="list"><a href="javascript:location.href='<%=ctxPath%>/manager/managerMemberList.do'"><span class="listType">회원관리</span></a></li>
 							<li class="list"><a href="javascript:location.href='<%=ctxPath%>/manager/managerProductList.do'"><span class="listType">상품관리</span></a></li>
 							<li class="list"><a href="javascript:location.href='<%=ctxPath%>/manager/managerMemberList.do'"><span class="listType">주문관리</span></a></li>
+							<li class="list"><a href="javascript:location.href='<%=ctxPath%>/manager/managerOneInquiryList.do'"><span class="listType">문의관리</span></a></li>
 							<li class="list"><a href="javascript:location.href='<%=ctxPath%>/manager/mangerBoardWrite.do'"><span class="listType">게시글 작성</span></a></li>
 							<li class="list"><a href="javascript:logout()"><span class="listType">로그아웃</span></a></li>
 						</c:if>
@@ -483,9 +492,9 @@ $(document).ready(function(){
 		</div>	
 	</div>
 	<div class="header-navi" align="center" >
-		<ul class="header-naviList" style="border-bottom:solid 1px purple;">
+		<ul class="header-naviList" style="border-bottom: solid 1px #f2f2f2;">
 			<li class="navi-dropdown">
-				<span class="listType dropbtn">전체 카테고리</span>
+				<span class="listType dropbtn">≡ 전체 카테고리</span>
 				<span class="bar">I</span><br/>
 				<div class="navi-dropdown-content" align="left">
 					<ul class="navi-categori">
@@ -514,7 +523,7 @@ $(document).ready(function(){
 				</c:if>
 			<img src="<%=ctxPath %>/images/search.png" onclick="searchList()" style="display:inline-block; width:20px; height:20px; cursor: pointer"/></li>
 			<li>
-				<span class="navi-basket" style="position:relative; ">
+				<span class="navi-basket" style="position:relative; padding-left: 5px;">
 					<img src="<%=ctxPath %>/images/basket.jpg" onclick="goBasket()"/>
 					
 					<div id="basketCnt" onclick="goBasket()"></div>

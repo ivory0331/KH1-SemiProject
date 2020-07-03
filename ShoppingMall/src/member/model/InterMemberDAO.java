@@ -44,7 +44,10 @@ public interface InterMemberDAO {
 	int serviceCenterMyQboardWrite(OneInquiryVO oneInQueryVO ) throws SQLException;
 
 	//1:1문의 게시판(주문조회)
-	List<OrderHistoryVO> selectOneMemberOrderList(int member_num) throws SQLException;
+	List<OrderHistoryVO> selectOneMemberOrderList(HashMap<String, String> paraMap) throws SQLException;
+
+	//1:1문의 게시판(주문주회) 페이징처리 
+	int getTotalpage(HashMap<String, String> paraMap) throws SQLException;
 
 
 

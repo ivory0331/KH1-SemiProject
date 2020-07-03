@@ -22,7 +22,7 @@
 		margin: 0px;
 		width: 180px;
 		text-align: center;
-		color:black;
+		color:#333;
 	}
 	
 	.cc_call{
@@ -31,12 +31,12 @@
 	
 	.cc_call > h3{
 		display: inline-block;
-		font-size: 20pt;
-		padding: 10px 5px;
+		border: solid 0px blue;
+		padding: 0px 5px;
 		font-weight: bolder;
 		width: 180px;
 		text-align: center;
-		color:black;
+		color:#333;
 	}
 	
 	.cc_list{
@@ -44,7 +44,8 @@
 		display: inline-block;
 		padding-left: 5px;
 		font-size:10pt;
-		color:gray;
+		color: #999;
+		font-weight: 400;
 	}
 	
 	
@@ -63,7 +64,7 @@
 		font-weight: bolder;
 		width: 180px;
 		text-align: center;
-		color:black;
+		color: #333;
 	}
 	
 	.cc_qua{
@@ -81,16 +82,22 @@
 		font-weight: bolder;
 		width: 180px;
 		text-align: center;
-		color:black;
+		color: #333;
 	}
 	.secondInfo{
 		display: inline-block;
 		text-align: left;
-		color:gray;
+		color: #999;
 		font-size: 8pt;
 		line-height: 20px;
 	}
-	
+	#minicenter {
+		border: solid 0px red;
+		font-size: 18px;
+		float: left;
+		margin-bottom: 20px;
+		padding-left: 20px;
+	}
 </style>
 </head>
 <body>
@@ -98,24 +105,24 @@
 		<div class="topFooter">
 			<div class="firstInfo" align="left">
 				<!-- <h3>고객행복센터</h3> -->
-				<div class="cc_call">
-					<h3>고객행복센터<br/><span class="tit">1644-1107</span></h3>
+				<div class="cc_call" style="margin-bottom: 30px !important;">
+					<h3><span id="minicenter">고객행복센터</span><br/><span class="tit" style="font-size: 28px;">1644-1107</span></h3>
 					<ul class="cc_list">
-						<li>365고객 센터</li>
+						<li style="color: #333 !important">365고객 센터</li>
 						<li>오전7시 ~ 오후7시</li>
 					</ul>
 				</div>
 				<div class="cc_kakao">
 					<h3><span>카카오톡 문의</span></h3>
 					<ul class="cc_list">
-						<li>365고객 센터</li>
+						<li style="color: #333 !important">365고객 센터</li>
 						<li>오전7시 ~ 오후7시</li>
 					</ul>
 				</div>
 				<div class="cc_qua">
 					<h3><span onclick = "javascript:location.href='/ShoppingMall/service/serviceCenterMyQboardWrite.do'">1:1 문의</span></h3>
 					<ul class="cc_list">
-						<li>24시간 접수가능</li>
+						<li style="color: #333 !important">24시간 접수가능</li>
 						<li>고객센터 운영시간에 순차적으로 답변드리겠습니다.</li>
 					</ul>
 				</div>
