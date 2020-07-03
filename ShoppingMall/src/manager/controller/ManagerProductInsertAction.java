@@ -21,6 +21,7 @@ import member.model.MemberVO;
 
 public class ManagerProductInsertAction extends AbstractController {
 
+
    @Override
    public void execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
       
@@ -77,8 +78,6 @@ public class ManagerProductInsertAction extends AbstractController {
        }else {
           
          MultipartRequest mtrequest = null;// 파일업로드, 다운로드 기능을 위한 객체, cos.jar 라이브러리 넣어줌
-
-          
          
          // 1. 첨부되어진 파일의 업로드 경로 설정
          HttpSession sesssion = request.getSession();
@@ -190,5 +189,6 @@ public class ManagerProductInsertAction extends AbstractController {
               
       
    }
+
 
 }

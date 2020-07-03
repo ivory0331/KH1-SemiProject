@@ -19,7 +19,7 @@ public class ManagerProductDetailAction extends AbstractController {
 		if(!super.checkLogin(request)) {
 			
 			 String message = "먼저 로그인 해야 가능합니다.";
-	         String loc = "javascript:history.back()";
+	         String loc = "/ShoppingMall/member/login.do";
 	         
 	         request.setAttribute("message", message);
 	         request.setAttribute("loc", loc);
@@ -37,8 +37,8 @@ public class ManagerProductDetailAction extends AbstractController {
 	         int status = loginuser.getStatus();
 	         
 	         if(status!=2) {
-	            String message = "관리자만 접근이 가능합니다.";
-	            String loc = "javascript:history.back()";
+	        	String message = "권한이 없습니다.";
+	            String loc = "/ShoppingMall/index.do";
 	            
 	            request.setAttribute("message", message);
 	            request.setAttribute("loc", loc);

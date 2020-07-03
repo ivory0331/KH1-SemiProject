@@ -18,9 +18,7 @@ public class QboardListAction extends AbstractController {
 
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
-		super.setViewPage("/WEB-INF/service/serviceCenterQboardList.jsp");
 	 
-	
 		InterServiceDAO dao = new ServiceDAO();
 
 

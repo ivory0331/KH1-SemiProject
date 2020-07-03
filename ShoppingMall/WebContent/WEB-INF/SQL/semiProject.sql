@@ -317,6 +317,9 @@ on OP.fk_product_num = P.product_num
 where O.fk_member_num = 1 and OP.reviewFlag = 0 and O.fk_category_num = 3);
 
 
+select*
+from member_table;
+
 -- 주문 정보 테이블 생성 --
 create table order_table
 (order_num  number  not null    -- 주문번호 필수+고유 시퀀스 사용
@@ -339,7 +342,7 @@ select * from order_product_table;
 select * from basket_table;
 
 select*
-from member_table;
+from order_table;
 
 9695b88a59a1610320897fa84cb7e144cc51f2984520efb77111d94b402a8382
 uYg23XNX4EHriQrBgXSXy73zzuR4KTIzxwM10BQ5Vek=
@@ -356,31 +359,33 @@ select*
 from order_table;
 insert into order_table(order_num, recipient, recipient_mobile, recipient_postcode, recipient_address, recipient_detailaddress, price, fk_member_num, fk_category_num)
 values(1,'나나','01012345678','12345','인천 어쩌고 저쩌고','1층','12800','40','3');
+insert into order_table(order_num, recipient, recipient_mobile, recipient_postcode, recipient_address, recipient_detailaddress, price, fk_member_num, fk_category_num)
+values(seq_order_table.nextval,'미미','01012345678','12345','서울','1층','50000','40','2');
 
-select member_num, name, userid, email, mobile, 
-postcode, address, detailaddress,gender,to_char(birthday,'yyyy-mm-dd') as birthday, 
-to_char(registerdate,'yyyy-mm-dd') as registerdate 
-from member_table 
-where member_num=40;
+select*
+from order_product_table;
 
 -- 주문 상품 정보 테이블 (주문번호 1)
-product_count  number not null -- 주문한 상품의 갯수 필수
-,fk_order_num   number not null -- 주문정보 테이블의 주문번호를 참조하는 컬럼
-,fk_product_num number not null -- 상품테이블의 상품번호를 참조하는 컬럼
-,price          number not null -- 주문상품의 가격(할인 후)
-,reviewFlag     number(1) default 0
-
 insert into order_product_table(product_count, fk_order_num, fk_product_num, price, reviewFlag)
 values(1,1,69,12900,0);
 insert into order_product_table(product_count, fk_order_num, fk_product_num, price, reviewFlag)
 values(2,1,70,45500,0);
-select * from order_table;
-select * from order_product_table;
--- 주문번호 대표상품명 외 1개 결제금액 배송상태
-select
-from 
-where member_num='40';
 
+insert into order_product_table(product_count, fk_order_num, fk_product_num, price, reviewFlag)
+values(1,2,146,3980,0);
+insert into order_product_table(product_count, fk_order_num, fk_product_num, price, reviewFlag)
+values(1,2,147,3810,0);
+
+insert into order_product_table(product_count, fk_order_num, fk_product_num, price, reviewFlag)
+values(1,2,150,1000,0);
+insert into order_product_table(product_count, fk_order_num, fk_product_num, price, reviewFlag)
+values(1,2,151,2000,0);
+insert into order_product_table(product_count, fk_order_num, fk_product_num, price, reviewFlag)
+values(1,2,152,3000,0);
+
+commit;
+
+-- 주문번호 대표상품명 외 1개 결제금액 배송상태
 
 update order_table set fk_category_num = 3
 where order_num = 1;
@@ -405,6 +410,101 @@ nominvalue
 nocycle
 nocache;
 
+
+
+-- 금요일
+
+select RON, review_num, subject, content, write_date,
+       fk_product_num, fk_order_num, fk_member_num, product_name
+from 
+    (select rownum as RON, review_num, subject, content, write_date,    
+            fk_product_num, fk_order_num, fk_member_num, product_name
+     from 
+        (select R.review_num, R.subject, R.content, to_char(R.write_date,'yyyy-mm-dd') as write_date,
+                R.fk_product_num, R.fk_order_num, R.fk_member_num, P.product_name
+         from review_table R join member_table M 
+         on R.fk_member_num = M.member_num 
+         join product_table P
+         on P.product_num = R.fk_product_num
+         where R.fk_member_num = 40 order by review_num desc
+         )V
+    )T 
+where T.RON between 1 and 10;
+
+select*
+from review_table;
+
+select*
+from order_table;
+
+insert into review_table(review_num, subject, content, fk_product_num, fk_order_num, fk_member_num)
+values(1, '좋아요', '맘에 듭니다', 69, 1, 40);
+insert into review_table(review_num, subject, content, fk_product_num, fk_order_num, fk_member_num)
+values(2, '굿굿굿 얄리얄리얄라성 얄라리얄라', '사진첨부해봐야되는데', 70, 1, 40);
+
+insert into review_table(review_num, subject, content, fk_product_num, fk_order_num, fk_member_num)
+values(seq_review_table.nextval, '1번후기', '굿굿', 146, 2, 40);
+insert into review_table(review_num, subject, content, fk_product_num, fk_order_num, fk_member_num)
+values(seq_review_table.nextval, '2번후기', '굿굿', 147, 2, 40);
+insert into review_table(review_num, subject, content, fk_product_num, fk_order_num, fk_member_num)
+values(seq_review_table.nextval, '3번후기', '굿굿굿', 150, 2, 40);
+insert into review_table(review_num, subject, content, fk_product_num, fk_order_num, fk_member_num)
+values(seq_review_table.nextval, '4번후기', '굿굿굿굿', 151, 2, 40);
+insert into review_table(review_num, subject, content, fk_product_num, fk_order_num, fk_member_num)
+values(seq_review_table.nextval, '5번후기', '굿굿굿굿굿', 152, 2, 40);
+
+commit;
+
+select*
+from order_product_table;
+         
+         
+select RON, order_num, representative_img, product_name, price,
+    fk_product_num, order_state
+from    
+(select rownum as RON, order_num, representative_img, product_name
+    ,price, order_date, fk_product_num, order_state
+from
+(select O.order_num , P.representative_img, P.product_name 
+    , O.price, to_char(O.order_date,'yyyy-mm-dd hh24:mi:ss') as order_date
+    , OP.fk_product_num, OS.order_state
+from order_table O
+join order_product_table OP
+on O.order_num = OP.fk_order_num
+join order_state_table OS
+on O.fk_category_num = OS.category_num 
+join product_table P
+on OP.fk_product_num = P.product_num
+where O.fk_member_num = 40
+order by O.order_num desc
+)V
+)T 
+where T.RON between 1 and 5;      
+
+select*
+from order_table;
+
+select*
+from order_state_table;
+
+select * from order_table;
+
+select ceil(count(*)/5) from order_table where fk_member_num = 40;
+
+
+select RNO, order_num, order_date, price, order_state 
+from 
+(
+select rownum AS RNO, order_num, order_date, price, fk_category_num, order_state
+from 
+(select O.order_num, to_char(O.order_date,'yyyy.mm.dd') as order_date, O.price, O.fk_category_num
+from order_table O 
+where O.fk_member_num = 40
+) V 
+join order_state_table S
+on V.fk_category_num = S.category_num 
+) T
+where T.RNO between 1 and 5; 
 
 -- 주문상품 테이블 생성 --
 create table order_product_table
@@ -514,8 +614,35 @@ create table one_inquiry_table
 ,constraint fk_one_category FOREIGN key (fk_category_num) REFERENCES one_category_table(category_num)
 ,constraint ck_one_emailCheck   check (emailFlag in(0,1))
 ,constraint ck_one_smsCheck check (smsFlag in (0,1))
-
 );
+
+select*
+from one_inquiry_table;
+
+insert into one_inquiry_table(one_inquiry_num,subject,content,fk_member_num,fk_order_num,fk_category_num)
+values(seq_one_inquiry_table.nextval, '배송이 안 와요','굶어죽겠다',40,1,1);
+insert into one_inquiry_table(one_inquiry_num,subject,content,fk_member_num,fk_category_num)
+values(seq_one_inquiry_table.nextval, '회원탈퇴는 어떻게 하나요','마켈컬리 불매ㅡㅡ',40,7);
+
+update one_inquiry_table set answer='' where one_inquiry_num='5';
+commit;
+
+select RON, one_inquiry_num, subject, content, write_date, answer, fk_member_num, fk_order_num, category_content
+from
+(select rownum as RON, one_inquiry_num, subject, content,
+write_date, answer, fk_member_num, fk_order_num, category_content
+from
+(select one_inquiry_num, subject, content, to_char(write_date,'yyyy-mm-dd') as write_date, answer,
+fk_member_num, fk_order_num, fk_category_num, OC.category_content 
+from one_inquiry_table O
+join one_category_table OC 
+on O.fk_category_num = OC.category_num
+where O.fk_member_num = 40
+order by one_inquiry_num desc )V
+)T
+where T.RON between 1 and 5;
+commit;
+
 
 -- 1:1문의 테이블에서 사용할 시퀀스 생성 --
 create sequence seq_one_inquiry_table
@@ -1216,6 +1343,7 @@ add constraint fk_review_image foreign key (fk_review_num) references review_tab
 
 select * from one_inquiry_table where subject like '%'||'배송'||'%';
 
+
 -- 작성가능 후기 페이징 (혜민)
 select RNO, idx, userid, name, email, gender
 from
@@ -1263,3 +1391,13 @@ from
     ) V
 ) T   
 where T.RNO between 1 and 3;
+
+select * from product_inquiry_table;
+
+delete from product_inquiry_table;
+commit;
+
+desc order_table;
+select sum(price), to_char(order_date, 'yyyy-mm-dd')as order_date from order_table group by to_char(order_date, 'yyyy-mm-dd')
+order by order_date desc;
+

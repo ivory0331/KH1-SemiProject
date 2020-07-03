@@ -19,7 +19,7 @@ public class OneInquiryVO {
 	private List<String> imageList;
 	private MemberVO member;
 	private int fk_category_num;
-
+	private String answer_content;
 	
 	public OneInquiryVO() {}
 	
@@ -43,6 +43,8 @@ public class OneInquiryVO {
 	}
 	
 	
+	
+
 	public int getOne_inquiry_num() {
 		return one_inquiry_num;
 	}
@@ -138,8 +140,7 @@ public class OneInquiryVO {
 	public void setMember(MemberVO member) {
 		this.member = member;
 	}
-	
-	
+		
 
 	public int getFk_category_num() {
 		return fk_category_num;
@@ -158,6 +159,15 @@ public class OneInquiryVO {
 	}
 
 	
+
+	public String getAnswer_content() {
+		return answer_content;
+	}
+
+	public void setAnswer_content(String answer_content) {
+		this.answer_content = answer_content;
+	}
+
 	
 	
 	

@@ -185,10 +185,11 @@ button.btn_address{
     float: right;
     margin-left: 2px;
     border-radius: 3px;  
-	padding-top : 5px;
+	padding-top : 4px;
 }
-
-
+.email_error{
+	padding-top : 0px;
+}
 .bthCheck_tel{
    cursor: pointer;
 }
@@ -388,9 +389,15 @@ div.check_event{
         
         if($("#userid").val().trim()==""){
            alert("아이디를 입력하세요");
-           bIdValidateCheck = false;
+           bIdValidateCheck = false;           
            return;
-        }$.ajax({
+        }else if(!bIdValidateCheck){
+        	alert("아이디를 바르게 입력해주세요");
+        	
+        }else if(bIdValidateCheck){
+        
+        	$.ajax({
+        
             url:"<%=ctxPath%>/member/idDuplicateCheck.do",
             type:"get",
             data:{"userid":$("#userid").val()},
@@ -414,7 +421,7 @@ div.check_event{
                alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
             }
          });
-         
+        } 
       });// end of $("#idcheck").click()------------
    
       

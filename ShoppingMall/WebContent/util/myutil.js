@@ -5,19 +5,15 @@ function func_comma(num){
 		var sResult = "";
 		
 		if(isNaN(num)){	
-		// isNaN(문자 또는 문자열) ==> 입력받은 문자 또는 문자열이 숫자가 아니라면 true
-		// isNaN(문자 또는 문자열) ==> 입력받은 문자 또는 문자열이 숫자이라면 false
-		// NaN 은 Not a Number 이다.
 			alert("숫자가 아니군요.");
 			
 		}
 		else{
-			// alert("숫자입니다.");
-			// alert( num.length /3 ); ==> 3.33333333335
-			// alert( parseInt(num.length /3) ); ==> 3
 			
+			num = num.toString();
 			var nBlockCount = 0; // 세자리마다 분할되어 나온 블럭수
 			var nStartCommaIndex = 0; // 콤마가 최초로 찍히는 인덱스 값
+			
 			
 			if(num.length % 3 != 0){ // 입력받은 숫자의 길이가 3의 배수가 아닌 경우
 				nBlockCount = parseInt(num.length / 3) + 1;
@@ -34,21 +30,23 @@ function func_comma(num){
 				var sComma = ( i < nBlockCount-1 )?",":"";
 				sResult += num.substring(nStartIndex, nStartCommaIndex) + sComma;
 				
-				// num.substring(0,1) + ","		1번째		1,
-				// num.substring(1,4) + ","		2번째		234,
-				// num.substring(4,7) + ","		3번째		567,
-				// num.substring(7,10) 			4번째		890
-				
 				nStartIndex = nStartCommaIndex;
 				nStartCommaIndex += 3;
 				
 			} // end of for
 			
+			
 		} // end of if~else
 		
 		
 		return sResult;
+		
 } // end of function func_comma(num){}
+
+
+
+
+
 
 
 // 버블정렬

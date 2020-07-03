@@ -26,7 +26,7 @@ public class ManagerProductUpdateAction extends AbstractController {
 		// 1. 로그인 해야 가능		
 		if(!super.checkLogin(request)) {
 			
-			 String message = "먼저 로그인 해야 가능합니다.";
+			 String message = "로그인 하세요.";
 	         String loc = "/ShoppingMall/member/login.do";
 	         
 	         request.setAttribute("message", message);
@@ -45,8 +45,8 @@ public class ManagerProductUpdateAction extends AbstractController {
 	         int status = loginuser.getStatus();
 	         
 	         if(status!=2) {
-	            String message = "관리자만 접근이 가능합니다.";
-	            String loc = "javascript:history.back()";
+	        	String message = "권한이 없습니다.";
+	            String loc = "/ShoppingMall/index.do";
 	            
 	            request.setAttribute("message", message);
 	            request.setAttribute("loc", loc);
@@ -152,30 +152,9 @@ public class ManagerProductUpdateAction extends AbstractController {
 			  
 			 // 상품 상세 이미지 업로드 
 			  int m = 0; 
-			  /*
-			  int imageCount = Integer.parseInt(mtrequest.getParameter("imageCount"));
-
-			  if(n==1) {
-				  if(imageCount!=0) {
-					  for(int i=0; i<imageCount; i++) {
-						  if(mtrequest.getParameter("detail_img")+(i+1)!="") {
-							  String detail_img = mtrequest.getFilesystemName("detail_img"+(i+1));
-							  m = pdao.productImageUpdate(product_num, detail_img);	
-						  }else {
-							  String detail_img = mtrequest.getParameter("upload_name"+(i+1));
-							  m = pdao.productImageUpdate(product_num, detail_img);	
-						  }
-					  }
-				  }else {
-					  m=2;
-				  }
-			  }		
-			  */	  
-
 			  
 			  if(n==1) {
 				  for(int i=0; i<3; i++) {
-					  System.out.println("=========="+mtrequest.getFilesystemName("detail_img"+(i+1)));
 					  
 					  if(mtrequest.getFilesystemName("detail_img"+(i+1))!=null) {
 						  String detail_img = mtrequest.getFilesystemName("detail_img"+(i+1));
@@ -184,9 +163,7 @@ public class ManagerProductUpdateAction extends AbstractController {
 						  
 						
 						  if("".equals(old_name)) { 
-							  System.out.println("############# 확인용 => i : " + i); 
 							  old_name = "noimage"; 
-							  System.out.println("############# old_name : " + old_name); 
 						  }
 						  
 						  // 교체
@@ -198,12 +175,8 @@ public class ManagerProductUpdateAction extends AbstractController {
 							  m = pdao.productImageInsert(product_num, detail_img);
 						  }
 					  }else { //삭제
-						  System.out.println("삭제 여기");
-						  System.out.println("이미지 선택"+(i+1));
-						  System.out.println(mtrequest.getParameter("upload_name"+(i+1)));
 						  if(("이미지 선택"+(i+1)).equals(mtrequest.getParameter("upload_name"+(i+1)))) {
 							  String old_name = mtrequest.getParameter("old_name"+(i+1));
-							  System.out.println("ㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁ 삭제해야될 이미지 이름 : "+old_name);
 							  m= pdao.productImageDelete(old_name);
 						  }
 						  
@@ -217,14 +190,19 @@ public class ManagerProductUpdateAction extends AbstractController {
 			  String message = "";
 			  String loc = "";
 			  
-			  if(n==1) {
+			  if(n==1&&(m==1||m==2)) {
 				  
-				  message = "제품 수정 성공!!";
+				  message = "제품 수정이 완료되었습니다.";
 				  loc = request.getContextPath()+"/manager/managerProductList.do";				  
+				  
+			  }else if(n==1&&m==0) {
+				  
+				  message = "상세 이미지 업로드를 확인해주세요.";
+				  loc = request.getContextPath()+"/manager/managerProductList.do";		
 				  
 			  }
 			  else {
-				  message = "제품 수정 실패!!";
+				  message = "제품 수정에 실패했습니다.";
 				  loc = request.getContextPath()+"/manager/managerProductList.do";
 			  }
 			  

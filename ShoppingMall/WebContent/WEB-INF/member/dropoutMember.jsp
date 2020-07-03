@@ -159,7 +159,8 @@ td.memberCols2 {
 
 		$("input#cancle_btn").click(function(event) {
 			
-			location.href= "<%= request.getContextPath()%>/member/myPageMyInfoUpdate.do"; 
+			<%-- location.href= "<%= request.getContextPath()%>/member/myPageMyInfoUpdate.do"; --%>
+			$("#password").val("");
 			return;
 		});
 		
@@ -173,28 +174,8 @@ td.memberCols2 {
 		frm.action = "dropoutMember.do";
 		frm.method = "POST";
 		frm.submit();
-		alert("회원님의 정보가 탈퇴 되었습니다");
-		logout();
+		//alert("회원님의 정보가 탈퇴 되었습니다");		
 		//return;
-	}
-	
-	function logout(){
-		$.ajax({
-			url:"<%=ctxPath%>/member/logout.do",
-			dataType:"JSON",
-			success:function(json){
-				if(json.check=="true"){
-					//location.reload(true);
-					location.href= "<%= request.getContextPath()%>/index.do"; 
-				}
-				else{
-					alert("회원탈퇴에 실패했습니다.");
-				}
-			},
-			error:function(e){
-				console.log(e);
-			}
-		});
 	}
 
 	
