@@ -572,7 +572,7 @@ input#userid:focus {outline:none;}
 	         }
 	    	
 	    	 $.ajax({
-				url:"<%= ctxPath%>/member/myPageTelverifyCertification.do",
+				url:"<%= ctxPath%>/member/myPageTelVerifyCertification.do",
 				type:"post",
 				data:{"tel_confirm":$("#tel_confirm").val()},
 				dataType:"json",
@@ -753,32 +753,44 @@ input#userid:focus {outline:none;}
 			}
 		}	
 			
-		if($("#tel").val().trim() != "${(sessionScope.loginuser).mobile}" && $("#tel").val().trim() != "") {	
-			//휴대폰 번호 검사 체크여부 
-			if(!bTelDuplicateCheck){
-		        alert("휴대폰 번호 인증을 해주세요");
-		        return;
-		    }
-			
-			//휴대폰 번호 검사 체크여부 
-			if(!bTelDuplicateCheck){
-		        alert("휴대폰 번호 인증을 해주세요");
-		        return;
-		    }
-			
-			//휴대폰 인증검사 체크여부 
-			if(!bTelCheckDuplicateCheck){
-		        alert("휴대폰 번호 인증을 해주세요");
-		        return;
-		    }
+		
+		if($("input#tel").val().trim() == ""){
+			alert("핸드폰 번호는 필수 입력 사항입니다.\r\n핸드폰 번호를 입력해주세요.");
+			return;
+			if($("#tel").val().trim() != "${(sessionScope.loginuser).mobile}") {	
+				//휴대폰 번호 검사 체크여부 
+				if(!bTelDuplicateCheck){
+			        alert("휴대폰 번호 인증을 해주세요");
+			        return;
+			    }
+				
+				//휴대폰 번호 검사 체크여부 
+				if(!bTelDuplicateCheck){
+			        alert("휴대폰 번호 인증을 해주세요");
+			        return;
+			    }
+				 
+				//휴대폰 인증검사 체크여부 
+				if(!bTelCheckDuplicateCheck){
+			        alert("휴대폰 번호 인증을 해주세요");
+			        return;
+			    }
+			}
 		}
 			
-		if($("#email").val().trim() != "${(sessionScope.loginuser).email}" && $("#email").val().trim() != "") {			
-			//이메일 중복체크 검사 
-			if (!bEmailDuplicateCheck) {
-				alert("이메일 중복확인을 해주세요");
-				return;
-			}			
+		
+		if($("input#email").val().trim() == ""){
+			alert("이메일은 필수 입력 사항입니다.\r\n이메일을 입력해주세요.");
+			return;
+			
+			if($("#email").val().trim() != "${(sessionScope.loginuser).email}") {			
+				//이메일 중복체크 검사 
+				if (!bEmailDuplicateCheck) {
+					alert("이메일 중복확인을 해주세요");
+					return;
+				}			
+			}
+			
 		}
 		
 		else{
@@ -899,7 +911,7 @@ input#userid:focus {outline:none;}
 			                           <input type="radio" class="gender" name="gender" value="2" id="female"/>
 			                           <label for="female" class="text_position">여자</label>
 			                           
-			                           <input type="radio" class="gender" name="gender" value="3" id="none"/>
+			                           <input type="radio" class="gender" name="gender" value="0" id="none"/>
 			                           <label for="none" class="text_position">선택안함</label>
 		                             </td>
 			                     </tr>

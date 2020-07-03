@@ -54,7 +54,8 @@ public class MyPageMyInfoUpdateEndAction extends AbstractController {
 			
 			int n = memberdao.updateMember(membervo);
 						
-			String message = "";			
+			String message = "";
+			String loc = "";
 			
 			if(n == 1) {
 				message = "회원정보가 수정되었습니다.";
@@ -72,13 +73,14 @@ public class MyPageMyInfoUpdateEndAction extends AbstractController {
 				loginuser.setBirthday(birthday);
 				
 				session.setAttribute("loginuser", loginuser);
+				
+				loc = request.getContextPath()+"/member/myPageMyInfoUpdatePW.do";
 			}
 			else {
 				message = "회원정보 수정에 실패했습니다.";
+				loc = "javascript:history.back()";
 			}
-			
-			String loc = "javascript:history.back()";
-			
+	  
 			request.setAttribute("message", message);
 			request.setAttribute("loc", loc);
 			
