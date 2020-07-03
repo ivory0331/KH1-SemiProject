@@ -429,20 +429,16 @@ public class MemberDAO implements InterMemberDAO {
 		try {
 			conn = ds.getConnection();
 			
-			String sql= " select RNO, order_num, order_date, price, product_name, product_count " + 
+			String sql= " select RNO, order_num, order_date, price " + 
 						" from " + 
 						" (  " + 
-						"    select rownum AS RNO, order_num, order_date, price, product_name, product_count " + 
+						"    select rownum AS RNO, order_num, order_date, price " + 
 						"    from " + 
-						"    (select O.order_num " + 
-						"          , to_char(O.order_date,'yyyy.mm.dd') as order_date " + 
-						"          , O.price " + 
-						"          , P.product_name " + 
-						"          , OP.product_count  " + 
-						"     from order_table O join order_product_table OP " + 
-						"     on O.order_num = OP.fk_order_num join product_table P " + 
-						"     on OP.fk_product_num = P.product_num " + 
-						"     where O.fk_member_num = ? " + 
+						"    (select order_num " + 
+						"          , to_char(order_date,'yyyy.mm.dd') as order_date " + 
+						"          , price " + 
+						"     from order_table   " + 
+						"     where fk_member_num = ? " + 
 						"    ) V " + 
 						" ) T " + 
 						" where T.RNO between ? and ? ";
@@ -452,8 +448,8 @@ public class MemberDAO implements InterMemberDAO {
 			int loginuserGetMemberNum = Integer.parseInt(paraMap.get("loginuserGetMemberNum"));
 			
 			pstmt.setInt(1, loginuserGetMemberNum);
-			pstmt.setInt(2,(currentShowPageNo * 13) - (13 - 1) );
-			pstmt.setInt(3, (currentShowPageNo * 13) ); // 공식
+			pstmt.setInt(2, (currentShowPageNo * 5) - (5 - 1) );
+			pstmt.setInt(3, (currentShowPageNo * 5) ); // 공식
 			
 			rs = pstmt.executeQuery();
 
@@ -463,14 +459,16 @@ public class MemberDAO implements InterMemberDAO {
 				ohvo.setOrder_num(rs.getInt("order_num"));
 				ohvo.setOrder_date(rs.getString("order_date"));
 				ohvo.setPrice(rs.getInt("price"));
-				ohvo.setProduct_name(rs.getString("product_name"));
-				ohvo.setProduct_cnt(rs.getInt("product_count"));
 				
 				orderHistoryList.add(ohvo);
 			}			
 			rs.close();
 			
-			sql = " select product_name from order_product_table join product_table on fk_product_num = product_num where fk_order_num = ? ";
+			sql = " select product_name "
+				+ " from order_product_table join product_table "
+				+ " on fk_product_num = product_num "
+				+ " where fk_order_num = ? ";
+			
 			pstmt = conn.prepareStatement(sql);
 
 			for (int i = 0; i < orderHistoryList.size(); i++) {

@@ -301,7 +301,7 @@ input[type=text] {
 													</dd>
 												</dl>
 											</div>
-										<textarea name="content" id="text_content" style="width: 100%; height: 474px; border:solid 1px #ccc" class="editing_area" required > </textarea>
+										<textarea name="content" id="text_content" style="resize: none; width: 100%; height: 474px; border:solid 1px #ccc" class="editing_area" required > </textarea>
 									</td>
 								</tr>
 								

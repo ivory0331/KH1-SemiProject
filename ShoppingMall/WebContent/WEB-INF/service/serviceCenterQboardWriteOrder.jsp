@@ -166,7 +166,7 @@ a:hover {
 												<td style="font: normal 8pt 돋움; color: #A8A8A8" >${ohvo.order_date}</td>
 												<td style="font: normal 8pt 돋움; color: #A8A8A8" >${ohvo.product_name}..
 													<c:if test="${ohvo.product_cnt != 0}">외 ${ohvo.product_cnt}건</c:if></td>
-												<td style="font: normal 8pt 돋움; color: #A8A8A8" align="right">${ohvo.product_cnt}개</td>
+												<td style="font: normal 8pt 돋움; color: #A8A8A8" align="right">${ohvo.product_cnt+1}개</td>
 												<td style="font: normal 8pt 돋움; color: #A8A8A8" align="right"><fmt:formatNumber value="${ohvo.price}" pattern="###,###"/>원</td>
 												<td><input type="radio" name="ordernoSelect" onclick="goWriteOrderNum('${ohvo.order_num}')"></td>
 											</tr>									
