@@ -232,12 +232,12 @@ public class OrderDAO implements InterOrderDAO {
 	
 	// 페이징처리를 한, 특정 회원의 모든 주문내역 보여주기
 	@Override
-	public List<OrderHistoryVO> selectPagingOneMemberAllOrder(HashMap<String, String> paraMap, int member_num) throws SQLException {
+	public List<OrderHistoryVO> selectPagingOneMemberAllOrder(HashMap<String, String> paraMap, int member_num, int option) throws SQLException {
 		
 		List<OrderHistoryVO> orderHistoryList= new ArrayList<>();
 		
 		try {
-			conn = ds.getConnection();
+			conn = ds.getConnection();		
 			
 	        String sql= " select RNO, order_num, order_date, price, order_state " + 
 		                " from " + 
@@ -249,17 +249,44 @@ public class OrderDAO implements InterOrderDAO {
 		                "          , O.price, OS.order_state " + 
 		                " 	  from order_table O join order_state_table OS " + 
 		                " 	  on O.fk_category_num = OS.category_num " + 
-		                "	  where fk_member_num = ? " + 
-		                "	  order by order_num desc " + 
-		                "    ) V " + 
-		                " ) T " + 
-		                " where T.RNO between ? and ? ";
+		                "	  where fk_member_num = ? ";
 			
 	        int currentShowPageNo = Integer.parseInt(paraMap.get("currentShowPageNo"));
-			int sizePerPage = Integer.parseInt(paraMap.get("sizePerPage"));	        
+			int sizePerPage = Integer.parseInt(paraMap.get("sizePerPage"));	    
+			
+			String term = paraMap.get("term");
+			int colname = 0;
+			
+			if ("all".equals(term) ) {
+				sql += " ";
+			}
+			
+			else if(  (Integer.toString(option)).equals(term) ) {
+				colname = option;
+				sql += " and to_char(O.order_date,'yyyy') = "+colname+" ";
+			}					
+			
+			else if( (Integer.toString(option-1)).equals(term) ) {
+				colname = option-1;
+				sql += " and to_char(O.order_date,'yyyy') = "+colname+" ";
+			}
+			
+			else if( (Integer.toString(option-2)).equals(term) ) {
+				colname = option-2;		
+				sql += " and to_char(O.order_date,'yyyy') = "+colname+" ";
+			}
+										
+			else {
+				sql += " ";
+			}
+			
+			sql +=  "	  order by order_num desc " + 
+	                "    ) V " + 
+	                " ) T " + 
+	                " where T.RNO between ? and ? ";
 	        
 			pstmt = conn.prepareStatement(sql);
-			
+			System.out.println("~~~~확인용 : "+sql);
 			pstmt.setInt(1, member_num);
 			pstmt.setInt(2, (currentShowPageNo * sizePerPage) - (sizePerPage - 1) ); // 공식
 			pstmt.setInt(3, (currentShowPageNo * sizePerPage) ); // 공식 
@@ -316,7 +343,7 @@ public class OrderDAO implements InterOrderDAO {
 	
 	// 페이징처리를 위한 특정 회원의 모든 주문내역에 대한 총페이지갯수 알아오기(select)
 	@Override
-	public int getPossibleReviewTotalPage(HashMap<String, String> paraMap, int member_num) throws SQLException {
+	public int getPossibleReviewTotalPage(HashMap<String, String> paraMap, int member_num, int option) throws SQLException {
 		
 		int totalpage = 0;
 		String sql = "";
@@ -328,8 +355,35 @@ public class OrderDAO implements InterOrderDAO {
 	        		"	, to_char(O.order_date,'yyyy.mm.dd hh24:mi:ss') as order_date " + 
 	        		"	, O.price " + 
 	        		"	from order_table O " + 
-	        		"	where O.fk_member_num = ? " + 
-	        		"	order by O.order_num desc ) ";
+	        		"	where O.fk_member_num = ? ";
+	        		
+	        String term = paraMap.get("term");
+			int colname = 0;
+			
+			if ("all".equals(term) ) {
+				sql += " ";
+			}
+			
+			else if(  (Integer.toString(option)).equals(term) ) {
+				colname = option;
+				sql += " and to_char(O.order_date,'yyyy') = "+colname+" ";
+			}					
+			
+			else if( (Integer.toString(option-1)).equals(term) ) {
+				colname = option-1;
+				sql += " and to_char(O.order_date,'yyyy') = "+colname+" ";
+			}
+			
+			else if( (Integer.toString(option-2)).equals(term) ) {
+				colname = option-2;		
+				sql += " and to_char(O.order_date,'yyyy') = "+colname+" ";
+			}
+										
+			else {
+				sql += " ";
+			}
+    
+	        sql += "	order by O.order_num desc ) ";
 	         
 	        pstmt = conn.prepareStatement(sql);
 	        pstmt.setInt(1, Integer.parseInt(paraMap.get("sizePerPage")) );
@@ -349,7 +403,36 @@ public class OrderDAO implements InterOrderDAO {
 		
 	}
 
+	
+	// 기간의 옵션 값 구하기
+	@Override
+	public int termOption() throws SQLException {
 		
+		int term = 0;
+		
+		try {
+	        conn = ds.getConnection();
+	      
+	        String sql = " select extract(year from sysdate) from dual ";
+	         
+	        pstmt = conn.prepareStatement(sql);
+	                                 
+	        rs = pstmt.executeQuery();
+	      
+	        rs.next();
+	      
+	        term = rs.getInt(1);
+	      
+	    } finally {
+	      close();
+	    }		
+		
+		return term;
+	}
+
+	
+
+	
 }
 
 
