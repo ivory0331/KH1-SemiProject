@@ -20,10 +20,13 @@ public interface InterOrderDAO {
 	OrderVO OneOrderInfoDetail(String order_num) throws SQLException;
 
 	// 페이징처리를 한, 특정 회원의 모든 주문내역 보여주기
-	List<OrderHistoryVO> selectPagingOneMemberAllOrder(HashMap<String, String> paraMap, int member_num) throws SQLException;
+	List<OrderHistoryVO> selectPagingOneMemberAllOrder(HashMap<String, String> paraMap, int member_num, int option) throws SQLException;
 
 	// 페이징처리를 위한 특정 회원의 모든 주문내역에 대한 총페이지갯수 알아오기(select)
-	int getPossibleReviewTotalPage(HashMap<String, String> paraMap, int member_num) throws SQLException;
+	int getPossibleReviewTotalPage(HashMap<String, String> paraMap, int member_num, int option) throws SQLException;
+
+	// 기간의 옵션 값 구하기
+	int termOption() throws SQLException;
 
 	
 
