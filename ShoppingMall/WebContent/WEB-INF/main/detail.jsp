@@ -2,6 +2,7 @@
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <% String ctxPath = request.getContextPath(); %>
 <% ServletContext context = request.getSession().getServletContext(); 
    String realPath = context.getRealPath("Upload");
@@ -289,6 +290,7 @@
 		
 		for(var i=0; i<$(".detailTablePart").length; i++){
 			offSet[i] = $(".detailTablePart")[i].offsetTop;
+			console.log(offSet[i]);
 		}
 		
 		
@@ -328,7 +330,7 @@
 	
 	function goTable(num){
 		
-		var top = offSet[num]-Number("90");
+		var top = offSet[num]-Number("150");
 		console.log("top:"+top);
 		$('html, body').animate({scrollTop : top}, 0);
 	}
@@ -578,10 +580,17 @@
 							<dt>분류</dt>
 							<dd>${product.category_content} / ${product.subcategory_content }</dd>
 						</dl>
+						
 						<dl>
 							<dt>판매단위</dt>
 							<dd>${product.unit }</dd>
 						</dl>
+						<c:if test="${!empty(product.weight)}">
+						<dl class="underLine">
+							<dt>중량/용량</dt>
+							<dd>${product.weight}</dd>
+						</dl>
+						</c:if>
 						<dl class="underLine">
 							<dt>배송구분</dt>
 							<dd>택배배송</dd>
@@ -596,6 +605,25 @@
 						<dl class="underLine">
 							<dt>포장타입</dt>
 							<dd>${product.packing}</dd>
+						</dl>
+						</c:if>
+						<c:if test="${!empty(product.shelf)}">
+						<dl class="underLine">
+							<dt>유통기한</dt>
+							<dd>${product.shelf}</dd>
+						</dl>
+						</c:if>
+						<c:if test="${!empty(product.information)}">
+						<dl class="underLine">
+							<dt>안내사항</dt>
+							<c:set var="list" value="${product.information}" />
+							<dd>
+								<ul>
+								<c:forEach items="${fn:split(list, '.') }" var="item">
+								    <li>${item}</li>
+								</c:forEach>
+								</ul>
+							</dd>
 						</dl>
 						</c:if>
 						<dl class="underLine">
@@ -623,26 +651,26 @@
 						<div style="clear:both;"></div>
 						<div id="mainImage" style="width:100%; padding-bottom:10px; border-bottom:solid 1px #bfbfbf;">
 							<c:if test="${product.imageList!=null}">
-								<c:forEach var="image" items="${product.imageList}">
-									<img src="<%=ctxPath %>/images/${image}"  style="margin:20px 0;"/>
+								<c:forEach var="image" items="${product.imageList}" varStatus="status">
+									<c:if test="${status.index == 0}">
+										<img src="<%=ctxPath %>/images/${image}"  style="margin:20px 0;"/>
+									</c:if>
 								</c:forEach>
 							</c:if>
 							
 							<h3 >${product.product_name}</h3>
 						</div>
-						<div style="margin-top:15px; font-size: 18pt; line-height: 32px; color:gray; font-family: noto sans; font-weight: 200;">
+						<div style="text-align:left; margin-top:15px; font-size: 14pt; line-height: 32px; color:gray; font-family: noto sans; font-weight: 200;">
 							${product.explain}
 						</div>
-
-
-						<c:if test="${not empty product.imageList}">
-							<c:forEach var="image" items="${product.imageList}">
-								<img src="<%=ctxPath %>/images/${image}" style="margin: 0 auto;"/>
+						<c:if test="${product.imageList!=null}">
+							<c:forEach var="image" items="${product.imageList}" varStatus="status">
+								<c:if test="${status.index != 0}">
+									<img src="<%=ctxPath %>/images/${image}"  style="margin:20px 0;"/>
+								</c:if>
 							</c:forEach>
 						</c:if>
 						
-						<div>${product.explain}</div>
-
 					</div>
 				
 					

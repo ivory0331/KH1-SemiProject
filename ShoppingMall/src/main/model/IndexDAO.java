@@ -137,11 +137,12 @@ public class IndexDAO implements InterIndexDAO{
 		List<String> imageList = new ArrayList<String>();
 		try {
 			conn = ds.getConnection();
-			String sql = " select P.product_num, P.product_name, P.price, P.sale, P.stock, P.origin, P.packing, P.unit, P.representative_img, P.explain, C.category_content , S.subcategory_content" + 
+			String sql = " select P.product_num, P.product_name, P.price, P.sale, P.stock, P.origin, P.packing, P.unit, P.representative_img, P.explain, C.category_content , S.subcategory_content, "
+					   + " P.weight, P.shelf, P.information " + 
 
 					" from product_table P join product_category_table C \r\n" + 
 					" on P.fk_category_num = C.category_num  " + 
-					" join product_subcategory_table S\r\n" + 
+					" join product_subcategory_table S" + 
 					" on P.fk_subcategory_num = S.subcategory_num " + 
 					" where P.product_num = ? ";
 			pstmt = conn.prepareStatement(sql);
@@ -163,13 +164,15 @@ public class IndexDAO implements InterIndexDAO{
 				product.setExplain(rs.getString(10));
 				product.setCategory_content(rs.getString(11));
 				product.setSubcategory_content(rs.getString(12));
-				
+				product.setWeight(rs.getString(13));
+				product.setShelf(rs.getString(14));
+				product.setInformation(rs.getString(15));
 				product.setFinalPrice();
 			}
 			rs.close();
 			
 			// 해당 상품 상세 이미지 불러오기
-			sql = " select image from product_image_table where fk_product_num = ? ";
+			sql = " select image from product_image_table where fk_product_num = ? order by product_image_num asc";
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, idx);
 			rs = pstmt.executeQuery();
@@ -806,8 +809,8 @@ public class IndexDAO implements InterIndexDAO{
 			
 			sql = " insert into order_table(order_num, recipient, recipient_mobile, "
 					   + " recipient_postcode, recipient_address, recipient_detailaddress, "
-					   + " price, memo, fk_member_num, fk_category_num ) "
-					   + " values(seq_order_table.nextval, ?, ?, ?, ?, ?, ?, ?, ?,'1') ";
+					   + " price, memo, fk_member_num ) "
+					   + " values(seq_order_table.nextval, ?, ?, ?, ?, ?, ?, ?, ?) ";
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, delivery.get("receiver"));
 			pstmt.setString(2, delivery.get("reciverMobbile"));
@@ -1859,6 +1862,12 @@ public class IndexDAO implements InterIndexDAO{
 		
 		
 		return totalPage;
+	}
+
+	@Override
+	public int orderStateChane(Map<String, String> paraMap) throws SQLException {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 
 	

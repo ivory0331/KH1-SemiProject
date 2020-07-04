@@ -8,9 +8,12 @@ public class ProductVO {
 	private String product_name;
 	private int price;
 	private int stock;
+	private String weight;
 	private String origin;
 	private String packing;
 	private String unit;
+	private String shelf;
+	private String information;
 	private String registerdate;
 	private int sale;
 	private int fk_category_num; 
@@ -176,6 +179,35 @@ public class ProductVO {
 
 	public void setImageList(List<String> imageList) {
 		this.imageList = imageList;
+	}
+	
+	
+	public String getWeight() {
+		return weight;
+	}
+
+	public void setWeight(String weight) {
+		this.weight = weight;
+	}
+
+	public String getShelf() {
+		return shelf;
+	}
+
+	public void setShelf(String shelf) {
+		this.shelf = shelf;
+	}
+
+	public String getInformation() {
+		return information;
+	}
+
+	public void setInformation(String information) {
+		this.information = information;
+	}
+
+	public void setFinalPrice(int finalPrice) {
+		this.finalPrice = finalPrice;
 	}
 
 	////////////////////////////////////////////////////////////

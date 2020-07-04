@@ -111,6 +111,33 @@
 		frm.method="get";
 		frm.submit();
 	}
+	
+	function goChange(num){
+		var state = "";
+		$("input:checkbox[name='state']:checked").each(function(index, item){
+			
+			state += item.value+",";
+			
+		});
+		
+		if(state.trim()==""){
+			alert("상태를 변경할 주문을 선택해주세요");
+			return false;
+		}
+		
+		 $.ajax({
+			url:"<%=ctxPath%>/manager/managerOrderStateChange.do",
+			data:{"value":num, "state":state},
+			dataType:"JSON",
+			success:function(json){
+				alert(json);
+				goOrderSelect();
+			},
+			error:function(e){
+				alert(e);
+			}
+		}); 
+	}
 </script>
 </head>
 <body>
@@ -178,7 +205,7 @@
 						${pageBar}
 					</div>
 					<div class="userBtn" align="right">
-						<span onclick = "">상품준비중</span><span onclick = "">배송중</span><span onclick = "">배송완료</span>
+						<span onclick = "goChange('1')">상품출하</span><span onclick = "goChange('1')">배송중</span><span onclick = "goChange('1')">배송완료</span>
 					</div>
 					</form>
 				</div>

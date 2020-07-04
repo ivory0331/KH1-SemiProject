@@ -120,6 +120,9 @@ public interface InterIndexDAO {
 	// 주문관리 주문테이블 행의 총 갯수
 	int getTotalPageOrder(HashMap<String, String> paraMap)throws SQLException;
 
+	// 특정 주문정보의 배송상태 변경
+	int orderStateChane(Map<String, String> paraMap)throws SQLException;
+
 
 	
 

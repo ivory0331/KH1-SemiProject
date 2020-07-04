@@ -3,14 +3,17 @@ show user;
 
 select * FROM tab;
 
+drop table review_image_table;
 drop table review_table;
 drop table order_product_table;
 drop table one_inquiry_table;
 drop table one_category_table;
 drop table order_table;
 drop table order_state_table;
+drop table product_inquiry_image_table;
 drop table product_inquiry_table;
-drop table product_detail_table;
+drop table product_image_table;
+drop table basket_table;
 drop table product_table;
 drop table product_category_table;
 drop table product_subcategory_table;
@@ -18,7 +21,7 @@ drop table notice_table;
 drop table FAQ_table;
 drop table inquiry_category_table;
 drop table member_table;
-drop table basket_table;
+
 
 -- 회원 테이블 --
 create table member_table
@@ -44,14 +47,9 @@ create table member_table
 ,constraint ck_member_table_status CHECK (status in(0,1,2))
 );
 
-select*
-from member_table;
 
-update member_table set pwd='9695b88a59a1610320897fa84cb7e144cc51f2984520efb77111d94b402a8382'
-where userid='hyeminj98';
 
-commit;
-
+drop sequence seq_member_table;
 -- 회원테이블에 사용할 시퀀스 생성 --
 create sequence seq_member_table
 start with 1
@@ -61,6 +59,11 @@ nominvalue
 nocycle
 nocache;
 
+-- 관리자 계정으로 변환
+update member_table set status=2;
+
+commit;
+
 
 -- 상품 대분류 카테고리 테이블 생성 --
 create table product_category_table
@@ -69,15 +72,15 @@ create table product_category_table
 ,constraint pk_category_num primary key (category_num)
 );
 
-select*
-from product_category_table;
 
 insert into product_category_table(category_num, category_content) values(1,'채소');
 insert into product_category_table(category_num, category_content) values(2,'과일 견과');
 insert into product_category_table(category_num, category_content) values(3,'수산 해산');
-insert into product_category_table(category_num, category_content) values(4,'정육 계란');
+insert into product_category_table(category_num, category_content) values(4,'정육');
 insert into product_category_table(category_num, category_content) values(5,'음료 우유');
 commit;
+
+
 
 -- 상품 소분류 카테고리 테이블 생성 --
 create table product_subcategory_table
@@ -106,12 +109,8 @@ insert into product_subcategory_table(subcategory_num, subcategory_content) valu
 insert into product_subcategory_table(subcategory_num, subcategory_content) values(53,'우유 두유 요거트');
 commit;
 
-select * from product_category_table;
-select * from product_subcategory_table;
 
-select * from product_table;
-  alter table product_table
-  modify product_name varchar2(200);
+
   
 -- 상품 테이블 생성 --
 create table product_table
@@ -119,9 +118,12 @@ create table product_table
 ,product_name   varchar2(200) not null -- 상품이름 필수+고유
 ,price          number  not null -- 가격 필수
 ,stock          number not null -- 재고 필수
+,weight         varchar2(200)   -- 중량/용량
 ,origin         varchar2(100) -- 원산지
 ,packing      varchar2(80) -- 포장방법
 ,unit           varchar2(50) -- 단위
+,shelf          varchar2(100) -- 유통기한
+,information    varchar2(500) -- 안내사항
 ,registerdate   date default sysdate -- 등록날짜
 ,sale           number default 0 -- 세일 %값
 ,best_point     number default 0 -- 관리자가 추천하는 수 (MD추천)
@@ -136,50 +138,12 @@ create table product_table
 ,constraint fk_product_category_num FOREIGN key(fk_category_num) REFERENCES product_category_table(category_num)
 ,constraint fk_product_subcategory_num FOREIGN key(fk_subcategory_num) REFERENCES product_subcategory_table(subcategory_num)
 );
-drop  sequence seq_product_table;
 
-show user;
 
-update product_table set fk_category_num = 5, fk_subcategory_num=51, product_name='고양이이' 
-where product_num=251;
-
-update product_table set fk_category_num = ?, fk_subcategory_num=?, product_name=?,
-unit=?,packing=?,origin=?,price=?,sale=?,best_point=?,seller=?,seller_phone=?,stock=?,explain=?
-where product_num=?;
-
-select*
-from product_table;
-
-update product_image_table set image=?
-where product_num=?;
 
 commit;
 
-select P.product_num as PRODUCT_NUM, c.category_content as CATEGORY_CONTENT, S.subcategory_content as SUBCATEGORY_CONTENT, 
-       P.product_name as PRODUCT_NAME, P.unit as unit, P.packing as packing, P.origin as origin, P.price as price, P.sale as sale,
-       P.best_point as best_point, P.seller as seller, P.seller_phone as seller_phone, P.stock as STOCK,
-       P.explain as explain, P.representative_img as representative_img
-from product_table P join product_category_table C
-on P.fk_category_num = C.category_num
-join product_subcategory_table S
-on P.fk_subcategory_num = S.subcategory_num
-where product_num=251;
-
-select image
-from product_image_table
-where fk_product_num=251;
-
-select seq_product_table.nextval AS PNUM 
-from dual;
--- 진하
-select last_number from user_sequences where SEQUENCE_NAME = 'SEQ_PRODUCT_TABLE';
-
-select*
-from product_table
-order by product_num desc;
-
-select last_number from user_sequences where SEQUENCE_NAME = 'SEQ_PRODUCT_TABLE';
-SELECT seq_product_table.CURRVAL FROM DUAL;
+drop  sequence seq_product_table;
 
 -- 상품 테이블에 사용할 시퀀스 생성 --
 create sequence seq_product_table
@@ -190,38 +154,31 @@ nominvalue
 nocycle
 nocache;
 
-select seq_product_table.nextval AS PNUM
-from dual;
 
-update product_table set explain = 
-'몸통과 다리가 온전히 붙어 있는 통문어는 참 쓸 곳이 많아요.한 냄비 가득 푸짐하게 자려내는 해물찜이나 큼직한 튀김의 메인 재료는 물론 제수용으로도 알맞지요'
-where product_num=151;
-commit;
+drop table product_image_table;
+
 -- 상품 이미지와 설명 테이블 생성 --
 
 create table product_image_table
-(fk_product_num number not null -- 상품테이블에 있는 상품번호를 참조받는 컬럼
+(product_image_num number not null
+,fk_product_num number not null -- 상품테이블에 있는 상품번호를 참조받는 컬럼
 ,image  varchar2(200)
+,constraint pk_product_image_table primary key (product_image_num)
 ,constraint fk_prodcut_detail_num FOREIGN key (fk_product_num) REFERENCES product_table(product_num) on DELETE CASCADE
 );
 
-select*
-from product_table where product_name like '%'||'오징어'||'%';
 
-select*
-from product_table
-order by product_num desc;
+drop sequence seq_product_table;
+-- 상품 이미지에서 사용할 시퀀스 -- 
+create sequence seq_product_table
+start with 1
+increment by 1
+nomaxvalue
+nominvalue
+nocycle
+nocache;
 
-update product_image_table set image='상세1.jpg'
-where image='고양이123.jpg';
-commit;
 
-select*
-from product_image_table;
-
-select image
-from product_image_table
-where image='고양이18.jpg';
 
 -- 상품문의 테이블 생성 --
 create table product_inquiry_table
@@ -230,6 +187,7 @@ create table product_inquiry_table
 ,content    varchar2(4000) not null -- 내용 필수
 ,write_date date default sysdate    -- 작성날짜 
 ,answer     varchar2(4000)          -- 관리자의 답변(문의가 들어오면 바로 답변을 받는 것이 아니기에 null허용)
+,answer_date date                   -- 관리자 답변 작성 날짜
 ,fk_member_num  number not null     -- 회원테이블의 회원번호를 참조받는 컬럼 필수(참조하는 값이 삭제되면 따라서 삭제됨)
 ,fk_product_num number not null     -- 상품테이블의 회원번호를 참조받는 컬럼 필수(참조하는 값이 삭제되면 따라서 삭제됨)
 ,emailFlag      number(1) default 0 -- 이메일로 답변 받고자 하는지 판단하는 컬럼
@@ -243,32 +201,29 @@ create table product_inquiry_table
 ,constraint ck_secretFlag check (secretFlag in(0,1))
 );
 
+drop sequence seq_product_inquiry;
+-- 상품문의 테이블에 사용할 시퀀스 생성 --
+create sequence seq_product_inquiry
+start with 1
+increment by 1
+nomaxvalue
+nominvalue
+nocycle
+nocache;
+
 -- 상품문의 이미지 테이블 --
 create table product_inquiry_image_table
-(fk_inquiry_num number not null
+(inquiry_image_num number not null
+,fk_inquiry_num number not null
 ,image varchar2(100)
+,constraint pk_inquiry_image_num primary key (inquiry_image_num)
 ,constraint fk_inquiry_image FOREIGN key (fk_inquiry_num) REFERENCES product_inquiry_table(inquiry_num) on delete CASCADE
 );
 
-select * from product_inquiry_image_table;
 
-select * from product_inquiry_table;
-
-update product_inquiry_table set answer = '답변입니다.' where inquiry_num=9;
-
-commit;
-
-select count(*) from 
-    (select T.RON, answer, inquiry_num, subject, content from
-        (select rownum as RON, answer, inquiry_num, subject, content from product_inquiry_table)T 
-    where T.RON between 1 and 0)N 
-where N.answer is null;
-
-SELECT LAST_NUMBER 
-FROM  USER_SEQUENCES WHERE  SEQUENCE_NAME = 'SEQ_PRODUCT_INQUIRY';
-
--- 상품문의 테이블에 사용할 시퀀스 생성 --
-create sequence seq_product_inquiry
+drop sequence seq_product_inquiry_image;
+-- 상품문의 이미지 테이블에 사용할 시퀀스 생성 --
+create sequence seq_product_inquiry_image
 start with 1
 increment by 1
 nomaxvalue
@@ -284,41 +239,17 @@ create table order_state_table
 ,constraint pk_order_state  primary key(category_num)
 );
 
-select * FROM order_state_table;
-
-insert into order_state_table(category_num, order_state) values(1, '상품준비중');
+insert into order_state_table(category_num, order_state) values(0, '상품준비중');
+insert into order_state_table(category_num, order_state) values(1, '상품출하');
 insert into order_state_table(category_num, order_state) values(2, '배송중');
 insert into order_state_table(category_num, order_state) values(3, '배송완료');
 
 commit;
 
-update 
-
--- 주문내역 상품 상세보기(혜민) 
-select P.representative_img, P.product_name, OP.price, OP.product_count,
-	OS.order_state, OP.reviewFlag
-from product_table P join order_product_table OP
-on P.product_num = OP.fk_product_num
-join order_table O
-on OP.fk_order_num = O.order_num
-join order_state_table OS
-on O.fk_category_num = OS.category_num
-where OP.fk_order_num = 1;
 
 
--- 작성가능 후기(혜민)
-select count(*)
-from(
-select OP.fk_order_num, P.representative_img, P.product_name, OP.product_count
-from order_table O join order_product_table OP 
-on O.order_num = OP.fk_order_num
-join product_table P
-on OP.fk_product_num = P.product_num
-where O.fk_member_num = 1 and OP.reviewFlag = 0 and O.fk_category_num = 3);
 
 
-select*
-from member_table;
 
 -- 주문 정보 테이블 생성 --
 create table order_table
@@ -332,38 +263,16 @@ create table order_table
 ,price  number  not null    -- 주문금액 필수
 ,memo   varchar2(200)       -- 요청사항
 ,fk_member_num  number  not null    -- 회원테이블의 회원번호를 참조하는 컬럼
-,fk_category_num number not null    -- 주문상태 테이블의 주문상태 번호를 참조하는 컬럼
+,fk_category_num number default 0 not null    -- 주문상태 테이블의 주문상태 번호를 참조하는 컬럼
 ,constraint pk_order_table  primary key(order_num)
 ,constraint fk_order_member FOREIGN key(fk_member_num) REFERENCES member_table(member_num)
 ,constraint fk_order_category foreign key(fk_category_num) references order_state_table(category_num)
 );
-select * from order_table;
-select * from order_product_table;
-select * from basket_table;
-
-select*
-from order_table;
-
-9695b88a59a1610320897fa84cb7e144cc51f2984520efb77111d94b402a8382
-uYg23XNX4EHriQrBgXSXy73zzuR4KTIzxwM10BQ5Vek=
 
 
--- 진하
 
-select member_num, name, userid, email, mobile, postcode, address, detailaddress,gender,birthday,to_char(registerdate,'yyyy-mm-dd')
-from member_table
-where member_num='40';
 
--- 주문 정보 테이블
-select*
-from order_table;
-insert into order_table(order_num, recipient, recipient_mobile, recipient_postcode, recipient_address, recipient_detailaddress, price, fk_member_num, fk_category_num)
-values(1,'나나','01012345678','12345','인천 어쩌고 저쩌고','1층','12800','40','3');
-insert into order_table(order_num, recipient, recipient_mobile, recipient_postcode, recipient_address, recipient_detailaddress, price, fk_member_num, fk_category_num)
-values(seq_order_table.nextval,'미미','01012345678','12345','서울','1층','50000','40','2');
 
-select*
-from order_product_table;
 
 -- 주문 상품 정보 테이블 (주문번호 1)
 insert into order_product_table(product_count, fk_order_num, fk_product_num, price, reviewFlag)
@@ -385,22 +294,7 @@ values(1,2,152,3000,0);
 
 commit;
 
--- 주문번호 대표상품명 외 1개 결제금액 배송상태
-
-update order_table set fk_category_num = 3
-where order_num = 1;
-
-update order_table set fk_category_num = 3
-where order_num = 2;
-
-update order_table set fk_category_num = 3
-where order_num = 4;
-
-update order_table set fk_category_num = 3
-where order_num = 5;
-
-commit;
-
+drop sequence seq_order_table;
 -- 주문 테이블에 사용할 시퀀스 생성 --
 create sequence seq_order_table
 start with 1
@@ -411,101 +305,6 @@ nocycle
 nocache;
 
 
-
--- 금요일
-
-select RON, review_num, subject, content, write_date,
-       fk_product_num, fk_order_num, fk_member_num, product_name
-from 
-    (select rownum as RON, review_num, subject, content, write_date,    
-            fk_product_num, fk_order_num, fk_member_num, product_name
-     from 
-        (select R.review_num, R.subject, R.content, to_char(R.write_date,'yyyy-mm-dd') as write_date,
-                R.fk_product_num, R.fk_order_num, R.fk_member_num, P.product_name
-         from review_table R join member_table M 
-         on R.fk_member_num = M.member_num 
-         join product_table P
-         on P.product_num = R.fk_product_num
-         where R.fk_member_num = 40 order by review_num desc
-         )V
-    )T 
-where T.RON between 1 and 10;
-
-select*
-from review_table;
-
-select*
-from order_table;
-
-insert into review_table(review_num, subject, content, fk_product_num, fk_order_num, fk_member_num)
-values(1, '좋아요', '맘에 듭니다', 69, 1, 40);
-insert into review_table(review_num, subject, content, fk_product_num, fk_order_num, fk_member_num)
-values(2, '굿굿굿 얄리얄리얄라성 얄라리얄라', '사진첨부해봐야되는데', 70, 1, 40);
-
-insert into review_table(review_num, subject, content, fk_product_num, fk_order_num, fk_member_num)
-values(seq_review_table.nextval, '1번후기', '굿굿', 146, 2, 40);
-insert into review_table(review_num, subject, content, fk_product_num, fk_order_num, fk_member_num)
-values(seq_review_table.nextval, '2번후기', '굿굿', 147, 2, 40);
-insert into review_table(review_num, subject, content, fk_product_num, fk_order_num, fk_member_num)
-values(seq_review_table.nextval, '3번후기', '굿굿굿', 150, 2, 40);
-insert into review_table(review_num, subject, content, fk_product_num, fk_order_num, fk_member_num)
-values(seq_review_table.nextval, '4번후기', '굿굿굿굿', 151, 2, 40);
-insert into review_table(review_num, subject, content, fk_product_num, fk_order_num, fk_member_num)
-values(seq_review_table.nextval, '5번후기', '굿굿굿굿굿', 152, 2, 40);
-
-commit;
-
-select*
-from order_product_table;
-         
-         
-select RON, order_num, representative_img, product_name, price,
-    fk_product_num, order_state
-from    
-(select rownum as RON, order_num, representative_img, product_name
-    ,price, order_date, fk_product_num, order_state
-from
-(select O.order_num , P.representative_img, P.product_name 
-    , O.price, to_char(O.order_date,'yyyy-mm-dd hh24:mi:ss') as order_date
-    , OP.fk_product_num, OS.order_state
-from order_table O
-join order_product_table OP
-on O.order_num = OP.fk_order_num
-join order_state_table OS
-on O.fk_category_num = OS.category_num 
-join product_table P
-on OP.fk_product_num = P.product_num
-where O.fk_member_num = 40
-order by O.order_num desc
-)V
-)T 
-where T.RON between 1 and 5;      
-
-select*
-from order_table;
-
-select*
-from order_state_table;
-
-select * from order_table;
-
-select ceil(count(*)/5) from order_table where fk_member_num = 40;
-
-
-select RNO, order_num, order_date, price, order_state 
-from 
-(
-select rownum AS RNO, order_num, order_date, price, fk_category_num, order_state
-from 
-(select O.order_num, to_char(O.order_date,'yyyy.mm.dd') as order_date, O.price, O.fk_category_num
-from order_table O 
-where O.fk_member_num = 40
-) V 
-join order_state_table S
-on V.fk_category_num = S.category_num 
-) T
-where T.RNO between 1 and 5; 
-
 -- 주문상품 테이블 생성 --
 create table order_product_table
 (product_count  number not null -- 주문한 상품의 갯수 필수
@@ -513,13 +312,13 @@ create table order_product_table
 ,fk_product_num number not null -- 상품테이블의 상품번호를 참조하는 컬럼
 ,price          number not null -- 주문상품의 가격(할인 후)
 ,reviewFlag     number(1) default 0
-,constraint fk_order FOREIGN key (fk_order_num) REFERENCES order_table(order_num)
+,constraint fk_order FOREIGN key (fk_order_num) REFERENCES order_table(order_num) on delete cascade
 ,constraint fk_product FOREIGN key (fk_product_num ) REFERENCES product_table(product_num)
 ,constraint ck_reviewFlag check (reviewFlag in (0,1))
 );
-select * from order_table O join order_product_table OP on O.order_num = OP.fk_order_num;
-select * from order_product_table join product_table on fk_product_num = product_num;
--- 고객 후기 테이블 --
+
+
+
 create table review_table
 (review_num number not null -- 후기 번호 필수+고유 시퀀스 사용
 ,subject    varchar2(100) not null -- 후기 제목  필수
@@ -537,48 +336,30 @@ create table review_table
 ,constraint uq_review_orderProduct UNIQUE (fk_product_num, fk_order_num)
 );
 
-select fk_product_num, fk_order_num from review_table where review_num = 10;
-select fk_product_num, fk_order_num from review_table where review_num = 10;
-select * from review_image_table;
+drop sequence seq_review_table;
+-- 리뷰테이블에 사용할 시퀀스 생성 --
+create sequence seq_review_table
+start with 1
+increment by 1
+nomaxvalue
+nominvalue
+nocycle
+nocache;
 
-select * from review_table;
-delete from review_table where review_num = 11;
-delete from review_image_table where fk_review_num = 5;
-
-update order_product_table set reviewFlag = 0
-where fk_order_num = 2 and fk_product_num = 100;
-
-commit;
-
-select image from review_image_table where fk_review_num = 10;
-
-
-insert into review_table(review_num, subject, content, hit, favorite, fk_product_num, fk_order_num, fk_member_num)
-values(seq_review_table.nextval, '맛있어요', '이렇게 맛있는 음식은 처음이에요', 4, 2, 115, 1, 1);
-
-select R.review_num, P.product_name, R.write_date, R.hit, R.favorite
-	, R.subject, RI.image, R.content
-from product_table P join review_table R
-on P.product_num = R.fk_product_num
-where R.fk_member_num = 3;
 
 -- 후기테이블용 이미지 테이블 생성 --
 create table review_image_table
-(fk_review_num number not null
+(review_image_num number not null
+,fk_review_num number not null
 ,image varchar2(100)
-,constraint fk_review_image FOREIGN key (fk_review_num) REFERENCES review_table(review_num)
+,constraint pk_review_image primary key(review_image_num)
+,constraint fk_review_image FOREIGN key (fk_review_num) REFERENCES review_table(review_num)on delete cascade
 );
  
---- ==== *** 제약조건 삭제하기 *** ==== --- 
-alter table review_image_table
-drop constraint fk_review_image;
- 
---- ==== *** 제약조건 추가하기 *** ==== --- 
-alter table review_image_table
-add constraint fk_review_image foreign key (fk_review_num) references review_table(review_num) on delete cascade;
 
--- 리뷰테이블에 사용할 시퀀스 생성 --
-create sequence seq_review_table
+drop sequence seq_review_image_table;
+-- 리뷰이미지 테이블에 사용할 시퀀스 생성 --
+create sequence seq_review_image_table
 start with 1
 increment by 1
 nomaxvalue
@@ -594,6 +375,20 @@ create table one_category_table
 ,constraint pk_one_category primary key (category_num)
 );
 
+insert into one_category_table(category_num, category_content) values(1, '배송지연/불만');
+insert into one_category_table(category_num, category_content) values(2, '컬리패스(무료배송)');
+insert into one_category_table(category_num, category_content) values(3, '반품문의');
+insert into one_category_table(category_num, category_content) values(4, 'A/S문의');
+insert into one_category_table(category_num, category_content) values(5, '환불문의');
+insert into one_category_table(category_num, category_content) values(6, '주문결제문의');
+insert into one_category_table(category_num, category_content) values(7, '회원정보문의');
+insert into one_category_table(category_num, category_content) values(8, '취소문의');
+insert into one_category_table(category_num, category_content) values(9, '교환문의');
+insert into one_category_table(category_num, category_content) values(10, '상품정보문의');
+insert into one_category_table(category_num, category_content) values(11, '기타문의');
+
+commit;
+
 
 
 -- 1:1문의 테이블 생성 --
@@ -603,6 +398,7 @@ create table one_inquiry_table
 ,content    varchar2(4000) not null -- 문의 내용 필수
 ,write_date date default sysdate    -- 작성날짜
 ,answer     varchar2(4000)          -- 관리자가 작성하는 답변
+,answer_date date                   -- 관리자가 답변한 날짜
 ,emailFlag  number default 0
 ,smsFlag    number default 0
 ,fk_member_num  number not null     -- 회원테이블에서 회원번호를 참조하는 컬럼
@@ -616,34 +412,9 @@ create table one_inquiry_table
 ,constraint ck_one_smsCheck check (smsFlag in (0,1))
 );
 
-select*
-from one_inquiry_table;
-
-insert into one_inquiry_table(one_inquiry_num,subject,content,fk_member_num,fk_order_num,fk_category_num)
-values(seq_one_inquiry_table.nextval, '배송이 안 와요','굶어죽겠다',40,1,1);
-insert into one_inquiry_table(one_inquiry_num,subject,content,fk_member_num,fk_category_num)
-values(seq_one_inquiry_table.nextval, '회원탈퇴는 어떻게 하나요','마켈컬리 불매ㅡㅡ',40,7);
-
-update one_inquiry_table set answer='' where one_inquiry_num='5';
-commit;
-
-select RON, one_inquiry_num, subject, content, write_date, answer, fk_member_num, fk_order_num, category_content
-from
-(select rownum as RON, one_inquiry_num, subject, content,
-write_date, answer, fk_member_num, fk_order_num, category_content
-from
-(select one_inquiry_num, subject, content, to_char(write_date,'yyyy-mm-dd') as write_date, answer,
-fk_member_num, fk_order_num, fk_category_num, OC.category_content 
-from one_inquiry_table O
-join one_category_table OC 
-on O.fk_category_num = OC.category_num
-where O.fk_member_num = 40
-order by one_inquiry_num desc )V
-)T
-where T.RON between 1 and 5;
-commit;
 
 
+drop sequence seq_one_inquiry_table
 -- 1:1문의 테이블에서 사용할 시퀀스 생성 --
 create sequence seq_one_inquiry_table
 start with 1
@@ -652,6 +423,7 @@ nomaxvalue
 nominvalue
 nocycle
 nocache;
+
 
 -- 공지사항 테이블 생성 --
 create table notice_table
@@ -663,6 +435,7 @@ create table notice_table
 ,constraint pk_notice_table primary key (notice_num)
 );
 
+drop sequence seq_notice_table;
 -- 공지사항 테이블에 사용할 시퀀스 생성 --
 create sequence seq_notice_table
 start with 1
@@ -680,6 +453,14 @@ create table inquiry_category_table
 ,constraint pk_inquiry_category primary key (category_num)
 );
 
+insert into inquiry_category_table(category_num, category_content) values(1, '회원문의');
+insert into inquiry_category_table(category_num, category_content) values(2, '주문/결제');
+insert into inquiry_category_table(category_num, category_content) values(3, '배송문의');
+insert into inquiry_category_table(category_num, category_content) values(4, '서비스 이용 및 기타');
+
+commit;
+
+
 
 -- 자주하는 질문 테이블 생성 --
 create table FAQ_table
@@ -694,16 +475,7 @@ create table FAQ_table
 );
 
 
-insert into inquiry_category_table(category_num, category_content) values(1, '회원문의');
-insert into inquiry_category_table(category_num, category_content) values(2, '주문/결제');
-insert into inquiry_category_table(category_num, category_content) values(3, '배송문의');
-insert into inquiry_category_table(category_num, category_content) values(4, '서비스 이용 및 기타');
-
-commit;
-
-
-
-
+drop sequence seq_FAQ_table;
 -- 자주하는 질문 테이블에서 사용할 시퀀스 생성 --
 create sequence seq_FAQ_table
 start with 1
@@ -714,10 +486,6 @@ nocycle
 nocache;
 
 
-delete from product_table;
-commit;
-
-select* from product_table;
 
 
 -- 장바구니 테이블 --
@@ -731,13 +499,8 @@ create table basket_table
 ,constraint pk_basket_num primary key (basket_num)
 );
 
-alter table basket_table
-drop column price; 
-    
-commit;
 
-select * from basket_table;
-
+drop sequence seq_basket_table;
 -- 장바구니 테이블에 사용할 시퀀스 생성 --
 create sequence seq_basket_table
 start with 1
@@ -747,120 +510,131 @@ nominvalue
 nocycle
 nocache;
 
--- 주문 상세 내역 정보(혜민)
-select O.price,
-M.name, to_char(O.order_date, 'yyyy-mm-dd hh24:mi:ss'), OS.order_state,
-O.recipient, O.recipient_mobile, O.recipient_postcode, O.recipient_address, O.recipient_detailaddress, O.memo
-from order_table O join member_table M
-on O.fk_member_num = M.member_num 
-join order_state_table OS
-on O.fk_category_num = OS.category_num
-where O.order_num = 1
+
+
+
+desc product_table;
+/*
+이름                 널?       유형             
+------------------ -------- -------------- 
+PRODUCT_NUM        NOT NULL NUMBER         
+PRODUCT_NAME       NOT NULL VARCHAR2(200)  
+PRICE              NOT NULL NUMBER         
+STOCK              NOT NULL NUMBER  
+WEIGHT                      VARCHAR2(200)
+ORIGIN                      VARCHAR2(100)  
+PACKING                     VARCHAR2(80)   
+UNIT                        VARCHAR2(50)   
+SHELF                       VARCHAR2(100)  
+INFORMATION                 VARCHAR2(500)  
+REGISTERDATE                DATE           
+SALE                        NUMBER         
+BEST_POINT                  NUMBER         
+SELLER                      VARCHAR2(50)   
+SELLER_PHONE                VARCHAR2(80)   
+EXPLAIN                     VARCHAR2(4000) 
+REPRESENTATIVE_IMG NOT NULL VARCHAR2(200)  
+FK_CATEGORY_NUM    NOT NULL NUMBER         
+FK_SUBCATEGORY_NUM NOT NULL NUMBER   
+
+*/
 
 -- 소고기
-insert into product_table (product_num, product_name, price, stock, origin, packing, unit, seller, seller_phone, fk_category_num, fk_subcategory_num,
-representative_img) 
-values(seq_product_table.nextval, '1등급 한우 갈빗살 구이용 200g(냉장)', '31000', '10', '국내산(한우)', '냉장/종이포장', '1팩', '김진하', '01075653393', 4, 41,
-'1등급 한우 갈빗살 구이용 200g(냉장).png');
-insert into product_table (product_num, product_name, price, stock, origin, packing, unit, seller, seller_phone, fk_category_num, fk_subcategory_num,
-representative_img) 
-values(seq_product_table.nextval, '1등급 한우 목심 샤브샤브용 200g(냉장)', '32000', '10', '국내산(한우)', '냉장/종이포장', '1팩', '김진하', '01075653393', 4, 41,
-'1등급 한우 목심 샤브샤브용 200g(냉장).png');
-insert into product_table (product_num, product_name, price, stock, origin, packing, unit, seller, seller_phone, fk_category_num, fk_subcategory_num,
-representative_img) 
-values(seq_product_table.nextval, '1등급 한우 안심 추리 200g(냉장)', '35000', '4', '국내산(한우)', '냉장/종이포장', '1팩', '김진하', '01075653393', 4, 41,
-'1등급 한우 안심 추리 200g(냉장).png');
-insert into product_table (product_num, product_name, price, stock, origin, packing, unit, seller, seller_phone, fk_category_num, fk_subcategory_num,
-representative_img) 
-values(seq_product_table.nextval, '1등급 한우 알사태 수육용 500g(냉장)', '34000', '6', '국내산(한우)', '냉장/종이포장', '1팩', '김진하', '01075653393', 4, 41,
-'1등급 한우 알사태 수육용 500g(냉장).png');
-insert into product_table (product_num, product_name, price, stock, origin, packing, unit, seller, seller_phone, fk_category_num, fk_subcategory_num,
-representative_img) 
-values(seq_product_table.nextval, '1등급 한우 채끝 스키야끼용 200g(냉장)', '30000', '10', '국내산(한우)', '냉장/종이포장', '1팩', '김진하', '01075653393', 4, 41,
-'1등급 한우 채끝 스키야끼용 200g(냉장).png');
-insert into product_table (product_num, product_name, price, stock, origin, packing, unit, seller, seller_phone, fk_category_num, fk_subcategory_num,
-representative_img) 
-values(seq_product_table.nextval, '1등급 한우 홍두깨 육전용 200g(냉장)', '32000', '10', '국내산(한우)', '냉장/종이포장', '1팩', '김진하', '01075653393', 4, 41,
-'1등급 한우 홍두깨 육전용 200g(냉장).png');
-insert into product_table (product_num, product_name, price, stock, origin, packing, unit, seller, seller_phone, fk_category_num, fk_subcategory_num,
-representative_img) 
-values(seq_product_table.nextval, '와규 MB4+안심 스테이크 200g(냉장)', '33000', '8', '국내산(한우)', '냉장/종이포장', '1팩', '김진하', '01075653393', 4, 41,
-'와규 MB4+안심 스테이크 200g(냉장).png');
-insert into product_table (product_num, product_name, price, stock, origin, packing, unit, seller, seller_phone, fk_category_num, fk_subcategory_num,
-representative_img) 
-values(seq_product_table.nextval, '와규 MB4+채끝 스테이크 200g(냉장)', '33000', '10', '국내산(한우)', '냉장/종이포장', '1팩', '김진하', '01075653393', 4, 41,
-'와규 MB4+채끝 스테이크 200g(냉장).png');
-insert into product_table (product_num, product_name, price, stock, origin, packing, unit, seller, seller_phone, fk_category_num, fk_subcategory_num,
-representative_img) 
-values(seq_product_table.nextval, '초이스 찜갈비 2kg(냉동)', '58000', '5', '국내산(한우)', '냉동/종이포장', '1팩', '김진하', '01075653393', 4, 41,
-'초이스 찜갈비 2kg(냉동).png');
+insert into product_table (product_num, product_name, price, stock, origin, packing, unit, shelf, information, sale, best_point, seller, seller_phone, fk_category_num, fk_subcategory_num, representative_img, explain) 
+values(seq_product_table.nextval, '1등급 한우 갈빗살 구이용 200g(냉장)', '31000', '1000', '국내산(한우)', '냉장/종이포장','1팩', '포장일로부터 최소5일 이내 제품을 보내드립니다.',
+'본 제품은 알레르기를 유발할 수 있습니다.배닐포당 등에 의해 산소가 공급되지 않아 간혹 검붉게 변하는 현상이 발생할 수 있으나, 산소와 접촉하면 선홍색으로 돌아오는 점 안내드립니다.', '10','5', '김진하', '01075653393', 4, 41, '1등급 한우 갈빗살 구이용 200g(냉장).png'
+,'컬리가 좋은 소식처럼 들려드리고 싶은 소고기, 소식의 1등급 한후 갈빗살 구이용을 만나보세요. 
+소식은 전국 최대 도축물량을 자랑하는 음성축산공판장에서 선별을 마친 고기를 즉시 가공하는데요.
+엄선한 1등급 한우의 갈빗살을 정육해 담았답니다. 냉동하지 않은 냉장 제품으리 고기의 육즙이 그대로 보존돼 있어요. 
+살코기와 지방의 균형이 좋아 씹는 맛이 좋고 감칠맛도 뛰어납니다.');
+
+insert into product_table (product_num, product_name, price, stock, origin, packing, unit, sale, seller, seller_phone, fk_category_num, fk_subcategory_num, representative_img,explain) 
+values(seq_product_table.nextval, '1등급 한우 목심 샤브샤브용 200g(냉장)', '32000', '10', '국내산(한우)', '냉장/종이포장', '1팩', '0', '김진하', '01075653393', 4, 41, '1등급 한우 목심 샤브샤브용 200g(냉장).png'
+,'보글보글 끓는 국물에 살짝살짝 익혀 먹기에 꼭 알맞은 목심을 만나보세요. 얇게 저며냈지만 1+등급의 한우답게 기름지지 않으면서도 적당한 육즙을 머금고 있는 제품이랍니다.
+200g을 한 팩에 담아 1인 가구가 근사한 한 끼를 먹기에도 적당할 거에요. 버섯, 알배추, 쑥갓 등의 채소를 더한 뒤 취향에 따라 생 고추냉이,참깨 드레싱, 간장 등을 곁들여 즐겨보세요.');
+
+insert into product_table (product_num, product_name, price, stock, origin, packing, weight, unit, shelf, sale, seller, seller_phone, fk_category_num, fk_subcategory_num, representative_img,information, explain) 
+values(seq_product_table.nextval, '1등급 한우 안심 추리 150g(냉장)', '35000', '4000', '국내산(한우)', '냉장/종이포장','150g', '1팩',
+'포장일로부터 최소 7일 이내 제품을 보내드립니다.', '0', '김진하', '01075653393', 4, 41, '1등급 한우 안심 추리 200g(냉장).png'
+,'해당 상품은 냉장 상품입니다. 비닐포장등에 의해 산소가 공급되지 않아 간혹 검붉게 변하는 현상이 발생할 수 있으나 산소와 접촉하면 선홍색으로 돌아오는 점 안내드립니다.'
+,'프리미엄 한우를 논할 때 마블링 등급, 다채로운 부위, 충분한 숙성은 빠질 수 없는 중요한 요소입니다. 이번에 소개하는 추리모둠은 등심과 안심, 채끝의 추리를 모은 상품이에요.
+추리는 고기 덩어리 주변에 있는 띠 모양의 근육으로 가장 자리에 붙은 부산물로 취급받곤 해요. 사실 추리 부분을 어떻게 손질하느냐에 따라 맛과 식감이 달라져 미식가에게 인기 있는 부위이기도 해요.
+PPUL은 등심과 안심, 채끝 추리 주변에 있는 얇은 근막과 불필요한 지방을 섬세하게 제거해 살코기만 남겼어요. 추리 본연의 진한 육항, 야들야들하면서도 쫄깃한 식감을 제대로 맛볼 수 있어요.');
+
+insert into product_table (product_num, product_name, price, stock, origin, packing, unit, sale, seller, seller_phone, fk_category_num, fk_subcategory_num, representative_img, weight, shelf, explain) 
+values(seq_product_table.nextval, '1등급 한우 알사태 수육용 500g(냉장)', '34000', '6', '국내산(한우)', '냉장/종이포장', '1팩', '20', '김진하', '01075653393', 4, 41, '1등급 한우 알사태 수육용 500g(냉장).png'
+,'500g','포장일로부터 최소 5일 이내 제품을 보내 드립니다.','컬리가 좋은 소식처럼 들려드리고 싶은 소고기, 소식의 1등급 한우 알사태 수육용을 만나보세요. 
+소식은 전국 최대 도축물량을 자랑하는 음성축산공판장에서 선별을 마친 고기를 즉시 가공하는데요.사태는 지방이 적은 대표적인 부위로, 삶을수록 먹기 좋게 쫀쫀해져요. 먹기 좋게 잘라 수육으로 먹거나 간장에 졸여 장조림을 만들어도 좋습니다.');
+
+insert into product_table (product_num, product_name, price, stock, origin, packing, unit, sale, seller, seller_phone, fk_category_num, fk_subcategory_num, representative_img, weight, information, explain) 
+values(seq_product_table.nextval, '[태우한우]1등급 한우 채끝 스키야끼용 200g(냉장)', '30000', '10', '국내산(한우)', '냉장/종이포장', '1팩', '0', '김진하', '01075653393', 4, 41, '1등급 한우 채끝 스키야끼용 200g(냉장).png'
+,'200g','중량에 따라 작은 조각이 함께 포장될 수 있습니다.보관기간이 신선도에 많은 영향을 주는 정육식품이기 때문에 수령후 최대한 빠른 시일내에 섭취를 권장드립니다.'
+,'스키야키는 일본을 대표하는 소고기 요리 중 하나입니다. 간장과 설탕을 섞어 만든 소스에 얇게 썬 소고기, 갖은 야채, 두부, 실곤약 등의 재료를 넣고 자작하게 끓여서 목죠.
+짭짤하면서도 달콤한 간이 배도록 만들기 때문에 지방과 살코기의 함량이 적절하게 섞인 부위를 사용하는게 좋아요. 태우한우는 감칠맛이 뛰어난 채끝으로 스키야키용 고기를 선보여요.
+고기의 결이 고우면서도 씹는 맛이 좋고, 마블링이 적당해 스키야키로 요리하면 부드러운 풍미로 즐길 수 있습니다.');
+
+insert into product_table (product_num, product_name, price, stock, origin, packing, unit, sale, seller, seller_phone, fk_category_num, fk_subcategory_num, representative_img, weight, shelf, information, explain) 
+values(seq_product_table.nextval, '1등급 한우 홍두깨 육전용 200g(냉장)', '32000', '10', '국내산(한우)', '냉장/종이포장', '1팩', '0', '김진하', '01075653393', 4, 41, '1등급 한우 홍두깨 육전용 200g(냉장).png'
+,'200g','포장일로부터 최소 3일 이내 제품을 보내드립니다.','해당 상품은 냉장 제품입니다. 정육 상품의 특성상 3% 내외 중량 차이가 발생할 수 있습니다.'
+,'컬리가 좋은 소식처럼 들려드리고 싶은 소고기, 소식의 1등급 한우 홍두깨 육전용을 만나보세요. 엄선한 1등급 한우의 홍두깨살로 육전을 만들어 보세요.
+고소한 기름맛 감도는 육전은 아이들 밥반찬으로도 더할 나위 없어요. 고추기름 낸 육개장에 푸짐하게 넣어 해장국을 만들어도 좋겠죠.');
+
+insert into product_table (product_num, product_name, price, stock, origin, packing, unit, sale, seller, seller_phone, fk_category_num, fk_subcategory_num, representative_img,explain) 
+values(seq_product_table.nextval, '와규 MB4+안심 스테이크 200g(냉장)', '33000', '500', '호주산', '냉장/종이포장', '1팩', '10', '김진하', '01075653393', 4, 41, '와규 MB4+안심 스테이크 200g(냉장).png'
+,'본래 일본의 소 품종을 일컫는 말인 와규는 현재 고급 소기기의 대명사로 통합니다. 마블링이 발달해서 육즙이 풍부하고 고기 본연의 감칠맛이 뛰어냐죠.
+부드러운 교깃결 덕분에 알맞게 조리하면 입 안에서 사르르 녹는 즐거움을 안겨줄 거에요. 고기 본연의 맛을 가장 잘 드러낼 수 있도록 구워서 드시길 추천해요.');
+
+insert into product_table (product_num, product_name, price, stock, origin, packing, unit, sale, seller, seller_phone, fk_category_num, fk_subcategory_num, representative_img,explain) 
+values(seq_product_table.nextval, '와규 MB4+채끝 스테이크 200g(냉장)', '33000', '10', '국내산(한우)', '냉장/종이포장', '1팩', '30', '김진하', '01075653393', 4, 41, '와규 MB4+채끝 스테이크 200g(냉장).png'
+,'본래 일본의 소 품종을 일컫는 말인 와규는 현재 고급 소고기의 대명사로 통합니다. 마블링이 발달해서 육즙이 풍부하고 고기 본연의 감칠맛이 뛰어나죠.
+등심보다 부드럽고 안심보다는 식감이 있는 채끝 스테이크를 선보입니다. 마블링이 적당하게 분포해서 구웠을 때 입안 가득 퍼지는 고소한 육즙과 풍성한 식감이 일품이죠.
+특별한 식사를 즐기고 싶은 날, 도톰한 채끝을 달궈진 팬에서 알맞게 구워 만찬을 즐겨보세요.');
+
+insert into product_table (product_num, product_name, price, stock, origin, packing, unit, sale, seller, seller_phone, fk_category_num, fk_subcategory_num, representative_img,weight,explain ) 
+values(seq_product_table.nextval, '초이스 찜갈비 2kg(냉동)', '58000', '505', '미국산', '냉동/종이포장', '1팩', '0', '김진하', '01075653393', 4, 41, '초이스 찜갈비 2kg(냉동).png','1.6kg'
+,'양념이 고루 밴 쫄깃한 갈비찜은 언제 먹어도 좋은 한 그릇 요리지요. 어떤 갈비를 선택할까 고민하고 있다면 초이스 찜갈비를 추천드려요.
+미국산 소고기 중에서도 상위 등급인 초이스 등급의 고품질 찜갈비. 부드러운 육질은 물론이고요. 불필요한 지방을 알맞게 제거했기에 더욱 깔끔하게 즐길 수 있답니다.
+달큰한 양념과 다양한 야채를 더해 푸짐한 갈비찜 한 그릇을 요리해 보세요.');
 
 commit;
 
-delete from product_table
-where origin = '국내산(한우)';
+select * from product_table where fk_category_num=4;
 
-select*
-from product_category_table;
-
-select*
-from product_subcategory_table;
-
-select*
-from product_subcategory_table
-where subcategory_num like '4_';
-
-
+desc product_image_table;
+/*
+FK_PRODUCT_NUM NOT NULL NUMBER        
+IMAGE                   VARCHAR2(200) 
+*/
+-- 상세 이미지 --
+insert into product_image_table(product_image_num ,fk_product_num, image)values(seq_product_table.nextval,10,'10번상품01이미지.png');
+insert into product_image_table(product_image_num ,fk_product_num, image)values(seq_product_table.nextval,10,'10번상품02이미지.png');
+insert into product_image_table(product_image_num ,fk_product_num, image)values(seq_product_table.nextval,10,'10번상품03이미지.png');
+insert into product_image_table(product_image_num ,fk_product_num, image)values(seq_product_table.nextval,9,'9번상품01이미지.png');
+insert into product_image_table(product_image_num ,fk_product_num, image)values(seq_product_table.nextval,9,'9번상품02이미지.png');
+insert into product_image_table(product_image_num ,fk_product_num, image)values(seq_product_table.nextval,9,'9번상품03이미지.png');
+insert into product_image_table(product_image_num ,fk_product_num, image)values(seq_product_table.nextval,8,'8번상품01이미지.png');
+insert into product_image_table(product_image_num ,fk_product_num, image)values(seq_product_table.nextval,8,'8번상품02이미지.png');
+insert into product_image_table(product_image_num ,fk_product_num, image)values(seq_product_table.nextval,8,'8번상품03이미지.png');
+insert into product_image_table(product_image_num ,fk_product_num, image)values(seq_product_table.nextval,7,'7번상품01이미지.png');
+insert into product_image_table(product_image_num ,fk_product_num, image)values(seq_product_table.nextval,7,'7번상품02이미지.png');
+insert into product_image_table(product_image_num ,fk_product_num, image)values(seq_product_table.nextval,7,'7번상품03이미지.png');
+insert into product_image_table(product_image_num ,fk_product_num, image)values(seq_product_table.nextval,6,'6번상품01이미지.png');
+insert into product_image_table(product_image_num ,fk_product_num, image)values(seq_product_table.nextval,6,'6번상품02이미지.png');
+insert into product_image_table(product_image_num ,fk_product_num, image)values(seq_product_table.nextval,6,'6번상품03이미지.png');
+insert into product_image_table(product_image_num ,fk_product_num, image)values(seq_product_table.nextval,5,'5번상품01이미지.png');
+insert into product_image_table(product_image_num ,fk_product_num, image)values(seq_product_table.nextval,5,'5번상품02이미지.png');
+insert into product_image_table(product_image_num ,fk_product_num, image)values(seq_product_table.nextval,5,'5번상품03이미지.png');
+insert into product_image_table(product_image_num ,fk_product_num, image)values(seq_product_table.nextval,4,'4번상품01이미지.png');
+insert into product_image_table(product_image_num ,fk_product_num, image)values(seq_product_table.nextval,4,'4번상품02이미지.png');
+insert into product_image_table(product_image_num ,fk_product_num, image)values(seq_product_table.nextval,4,'4번상품03이미지.png');
+insert into product_image_table(product_image_num ,fk_product_num, image)values(seq_product_table.nextval,3,'3번상품01이미지.png');
+insert into product_image_table(product_image_num ,fk_product_num, image)values(seq_product_table.nextval,3,'3번상품02이미지.png');
+insert into product_image_table(product_image_num ,fk_product_num, image)values(seq_product_table.nextval,3,'3번상품03이미지.png');
+insert into product_image_table(product_image_num ,fk_product_num, image)values(seq_product_table.nextval,2,'2번상품01이미지.png');
+insert into product_image_table(product_image_num ,fk_product_num, image)values(seq_product_table.nextval,2,'2번상품02이미지.png');
+insert into product_image_table(product_image_num ,fk_product_num, image)values(seq_product_table.nextval,2,'2번상품03이미지.png');
 commit;
-
-select *
-from product_table;
-
-select*
-from product_image_table;
-
-delete from product_image_table where image='김곤.gif';
-commit;
-
-
--- 소고기
-insert into product_table (product_num, product_name, price, stock, origin, packing, unit, sale, seller, seller_phone, fk_category_num, fk_subcategory_num, representative_img) 
-values(seq_product_table.nextval, '1등급 한우 갈빗살 구이용 200g(냉장)', '31000', '10', '국내산(한우)', '냉장/종이포장', '1팩', '10', '김진하', '01075653393', 4, 41, '1등급 한우 갈빗살 구이용 200g(냉장).png');
-insert into product_table (product_num, product_name, price, stock, origin, packing, unit, sale, seller, seller_phone, fk_category_num, fk_subcategory_num, representative_img) 
-values(seq_product_table.nextval, '1등급 한우 목심 샤브샤브용 200g(냉장)', '32000', '10', '국내산(한우)', '냉장/종이포장', '1팩', '0', '김진하', '01075653393', 4, 41, '1등급 한우 목심 샤브샤브용 200g(냉장).png');
-insert into product_table (product_num, product_name, price, stock, origin, packing, unit, sale, seller, seller_phone, fk_category_num, fk_subcategory_num, representative_img) 
-values(seq_product_table.nextval, '1등급 한우 안심 추리 200g(냉장)', '35000', '4', '국내산(한우)', '냉장/종이포장', '1팩', '0', '김진하', '01075653393', 4, 41, '1등급 한우 안심 추리 200g(냉장).png');
-insert into product_table (product_num, product_name, price, stock, origin, packing, unit, sale, seller, seller_phone, fk_category_num, fk_subcategory_num, representative_img) 
-values(seq_product_table.nextval, '1등급 한우 알사태 수육용 500g(냉장)', '34000', '6', '국내산(한우)', '냉장/종이포장', '1팩', '20', '김진하', '01075653393', 4, 41, '1등급 한우 알사태 수육용 500g(냉장).png');
-insert into product_table (product_num, product_name, price, stock, origin, packing, unit, sale, seller, seller_phone, fk_category_num, fk_subcategory_num, representative_img) 
-values(seq_product_table.nextval, '1등급 한우 채끝 스키야끼용 200g(냉장)', '30000', '10', '국내산(한우)', '냉장/종이포장', '1팩', '0', '김진하', '01075653393', 4, 41, '1등급 한우 채끝 스키야끼용 200g(냉장).png');
-insert into product_table (product_num, product_name, price, stock, origin, packing, unit, sale, seller, seller_phone, fk_category_num, fk_subcategory_num, representative_img) 
-values(seq_product_table.nextval, '1등급 한우 홍두깨 육전용 200g(냉장)', '32000', '10', '국내산(한우)', '냉장/종이포장', '1팩', '0', '김진하', '01075653393', 4, 41, '1등급 한우 홍두깨 육전용 200g(냉장).png');
-insert into product_table (product_num, product_name, price, stock, origin, packing, unit, sale, seller, seller_phone, fk_category_num, fk_subcategory_num, representative_img) 
-values(seq_product_table.nextval, '와규 MB4+안심 스테이크 200g(냉장)', '33000', '8', '국내산(한우)', '냉장/종이포장', '1팩', '10', '김진하', '01075653393', 4, 41, '와규 MB4+안심 스테이크 200g(냉장).png');
-insert into product_table (product_num, product_name, price, stock, origin, packing, unit, sale, seller, seller_phone, fk_category_num, fk_subcategory_num, representative_img) 
-values(seq_product_table.nextval, '와규 MB4+채끝 스테이크 200g(냉장)', '33000', '10', '국내산(한우)', '냉장/종이포장', '1팩', '30', '김진하', '01075653393', 4, 41, '와규 MB4+채끝 스테이크 200g(냉장).png');
-insert into product_table (product_num, product_name, price, stock, origin, packing, unit, sale, seller, seller_phone, fk_category_num, fk_subcategory_num, representative_img) 
-values(seq_product_table.nextval, '초이스 찜갈비 2kg(냉동)', '58000', '5', '국내산(한우)', '냉동/종이포장', '1팩', '0', '김진하', '01075653393', 4, 41, '초이스 찜갈비 2kg(냉동).png');
-
-
-select P.product_num as PRODUCT_NUM, c.category_content as CATEGORY_CONTENT,
-             S.subcategory_content as SUBCATEGORY_CONTENT, P.product_name as PRODUCT_NAME,
-             P.price as PRICE, P.stock as STOCK, p.sale as sale
-from product_table P join product_category_table C
-on P.fk_category_num = C.category_num
-join product_subcategory_table S
-on P.fk_subcategory_num = S.subcategory_num
-where fk_category_num =4 and fk_subcategory_num = 41 ;
- 
-select P.product_num AS product_num, c.category_content AS category_content, 
-             S.subcategory_content AS subcategory_content, P.product_name AS product_name,
-             P.price AS price, P.stock AS stock, P.sale AS sale
-from product_table P JOIN product_category_table C 
-ON P.fk_category_num = C.category_num 
-JOIN product_subcategory_table S 
-on P.fk_subcategory_num = S.subcategory_num 
-where fk_category_num = 4 and fk_subcategory_num = 41; 
+select * from product_image_table order by product_image_num asc; 
 
 
 
@@ -1123,281 +897,7 @@ values (seq_member_table.nextval, '관리자', 'admin', 'qwer1234!','2wnaud@nave
 commit;
 
 
-select * from member_table;
-update member_table set status=2 where userid='admin1';
-
-commit;
-
-delete from member_table;
-
-select count(*) from basket_table where fk_member_num = ;
-
--- 주문 내역(혜민)
-select O.order_num
-     , O.to_char(order_date,'yyyy.mm.dd hh24:mi:ss')
-     , O.price
-     , OP.fk_product_num
-     , P.product_name
-     , P.representative_img
-     , OS.order_state 
-from order_table O join order_product_table OP 
-on O.order_num = OP.fk_order_num join order_state_table OS 
-on O.fk_category_num = OS.category_num join product_table P 
-on OP.fk_product_num = P.product_num
-where O.fk_member_num = ?
-+
-select count(*) from order_product_table where fk_order_num = ?
-
--- 주문내역 조회 페이징 처리 (으네)
-select RNO, order_num, order_date, price, product_name, product_count
-from
- (   
-    select rownum AS RNO, order_num, order_date, price, product_name, product_count 
-    from 
-    (select O.order_num  
-          , to_char(O.order_date,'yyyy.mm.dd') as order_date
-          , O.price 
-          , P.product_name 
-          , OP.product_count 
-     from order_table O join order_product_table OP 
-     on O.order_num = OP.fk_order_num join product_table P 
-     on OP.fk_product_num = P.product_num
-     where O.fk_member_num = 1
-    ) V
-) T
-where T.RNO between 1 and 10;
-
-select product_name from order_product_table join product_table on fk_product_num = product_num where fk_order_num = 1;
- 
- select RNO, order_num, order_date, price 
- from 
- (  
-    select rownum AS RNO, order_num, order_date, price 
-    from 
-    (select order_num 
-          , to_char(order_date,'yyyy.mm.dd') as order_date 
-          , price 
-     from order_table   
-     where fk_member_num = 1
-    ) V 
- ) T 
- where T.RNO between 1 and 5; 
 
 
 
-select ceil( count(*)/5 ) AS totalPage
-from order_table
-where fk_member_num = 1;
-
-select *
-from order_table
-where fk_member_num = 1;
-
-commit;
-
-
- select RNO, product_num, product_name, price, sale, representative_img 
- from 
- ( 
-     select rownum AS RNO, product_num, product_name, price, sale, representative_img 
-     from 
-     ( 
-        select  product_num, product_name, price, sale, representative_img 
-        from product_table 
-        where sale > 0 
-    ) V 
- ) T 
- where T.RNO between 1 and 10;
-
-select  RNO, PRODUCT_NUM, CATEGORY_CONTENT, SUBCATEGORY_CONTENT, PRODUCT_NAME, PRICE, STOCK 
-from 
-    ( select rownum AS RNO,PRODUCT_NUM, CATEGORY_CONTENT, SUBCATEGORY_CONTENT, PRODUCT_NAME, PRICE, STOCK
-        from 
-          ( select P.PRODUCT_NUM, c.category_content as CATEGORY_CONTENT, 
-                    S.subcategory_content as SUBCATEGORY_CONTENT, P.PRODUCT_NAME,
-                    P.PRICE, P.STOCK
-            from ( select product_num as PRODUCT_NUM, fk_category_num, fk_subcategory_num, product_name as PRODUCT_NAME, price as PRICE, stock as STOCK
-                    from product_table
-                    where fk_category_num = 3 and product_name like '%'||''||'%')
-            P join product_category_table C
-            on P.fk_category_num = C.category_num 
-            join product_subcategory_table S
-            on P.fk_subcategory_num = S.subcategory_num
-            order by PRODUCT_NUM desc
-            )V
-		)T;
-where T.RNO between 1 and 10;
-
-
-
-select ceil(count(*)/10) as totalPage
-from product_table
-where FK_CATEGORY_NUM = 3 and product_name like '%'||'오징어'||'%';
-                        
-
-
-
-
-insert into member_table(member_num, name, userid, address, pwd, email, hp1, hp2, hp3) values (seq_member_table.nextval, '미미','mimi','인천 남동구 구월동','qwer1234!','abcd@naver.com','010','1234','5678');
-insert into member_table(member_num, name, userid, address, pwd, email, hp1, hp2, hp3) values (seq_member_table.nextval, '미미미','mimimi','서울 남동구 구월동','qwer1234!','mimimi@naver.com','010','1234','5678');
-insert into member_table(member_num, name, userid, address, pwd, email, hp1, hp2, hp3) values (seq_member_table.nextval, '미미미미','mimimimi','인천 구월1동','qwer1234!','mimimimi@naver.com','010','1234','5678');
-insert into member_table(member_num, name, userid, address, pwd, email, hp1, hp2, hp3) values (seq_member_table.nextval, '나나','nana','서울 강남구','qwer1234!','nana@naver.com','010','1234','5678');
-insert into member_table(member_num, name, userid, address, pwd, email, hp1, hp2, hp3) values (seq_member_table.nextval, '나나나','nanana','부산광역시 동래구 사직로 77 ','qwer1234!','nanana@naver.com','010','1234','5678');
-insert into member_table(member_num, name, userid, address, pwd, email, hp1, hp2, hp3) values (seq_member_table.nextval, '라라','rara','인천광역시','qwer1234!','rara@naver.com','010','1234','5678');
-insert into member_table(member_num, name, userid, address, pwd, email, hp1, hp2, hp3) values (seq_member_table.nextval, '라라라','rarara','서울','qwer1234!','rarara@naver.com','010','1234','5678');
-insert into member_table(member_num, name, userid, address, pwd, email, hp1, hp2, hp3) values (seq_member_table.nextval, '김웅앵','kim','우리동네','qwer1234!','kim@naver.com','010','1234','5678');
-insert into member_table(member_num, name, userid, address, pwd, email, hp1, hp2, hp3) values (seq_member_table.nextval, '이웅앵','lee','너네동네','qwer1234!','lee@naver.com','010','1234','5678');
-insert into member_table(member_num, name, userid, address, pwd, email, hp1, hp2, hp3) values (seq_member_table.nextval, '야야','yaya','','qwer1234!','yaya@naver.com','010','1234','5678');
-insert into member_table(member_num, name, userid, pwd, email, hp1, hp2, hp3) values (seq_member_table.nextval, '김라라','kimrara','qwer1234','kimraraabcd@naver.com','010','1234','5678');
-
-commit;
-
-select*
-from member_table;
-
-
-select ceil(count(*)/10) as totalPage
-from member_table
-where userid like '%'||'mimi'||'%' ;
-
-
-select member_num, name, userid, address				
-from member_table ;
-order by member_num desc;
-
-
-select * from member_table where email='28b68acc3cb16bb4484f15c844477637c2f615e6e0b874cb1bbc87490160a50f';
-select email from member_table;
-
-commit;
-
-
-select nvl(sum(oqty * saleprice), 0) AS SUMTOTALPRICE
-     , nvl(sum(oqty * point), 0) AS SUMTOTALPOINT
-from shopping_cart A join shopping_product B
-on A.fk_pnum = B.pnum
-where status = 1 and fk_userid = 'hongkd';
-
-select nvl(sum(product_count *  (price - price * (sale/100) ) ), 0 ) AS SUMTOTALPRICE
-from basket_table A join product_table B
-on A.fk_product_num = B.product_num
-where  A.fk_member_num = ?;
-
-select nvl(sum(2 *  (34000 - 34000 * (20/100) ) ), 0 ) 
-from dual;
-
-select * from order_product_table OP
-join order_table O on OP.fk_order_num = O.order_num
-join member_table M on O.fk_member_num = M.member_num
-join product_table P on OP.fk_product_num = P.product_num
-join product_category_table PC on P.fk_category_num = PC.category_num
-join product_subcategory_table PS on P.fk_subcategory_num = PS.subcategory_num
-where OP.reviewFlag = 0 and O.fk_category_num = 1;
-
-select * from order_table
-select * from one_category_table;
-insert into one_category_table(category_num, category_content) values(1, '배송지연/불만');
-insert into one_category_table(category_num, category_content) values(2, '컬리패스(무료배송)');
-insert into one_category_table(category_num, category_content) values(3, '반품문의');
-insert into one_category_table(category_num, category_content) values(4, 'A/S문의');
-insert into one_category_table(category_num, category_content) values(5, '환불문의');
-insert into one_category_table(category_num, category_content) values(6, '주문결제문의');
-insert into one_category_table(category_num, category_content) values(7, '회원정보문의');
-insert into one_category_table(category_num, category_content) values(8, '취소문의');
-insert into one_category_table(category_num, category_content) values(9, '교환문의');
-insert into one_category_table(category_num, category_content) values(10, '상품정보문의');
-insert into one_category_table(category_num, category_content) values(11, '기타문의');
-
-commit;
-
-update one_inquiry_table set answer='답변답변답변';
-
-create table basket_table
-(basket_num     number not null
-,product_count  number not null -- 주문한 상품의 갯수 필수
-,fk_member_num  number not null -- 해당 장바구니에 상품을 담은 회원
-,fk_product_num number not null -- 상품테이블의 상품번호를 참조하는 컬럼
-,constraint fk_basket_product FOREIGN key (fk_product_num ) REFERENCES product_table(product_num)
-,constraint fk_basket_member FOREIGN key (fk_member_num) REFERENCES member_table (member_num)
-,constraint pk_basket_num primary key (basket_num)
-);
-
-select * from basket_table;
-select * from product_inquiry_image_table where image like '%'||'search'||'%';
-
-desc order_table;
-update order_table set fk_category_num=3;
-commit;
-
-select * from order_table join order_product_table on order_num  = fk_order_num join product_table on fk_product_num = product_num;
-
-alter table product_inquiry_table modify subject varchar2(200);
-
-desc product_inquiry_table;
-
-alter table review_image_table
-drop constraint fk_review_image;
-
-alter table review_image_table
-add constraint fk_review_image foreign key (fk_review_num) references review_table(review_num) on delete cascade;
-
-select * from one_inquiry_table where subject like '%'||'배송'||'%';
-
-
--- 작성가능 후기 페이징 (혜민)
-select RNO, idx, userid, name, email, gender
-from
-(
-    select rownum AS RNO, idx, userid, name, email, gender
-    from
-    (
-    select idx, userid, name, email, gender
-    from mymvc_shopping_member
-    order by idx desc
-    ) V
-) T
-where T.RNO between 1 and 10;
-
-
-select RNO, fk_order_num, representative_img, product_name, product_count, product_num
-from
-(
-    select rownum AS RNO, fk_order_num, representative_img, product_name, product_count, product_num
-    from
-    (
-    select OP.fk_order_num, P.representative_img, P.product_name, OP.product_count, P.product_num
-    from order_table O join order_product_table OP
-    on O.order_num = OP.fk_order_num
-    join product_table P
-    on OP.fk_product_num = P.product_num
-    where O.fk_member_num = 1 and OP.reviewFlag = 0 and O.fk_category_num = 3
-    order by fk_order_num desc
-    ) V
-) T
-where T.RNO between 1 and 3;
-
-
-select RNO, review_num, product_name, to_char(write_date,'yyyy-mm-dd'), hit, favorite, subject, content
-from
-(    
-    select rownum AS RNO, review_num, product_name, to_char(write_date,'yyyy-mm-dd'), hit, favorite, subject, content
-    from
-    (
-    select R.review_num, P.product_name, to_char(R.write_date,'yyyy-mm-dd'), R.hit, R.favorite, R.subject, R.content
-    from product_table P join review_table R
-    on P.product_num = R.fk_product_num 
-    where R.fk_member_num = 1
-    order by R.review_num desc
-    ) V
-) T   
-where T.RNO between 1 and 3;
-
-select * from product_inquiry_table;
-
-delete from product_inquiry_table;
-commit;
-
-desc order_table;
-select sum(price), to_char(order_date, 'yyyy-mm-dd')as order_date from order_table group by to_char(order_date, 'yyyy-mm-dd')
-order by order_date desc;
 
