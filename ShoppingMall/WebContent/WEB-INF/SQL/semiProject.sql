@@ -61,7 +61,7 @@ nocycle
 nocache;
 
 -- 관리자 계정으로 변환
-update member_table set status=2;
+update member_table set status=2 where member_num=1;
 
 commit;
 
@@ -136,8 +136,8 @@ create table product_table
 ,fk_subcategory_num number not null -- product_subcategory_table에 있는 subcategory_num을 참조하는 컬럼
 ,constraint pk_product_table primary key (product_num)
 ,constraint uq_product_product_name   unique (product_name)
-,constraint fk_product_category_num FOREIGN key(fk_category_num) REFERENCES product_category_table(category_num)
-,constraint fk_product_subcategory_num FOREIGN key(fk_subcategory_num) REFERENCES product_subcategory_table(subcategory_num)
+,constraint fk_product_category_num FOREIGN key(fk_category_num) REFERENCES product_category_table(category_num) on delete cascade
+,constraint fk_product_subcategory_num FOREIGN key(fk_subcategory_num) REFERENCES product_subcategory_table(subcategory_num) on delete cascade
 );
 
 
@@ -167,7 +167,7 @@ create table product_image_table
 ,constraint pk_product_image_table primary key (product_image_num)
 ,constraint fk_prodcut_detail_num FOREIGN key (fk_product_num) REFERENCES product_table(product_num) on DELETE CASCADE
 );
-drop table product_image_table;
+
 
 drop sequence seq_product_image;
 -- 상품 이미지에서 사용할 시퀀스 -- 
@@ -253,11 +253,11 @@ create table order_table
 ,recipient_detailaddress varchar2(200) not null -- 받는 사람의 상세주소
 ,price  number  not null    -- 주문금액 필수
 ,memo   varchar2(200)       -- 요청사항
-,fk_member_num  number  not null    -- 회원테이블의 회원번호를 참조하는 컬럼
+,fk_member_num  number      -- 회원테이블의 회원번호를 참조하는 컬럼
 ,fk_category_num number default 0 not null    -- 주문상태 테이블의 주문상태 번호를 참조하는 컬럼
 ,constraint pk_order_table  primary key(order_num)
-,constraint fk_order_member FOREIGN key(fk_member_num) REFERENCES member_table(member_num)
-,constraint fk_order_category foreign key(fk_category_num) references order_state_table(category_num)
+,constraint fk_order_member FOREIGN key(fk_member_num) REFERENCES member_table(member_num) on delete set null
+,constraint fk_order_category foreign key(fk_category_num) references order_state_table(category_num) 
 );
 
 
@@ -301,11 +301,11 @@ nocache;
 create table order_product_table
 (product_count  number not null -- 주문한 상품의 갯수 필수
 ,fk_order_num   number not null -- 주문정보 테이블의 주문번호를 참조하는 컬럼
-,fk_product_num number not null -- 상품테이블의 상품번호를 참조하는 컬럼
+,fk_product_num number          -- 상품테이블의 상품번호를 참조하는 컬럼
 ,price          number not null -- 주문상품의 가격(할인 후)
 ,reviewFlag     number(1) default 0
 ,constraint fk_order FOREIGN key (fk_order_num) REFERENCES order_table(order_num) on delete cascade
-,constraint fk_product FOREIGN key (fk_product_num ) REFERENCES product_table(product_num)
+,constraint fk_product FOREIGN key (fk_product_num ) REFERENCES product_table(product_num) on delete set null
 ,constraint ck_reviewFlag check (reviewFlag in (0,1))
 );
 
@@ -319,12 +319,12 @@ create table review_table
 ,hit        number default 0 -- 조회수
 ,favorite   number default 0 -- 좋아요 수
 ,fk_product_num number not null -- 상품테이블에서 상품번호를 참조하는 컬럼 -- 두 개의 컬럼을 복합해서 유니크 키로 제약 
-,fk_order_num   number not null -- 주문테이블에서 주문번호를 참조하는 컬럼 --
-,fk_member_num  number not null -- 회원테이블에서 회원번호를 참조하는 컬림
+,fk_order_num   number          -- 주문테이블에서 주문번호를 참조하는 컬럼 --
+,fk_member_num  number          -- 회원테이블에서 회원번호를 참조하는 컬림
 ,constraint pk_review_table primary key (review_num)
-,constraint fk_review_order FOREIGN key (fk_order_num) REFERENCES order_table(order_num)
+,constraint fk_review_order FOREIGN key (fk_order_num) REFERENCES order_table(order_num) on delete set null
 ,constraint fk_review_product FOREIGN key (fk_product_num) REFERENCES product_table(product_num) on delete CASCADE
-,constraint fk_review_member FOREIGN key (fk_member_num) REFERENCES member_table(member_num) on delete CASCADE
+,constraint fk_review_member FOREIGN key (fk_member_num) REFERENCES member_table(member_num) on delete cascade
 ,constraint uq_review_orderProduct UNIQUE (fk_product_num, fk_order_num)
 );
 
@@ -388,16 +388,15 @@ create table one_inquiry_table
 ,fk_order_num   number     -- 주문테이블에서 주문번호를 참조하는 컬럼
 ,fk_category_num number not null    -- 1:1문의 카테고리 테이블에서 카테고리번호를 참조하는 컬럼
 ,constraint pk_one_inquiry primary key (one_inquiry_num)
-,constraint fk_one_member FOREIGN key (fk_member_num) REFERENCES member_table(member_num) on delete CASCADE
-,constraint fk_one_order FOREIGN key (fk_order_num) REFERENCES order_table(order_num)
-,constraint fk_one_category FOREIGN key (fk_category_num) REFERENCES one_category_table(category_num)
+,constraint fk_one_member FOREIGN key (fk_member_num) REFERENCES member_table(member_num) on delete cascade
+,constraint fk_one_category FOREIGN key (fk_category_num) REFERENCES one_category_table(category_num) on delete set null
 ,constraint ck_one_emailCheck   check (emailFlag in(0,1))
 ,constraint ck_one_smsCheck check (smsFlag in (0,1))
 );
 
 
 
-drop sequence seq_one_inquiry_table
+drop sequence seq_one_inquiry_table;
 -- 1:1문의 테이블에서 사용할 시퀀스 생성 --
 create sequence seq_one_inquiry_table
 start with 1
@@ -454,7 +453,7 @@ create table FAQ_table
 ,hits   number default 0
 ,fk_category_num    number not null
 ,constraint pk_FAQ_table primary key(FAQ_num)
-,constraint fk_FAQ_category FOREIGN key(fk_category_num) REFERENCES inquiry_category_table(category_num)
+,constraint fk_FAQ_category FOREIGN key(fk_category_num) REFERENCES inquiry_category_table(category_num) on delete cascade
 );
 
 
@@ -479,8 +478,8 @@ create table basket_table
 ,product_count  number not null -- 주문한 상품의 갯수 필수
 ,fk_member_num  number not null -- 해당 장바구니에 상품을 담은 회원
 ,fk_product_num number not null -- 상품테이블의 상품번호를 참조하는 컬럼
-,constraint fk_basket_product FOREIGN key (fk_product_num ) REFERENCES product_table(product_num)
-,constraint fk_basket_member FOREIGN key (fk_member_num) REFERENCES member_table (member_num)
+,constraint fk_basket_product FOREIGN key (fk_product_num ) REFERENCES product_table(product_num) on delete cascade
+,constraint fk_basket_member FOREIGN key (fk_member_num) REFERENCES member_table (member_num) on delete cascade
 ,constraint pk_basket_num primary key (basket_num)
 );
 
@@ -591,33 +590,34 @@ FK_PRODUCT_NUM NOT NULL NUMBER
 IMAGE                   VARCHAR2(200) 
 */
 -- 상세 이미지 --
-insert into product_image_table(product_image_num ,fk_product_num, image)values(seq_product_table.nextval,10,'10번상품01이미지.png');
-insert into product_image_table(product_image_num ,fk_product_num, image)values(seq_product_table.nextval,10,'10번상품02이미지.png');
-insert into product_image_table(product_image_num ,fk_product_num, image)values(seq_product_table.nextval,10,'10번상품03이미지.png');
-insert into product_image_table(product_image_num ,fk_product_num, image)values(seq_product_table.nextval,9,'9번상품01이미지.png');
-insert into product_image_table(product_image_num ,fk_product_num, image)values(seq_product_table.nextval,9,'9번상품02이미지.png');
-insert into product_image_table(product_image_num ,fk_product_num, image)values(seq_product_table.nextval,9,'9번상품03이미지.png');
-insert into product_image_table(product_image_num ,fk_product_num, image)values(seq_product_table.nextval,8,'8번상품01이미지.png');
-insert into product_image_table(product_image_num ,fk_product_num, image)values(seq_product_table.nextval,8,'8번상품02이미지.png');
-insert into product_image_table(product_image_num ,fk_product_num, image)values(seq_product_table.nextval,8,'8번상품03이미지.png');
-insert into product_image_table(product_image_num ,fk_product_num, image)values(seq_product_table.nextval,7,'7번상품01이미지.png');
-insert into product_image_table(product_image_num ,fk_product_num, image)values(seq_product_table.nextval,7,'7번상품02이미지.png');
-insert into product_image_table(product_image_num ,fk_product_num, image)values(seq_product_table.nextval,7,'7번상품03이미지.png');
-insert into product_image_table(product_image_num ,fk_product_num, image)values(seq_product_table.nextval,6,'6번상품01이미지.png');
-insert into product_image_table(product_image_num ,fk_product_num, image)values(seq_product_table.nextval,6,'6번상품02이미지.png');
-insert into product_image_table(product_image_num ,fk_product_num, image)values(seq_product_table.nextval,6,'6번상품03이미지.png');
-insert into product_image_table(product_image_num ,fk_product_num, image)values(seq_product_table.nextval,5,'5번상품01이미지.png');
-insert into product_image_table(product_image_num ,fk_product_num, image)values(seq_product_table.nextval,5,'5번상품02이미지.png');
-insert into product_image_table(product_image_num ,fk_product_num, image)values(seq_product_table.nextval,5,'5번상품03이미지.png');
-insert into product_image_table(product_image_num ,fk_product_num, image)values(seq_product_table.nextval,4,'4번상품01이미지.png');
-insert into product_image_table(product_image_num ,fk_product_num, image)values(seq_product_table.nextval,4,'4번상품02이미지.png');
-insert into product_image_table(product_image_num ,fk_product_num, image)values(seq_product_table.nextval,4,'4번상품03이미지.png');
-insert into product_image_table(product_image_num ,fk_product_num, image)values(seq_product_table.nextval,3,'3번상품01이미지.png');
-insert into product_image_table(product_image_num ,fk_product_num, image)values(seq_product_table.nextval,3,'3번상품02이미지.png');
-insert into product_image_table(product_image_num ,fk_product_num, image)values(seq_product_table.nextval,3,'3번상품03이미지.png');
-insert into product_image_table(product_image_num ,fk_product_num, image)values(seq_product_table.nextval,2,'2번상품01이미지.png');
-insert into product_image_table(product_image_num ,fk_product_num, image)values(seq_product_table.nextval,2,'2번상품02이미지.png');
-insert into product_image_table(product_image_num ,fk_product_num, image)values(seq_product_table.nextval,2,'2번상품03이미지.png');
+insert into product_image_table(product_image_num ,fk_product_num, image)values(seq_product_image.nextval,9,'10번상품01이미지.png');
+insert into product_image_table(product_image_num ,fk_product_num, image)values(seq_product_image.nextval,9,'10번상품02이미지.png');
+insert into product_image_table(product_image_num ,fk_product_num, image)values(seq_product_image.nextval,9,'10번상품03이미지.png');
+insert into product_image_table(product_image_num ,fk_product_num, image)values(seq_product_image.nextval,8,'9번상품01이미지.png');
+insert into product_image_table(product_image_num ,fk_product_num, image)values(seq_product_image.nextval,8,'9번상품02이미지.png');
+insert into product_image_table(product_image_num ,fk_product_num, image)values(seq_product_image.nextval,8,'9번상품03이미지.png');
+insert into product_image_table(product_image_num ,fk_product_num, image)values(seq_product_image.nextval,7,'8번상품01이미지.png');
+insert into product_image_table(product_image_num ,fk_product_num, image)values(seq_product_image.nextval,7,'8번상품02이미지.png');
+insert into product_image_table(product_image_num ,fk_product_num, image)values(seq_product_image.nextval,7,'8번상품03이미지.png');
+insert into product_image_table(product_image_num ,fk_product_num, image)values(seq_product_image.nextval,6,'7번상품01이미지.png');
+insert into product_image_table(product_image_num ,fk_product_num, image)values(seq_product_image.nextval,6,'7번상품02이미지.png');
+insert into product_image_table(product_image_num ,fk_product_num, image)values(seq_product_image.nextval,6,'7번상품03이미지.png');
+insert into product_image_table(product_image_num ,fk_product_num, image)values(seq_product_image.nextval,5,'6번상품01이미지.png');
+insert into product_image_table(product_image_num ,fk_product_num, image)values(seq_product_image.nextval,5,'6번상품02이미지.png');
+insert into product_image_table(product_image_num ,fk_product_num, image)values(seq_product_image.nextval,5,'6번상품03이미지.png');
+insert into product_image_table(product_image_num ,fk_product_num, image)values(seq_product_image.nextval,4,'5번상품01이미지.png');
+insert into product_image_table(product_image_num ,fk_product_num, image)values(seq_product_image.nextval,4,'5번상품02이미지.png');
+insert into product_image_table(product_image_num ,fk_product_num, image)values(seq_product_image.nextval,4,'5번상품03이미지.png');
+insert into product_image_table(product_image_num ,fk_product_num, image)values(seq_product_image.nextval,3,'4번상품01이미지.png');
+insert into product_image_table(product_image_num ,fk_product_num, image)values(seq_product_image.nextval,3,'4번상품02이미지.png');
+insert into product_image_table(product_image_num ,fk_product_num, image)values(seq_product_image.nextval,3,'4번상품03이미지.png');
+insert into product_image_table(product_image_num ,fk_product_num, image)values(seq_product_image.nextval,2,'3번상품01이미지.png');
+insert into product_image_table(product_image_num ,fk_product_num, image)values(seq_product_image.nextval,2,'3번상품02이미지.png');
+insert into product_image_table(product_image_num ,fk_product_num, image)values(seq_product_image.nextval,2,'3번상품03이미지.png');
+insert into product_image_table(product_image_num ,fk_product_num, image)values(seq_product_image.nextval,1,'2번상품01이미지.png');
+insert into product_image_table(product_image_num ,fk_product_num, image)values(seq_product_image.nextval,1,'2번상품02이미지.png');
+insert into product_image_table(product_image_num ,fk_product_num, image)values(seq_product_image.nextval,1,'2번상품03이미지.png');
+
 commit;
 select * from product_image_table order by product_image_num asc; 
 
@@ -643,14 +643,15 @@ values(seq_product_table.nextval, '[태우한우]무한생제 1등급 한동 다
 가늘게 다져낸 다짐육은 부드러운 결과 식감이 참 곱답니다. 세균 번식을 막아주는 음이온 시설에서 가공되는 점도 컬리의 마음을 끌었죠.1회분씩 소분 포장한 한우 다짐육을 그때그때 꺼내어 간편하게 요리하세요.
 우리 아기를 위한 소고기 요리, 태우한우 다짐육과 함께라면 더이상 번거롭지 않아요.');
 
-insert into product_table (product_num, product_name, price, stock, origin, packing, unit, sale, seller, seller_phone, fk_category_num, fk_subcategory_num, representative_img) 
-values(seq_product_table.nextval, '바베큐맛 삼겹살구이 (냉동)', '4900', '12', '돼지고기(브라질산)', '냉동/종이포장', '1팩', '0', '김진하', '01075653393', 4, 42, '바베큐맛 삼겹살구이 (냉동).png');
+insert into product_table (product_num, product_name, price, stock, origin, packing, unit, sale, seller, seller_phone, fk_category_num, fk_subcategory_num, representative_img,weight, explain) 
+values(seq_product_table.nextval, '바베큐맛 삼겹살구이 (냉동)', '4900', '1002', '돼지고기(브라질산)', '냉동/종이포장', '1팩', '0', '김진하', '01075653393', 4, 42, '바베큐맛 삼겹살구이 (냉동).png','320g'
+,'라면 끓이듯 간편하게 양념 삼겹살을 만들어보세요. 컬리가 소개하는 돈쉐이크 삼겹살구이는 양념 구이가 얼마나 쉬울 수 있는지 보여줍니다.');
 
-insert into product_table (product_num, product_name, price, stock, origin, packing, unit, sale, seller, seller_phone, fk_category_num, fk_subcategory_num, representative_img) 
-values(seq_product_table.nextval, '베요타 프레사 구이용 200g(냉동)', '18000', '14', '스페인산', '냉동/종이포장', '1팩', '20', '김진하', '01075653393', 4, 42, '베요타 프레사 구이용 200g(냉동).png');
+insert into product_table (product_num, product_name, price, stock, origin, packing, unit, sale, seller, seller_phone, fk_category_num, fk_subcategory_num, representative_img, explain) 
+values(seq_product_table.nextval, '베요타 프레사 구이용 200g(냉동)', '18000', '14', '스페인산', '냉동/종이포장', '1팩', '20', '김진하', '01075653393', 4, 42, '베요타 프레사 구이용 200g(냉동).png','컬리가 준비한 상품입니다.');
 
-insert into product_table (product_num, product_name, price, stock, origin, packing, unit, sale, seller, seller_phone, fk_category_num, fk_subcategory_num, representative_img) 
-values(seq_product_table.nextval, '베요타 플루마 구이용 200g(냉동)', '18500', '10', '스페인산', '냉동/종이포장', '1팩', '0', '김진하', '01075653393', 4, 42, '베요타 플루마 구이용 200g(냉동).png');
+insert into product_table (product_num, product_name, price, stock, origin, packing, unit, sale, seller, seller_phone, fk_category_num, fk_subcategory_num, representative_img, explain) 
+values(seq_product_table.nextval, '베요타 플루마 구이용 200g(냉동)', '18500', '10', '스페인산', '냉동/종이포장', '1팩', '0', '김진하', '01075653393', 4, 42, '베요타 플루마 구이용 200g(냉동).png','컬리가 준비한 상품입니다.');
 
 insert into product_table (product_num, product_name, price, stock, origin, packing, unit, sale, seller, seller_phone, fk_category_num, fk_subcategory_num, representative_img) 
 values(seq_product_table.nextval, '세보데깜뽀 플루마 구이용 200g(냉동)', '16500', '10', '스페인산', '냉동/종이포장', '1팩', '10', '김진하', '01075653393', 4, 42, '세보데깜뽀 플루마 구이용 200g(냉동).png');
@@ -861,51 +862,6 @@ values(seq_product_table.nextval, '[베지밀] 건강맘 두유', '14000', '10',
 
 commit;
 
-
-select RON, product_name, sale from
-(select rownum as RON, product_name, sale from
-    (select product_num, product_name, price, stock, sale, to_char(registerdate,'yyyy-mm-dd') as registerdate from product_table))T
-    where T.RON between 1 and 8;
-    
-    
-    
-select P.product_num, P.product_name, P.price, P.stock, P.origin, P.packing, P.unit, C.category_content , S.subcategory_content
-from product_table P join product_category_table C 
-on P.fk_category_num = C.category_num 
-join product_subcategory_table S
-on P.fk_subcategory_num = S.subcategory_num
-join product_detail_table D 
-on P.product_num = D.fk_product_num;
-
-select * from product_table;
-
-insert into product_detail_table (fk_product_num, representative_image, explain)
-values(1,'1등급 한우 갈빗살 구이용 200g(냉장).png','1등급 한우 갈빗살');
-insert into product_detail_table (fk_product_num, representative_image, explain)
-values(2,'1등급 한우 목심 샤브샤브용 200g(냉장).png','1등급 한우 목심');
-insert into product_detail_table (fk_product_num, representative_image, explain)
-values(3,'1등급 한우 안심 추리 200g(냉장).png','1등급 한우 안심');
-insert into product_detail_table (fk_product_num, representative_image, explain)
-values(4,'1등급 한우 알사태 수육용 500g(냉장).png','1등급 한우 알사태');
-
-
-
-
-
-select * from product_category_table union select * from product_subcategory_table;
-
-insert into member_table (member_num, name, userid, pwd, email, mobile, status) 
-values (seq_member_table.nextval, '관리자', 'admin', 'qwer1234!','2wnaud@naver.com','010-9101-8698','1');
-
-
-rollback;
-
-commit;
-
-select * from order_product_table;
-select * from review_table;
-
-
-
+select * from product_table where product_num = 1;
 
 
