@@ -14,6 +14,7 @@ public class OrderVO {
 	private String memo;
 	private String order_state;
 	private MemberVO member;
+	private int rowNum;
 	
 	public OrderVO() { }
 	
@@ -124,6 +125,15 @@ public class OrderVO {
 	public void setMember(MemberVO member) {
 		this.member = member;
 	}
+
+	public int getRowNum() {
+		return rowNum;
+	}
+
+	public void setRowNum(int rowNum) {
+		this.rowNum = rowNum;
+	}
+	
 	
 	
 }

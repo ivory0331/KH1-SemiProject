@@ -39,7 +39,7 @@ public class MyPageReviewUpdateAction extends AbstractController {
 		if("get".equalsIgnoreCase(method)) { //수정페이지로 이동할 때
 			System.out.println("확인용 => product_num:"+product_num);
 			
-			String message = "로그인이 필요한 기능입니다.";
+			String message = "로그인하셔야 본 서비스를 이용하실 수 있습니다.";
 			String loc = request.getContextPath()+"/member/login.do";
 			String goBackURL = request.getContextPath()+"/member/myPageReviewWrite.do?product_num="+product_num;
 			
@@ -99,22 +99,23 @@ public class MyPageReviewUpdateAction extends AbstractController {
 			String member_num = String.valueOf(loginuser.getMember_num());	
 			product_num = multi.getParameter("product_num");
 			
-			System.out.println(oldFileName);
+			System.out.println("old:"+oldFileName);
 			
 			// 후기 이미지 테이블에 기존에 있던 사진 조회 및 삭제
 			String delFileName = dao.ReviewImgDel(review_num, oldFileName);
 			
-			
-			//실제 경로에서도 이미지 삭제
-			context = request.getSession().getServletContext();
-			realPath = context.getRealPath("Upload")+"/"+oldFileName;		        
-			File file = new File(realPath);			
-			if(file.exists()){
-				file.delete();
+			if ( !delFileName.trim().isEmpty() && delFileName!=null ) {
+				//실제 경로에서도 이미지 삭제
+				context = request.getSession().getServletContext();
+				realPath = context.getRealPath("Upload")+"/"+delFileName;		        
+				File file = new File(realPath);			
+				if(file.exists()){
+					file.delete();
+				}
+				else {
+					System.out.println("이미 삭제된 파일");
+				}			
 			}
-			else {
-				System.out.println("이미 삭제된 파일");
-			}			
 			
 			Enumeration<String> files = multi.getFileNames();
 			if(files.hasMoreElements()) {
@@ -136,10 +137,10 @@ public class MyPageReviewUpdateAction extends AbstractController {
 			
 			System.out.println(subject+"/"+content+"/"+fileName+"/"+review_num+"/"+member_num+"/"+product_num);
 			
+			
 			Map<String,String> paraMap = new HashMap<String, String>();
 			paraMap.put("subject", subject);
 			paraMap.put("content",content);
-			paraMap.put("image", fileName);
 			paraMap.put("review_num", review_num);
 			paraMap.put("member_num", member_num);
 			paraMap.put("product_num", product_num);
@@ -150,7 +151,8 @@ public class MyPageReviewUpdateAction extends AbstractController {
 			String message = "상품 후기가 수정되었습니다.";
 			String loc = request.getContextPath()+"/member/myPageProductCompleteReview.do";
 			
-			if(result==0) {
+			
+			if(result == 0) {
 				message = "상품 후기 수정 도중 오류가 발생했습니다.";
 				loc=request.getContextPath()+"/member/myPageProductCompleteReview.do";				
 			}

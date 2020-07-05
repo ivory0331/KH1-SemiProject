@@ -9,6 +9,7 @@ import java.util.Map;
 import main.model.FAQtableVO;
 import main.model.NoticeVO;
 import main.model.OneInquiryVO;
+import main.model.OrderVO;
 
 public interface InterServiceDAO {
 
@@ -57,5 +58,6 @@ public interface InterServiceDAO {
 
 	// 공지사항 특정 글 삭제
 	int boardDelete(String notice_num)throws SQLException;
+
 
 }

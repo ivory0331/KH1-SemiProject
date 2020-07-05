@@ -37,7 +37,7 @@ public class MyPageReviewWriteAction extends AbstractController {
 			System.out.println("확인용 => product_num:"+product_num);
 			InterIndexDAO dao = new IndexDAO();
 			
-			String message = "로그인이 필요한 기능입니다.";
+			String message = "로그인하셔야 본 서비스를 이용하실 수 있습니다.";
 			String loc = request.getContextPath()+"/member/login.do";
 			String goBackURL = request.getContextPath()+"/member/myPageReviewWrite.do?product_num="+product_num;
 			

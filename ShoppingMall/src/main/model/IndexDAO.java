@@ -1660,5 +1660,206 @@ public class IndexDAO implements InterIndexDAO{
 		return salesList;
 	}
 
+	// 모든 회원의 주문 조회
+	@Override
+	public List<OrderVO> selectOrder(HashMap<String, String> paraMap) throws SQLException {
+		List<OrderVO> orderList = new ArrayList<OrderVO>();
+		try {
+			conn = ds.getConnection();
+			String sql = " select RON, order_num, order_date, recipient, recipient_mobile,"
+					   + " recipient_postcode, recipient_address, recipient_detailaddress,"
+					   + " price, memo, fk_member_num, fk_category_num, name, mobile, email, order_state"
+					   + " from("
+					   + "  select rownum as RON, order_num, order_date, recipient, "
+					   + "  recipient_mobile, recipient_postcode, recipient_address, "
+					   + "  recipient_detailaddress, price, memo, fk_member_num, fk_category_num,"
+					   + "  name, mobile, email, order_state"
+					   + "  from("
+					   + "   select order_num, to_char(order_date,'yyyy-mm-dd')as order_date, "
+					   + "   recipient, recipient_mobile, recipient_postcode, recipient_address, "
+					   + "   recipient_detailaddress, price, memo, fk_member_num, fk_category_num, "
+					   + "   name, mobile, email, order_state "
+					   + "   from order_table join member_table on fk_member_num = member_num "
+					   + "   join order_state_table on fk_category_num = category_num";
+			
+			String searchWord = paraMap.get("searchWord");
+			String orderState = paraMap.get("orderState");
+			String searchType = paraMap.get("searchType");
+			
+			if((searchWord != null && !searchWord.trim().isEmpty()) && (orderState != null && !"0".equals(orderState))) {      
+				sql += " where "+searchType+" like '%'||?||'%'  and fk_category_num = ? ";                          
+			}
+	    
+			else if(searchWord != null && !searchWord.trim().isEmpty()) {
+				sql += " where "+searchType+" like '%'||?||'%' ";
+			}
+			
+			else if(orderState != null && !"0".equals(orderState)){
+				sql += " where fk_category_num = ? ";
+			}
+			
+			
+			sql += " order by order_num asc"
+				+  " )V"
+				+  " )T where T.RON between ? and ?";
+			
+			pstmt = conn.prepareStatement(sql);
+			
+			int currentShowPageNo = Integer.parseInt(paraMap.get("currentShowPageNo"));
+			int sizePerPage = Integer.parseInt(paraMap.get("sizePerPage"));
+			
+			if((searchWord != null && !searchWord.trim().isEmpty()) && (orderState != null && !"0".equals(orderState))) {      
+				pstmt.setString(1, searchWord);
+				pstmt.setString(2, orderState);
+				pstmt.setInt(3, (currentShowPageNo*sizePerPage)-(sizePerPage-1));
+				pstmt.setInt(4, (currentShowPageNo*sizePerPage) );
+			}
+	    
+			else if(searchWord != null && !searchWord.trim().isEmpty()) {
+				pstmt.setString(1, searchWord);
+				pstmt.setInt(2, (currentShowPageNo*sizePerPage)-(sizePerPage-1));
+				pstmt.setInt(3, (currentShowPageNo*sizePerPage) );
+			}
+			
+			else if(orderState != null && !"0".equals(orderState)){
+				pstmt.setString(1, orderState);
+				pstmt.setInt(2, (currentShowPageNo*sizePerPage)-(sizePerPage-1));
+				pstmt.setInt(3, (currentShowPageNo*sizePerPage) );
+			}
+			else {
+				pstmt.setInt(1, (currentShowPageNo*sizePerPage)-(sizePerPage-1));
+				pstmt.setInt(2, (currentShowPageNo*sizePerPage) );
+			}
+			
+			System.out.println("확인용sql:"+sql);
+			rs = pstmt.executeQuery();
+			
+			while(rs.next()) {
+				OrderVO order = new OrderVO();
+				MemberVO member = new MemberVO();
+				order.setRowNum(rs.getInt(1));
+				order.setOrder_num(rs.getInt(2));
+				order.setOrder_date(rs.getString(3));
+				order.setRecipient(rs.getString(4));
+				order.setRecipient_mobile(rs.getString(5));
+				order.setRecipient_postcode(rs.getString(6));
+				order.setRecipient_address(rs.getString(7));
+				order.setRecipient_detailAddress(rs.getString(8));
+				order.setPrice(rs.getInt(9));
+				order.setMemo(rs.getString(10));
+				
+				member.setMember_num(rs.getInt(11));
+				member.setName(rs.getString(13));
+				member.setMobile(aes.decrypt(rs.getString(14)));
+				member.setEmail(aes.decrypt(rs.getString(15)));
+				order.setMember(member);
+				
+				order.setOrder_state(rs.getString(16));
+				orderList.add(order);
+			}
+		}
+		catch(UnsupportedEncodingException | GeneralSecurityException e) {
+	         e.printStackTrace();
+	         
+	    }
+		finally {
+			close();
+		}
+		return orderList;
+	}
+
+	// 배송상태 조회
+	@Override
+	public List<Map<String, String>> getOrderStateList() throws SQLException {
+		List<Map<String, String>> orderStateList = new ArrayList<Map<String,String>>();
+		try {
+			conn = ds.getConnection();
+			String sql = " select category_num, order_state from order_state_table ";
+			pstmt = conn.prepareStatement(sql);
+			rs = pstmt.executeQuery();
+			while(rs.next()) {
+				Map<String, String> orderState = new HashMap<String, String>();
+				orderState.put("num", rs.getString(1));
+				orderState.put("state", rs.getString(2));
+				orderStateList.add(orderState);
+			}
+		}
+		finally {
+			close();
+		}
+		return orderStateList;
+	}
+
+	@Override
+	public int getTotalPageOrder(HashMap<String, String> paraMap) throws SQLException {
+		int totalPage = 0;
+		int sizePerPage = Integer.parseInt(paraMap.get("sizePerPage"));
+		try {
+			conn=ds.getConnection();
+			
+			String sql = " select ceil(count(*)/?) as totalPage "
+						+" from order_table ";
+			
+			String searchWord = paraMap.get("searchWord");
+			String orderState = paraMap.get("orderState");
+			String searchType = paraMap.get("searchType");
+			
+			
+			if((searchWord != null && !searchWord.trim().isEmpty()) && (orderState != null && !"0".equals(orderState))) {      
+				sql += " where "+searchType+" like '%'||?||'%'  and fk_category_num = ? ";                          
+			}
+	    
+			else if(searchWord != null && !searchWord.trim().isEmpty()) {
+				sql += " where "+searchType+" like '%'||?||'%' ";
+			}
+			
+			else if(orderState != null && !"0".equals(orderState)){
+				sql += " where fk_category_num = ? ";
+			}
+			
+			
+			
+			pstmt = conn.prepareStatement(sql);
+			System.out.println("확인용sql:"+sql);
+			
+
+			if((searchWord != null && !searchWord.trim().isEmpty()) && (orderState != null && !"0".equals(orderState))) {      
+				pstmt.setInt(1,sizePerPage);
+				pstmt.setString(2, searchWord);
+				pstmt.setString(3, orderState);
+			}
+	    
+			else if(searchWord != null && !searchWord.trim().isEmpty()) {
+				pstmt.setInt(1,sizePerPage);
+				pstmt.setString(2, searchWord);
+			}
+			
+			else if(orderState != null && !"0".equals(orderState)){
+				pstmt.setInt(1,sizePerPage);
+				pstmt.setString(2, orderState);
+			}
+			else {
+				pstmt.setInt(1,sizePerPage);
+			}
+			
+			
+			rs = pstmt.executeQuery();
+			
+			rs.next();
+			
+			totalPage = rs.getInt(1);
+			
+			System.out.println("totalPage : "+totalPage);
+			
+		}catch(Exception e){
+			e.printStackTrace();
+		} finally {
+			close();
+		}
+		
+		
+		return totalPage;
+	}
+
 	
 }

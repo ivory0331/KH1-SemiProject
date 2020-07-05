@@ -165,6 +165,16 @@
 		    location.href="<%= ctxPath%>/member/myPageOrderHistoryDetail.do?order_num="+order_num;
 		});
 		
+		$("#term").val("${term}");
+		
+		$("#term").bind("change", function(){
+			  var frm = document.orderFrm;
+			  
+			  frm.method = "GET";
+			  frm.action = "<%= ctxPath%>/member/myPageOrderHistory.do";
+			  frm.submit();
+		  });
+		
 	});// end of $(document).ready()---------------------
 	
 	
@@ -180,21 +190,23 @@
 			
 			<jsp:include page="../include/myPageSideMenu.jsp"></jsp:include>
 				
-			<div id="myPage_Contents">		
+			<div id="myPage_Contents">						
 				<div id="myOrderHistory_Header">
+				<form name="orderFrm">
 					<h2 id="myOrderHistory_Title">주문 내역</h2>
 					<span id="myOrderHistory_Text">지난 3년간의 주문 내역 조회가 가능합니다</span>
 					<ul>
 						<li id="mySelectTerm">
 							<select name="term" id="term">
-								<option value="1" selected>전체기간</option>
-								<option value="2">2020년</option>
-								<option value="3">2019년</option>
-								<option value="4">2018년</option>
+								<option value="all" selected>전체기간</option>
+								<option value="${option}">${option}년</option>
+								<option value="${option-1}">${option-1}년</option>
+								<option value="${option-2}">${option-2}년</option>
 							</select>
 						</li>
 					</ul>
 					<div id="line" style="clear:both;"></div>
+				</form>	
 				</div>
 			
 				<div id="myOrderHistory_List">
@@ -216,7 +228,7 @@
 								<div class="myOrder_Goods">
 									<div class="myOrder_Name">
 										<a class="myOrder_Name">${ohvo.product_name}&nbsp;
-											<c:if test="${ohvo.product_cnt != 1}">외 ${ohvo.product_cnt-1}건</c:if>
+											<c:if test="${ohvo.product_cnt != 0}">외 ${ohvo.product_cnt}건</c:if>
 											<input type="hidden" class="order_num" value="${ohvo.order_num}"/>
 										</a>
 									</div>
@@ -259,7 +271,7 @@
 					</c:forEach>
 					</c:if>
 				</div>	
-				<div style="border-bottom:solid 1px black; text-align:center;">페이징 처리</div>			
+				<div style="border-bottom:solid 0px black; text-align:center;">${pageBar}</div>			
 			</div>						
 			</div>
 			<div style="clear:both;"></div>

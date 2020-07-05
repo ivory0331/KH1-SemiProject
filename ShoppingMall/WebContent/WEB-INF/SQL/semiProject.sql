@@ -151,8 +151,7 @@ unit=?,packing=?,origin=?,price=?,sale=?,best_point=?,seller=?,seller_phone=?,st
 where product_num=?;
 
 select*
-from product_table
-where product_num=251;
+from product_table;
 
 update product_image_table set image=?
 where product_num=?;
@@ -296,6 +295,8 @@ insert into order_state_table(category_num, order_state) values(3, '배송완료
 
 commit;
 
+update 
+
 -- 주문내역 상품 상세보기(혜민) 
 select P.representative_img, P.product_name, OP.price, OP.product_count,
 	OS.order_state, OP.reviewFlag
@@ -318,6 +319,9 @@ join product_table P
 on OP.fk_product_num = P.product_num
 where O.fk_member_num = 1 and OP.reviewFlag = 0 and O.fk_category_num = 3);
 
+
+select*
+from member_table;
 
 -- 주문 정보 테이블 생성 --
 create table order_table
@@ -346,6 +350,10 @@ commit;
 
 select*
 from order_table;
+
+9695b88a59a1610320897fa84cb7e144cc51f2984520efb77111d94b402a8382
+uYg23XNX4EHriQrBgXSXy73zzuR4KTIzxwM10BQ5Vek=
+
 
 -- 진하
 
@@ -391,6 +399,12 @@ where order_num = 1;
 
 update order_table set fk_category_num = 3
 where order_num = 2;
+
+update order_table set fk_category_num = 3
+where order_num = 4;
+
+update order_table set fk_category_num = 3
+where order_num = 5;
 
 commit;
 
@@ -1338,3 +1352,62 @@ alter table review_image_table
 add constraint fk_review_image foreign key (fk_review_num) references review_table(review_num) on delete cascade;
 
 select * from one_inquiry_table where subject like '%'||'배송'||'%';
+
+
+-- 작성가능 후기 페이징 (혜민)
+select RNO, idx, userid, name, email, gender
+from
+(
+    select rownum AS RNO, idx, userid, name, email, gender
+    from
+    (
+    select idx, userid, name, email, gender
+    from mymvc_shopping_member
+    order by idx desc
+    ) V
+) T
+where T.RNO between 1 and 10;
+
+
+select RNO, fk_order_num, representative_img, product_name, product_count, product_num
+from
+(
+    select rownum AS RNO, fk_order_num, representative_img, product_name, product_count, product_num
+    from
+    (
+    select OP.fk_order_num, P.representative_img, P.product_name, OP.product_count, P.product_num
+    from order_table O join order_product_table OP
+    on O.order_num = OP.fk_order_num
+    join product_table P
+    on OP.fk_product_num = P.product_num
+    where O.fk_member_num = 1 and OP.reviewFlag = 0 and O.fk_category_num = 3
+    order by fk_order_num desc
+    ) V
+) T
+where T.RNO between 1 and 3;
+
+
+select RNO, review_num, product_name, to_char(write_date,'yyyy-mm-dd'), hit, favorite, subject, content
+from
+(    
+    select rownum AS RNO, review_num, product_name, to_char(write_date,'yyyy-mm-dd'), hit, favorite, subject, content
+    from
+    (
+    select R.review_num, P.product_name, to_char(R.write_date,'yyyy-mm-dd'), R.hit, R.favorite, R.subject, R.content
+    from product_table P join review_table R
+    on P.product_num = R.fk_product_num 
+    where R.fk_member_num = 1
+    order by R.review_num desc
+    ) V
+) T   
+where T.RNO between 1 and 3;
+
+select * from product_inquiry_table;
+
+delete from product_inquiry_table;
+commit;
+
+desc order_table;
+select sum(price), to_char(order_date, 'yyyy-mm-dd')as order_date from order_table group by to_char(order_date, 'yyyy-mm-dd')
+order by order_date desc;
+

@@ -4,6 +4,7 @@ import java.io.UnsupportedEncodingException;
 import java.security.GeneralSecurityException;
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -11,6 +12,7 @@ import javax.naming.*;
 import javax.sql.DataSource;
 
 import main.model.*;
+import member.model.MemberVO;
 import util.security.AES256;
 import util.security.Sha256;
 
@@ -499,7 +501,7 @@ public class ReviewDAO implements InterReviewDAO {
 				
 				System.out.println("fileName="+paraMap.get("fileName"));
 				
-				if(!paraMap.get("fileName").trim().isEmpty()) {
+				if( paraMap.get("fileName")!=null && !paraMap.get("fileName").trim().isEmpty()) {
 					
 					sql = " insert into review_image_table (fk_review_num, image) "
 						+ " values (?,?)";
@@ -534,52 +536,281 @@ public class ReviewDAO implements InterReviewDAO {
 		@Override
 		public String ReviewImgDel(String review_num, String oldFileName) throws SQLException {
 			
+			int n = 0;
 			String delFileName = "";
 			
 			try {
 				conn = ds.getConnection();
 				
-				String sql = " select image from review_image_table where fk_review_num = ? ";
+				String sql = " select image " + 
+						     " from review_image_table " + 
+						     " where fk_review_num = ? ";
 				
-				if(oldFileName != null) {
+				if(oldFileName != null && !oldFileName.trim().isEmpty()) {
 					sql += " and image != ? ";					
 				}
 				
-				sql += " and image is null ";
+				
 				
 				pstmt = conn.prepareStatement(sql);
 				pstmt.setString(1, review_num);
 				
-				if(oldFileName != null) {
+				if(oldFileName != null && !oldFileName.trim().isEmpty()) {
 					pstmt.setString(2, oldFileName);
 				}						
 				System.out.println(sql);				
 				
-				rs = pstmt.executeQuery();				
+				rs = pstmt.executeQuery();					
 				if(rs.next()) {
 					delFileName = rs.getString(1);
 				}
 				rs.close();
 				
-				sql = " delete from review_image_table where fk_review_num = ? ";
+				sql = " delete from review_image_table " + 
+					  " where fk_review_num = ? ";
 				
-				if(oldFileName != null) {
+				if(oldFileName != null && !oldFileName.trim().isEmpty()) {
 					sql += " and image != ? ";
 				}
 				
 				pstmt = conn.prepareStatement(sql);
 				pstmt.setString(1, review_num);
 				
-				if(oldFileName != null) {
+				if(oldFileName != null && !oldFileName.trim().isEmpty()) {
 					pstmt.setString(2, oldFileName);
 				}
 				
-				pstmt.executeUpdate();				
+				n = pstmt.executeUpdate();				
 			}
 			finally {
 				close();
 			}			
 			return delFileName;
+		}
+
+		
+		// 페이징처리를 한, 특정 회원의 모든 작성가능 후기내역 보여주기
+		@Override
+		public List<OrderProductVO> selectPagingPossibleReview(HashMap<String, String> paraMap, int member_num) throws SQLException {
+			
+			List<OrderProductVO> possibleReviewList= new ArrayList<>();
+			
+			try {
+				conn = ds.getConnection();
+				
+				String sql = " select RNO, fk_order_num, representative_img, product_name, product_count, product_num " + 
+							 " from " + 
+							 " ( " + 
+							 "    select rownum AS RNO, fk_order_num, representative_img, product_name, product_count, product_num " + 
+							 "    from " + 
+							 "    ( " + 
+							 "    select OP.fk_order_num, P.representative_img, P.product_name, OP.product_count, P.product_num " + 
+							 "    from order_table O join order_product_table OP " + 
+							 "    on O.order_num = OP.fk_order_num " + 
+							 "    join product_table P " + 
+							 "    on OP.fk_product_num = P.product_num " + 
+							 "    where O.fk_member_num = ? and OP.reviewFlag = 0 and O.fk_category_num = 3 " + 
+							 "    order by fk_order_num desc " + 
+							 "    ) V " + 
+							 " ) T " + 
+							 " where T.RNO between ? and ? ";
+				
+				pstmt = conn.prepareStatement(sql);
+				int currentShowPageNo = Integer.parseInt(paraMap.get("currentShowPageNo"));
+				int sizePerPage = Integer.parseInt(paraMap.get("sizePerPage"));
+				
+				pstmt.setInt(1, member_num);
+				pstmt.setInt(2, (currentShowPageNo * sizePerPage) - (sizePerPage - 1) ); // 공식
+				pstmt.setInt(3, (currentShowPageNo * sizePerPage) ); // 공식 
+				
+				rs = pstmt.executeQuery();
+				
+				while(rs.next()) {
+					
+					int fk_order_num = rs.getInt(2);
+					String representative_img = rs.getString(3);
+					String product_name = rs.getString(4);
+					int product_count = rs.getInt(5);
+					int product_num = rs.getInt(6);
+					
+					ProductVO pvo = new ProductVO();			
+					pvo.setProduct_name(product_name);
+					pvo.setRepresentative_img(representative_img);
+					pvo.setProduct_num(product_num);
+					
+					OrderProductVO opvo = new OrderProductVO();
+					opvo.setOrder_num(fk_order_num);
+					opvo.setCount(product_count);	
+					opvo.setProduct(pvo);
+
+					possibleReviewList.add(opvo);
+				}
+				
+			} finally {
+				close();
+			}
+
+			return possibleReviewList;
+		}
+
+		
+		// 페이징처리를 위한 특정 회원의 작성가능 후기 내역에 대한 총페이지갯수 알아오기(select)
+		@Override
+		public int getPossibleReviewTotalPage(HashMap<String, String> paraMap, int member_num) throws SQLException {
+			int totalPage = 0;
+			
+			try {
+				conn = ds.getConnection();
+				
+				String sql = " select ceil( count(*)/? ) from( select OP.fk_order_num, P.representative_img, P.product_name, OP.product_count, P.product_num " + 
+							 " from order_table O join order_product_table OP " + 
+							 " on O.order_num = OP.fk_order_num " + 
+							 " join product_table P " + 
+							 " on OP.fk_product_num = P.product_num " + 
+							 " where O.fk_member_num = ? and OP.reviewFlag = 0 and O.fk_category_num = 3 ) ";
+				
+				pstmt = conn.prepareStatement(sql);
+				
+				pstmt.setInt(1, Integer.parseInt(paraMap.get("sizePerPage")) );
+				pstmt.setInt(2, member_num);
+				
+				rs = pstmt.executeQuery();
+					
+				rs.next();
+				
+				totalPage = rs.getInt(1);	
+				
+			} finally {
+				close();
+			}
+			
+			return totalPage;
+		}
+
+		
+		// 페이징처리를 한, 특정 회원의 모든 작성완료 후기내역 보여주기
+		@Override
+		public List<ReviewVO> selectPagingCompleteReview(HashMap<String, String> paraMap, int member_num) throws SQLException {
+			
+			List<ReviewVO> completeReviewList= new ArrayList<>();
+			
+			try {
+				conn = ds.getConnection();
+				
+				String sql = " select RNO, review_num, product_name, write_date, hit, favorite, subject, content " + 
+							 " from " + 
+							 " ( " + 
+							 "    select rownum AS RNO, review_num, product_name, write_date, hit, favorite, subject, content " + 
+							 "    from " + 
+							 "    ( " + 
+							 "    select R.review_num, P.product_name, to_char(R.write_date,'yyyy-mm-dd') as write_date, R.hit, R.favorite, R.subject, R.content " + 
+							 "    from product_table P join review_table R " + 
+							 "    on P.product_num = R.fk_product_num " + 
+							 "    where R.fk_member_num = ? " + 
+							 "    order by R.review_num desc " + 
+							 "    ) V " + 
+							 " ) T " + 
+							 " where T.RNO between ? and ? ";
+				
+				int currentShowPageNo = Integer.parseInt(paraMap.get("currentShowPageNo"));
+				int sizePerPage = Integer.parseInt(paraMap.get("sizePerPage"));
+	
+				pstmt = conn.prepareStatement(sql);
+				
+				pstmt.setInt(1, member_num);
+				pstmt.setInt(2, (currentShowPageNo * sizePerPage) - (sizePerPage - 1) ); // 공식
+				pstmt.setInt(3, (currentShowPageNo * sizePerPage) ); // 공식 
+				
+				rs = pstmt.executeQuery();
+
+				while(rs.next()) {
+					
+					int review_num = rs.getInt(2);
+					String product_name = rs.getString(3);
+					String write_date = rs.getString(4);
+					int hit = rs.getInt(5);
+					int favorite = rs.getInt(6);
+					String subject = rs.getString(7);
+					String content = rs.getString(8);										
+					
+					ProductVO pvo = new ProductVO();
+					pvo.setProduct_name(product_name);
+					
+					ReviewVO rvo = new ReviewVO();			
+					rvo.setReview_num(review_num);
+					rvo.setWrite_date(write_date);
+					rvo.setHit(hit);
+					rvo.setFavorite(favorite);
+					rvo.setSubject(subject);
+					rvo.setContent(content);
+					rvo.setProduct(pvo);
+														
+					completeReviewList.add(rvo);
+				}								
+				rs.close();
+				
+				if(completeReviewList.size() > 0) {
+					sql = " select image from review_image_table where fk_review_num = ? ";	
+					
+					pstmt = conn.prepareStatement(sql);	
+					
+					for(int i=0; i<completeReviewList.size(); i++) {								
+						pstmt.setInt(1, completeReviewList.get(i).getReview_num());						
+						rs = pstmt.executeQuery();		
+						
+						List<String>imageList = new ArrayList<String>();
+						
+						while(rs.next()) {
+							String image = rs.getString(1);
+							imageList.add(image);						
+						}	
+						rs.close();
+						
+						completeReviewList.get(i).setImageList(imageList);
+					}
+				}
+			
+			} finally {
+				close();
+			}
+			
+			return completeReviewList;
+			
+		}
+
+		
+		// 페이징처리를 위한 특정 회원의 모든 작성완료 후기내역에 대한 총페이지갯수 알아오기(select)
+		@Override
+		public int getCompleteReviewTotalPage(HashMap<String, String> paraMap, int member_num) throws SQLException {
+
+			int totalPage = 0;
+			
+			try {
+				conn = ds.getConnection();
+				
+				String sql = " select ceil( count(*)/? ) from( select R.review_num, P.product_name, to_char(R.write_date,'yyyy-mm-dd') as write_date, R.hit, R.favorite, R.subject, R.content " + 
+							 "    from product_table P join review_table R " + 
+							 "    on P.product_num = R.fk_product_num " + 
+							 "    where R.fk_member_num = ? " + 
+							 "    order by R.review_num desc ) ";
+				
+				pstmt = conn.prepareStatement(sql);
+				
+				pstmt.setInt(1, Integer.parseInt(paraMap.get("sizePerPage")) );
+				pstmt.setInt(2, member_num);
+				
+				rs = pstmt.executeQuery();
+					
+				rs.next();
+				
+				totalPage = rs.getInt(1);	
+				
+			} finally {
+				close();
+			}
+			
+			return totalPage;
+
 		}
 
 			

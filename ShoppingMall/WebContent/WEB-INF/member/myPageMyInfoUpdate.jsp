@@ -406,6 +406,8 @@ input#userid:focus {outline:none;}
 	var bPwChValidateCheck = true; //비밀번호 확인 체크 
 	var bEmailDuplicateCheck = true; //이메일 중복확인 클릭여부 확인 
 	var bEmailButtonCheck = false; //이메일 버튼 활성화 여부 체크(현재 비활성화)
+	var bTelDuplicateCheck = false; //휴대폰인증 클릭여부 확인
+	var bTelCheckDuplicateCheck = false; //휴대폰인증 확인 클릭여부 체크 
 	
 	$(document).ready(function(){
         
@@ -459,7 +461,7 @@ input#userid:focus {outline:none;}
 	      });// end of $("#passwdCk").blur()--------------
 	      
 	      
-	    //== 휴대폰 유효성 검사 == 
+	      //== 휴대폰 유효성 검사 == 
 	      // 1) 숫자만 입력(숫자이외의 글자를 치면 아예 못치게 차단) 2)유효성검사에 맞으면 인증번호받기 클릭가능 3)버튼 누르면 메세지 전송
 	                      
 	      $("#tel").keyup(function(event){
@@ -470,7 +472,9 @@ input#userid:focus {outline:none;}
 	           //console.log($(this).val().length);
 	           //console.log(keycode);
 	         
-	         if( !((48 <= keycode && keycode<=57) || (96<=keycode && keycode<=105) || (keycode == 8))){
+
+	         if( !((48 <= keycode && keycode<=57) || (96<=keycode && keycode<=105)|| (keycode==8))){
+
 	            var word = $(this).val().length;
 	            var keyValue = $(this).val().substring(0,word-1);
 	            $(this).val(keyValue);
@@ -500,13 +504,96 @@ input#userid:focus {outline:none;}
 	      
 	      
 	      //==인증번호 받기 (인증번호 클릭하면 telCk_error나오게 )
-	      $(".btn_tel").click(function(event){
-	    	  $(".txt_guide:eq(4)").show();
+	      $("#btn_tel").click(function(event){
+	    	  $(".txt_guide:eq(3)").show();
 	    	  
+	    	  if($("#tel").val().trim()==""){
+	              alert("인증받을 휴대폰 번호를 기입하세요");
+	              bTelDuplicateCheck = false;
+	              return;            
+	           }
+	    	  
+	    	  $.ajax({
+					url:"<%= ctxPath%>/member/myPageSmsSend.do",
+					type:"post",
+					data:{"mobile":$("#tel").val() /*핸드폰 번호 */
+						 }, /*문자 내용이 난수 값 : action단에서 생성해서 넘김  */
+					dataType:"json",
+					success:function(json){
+						if(json.success_count == 1) {
+							 alert("인증번호가 발송되었습니다");
+							 bTelDuplicateCheck = true;						
+						}
+						else {
+							alert("인증번호 전송이 실패되었습니다");
+							 bTelDuplicateCheck = false;
+						}
+					},
+					error: function(request, status, error){
+						alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
+				    }
+				});	
 	      });
-	     
 	      
-	      //==인증번호 확인     
+	      
+	      // == 인증번호 확인버튼 효과주기 
+	      $("#tel_confirm").keyup(function(event){
+	          
+	          //1) 숫자만 입력(숫자이외의 글자를 치면 아예 못치게 차단)
+	          var keycode = event.keyCode;
+	            
+	          if( !((48 <= keycode && keycode<=57) || (96<=keycode && keycode<=105)|| (keycode==8))){
+
+	             var word = $(this).val().length;
+	             var keyValue = $(this).val().substring(0,word-1);
+	             $(this).val(keyValue);
+	          }
+	          
+	          //2)유효성검사에 맞으면 인증번호받기 클릭가능
+	          if($(this).val().length == 6) {
+	               // $("#btnCheck_tel").addClass('btn_tel_correct');
+	               $("#btnCheck_tel").css({"background-color":"#5f0080", "color":"#fff","border":"solid 1px #5f0080"});
+	                //alert("확인!");
+	          }
+	          else{
+	                $("#btnCheck_tel").removeClass('btn_tel_correct');
+	                $("#btnCheck_tel").removeAttr("href");
+	          }
+	     });// end of $("#tel_confirm").keyup(function(event) ------------
+	    		 
+	       
+	      //==인증번호 동일 한지 확인                 
+	      $("#btnCheck_tel").click(function(){    	  
+	    	  
+	    	if($("#tel_confirm").val().trim()==""){
+	            alert("인증번호를 기입하세요");
+	            bTelCheckDuplicateCheck = false;
+	            return;            
+	         }
+	    	
+	    	 $.ajax({
+				url:"<%= ctxPath%>/member/myPageTelVerifyCertification.do",
+				type:"post",
+				data:{"tel_confirm":$("#tel_confirm").val()},
+				dataType:"json",
+				success:function(json){
+					if(json.n == 1) {
+						 alert("인증성공 되었습니다");
+						 bTelCheckDuplicateCheck = true;					
+					}
+					else{
+						alert("발급된 인증코드가 아닙니다. 인증코드를 다시 발급받으세요");
+						$("#tel_confirm").val("");
+						bTelCheckDuplicateCheck = false;
+					}
+				},
+				error: function(request, status, error){
+					alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
+			    }
+	    	 
+	      	});
+	    	 
+	      });// end of $("#passwdCk").blur()--------------  
 	      
 	      
 	    //생년월일 클릭 시 
@@ -552,8 +639,6 @@ input#userid:focus {outline:none;}
 		var email = $("#email").val();
 		var regExp_EMAIL = /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i;
 		var bool = regExp_EMAIL.test(email);
-		
-		
 
 		if (!bool) { // 이메일이 정규표현식에 위배된 경우
 
@@ -649,10 +734,10 @@ input#userid:focus {outline:none;}
 	//== update 버튼 클릭시  ==
 	function goUpdate() {
 		
-		if($("input#userid").val().trim() == null){
+ 		if($("input#name").val().trim() == ""){
 			alert("이름은 필수 입력 사항입니다.\r\n이름을 입력해주세요.");
 			return;
-		}
+		} 
 		
 		if($("input#passwd").val().trim() != "" || $("input#passwdCk").val().trim() != ""){			
 			//비밀번호 유효성 검사 체크
@@ -669,18 +754,43 @@ input#userid:focus {outline:none;}
 		}	
 			
 		
-		//휴대폰 번호 검사 체크여부 
-		if($("input#tel").val().trim() == null){
-			alert("휴대폰 번호는 필수 입력 사항입니다.\r\n휴대폰 번호를 입력해주세요.");
+		if($("input#tel").val().trim() == ""){
+			alert("핸드폰 번호는 필수 입력 사항입니다.\r\n핸드폰 번호를 입력해주세요.");
 			return;
+			if($("#tel").val().trim() != "${(sessionScope.loginuser).mobile}") {	
+				//휴대폰 번호 검사 체크여부 
+				if(!bTelDuplicateCheck){
+			        alert("휴대폰 번호 인증을 해주세요");
+			        return;
+			    }
+				
+				//휴대폰 번호 검사 체크여부 
+				if(!bTelDuplicateCheck){
+			        alert("휴대폰 번호 인증을 해주세요");
+			        return;
+			    }
+				 
+				//휴대폰 인증검사 체크여부 
+				if(!bTelCheckDuplicateCheck){
+			        alert("휴대폰 번호 인증을 해주세요");
+			        return;
+			    }
+			}
 		}
+			
 		
-		if($("#email").val().trim() != "${(sessionScope.loginuser).email}" && $("#email").val().trim() != "") {			
-			//이메일 중복체크 검사 
-			if (!bEmailDuplicateCheck) {
-				alert("이메일 중복확인을 해주세요");
-				return;
-			}			
+		if($("input#email").val().trim() == ""){
+			alert("이메일은 필수 입력 사항입니다.\r\n이메일을 입력해주세요.");
+			return;
+			
+			if($("#email").val().trim() != "${(sessionScope.loginuser).email}") {			
+				//이메일 중복체크 검사 
+				if (!bEmailDuplicateCheck) {
+					alert("이메일 중복확인을 해주세요");
+					return;
+				}			
+			}
+			
 		}
 		
 		else{
@@ -771,10 +881,10 @@ input#userid:focus {outline:none;}
 			                        <td class="memberCols1">휴대폰*</td>
 			                        <td class="memberCols2">
 			                           <input type="tel"  name="mobile" id="tel" value="${(sessionScope.loginuser).mobile}" maxlength="11" placeholder="숫자만 입력해주세요"/>
-			                            <span class="btnCheck btn_tel ">인증번호 받기 </span>
+			                            <span class="btnCheck btn_tel " id="btn_tel">인증번호 받기 </span>
 			                             
 			                             <input type="text" class="tel_confirm" name="tel_confirm" id="tel_confirm" value="" maxlength="6" >   
-			                            <span class="btnCheck btnCheck_tel ">인증번호 확인 </span>
+			                            <span class="btnCheck btnCheck_tel" id="btnCheck_tel">인증번호 확인 </span>
 			                             
 			                             <p class="txt_guide" style="display: block;">
 			                           <span class="txt txt_errorCk telCk_error">인증번호가 오지 않는다면, 통신사 스팸 차단 서비스 혹은 휴대폰 번호 차단 여부를 확인해주세요. (마켓컬리 1644-1107)</span>
@@ -801,7 +911,7 @@ input#userid:focus {outline:none;}
 			                           <input type="radio" class="gender" name="gender" value="2" id="female"/>
 			                           <label for="female" class="text_position">여자</label>
 			                           
-			                           <input type="radio" class="gender" name="gender" value="3" id="none"/>
+			                           <input type="radio" class="gender" name="gender" value="0" id="none"/>
 			                           <label for="none" class="text_position">선택안함</label>
 		                             </td>
 			                     </tr>
