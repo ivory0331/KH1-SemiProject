@@ -24,7 +24,7 @@ public class ManagerProductDeleteAction extends AbstractController {
 		
 		if(sum==product_num.length) {
 			
-			 response.sendRedirect("managerProductList.do");
+			response.sendRedirect("managerProductList.do");
 
 		}
 				

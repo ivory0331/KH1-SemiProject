@@ -19,7 +19,6 @@
 	}
 	
 	div#info{
-		border : solid 1px red;
 		display:inline-block;
 		width: 900px;
 		margin-left:10px;
@@ -495,8 +494,8 @@
 				<div id="info">
 					<form name="productInsert" >
 						<div class="newGoodsAdd" id="newGoodsAdd0" align="left">
-							<div class="newGoodsTitle" id="newGoodsTitle0">
-								<h4>상품 상세페이지</h4>
+							<div class="newGoodsTitle" id="newGoodsTitle0" style="margin:10px 0;">
+								<h3 style="margin:25px 0; padding:15px">상품 상세 페이지</h3>
 							</div>
 							
 							<div class="newProductImg" align="center" id="newProductImg0">
@@ -618,9 +617,8 @@
 								<label>상품 상세 설명</label>
 								<textarea style="width:95%; height:150px;" name="explain" >${pvo.explain}</textarea>
 							</div>
-							
-							
-						</div>
+							</div>
+				
 						<div style="clear:both;"></div>
 					</form>
 					

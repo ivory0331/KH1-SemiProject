@@ -88,6 +88,7 @@ public class MemberDAO implements InterMemberDAO {
 				
 				String sql = " select member_num, name, userid, address" 					
 							+" from member_table "
+							+" where status!=2 "
 							+" order by member_num desc ";
 				//여기 나중에 status 추가해서 관리가 빼야 됨.
 				//전화번호 컬럼 추가
@@ -126,25 +127,34 @@ public class MemberDAO implements InterMemberDAO {
 			try {			
 				conn = ds.getConnection();
 				
-				String sql = " select RNO, member_num, name, userid, address "
+				String sql = " select RNO, member_num, name, userid, address, mobile"
 							+" from "
-							+" ( select rownum AS RNO, member_num, name, userid, address "
+							+" ( select rownum AS RNO, member_num, name, userid, address, mobile"
 							+"   from "
-							+"     ( select member_num, name, userid, address "
+							+"     ( select member_num, name, userid, address, mobile"
 							+"       from member_table ";
 							
-				String searchWord = paraMap.get("searchWord");
 				String searchType = paraMap.get("searchType");
+				String searchWord = paraMap.get("searchWord");
+
 					
-				if(searchWord != null && !searchWord.trim().isEmpty()) {      
+				if(searchWord != "") {      
 			            
-			            sql += " where "+searchType+" like '%'||?||'%' ";                  
+			        sql += " where "+searchType+" like '%'||?||'%' and status!=2 "
+			        	+" order by member_num desc "
+						+"     )V "
+						+" )T "
+						+" where T.RNO between ? and ? ";
+			        
+			    }else {
+			    	sql += " where status!=2 "
+			    		  +" order by member_num desc "
+					      +"     )V "
+					      +" )T "
+					      +" where T.RNO between ? and ? ";
+			    	
 			    }
-			         
-			    sql +=    "       order by member_num desc "
-			           +"     )V "
-			           +" )T "
-			           +" where T.RNO between ? and ? ";     				
+			          				
 				
 				pstmt = conn.prepareStatement(sql);			
 			
@@ -152,7 +162,7 @@ public class MemberDAO implements InterMemberDAO {
 				int sizePerPage = Integer.parseInt(paraMap.get("sizePerPage"));
 
 				// 공식
-				if(searchWord != null && !searchWord.trim().isEmpty()) {	
+				if(searchWord != "") {	
 
 					pstmt.setString(1, searchWord);
 					pstmt.setInt(2, (currentShowPageNo*sizePerPage)-sizePerPage+1);
@@ -173,6 +183,7 @@ public class MemberDAO implements InterMemberDAO {
 					mvo.setName(rs.getString("name"));
 					mvo.setUserid(rs.getString("userid"));
 					mvo.setAddress(rs.getString("address"));
+					mvo.setMobile(aes.decrypt(rs.getString("mobile")));
 		            
 		            memberList.add(mvo);
 				}
@@ -204,16 +215,20 @@ public class MemberDAO implements InterMemberDAO {
 				String searchWord = paraMap.get("searchWord");
 				String searchType = paraMap.get("searchType");
 				
-				if(searchWord !=null && !searchWord.trim().isEmpty()) {		
+				if(searchWord !="") {		
 					
-					sql += " where "+searchType+" like '%'||?||'%' ";						
+					sql += " where "+searchType+" like '%'||?||'%' and status!=2";
+				}else {
+					
+					sql += " where status!=2";						
 				}
 				
 				
 				pstmt = conn.prepareStatement(sql);
 				
 				
-				if(searchWord !=null && !searchWord.trim().isEmpty()) {		
+				if(searchWord !="") {		
+					//null && !searchWord.trim().isEmpty()
 					
 					pstmt.setInt(1, Integer.parseInt(paraMap.get("sizePerPage")));
 					pstmt.setString(2, searchWord);
@@ -289,7 +304,7 @@ public class MemberDAO implements InterMemberDAO {
 				
 				pstmt = conn.prepareStatement(sql);		
 				
-				pstmt.setString(1, member_num);	
+				pstmt.setInt(1, Integer.parseInt(member_num));	
 				
 				rs = pstmt.executeQuery();
 				

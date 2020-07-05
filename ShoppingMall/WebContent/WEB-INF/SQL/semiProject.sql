@@ -49,6 +49,7 @@ create table member_table
 
 
 
+
 drop sequence seq_member_table;
 -- 회원테이블에 사용할 시퀀스 생성 --
 create sequence seq_member_table
@@ -264,6 +265,7 @@ create table order_table
 
 
 
+
 -- 주문 상품 정보 테이블 (주문번호 1)
 insert into order_product_table(product_count, fk_order_num, fk_product_num, price, reviewFlag)
 values(1,1,69,12900,0);
@@ -456,7 +458,9 @@ create table FAQ_table
 );
 
 
+
 drop sequence seq_FAQ_table;
+
 -- 자주하는 질문 테이블에서 사용할 시퀀스 생성 --
 create sequence seq_FAQ_table
 start with 1
@@ -891,12 +895,17 @@ values(4,'1등급 한우 알사태 수육용 500g(냉장).png','1등급 한우 �
 select * from product_category_table union select * from product_subcategory_table;
 
 insert into member_table (member_num, name, userid, pwd, email, mobile, status) 
-values (seq_member_table.nextval, '관리자', 'admin', 'qwer1234!','2wnaud@naver.com','010-9101-8698','2');
+values (seq_member_table.nextval, '관리자', 'admin', 'qwer1234!','2wnaud@naver.com','010-9101-8698','1');
+
+
+rollback;
 
 commit;
 
 select * from order_product_table;
 select * from review_table;
+
+
 
 
 
