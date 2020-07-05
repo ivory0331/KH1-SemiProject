@@ -1,5 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>    
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+
 <% String ctxPath = request.getContextPath(); %>
 <!DOCTYPE html>
 <html>
@@ -68,12 +71,13 @@
 		margin-bottom: 20px;
 	}
 	
-	.myOrder_Name {
+	div.myOrder_Name {
 		border: solid 0px cyan;
 		border-bottom: solid 1px #eee;
 		padding: 10px 5px;
 		text-align: left;
 		color: black;
+		cursor: pointer;
 	}  
 	
 	.myOrder_Name > a {  
@@ -120,31 +124,17 @@
 	.myOrder_Status {
 		border: solid 0px lime;
 		display: inline-block;
+		margin-bottom: 17px;
 		width: 15%;
 	}	
 	
-	a.link {
+	a.link_question {
 		border: solid 1px #5f0080;
 		display: inline-block; 
 		float: right;
 		width: 100px;
 		padding: 5px 0;
 		margin: 5px;
-	}
-	
-	a.link_review {
-		color: white;
-		font-weight: bold;
-		background-color: #5f0080;
-	}
-	
-	a.link_review:hover {
-		text-decoration: none;		
-		color: white;
-		cursor: pointer;
-	}
-	
-	a.link_question {
 		color: #5f0080;
 		background-color: white;
 	}
@@ -161,118 +151,127 @@
 </style>
 
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-<link rel="stylesheet" href="css/style.css" />
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 <script type="text/javascript" src="/ShoppingMall/js/jquery-3.3.1.min.js"></script>
 <script type="text/javascript" src="/ShoppingMall/util/myutil.js"></script>
 
 <script type="text/javascript">
-
+	$(document).ready(function(){
+		
+		$(".myOrder_Name").click(function(){
+			var order_num = $(this).find(".order_num").val();
+			// alert(order_num);
+		    location.href="<%= ctxPath%>/member/myPageOrderHistoryDetail.do?order_num="+order_num;
+		});
+		
+		$("#term").val("${term}");
+		
+		$("#term").bind("change", function(){
+			  var frm = document.orderFrm;
+			  
+			  frm.method = "GET";
+			  frm.action = "<%= ctxPath%>/member/myPageOrderHistory.do";
+			  frm.submit();
+		  });
+		
+	});// end of $(document).ready()---------------------
+	
+	
+	
 </script>
 
 </head>
 <body>	
-	<div class="container">
+	<div class="Mycontainer">
 		<jsp:include page="../include/header.jsp"></jsp:include>
 		<div class="section" align="center">
 			<div class="contents">	
 			
 			<jsp:include page="../include/myPageSideMenu.jsp"></jsp:include>
 				
-			<div id="myPage_Contents">		
+			<div id="myPage_Contents">						
 				<div id="myOrderHistory_Header">
+				<form name="orderFrm">
 					<h2 id="myOrderHistory_Title">주문 내역</h2>
 					<span id="myOrderHistory_Text">지난 3년간의 주문 내역 조회가 가능합니다</span>
 					<ul>
 						<li id="mySelectTerm">
 							<select name="term" id="term">
-								<option value="1" selected>전체기간</option>
-								<option value="2">2020년</option>
-								<option value="3">2019년</option>
-								<option value="4">2018년</option>
+								<option value="all" selected>전체기간</option>
+								<option value="${option}">${option}년</option>
+								<option value="${option-1}">${option-1}년</option>
+								<option value="${option-2}">${option-2}년</option>
 							</select>
 						</li>
 					</ul>
 					<div id="line" style="clear:both;"></div>
+				</form>	
 				</div>
 			
 				<div id="myOrderHistory_List">
-					<div>
-						<div class="myOrder_Date">0000.00.00 (00시 00분)</div>
-						<div class="myOrder_Goods">
-							<div class="myOrder_Name">
-								<a>상품명1 외 2건</a>
-							</div>
-							<div class="myOrder_block">
-								<div class="myOrder_Info">
-									<div class="myOrder_Image">
-										<img alt="해당 주문 대표 상품 이미지" src="include/images/logo.png">
-									</div> 
-									<table class="myOrder_Desc">
-										<tr>
-											<td class="mytd1">주문번호</td>
-											<td class="mytd2">1111111111</td>
-										</tr>
-										<tr>
-											<td class="mytd1">결제금액</td>
-											<td class="mytd2">11,111원</td>
-										</tr>
-										<tr>
-											<td class="mytd1">주문상태</td>
-											<td class="status end mytd2">배송완료</td>
-										</tr>															
-									</table>						
-									<div style="clear:both;"></div>
-								</div>						
-								<div class="myOrder_Status">
-									<span class="myOrder_InnerStatus">
-										<a class="link link_review">후기 작성</a>
-										<a class="link link_question">1:1 문의</a>
-									</span>
-								</div>
-							</div>
+					<c:if test="${empty orderHistoryList}">
+						<div style="margin-bottom:100px;">
+							<span>
+					   	    	주문 내역이 없습니다.
+					   	    </span>
 						</div>
-					</div>	
+					</c:if>
 					
+					<c:if test="${not empty orderHistoryList}">					
+					<c:set var="temp" value="0" />
+					<c:forEach var="ohvo" items="${orderHistoryList}">
 					<div>
-						<div class="myOrder_Date">0000.00.00 (00시 00분)</div>
-						<div class="myOrder_Goods">
-							<div class="myOrder_Name">
-								<a>상품명2 외 1건</a>
-							</div>
-							<div class="myOrder_block">
-								<div class="myOrder_Info">
-									<div class="myOrder_Image">
-										<img alt="해당 주문 대표 상품 이미지" src="include/images/logo.png">
-									</div> 
-									<table class="myOrder_Desc">
-										<tr>
-											<td class="mytd1">주문번호</td>
-											<td class="mytd2">2222222222</td>
-										</tr>
-										<tr>
-											<td class="mytd1">결제금액</td>
-											<td class="mytd2">22,222원</td>
-										</tr>
-										<tr>
-											<td class="mytd1">주문상태</td>
-											<td class="status end mytd2">배송완료</td>
-										</tr>															
-									</table>						
-									<div style="clear:both;"></div>
-								</div>						
-								<div class="myOrder_Status">
-									<span class="myOrder_InnerStatus">
-										<a class="link link_review">후기 작성</a>
-										<a class="link link_question">1:1 문의</a>
-									</span>
+					 	<c:choose>
+						 	<c:when test="${ohvo.order_num != temp}">
+								<div class="myOrder_Date">${ohvo.order_date}</div>
+								<div class="myOrder_Goods">
+									<div class="myOrder_Name">
+										<a class="myOrder_Name">${ohvo.product_name}&nbsp;
+											<c:if test="${ohvo.product_cnt != 0}">외 ${ohvo.product_cnt}건</c:if>
+											<input type="hidden" class="order_num" value="${ohvo.order_num}"/>
+										</a>
+									</div>
+									<div class="myOrder_block">
+										<div class="myOrder_Info">
+											<div class="myOrder_Image">
+												<img alt="해당 주문 대표 상품 이미지" src="<%=ctxPath %>/images/${ohvo.representative_img}">
+											</div> 
+											<table class="myOrder_Desc">
+												<tr>
+													<td class="mytd1">주문번호</td>
+													<td class="mytd2">${ohvo.order_num}</td>
+												</tr>
+												<tr>
+													<td class="mytd1">결제금액</td>
+													<td class="mytd2"><fmt:formatNumber value="${ohvo.price}" pattern="###,###"/> 원</td>
+												</tr>
+												<tr>
+													<td class="mytd1">주문상태</td>
+													<td class="status end mytd2">${ohvo.order_state}</td>
+												</tr>															
+											</table>						
+											<div style="clear:both;"></div>
+										</div>						
+										<div class="myOrder_Status">
+											<span class="myOrder_InnerStatus">
+												<a class="link link_question" href="<%= ctxPath %>/service/serviceCenterMyQboardWrite.do">1:1 문의</a>
+											</span>
+										</div>
+									</div>
 								</div>
-							</div>
-						</div>
-					</div>					
+								<c:set var="temp" value="${ohvo.order_num}" />
+							</c:when>
+							
+							<c:otherwise>
+								<c:set var="temp" value="${ohvo.order_num}" />
+							</c:otherwise>
+						</c:choose>						
+					</div>	
+					</c:forEach>
+					</c:if>
 				</div>	
-				<div style="border-bottom:solid 1px black; text-align:center;">페이징 처리</div>			
+				<div style="border-bottom:solid 0px black; text-align:center;">${pageBar}</div>			
 			</div>						
 			</div>
 			<div style="clear:both;"></div>
@@ -281,25 +280,3 @@
 	</div>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

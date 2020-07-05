@@ -1,191 +1,257 @@
 package main.model;
 
+import java.util.List;
+
 public class ProductVO {
-	// 상품VO
-	private int product_num; // 상품 고유 번호
-	private String product_name; // 상품명
-	private int price; // 상품 가격
-	private int stock; // 상품 재고
-	private String origin; // 상품 원산지
-	private String packing; // 상품 포장방법
-	private String unit; // 상품 단위
-	private String registerdate; // 상품 등록날짜
-	private int sale; // 상품 세일(0=>세일x , 10=> 10%세일)
-	private String seller; // 쇼핑몰로 상품을 판매한 판매자 정보(관리자에서 사용)
-	private String seller_phone; // 판매자 번호
-	private int fk_category_num; // 상품 카테고리 번호
-	private int fk_subcategory_num; // 상품 카테고리 번호2
-	private String representative_img; // 대표 이미지
-	private String image1; //상품이미지1
-	private String image2; //상품이미지2
-	private String image3; //상품이미지3
-	private String explain; //상품 설명
 	
+	private int product_num;
+	private String product_name;
+	private int price;
+	private int stock;
+	private String weight;
+	private String origin;
+	private String packing;
+	private String unit;
+	private String shelf;
+	private String information;
+	private String registerdate;
+	private int sale;
+	private int fk_category_num; 
+	private int fk_subcategory_num;
+	private int category_num;
+	private String category_content;
+	private int subcategory_num;
+	private String subcategory_content;
+	private String representative_img;
+	private String explain;
+	private List<String> imageList; // 상품 상세정보페이지에서 사용할 이미지 파일들
+	private List<ImageVO> imageList2;
 	
-	//상품과 관련된 카테고리 내용
-	private String category_content; // 상품 카테고리명
-	private String subcategory_content; // 상품 카테고리명2
+	private int finalPrice;
+	private int totalPrice;
 	
-	
-	// product_num //
+	public ProductVO() { }
+
+	public ProductVO(int product_num, String product_name, int price, int stock, String origin, String packing,
+			String unit, String registerdate, int sale, int fk_category_num, int fk_subcategory_num, int category_num,
+			String category_content, int subcategory_num, String subcategory_content, String representative_img,
+			String explain, List<String> imageList) {
+		super();
+		this.product_num = product_num;
+		this.product_name = product_name;
+		this.price = price;
+		this.stock = stock;
+		this.origin = origin;
+		this.packing = packing;
+		this.unit = unit;
+		this.registerdate = registerdate;
+		this.sale = sale;
+		this.fk_category_num = fk_category_num;
+		this.fk_subcategory_num = fk_subcategory_num;
+		this.category_num = category_num;
+		this.category_content = category_content;
+		this.subcategory_num = subcategory_num;
+		this.subcategory_content = subcategory_content;
+		this.representative_img = representative_img;
+		this.explain = explain;
+		this.imageList = imageList;
+	}
+
+
+
 	public int getProduct_num() {
 		return product_num;
 	}
 	public void setProduct_num(int product_num) {
 		this.product_num = product_num;
 	}
-	
-	// product_name //
 	public String getProduct_name() {
 		return product_name;
 	}
 	public void setProduct_name(String product_name) {
 		this.product_name = product_name;
 	}
-	
-	// price //
 	public int getPrice() {
 		return price;
 	}
 	public void setPrice(int price) {
 		this.price = price;
 	}
-	
-	// stock //
 	public int getStock() {
 		return stock;
 	}
 	public void setStock(int stock) {
 		this.stock = stock;
 	}
-	
-	// origin //
 	public String getOrigin() {
 		return origin;
 	}
 	public void setOrigin(String origin) {
 		this.origin = origin;
 	}
-	
-	// packing //
 	public String getPacking() {
 		return packing;
 	}
 	public void setPacking(String packing) {
 		this.packing = packing;
 	}
-	
-	// unit //
 	public String getUnit() {
 		return unit;
 	}
 	public void setUnit(String unit) {
 		this.unit = unit;
 	}
-	
-	// registerdate //
 	public String getRegisterdate() {
 		return registerdate;
 	}
 	public void setRegisterdate(String registerdate) {
 		this.registerdate = registerdate;
 	}
-	
-	// sale //
 	public int getSale() {
 		return sale;
 	}
 	public void setSale(int sale) {
 		this.sale = sale;
 	}
-	
-	// seller //
-	public String getSeller() {
-		return seller;
-	}
-	public void setSeller(String seller) {
-		this.seller = seller;
-	}
-	
-	// seller_phone //
-	public String getSeller_phone() {
-		return seller_phone;
-	}
-	public void setSeller_phone(String seller_phone) {
-		this.seller_phone = seller_phone;
-	}
-	
-	// fk_category_num //
 	public int getFk_category_num() {
 		return fk_category_num;
 	}
 	public void setFk_category_num(int fk_category_num) {
 		this.fk_category_num = fk_category_num;
 	}
-	
-	// fk_subcategory_num //
 	public int getFk_subcategory_num() {
 		return fk_subcategory_num;
 	}
 	public void setFk_subcategory_num(int fk_subcategory_num) {
 		this.fk_subcategory_num = fk_subcategory_num;
 	}
-	
-	// category_content //
+
 	public String getCategory_content() {
 		return category_content;
 	}
+
 	public void setCategory_content(String category_content) {
 		this.category_content = category_content;
 	}
-	
-	// subcategory_content //
+
 	public String getSubcategory_content() {
 		return subcategory_content;
 	}
+
 	public void setSubcategory_content(String subcategory_content) {
 		this.subcategory_content = subcategory_content;
 	}
-	
-	// representativ_img //
+
+	public int getCategory_num() {
+		return category_num;
+	}
+
+	public void setCategory_num(int category_num) {
+		this.category_num = category_num;
+	}
+
+	public int getSubcategory_num() {
+		return subcategory_num;
+	}
+
+	public void setSubcategory_num(int subcategory_num) {
+		this.subcategory_num = subcategory_num;
+	}
+
 	public String getRepresentative_img() {
 		return representative_img;
 	}
+
 	public void setRepresentative_img(String representative_img) {
 		this.representative_img = representative_img;
 	}
-	
-	// image1 //
-	public String getImage1() {
-		return image1;
-	}
-	public void setImage1(String image1) {
-		this.image1 = image1;
-	}
-	
-	// image2 //
-	public String getImage2() {
-		return image2;
-	}
-	public void setImage2(String image2) {
-		this.image2 = image2;
-	}
-	
-	// image3 //
-	public String getImage3() {
-		return image3;
-	}
-	public void setImage3(String image3) {
-		this.image3 = image3;
-	}
-	
-	// explain //
+
 	public String getExplain() {
 		return explain;
 	}
+
 	public void setExplain(String explain) {
 		this.explain = explain;
 	}
+
+	public List<String> getImageList() {
+		return imageList;
+	}
+
+	public void setImageList(List<String> imageList) {
+		this.imageList = imageList;
+	}
+	
+	
+	public String getWeight() {
+		return weight;
+	}
+
+	public void setWeight(String weight) {
+		this.weight = weight;
+	}
+
+	public String getShelf() {
+		return shelf;
+	}
+
+	public void setShelf(String shelf) {
+		this.shelf = shelf;
+	}
+
+	public String getInformation() {
+		return information;
+	}
+
+	public void setInformation(String information) {
+		this.information = information;
+	}
+
+	public void setFinalPrice(int finalPrice) {
+		this.finalPrice = finalPrice;
+	}
+
+	////////////////////////////////////////////////////////////
+	// *** 제품의 총판매가(실제판매가 * 주문량) 구해오기 ***
+	public void setTotalPrice(int price, int sale, int product_count) {
+		
+		double salePrice = Double.valueOf(price)*(Double.valueOf(sale)/100);
+		
+		finalPrice = (int)(Double.valueOf(price)-salePrice);
+		
+		totalPrice =  finalPrice * product_count; // 세일까지 적용한 최종 판매가 * 주문량
+
+	}
+	
+	public int getTotalPrice() {
+		return totalPrice;
+	}
+	
+	public void setFinalPrice() {
+		if(sale != 0) {
+			double salePrice = Double.valueOf(price)*(Double.valueOf(sale)/100);
+			finalPrice = (int)(Double.valueOf(price)-salePrice);
+		}
+		else {
+			finalPrice = price;
+		}
+	}
+
+	public int getFinalPrice() {
+		
+		
+		return finalPrice;
+	}
+
+	public List<ImageVO> getImageList2() {
+		return imageList2;
+	}
+
+	public void setImageList2(List<ImageVO> imageList2) {
+		this.imageList2 = imageList2;
+	}
+
+	
 	
 	
 	

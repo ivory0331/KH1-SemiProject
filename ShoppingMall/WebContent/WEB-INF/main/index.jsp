@@ -44,16 +44,16 @@
 		float:left;
 		position: relative;
 		margin-right:20px;
-		
+		cursor: pointer;
 		
 		
 	}
 	
 	.item_list > li > img{
 		display: block;
-		border: solid 1px black;
+		border: solid 0px black;
 		width: 100%;
-		height:440px;
+		height: 360px;
 	}
 	
 	/*footer.jsp가 include되는 영역*/
@@ -95,18 +95,23 @@
 		display: inline-block;
 		padding: 10px 20px;
 		font-size: 12pt;
-		background-color: #f4f4f4;
+		background-color: #f7f7f6;
 		border-radius: 20px;
 		margin-right: 10px;
 		cursor: pointer;
+		font-weight: 600;
 	}
 	
 	.select_MDbest{
-		background-color: purple !important;
+		background-color: #5f0081 !important;
 		color:white;
+	}
+	.item>img {
+		height: 200px;
 	}
 	
 </style>
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
@@ -142,8 +147,9 @@
 													 $("#"+type+"_slideL").hide();
 										          });
 		}	
+
 	} //end of func_slideL(type) ---------------------------------------------
-	
+
 	// 오른쪽 버튼을 클릭하면 실행되는 function //
 	function func_slideR(type){
 		console.log(type);
@@ -188,9 +194,9 @@
 	
 	
 	// 상세보기 url 이동
-	function goDetail(idx){
-		console.log(idx);
-		location.href="<%=ctxPath%>/detail.do?idx="+idx;
+	function goDetail(product_num){
+		//console.log(product_num);
+		location.href="<%=ctxPath%>/detail.do?product_num="+product_num;
 	} // end of goDetail(idx)----------------------------------------------------
 	
 	
@@ -203,54 +209,84 @@
 	      $.ajax({
 	         url:"<%=ctxPath%>"+url,
 	         type:"get",
+	         async:false,
 	         data:data,
 	         dataType:"JSON",
 	         success:function(json){
 	            console.log(json);
 	            if(data.type=="new"){
-	            	for(var i=0; i<json.length; i++){
-	            		var imgFileName = decodeURIComponent(json[i].product_name);
-		            	var html="<img alt='상품1' src='<%=ctxPath %>/images/"+imgFileName+".png' onclick = 'goDetail("+json[i].product_num+")'>"
-		            	        +"<a href='#'>"
-		            	        +json[i].product_name
-		            	        +"</a><br/>"
-		            	        +"<span>"+func_comma(""+json[i].price)+"원</span>";
-		            	$("#new_item"+i).html(html);
-		            }
+	            	$(json).each(function(index, item){
+	            		console.log(item.sale);
+	            		var imgFileName = decodeURIComponent(item.representative_img);
+	            		var html="<img alt='상품1' src='<%=ctxPath %>/images/"+imgFileName+"' onclick = 'goDetail("+item.product_num+")'>"
+            	        +"<span style='font-size:16px; color:#333;' onclick = 'goDetail("+item.product_num+")'>"+item.product_name+"<span>"
+            	        +"<br/>";
+            	        if(item.sale==0){
+            	        	html+="<span style='color: #333; font-weight: bold; font-size: 16px;'>"+func_comma(""+item.price)+"원</span>";
+            	        }
+            	        else{
+            	        	html+="<span style='color: #333; font-weight: bold; font-size: 16px;'>"+func_comma(""+item.finalPrice)+"원</span>"
+            	        	html+="<br/><span style='text-decoration:line-through; color: #ccc; font-weight: bold; font-size: 14px;'>"+func_comma(""+item.price)+"</span>"
+            	        }
+            	        
+            			$("#new_item"+index).html(html);
+	            	});
+	            	
 	            }
 	            else if(data.type=="best"){
-	            	for(var i=0; i<json.length; i++){
-	            		var imgFileName = decodeURIComponent(json[i].product_name);
-		            	var html="<img alt='상품1' src='<%=ctxPath %>/images/"+imgFileName+".png' onclick = 'goDetail("+json[i].product_num+")'>"
-		            	        +"<a href='javascript:goDetail("+json[i].product_num+")'>"
-		            	        +json[i].product_name
-		            	        +"</a><br/>"
-		            	        +"<span>"+func_comma(""+json[i].price)+"원</span>";
-		            	$("#MDbest_item"+i).html(html);
-		            }
+	            	$(json).each(function(index, item){
+	            		console.log(item.sale);
+	            		var imgFileName = decodeURIComponent(item.representative_img);
+	            		var html="<img alt='상품1' src='<%=ctxPath %>/images/"+imgFileName+"' onclick = 'goDetail("+item.product_num+")'>"
+            	        +"<span style='font-size:16px; color:#333;' onclick = 'goDetail("+item.product_num+")'>"+item.product_name+"<span>"
+            	        +"<br/>";
+            	        if(item.sale==0){
+            	        	html+="<span style='color: #333; font-weight: bold; font-size: 16px;'>"+func_comma(""+item.price)+"원</span>";
+            	        }
+            	        else{
+            	        	html+="<span style='color: #333; font-weight: bold; font-size: 16px;'>"+func_comma(""+item.finalPrice)+"원</span>"
+            	        	html+="<br/><span style='text-decoration:line-through; color: #ccc; font-weight: bold; font-size: 14px;'>"+func_comma(""+item.price)+"</span>"
+            	        }
+            	        
+            			$("#MDbest_item"+index).html(html);
+	            	});
 	            }
 	            else if(data.type=="sale"){
-	            	for(var i=0; i<json.length; i++){
-	            		var imgFileName = decodeURIComponent(json[i].product_name);
-		            	var html="<img alt='상품1' src='<%=ctxPath %>/images/"+imgFileName+".png' onclick = 'goDetail("+json[i].product_num+")'>"
-		            	        +"<a href='javascript:goDetail("+json[i].product_num+")'>"
-		            	        +json[i].product_name
-		            	        +"</a><br/>"
-		            	        +"<span>"+func_comma(""+json[i].price)+"원</span>";
-		            	$("#sale_item"+i).html(html);
-		            }
+	            	$(json).each(function(index, item){
+	            		console.log(item.sale);
+	            		var imgFileName = decodeURIComponent(item.representative_img);
+	            		var html="<img alt='상품1' src='<%=ctxPath %>/images/"+imgFileName+"' onclick = 'goDetail("+item.product_num+")'>"
+            	        +"<span style='font-size:16px; color:#333;' onclick = 'goDetail("+item.product_num+")'>"+item.product_name+"<span>"
+            	        +"<br/>";
+            	        if(item.sale==0){
+            	        	html+="<span style='color: #333; font-weight: bold; font-size: 16px;'>"+func_comma(""+item.price)+"원</span>";
+            	        }
+            	        else{
+            	        	html+="<span style='color: #333; font-weight: bold; font-size: 16px;'>"+func_comma(""+item.finalPrice)+"원</span>"
+            	        	html+="<br/><span style='text-decoration:line-through; color: #ccc; font-weight: bold; font-size: 14px;'>"+func_comma(""+item.price)+"</span>"
+            	        }
+            	        
+            			$("#sale_item"+index).html(html);
+	            	});
 	            }
 	            
 	            else if(data.type=="random"){
-	            	for(var i=0; i<json.length; i++){
-	            		var imgFileName = decodeURIComponent(json[i].product_name);
-		            	var html="<img alt='상품1' src='<%=ctxPath %>/images/"+imgFileName+".png' onclick = 'goDetail("+json[i].product_num+")'>"
-		            	        +"<a href='javascript:goDetail("+json[i].product_num+")'>"
-		            	        +json[i].product_name
-		            	        +"</a><br/>"
-		            	        +"<span>"+func_comma(""+json[i].price)+"원</span>";
-		            	$("#random_item"+i).html(html);
-		            }
+	            	$(json).each(function(index, item){
+	            		console.log(item.sale);
+	            		var imgFileName = decodeURIComponent(item.representative_img);
+	            		var html="<img alt='상품1' src='<%=ctxPath %>/images/"+imgFileName+"' onclick = 'goDetail("+item.product_num+")'>"
+            	        +"<span style='font-size:16px; color:#333;' onclick = 'goDetail("+item.product_num+")'>"+item.product_name+"<span>"
+            	        +"<br/>";
+            	        if(item.sale==0){
+            	        	html+="<span style='color: #333; font-weight: bold; font-size: 16px;'>"+func_comma(""+item.price)+"원</span>";
+            	        }
+            	        else{
+            	        	html+="<span style='color: #333; font-weight: bold; font-size: 16px;'>"+func_comma(""+item.finalPrice)+"원</span>"
+            	        	html+="<br/><span style='text-decoration:line-through; color: #ccc; font-weight: bold; font-size: 14px;'>"+func_comma(""+item.price)+"</span>"
+            	        }
+            	        
+            			$("#random_item"+index).html(html);
+	            	});
 	            }
 	            
 	         },
@@ -259,13 +295,47 @@
 	         }
 	   });
 	} // end of reqServer(url, data) --------------------------------------------
-	
 </script>
 </head>
 <body>
 	
 	<div class="Mycontainer">
 		<jsp:include page="../include/header.jsp"></jsp:include>
+		
+	<div id="myCarousel" class="carousel slide" data-ride="carousel">
+    <!-- Indicators -->
+    <ol class="carousel-indicators">
+      <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+      <li data-target="#myCarousel" data-slide-to="1"></li>
+      <li data-target="#myCarousel" data-slide-to="2"></li>
+    </ol>
+
+    <!-- Wrapper for slides -->
+    <div class="carousel-inner" style="margin-bottom: 50px !important;">
+      <div class="item active">
+        <img src="<%=ctxPath %>/images/allpaper.png" alt="종이박스" style="width:100%;">
+      </div>
+
+      <div class="item">
+        <img src="<%=ctxPath %>/images/banchan.png" alt="매일반찬" style="width:100%;">
+      </div>
+    
+      <div class="item">
+        <img src="<%=ctxPath %>/images/jarang.png" alt="장바구니자랑" style="width:100%;">
+      </div>
+    </div>
+
+    <!-- Left and right controls -->
+    <a class="left carousel-control" href="#myCarousel" data-slide="prev">
+      <span class="glyphicon glyphicon-chevron-left"></span>
+      <span class="sr-only">Previous</span>
+    </a>
+    <a class="right carousel-control" href="#myCarousel" data-slide="next">
+      <span class="glyphicon glyphicon-chevron-right"></span>
+      <span class="sr-only">Next</span>
+    </a>
+  </div>
+  
 		<div class="section" align="center">
 			<div class="contents">
 				<div id="best">
@@ -501,7 +571,7 @@
 						<h6>매일 정오 신상품을 확인해보세요</h6>
 						<!-- sale영역에 있는 li(class=sale_item)태그를 움직여야 하므로 onclick의 파라미터에 'sale'을 입력한다. -->
 						<span id="new_slideL" class="slideL" onclick="func_slideL('new')">&lt;&lt;&lt;</span>
-						<span id="new_slideR" class="slideR"onclick="func_slideR('new')" style="display:none;">&gt;&gt;&gt;</span>
+						<span id="new_slideR" class="slideR" onclick="func_slideR('new')" style="display:none;">&gt;&gt;&gt;</span>
 					</div>
 					<div class="slide_wrapper">
 					<ul class="item_list">

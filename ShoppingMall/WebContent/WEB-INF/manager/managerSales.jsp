@@ -1,6 +1,17 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<% String ctxPath = request.getContextPath(); %>
+<%@ page import="java.util.*" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<% String ctxPath = request.getContextPath(); 
+   Object obj = request.getAttribute("salesList");
+   List<Map<String, String>> salesList = (List<Map<String, String>>)obj;
+   String[] dateArr = new String[salesList.size()];
+   String[] priceArr = new String[salesList.size()];
+   for(int i=0; i<salesList.size(); i++){
+	   dateArr[i]=salesList.get(i).get("date");
+	   priceArr[i]=salesList.get(i).get("price");
+   }
+%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -30,12 +41,13 @@
 		margin-left:10px;
 		padding:10px 20px;
 		color:purple;
+		cursor: pointer;
 	}
 	
-	.type:hover{
+	.select{
 		cursor: pointer;
-		background-color: purple;
 		color:white;
+		background-color: purple;
 	}
 </style>
 <!-- 부트스트랩 -->
@@ -46,9 +58,8 @@
 <script type="text/javascript" src="/ShoppingMall/util/myutil.js"></script>
 <script type="text/javascript">
 	$(document).ready(function(){
+		$(".${type}").addClass("select");
 		func_lineGraph();
-		
-		
 	});
 	
 	function func_lineGraph(){
@@ -57,11 +68,34 @@
 				{ 	// 챠트 종류를 선택 
 					type: 'line', 
 					// 챠트를 그릴 데이타
-					data: { labels: ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월','9월','10월','11월','12월'], 
-					datasets: [{ label: 'My First dataset', backgroundColor: 'transparent', borderColor: 'red', data: [0, 10, 5, 2, 20, 30, 45, 60, 80, 24, 11, 60] }] }, 
+					data: { labels: [
+						<% for(int i=0; i<dateArr.length; i++){%>
+							<%if(i<dateArr.length-1){%>
+								"<%=dateArr[i]%>",
+							<%}
+							else{%>
+								"<%=dateArr[i]%>"
+							<%}%>
+						<%}%>
+					], 
+					datasets: [{ label: 'My First dataset', backgroundColor: 'transparent', borderColor: 'red', data: [
+						<% for(int i=0; i<dateArr.length; i++){%>
+						<%if(i<priceArr.length-1){%>
+							"<%=priceArr[i]%>",
+						<%}
+						else{%>
+							"<%=priceArr[i]%>"
+						<%}%>
+					<%}%>
+						
+						] }] }, 
 					// 옵션
 					 options: {} 
-			})
+			});
+	}
+	
+	function goSubmit(type){
+		location.href="<%=ctxPath%>/manager/managerSale.do?type="+type;
 	}
 	
 </script>
@@ -77,8 +111,8 @@
 				<div class="sales">
 					<canvas id="myChart"></canvas> 
 					<div class="range" align="right">
-						<span class="type month">월간</span>
-						<span class="type year">년간</span>
+						<span class="type month" onclick="goSubmit('month')">월간</span>
+						<span class="type year" onclick="goSubmit('year')">년간</span>
 					</div>
 				</div>
 				<div style="clear:both;"></div>

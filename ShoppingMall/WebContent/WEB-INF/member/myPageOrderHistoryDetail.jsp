@@ -1,6 +1,10 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %> 
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>   
+
 <% String ctxPath = request.getContextPath(); %>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -162,7 +166,6 @@
 </style>
 
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-<link rel="stylesheet" href="css/style.css" />
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 <script type="text/javascript" src="/ShoppingMall/js/jquery-3.3.1.min.js"></script>
@@ -170,11 +173,19 @@
 
 <script type="text/javascript">
 
+	$(document).ready(function(){
+	
+	});
+
+	function goReview(num){
+		location.href="<%= ctxPath%>/member/myPageReviewWrite.do?product_num="+num;
+	}
+	
 </script>
 
 </head>
 <body>	
-	<div class="container">
+	<div class="Mycontainer">
 		<jsp:include page="../include/header.jsp"></jsp:include>
 		<div class="section" align="center">
 			<div class="contents">	
@@ -190,58 +201,55 @@
 				<div id="myOrderHistoryDetail_List">
 					<div>												
 						<div class="myOrder_number">
-							<h3>주문번호 1111111111</h3>
+							<h3>주문번호&nbsp;${order_num}</h3>
 						</div>
 						
 						<div class="myOrder_Goods">						
 							<div class="myOrder_Info">
 							
-								<table class="myOrder_Desc">
+								<table class="myOrder_Desc">	
+									<c:forEach var="OrderProductsList" items="${OrderProductsList}">					
 									<tr class="desc-list">
 										<td class="image">
-											<img alt="해당 주문 대표 상품 이미지" src="include/images/logo.png">
+											<img alt="해당 주문 대표 상품 이미지" src="<%=ctxPath %>/images/${OrderProductsList.representative_img}">
 										</td>
 										<td class="info">
 											<div class="name">
-												<a class="productName">제품명1</a>
+												<a class="productName" href="<%= ctxPath %>/detail.do?product_num=${OrderProductsList.product_num}">${OrderProductsList.product_name}</a>
 											</div>
 											<div class="desc">
-												<span class="price">4,000원</span>
-												<span class="count">1개 구매</span>
+												<span class="price"><fmt:formatNumber value="${OrderProductsList.price}" pattern="###,###"/> 원</span>
+												<span class="count">${OrderProductsList.product_count}개 구매</span>
 											</div>											
 										</td>		
 										<td class="delivery">
-											<span>배송완료</span>
+											<span>${OrderProductsList.order_state}</span>
 										</td>
-										<td class="link">
-											<a class="link_review">후기 작성</a>
-										</td>																	
-									</tr>	
+										
+										<c:choose>
+											<c:when test="${OrderProductsList.reviewFlag != 1 && OrderProductsList.order_state == '배송완료'}">
+												<td class="link">
+													<a class="link_review" onclick="goReview('${OrderProductsList.product_num}')">후기 작성</a>
+												</td>							
+											</c:when>	
+											<c:when test="${OrderProductsList.reviewFlag == 1 && OrderProductsList.order_state == '배송완료'}">
+												<td class="link">
+													<a class="link_review_complete">후기 작성 완료</a>
+												</td>							
+											</c:when>
+											<c:otherwise>
+												<td class="link">
+													<a class="link_review_complete">후기 작성</a>
+												</td>
+											</c:otherwise>
+										</c:choose>														
+									</tr>
+									</c:forEach>														
+								</table>
 									
-									<tr class="desc-list">
-										<td class="image">
-											<img alt="해당 주문 대표 상품 이미지" src="include/images/logo.png">
-										</td>
-										<td class="info">
-											<div class="name">
-												<a class="productName">제품명2</a>
-											</div>
-											<div class="desc">
-												<span class="price">3,000원</span>
-												<span class="count">2개 구매</span>
-											</div>											
-										</td>		
-										<td class="delivery">
-											<span>배송완료</span>
-										</td>
-										<td class="link">
-											<a class="link_review_complete">후기 작성 완료</a>
-										</td>																	
-									</tr>																								
-								</table>	
 													
 								<div style="clear:both;"></div>
-								
+													
 								<div class="head_section">								
 									<h3 class="tit">결제 정보</h3>									
 								</div>
@@ -249,19 +257,18 @@
 								<table class="info">
 									<tr>
 										<th class="info">총주문금액</th>
-										<td class="info"><span>10,000</span>원</td>
+										<td class="info">
+											<c:set var="price" value="${OrderInfodetail.price-3000}"/>
+											<fmt:formatNumber value="${price}" pattern="###,###"/> 원
+										</td>
 									</tr>
 									<tr>
 										<th class="info">배송비</th>
-										<td class="info">+2,500원</td>
-									</tr>
-									<tr>
-										<th class="info">결제금액</th>
-										<td class="info"><span>12,500</span>원</td>										
+										<td class="info">3,000 원</td>
 									</tr>
 									<tr style="border-bottom:solid 1px #ddd;">
-										<th class="info">결제방법</th>
-										<td class="info">신용카드</td>										
+										<th class="info">결제금액</th>
+										<td class="info"><fmt:formatNumber value="${OrderInfoDetail.price}" pattern="###,###"/> 원</td>										
 									</tr>
 								</table>
 								
@@ -272,23 +279,19 @@
 								<table class="info">
 									<tr>
 										<th class="info">주문 번호</th>
-										<td class="info">1111111111</td>
+										<td class="info">${order_num}</td>
 									</tr>
 									<tr>
 										<th class="info">주문자명</th>
-										<td class="info">OOO</td>
-									</tr>
-									<tr>
-										<th class="info">보내는 분</th>
-										<td class="info">OOO</td>										
+										<td class="info">${name}</td>
 									</tr>
 									<tr>
 										<th class="info">결제일시</th>
-										<td class="info">0000-00-00 00:00:00</td>										
+										<td class="info">${OrderInfoDetail.order_date}</td>										
 									</tr>
 									<tr style="border-bottom:solid 1px #ddd;">
 										<th class="info">주문 처리상태</th>
-										<td class="info">배송완료</td>										
+										<td class="info">${OrderInfoDetail.order_state}</td>										
 									</tr>
 								</table>
 								
@@ -296,52 +299,29 @@
 									<h3 class="tit">배송 정보</h3>									
 								</div>
 								
-								<table class="info">
+								<table class="info" style="margin-bottom: 50px;">
 									<tr>
 										<th class="info">받는 분</th>
-										<td class="info">OOO</td>
+										<td class="info">${OrderInfoDetail.recipient}</td>
 									</tr>
 									<tr>
 										<th class="info">받는 분 핸드폰</th>
-										<td class="info">010-****-0000</td>
+										<td class="info">${OrderInfoDetail.mobileForm}</td>
 									</tr>
 									<tr>
 										<th class="info">우편번호</th>
-										<td class="info">00000</td>										
+										<td class="info">${OrderInfoDetail.recipient_postcode}</td>										
 									</tr>
 									<tr>
 										<th class="info">주소</th>
-										<td class="info">서울 OOO구 ~~~~~~~~ OOO동 OOO호</td>										
+										<td class="info">${OrderInfoDetail.recipient_address}&nbsp;${OrderInfoDetail.recipient_detailAddress}</td>										
 									</tr>
 									<tr style="border-bottom:solid 1px #ddd;">
 										<th class="info">배송 요청사항</th>
-										<td class="info"></td>										
+										<td class="info">${OrderInfoDetail.memo}</td>										
 									</tr>
-								</table>
-								
-								<div class="head_section">								
-									<h3 class="tit">공동현관 출입방법</h3>									
-								</div>
-								
-								<table class="info">
-									<tr style="border-bottom:solid 1px #ddd;">
-										<th class="info">비밀번호</th>
-										<td class="info">***********</td>										
-									</tr>
-								</table>
-								
-								<div class="head_section">								
-									<h3 class="tit">추가 정보</h3>									
-								</div>
-								
-								<table class="info">
-									<tr style="border-bottom:solid 1px #ddd;">
-										<th class="info">메시지 전송 시점</th>
-										<td class="info">오전 7시</td>										
-									</tr>
-								</table>
-								
-							</div>						
+								</table>																
+							</div>												
 						</div>
 						
 					</div>						
@@ -356,7 +336,6 @@
 	</div>
 </body>
 </html>
-
 
 
 

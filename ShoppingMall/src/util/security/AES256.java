@@ -11,7 +11,7 @@ import javax.crypto.spec.SecretKeySpec;
 
 import org.apache.commons.codec.binary.Base64;
 
-/**
+/** 
  * 양방향 암호화 알고리즘인 AES256 암호화를 지원하는 클래스
  */
 public class AES256 {
@@ -19,7 +19,7 @@ public class AES256 {
     private Key keySpec;
 
     /**
-     * 16자리의 키값을 입력하여 객체를 생성한다.
+     * 16자리의 키값을 입력하여 객체를 생성한다.  
      * @param key 암호화/복호화를 위한 키값
      * @throws UnsupportedEncodingException 키값의 길이가 16이하일 경우 발생
      */

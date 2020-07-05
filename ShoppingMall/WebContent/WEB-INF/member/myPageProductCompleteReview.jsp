@@ -1,6 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <% String ctxPath = request.getContextPath(); %>
+
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -32,14 +34,6 @@
 		border: solid 0px blue;
 		font-size: 16pt;
 		display: inline-block;
-		float: left;
-	}
-	
-	#myProductReview_Text {
-		border: solid 0px red;	
-		font-size: 8pt;
-		display: inline-block;
-		margin: 30px 0 0 10px;
 		float: left;
 	}	
 	
@@ -199,13 +193,37 @@
 	.review {
 		text-align: left;
 	}
+
+	.button {
+		float: right;
+	}
+
+	.delete , .delete:focus {
+		border-style: none;
+		background-color: white;
+		font-size: 9pt;
+		color: #5f0080;
+		margin-right: 20px;
+		padding: 8px;
+		outline:none;
+	}
+	
+	.update , .update:focus  {
+		border: solid 1px #5f0080;
+		background-color: white;
+		font-size: 9pt;
+		color: #5f0080;
+		margin-right: 20px;
+		padding: 8px;
+		outline:none;
+	}
+	
 }
 	
 	
 </style>
 
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-<link rel="stylesheet" href="css/style.css" />
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 <script type="text/javascript" src="/ShoppingMall/js/jquery-3.3.1.min.js"></script>
@@ -237,11 +255,53 @@
 		});
 		
 	});
+	
+	
+	// === 작성완료 후기 삭제하기 === //  
+	function goDelete(review_num) {
+		
+		var $target = $(event.target);
+		var bool = confirm("작성한 후기를 정말로 삭제하시겠습니까?\r\n삭제 시 복구가 불가능합니다.");
+	
+		if(bool) {
+			
+			$.ajax({
+				url:"/ShoppingMall/member/myPageReviewDelete.do",
+				type:"POST",
+				data:{"review_num":review_num},
+				dataType:"JSON",
+				success:function(json){
+					if(json.n == 2) { // 작성한 후기를 삭제한 후 페이지이동을 해야 하는데 이동할 페이지는 페이징 처리하여 보고 있던 그 페이지로 가도록 한다. 
+						alert(json.message);
+						location.href= "<%= request.getContextPath()%>/member/myPageProductCompleteReview.do";
+						<%-- location.href= "<%= request.getContextPath()%>/${goBackURL}"; --%>
+					}
+				},
+				error: function(request, status, error){
+					alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
+				}
+			});
+			
+		}
+		else {
+			alert("삭제를 취소하셨습니다.");
+		}
+
+	}// end of function goDelete(review_num)---------------------------
+	
+	
+	// === 작성완료 후기 수정하기 === // 
+	function goUpdate(review_num) {
+		
+		location.href="<%= ctxPath%>/member/myPageReviewUpdate.do?review_num="+review_num;
+
+	}// end of function goUpdate(review_num)---------------------------
+	
 </script>
 
 </head>
 <body>	
-	<div class="container">
+	<div class="Mycontainer">
 		<jsp:include page="../include/header.jsp"></jsp:include>
 		<div class="section" align="center">
 			<div class="contents">	
@@ -251,59 +311,63 @@
 			<div id="myPage_Contents">		
 				<div id="myProductReview_Header">
 					<h2 id="myProductReview_Title">상품후기</h2>
-					<span id="myProductReview_Text">후기 작성은 배송 완료일로부터 30일 이내 가능합니다.</span>	
 					
 					<div style="clear:both; height:20px;"></div>
 					
 					<div class="tab">
-						<a class="tab possibleReview">작성가능 후기(<span>3</span>)</a>	
+						<a class="tab possibleReview" href="<%= ctxPath %>/member/myPageProductPossibleReview.do">작성가능 후기(<span>${pReviewCount}</span>)</a>	
 					</div>				
 					<div class="tab">					
-						<a class="tab completedReview">작성완료 후기(<span>2</span>)</a>	
+						<a class="tab completedReview" href="<%= ctxPath %>/member/myPageProductCompleteReview.do">작성완료 후기(<span>${cReviewCount}</span>)</a>	
 					</div>	
 					
 					<div style="clear:both; height:10px;"></div>								
 				</div>			
 
+				<c:if test="${empty completeReviewList}">
+					<div style="margin-bottom:100px;">
+						<span>
+				   	    	작성완료 후기내역이 없습니다.
+				   	    </span>
+					</div>
+				</c:if>
+
+				<c:if test="${not empty completeReviewList}">
 				<div class="reviewList">    				
 					<div class="column">
 						<div class="col" style="width:70px;">번호</div>
 						<div class="col" style="width:550px;">상품명</div>
-						<div class="col" style="width:100px;">작성일</div>
+						<div class="col" style="width:110px;">작성일</div>
 						<div class="col" style="width:80px;">조회</div>
 					</div>
 					
-					<div class="accordion">
-				    	<div class="col num" style="width:70px;">2</div>
-						<div class="col name" style="width:550px;">상품명2</div>
-						<div class="col date" style="width:100px;">0000-00-00</div>
-						<div class="col view" style="width:80px;">2</div>
+					<c:forEach var="List" items="${completeReviewList}">
+					<div class="accordion" style="cursor: pointer;">
+				    	<div class="col num" style="width:70px;">${List.review_num}</div>
+						<div class="col name" style="width:550px;">${List.product.getProduct_name()}</div>
+						<div class="col date" style="width:110px;">${List.write_date}</div>
+						<div class="col view" style="width:80px;">${List.hit}</div>
 				    </div>
 				    <div class="panel">
-				    	<div class="title">~~제목2~~</div>
-				    	<div class="image">
-				    		<img class="image" alt="해당 주문 대표 상품 이미지" src="include/images/logo.png">
+				    	<div class="title" style="margin: 10px 10px 20px 10px;">제목 : ${List.subject}</div>
+				    	<c:if test="${not empty List.imageList[0]}">
+					    	<div class="image">
+					    		<img class="image" alt="${List.subject} 이미지" src="<%=ctxPath%>/Upload/${List.imageList[0]}">
+					    	</div>
+				    	</c:if>
+				    	<div class="review" style="margin: 20px 10px;">${List.content}</div>
+				    	<div class="button">
+					    	<input type="button" id="delete" class="delete" name="delete" value="삭제하기" onclick="goDelete('${List.review_num}')" />
+					    	<input type="button" id="update" class="update" name="update" value="수정" onclick="goUpdate('${List.review_num}')" />
 				    	</div>
-				    	<div class="review">~~~~~~~~~~~~~~내용2~~~~~~~~~~~~~~</div>
+				    	<div style="clear:both;"></div>
 				    </div>
 				    
-				    <div class="accordion">
-				    	<div class="col num" style="width:70px;">1</div>
-						<div class="col name" style="width:550px;">상품명1</div>
-						<div class="col date" style="width:100px;">0000-00-00</div>
-						<div class="col view" style="width:80px;">1</div>
-				    </div>
-				    <div class="panel">
-				    	<div class="title">~~제목1~~</div>
-				    	<div class="image">
-				    		<img class="image" alt="해당 주문 대표 상품 이미지" src="include/images/logo.png">
-				    	</div>
-				    	<div class="review">~~~~~~~~~~~~~~내용1~~~~~~~~~~~~~~</div>
-				    </div>
-				
+				    </c:forEach>				    
 				</div>
+				</c:if>
 				
-				<div style="border-bottom:solid 1px black; text-align:center;">페이징 처리</div>			
+				<div style="border-bottom:solid 0px black; text-align:center;">${pageBar}</div>			
 			</div>						
 			</div>
 			<div style="clear:both;"></div>
@@ -312,17 +376,3 @@
 	</div>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-

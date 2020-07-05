@@ -18,7 +18,7 @@
 	width: 780px;
 	margin-left: 90px;
 	text-align: left;
-	border: solid 1px red;
+	/* border: solid 1px red; */
 }
 
 .board-title {
@@ -61,72 +61,150 @@
 	display: none;
 }
 
-.Mycontainer{
-    font-family: noto sans;
-    letter-spacing: 0.7;
+.Mycontainer {
+	font-family: noto sans;
+	letter-spacing: 0.7;
 }
 
 th.input_txt {
-    width: 200px;
-    padding: 30px 0 0 30px;
-    background-color: #f7f5f8;
-    border-bottom: 1px solid #e8e8e8;
-    text-align: left;
-    font-weight: 400;
-    vertical-align: middle;
-    font-size: 9pt;   
+	width: 200px;
+	padding: 30px 0 0 30px;
+	background-color: #f7f5f8;
+	border-bottom: 1px solid #e8e8e8;
+	text-align: left;
+	font-weight: 400;
+	vertical-align: middle;
+	font-size: 9pt;
 }
 
 table td {
-    width: auto;
-    padding: 15px 0 15px 10px;
-    height: 23px;
-    border-top: 1px solid #e8e8e8;
-    border-bottom: 1px solid #e8e8e8;
-    vertical-align: middle;
-    line-height: 20px;
+	width: auto;
+	padding: 15px 0 15px 10px;
+	height: 23px;
+	border-top: 1px solid #e8e8e8;
+	border-bottom: 1px solid #e8e8e8;
+	vertical-align: middle;
+	line-height: 20px;
 }
 
-.edit_area{
-	font-size : 8.5pt;
-	color : #333;
+.edit_area {
+	font-size: 8.5pt;
+	color: #333;
 }
 
-.select{
-	width : 200px;
-	height : 30px;
-	margin : 5px 0 ;
-	border : solid 1px #ccc;
-}
-input[type=text]{
-	border : solid 1px #ccc;
-	height : 30px;
+.select {
+	width: 200px;
+	height: 30px;
+	margin: 5px 0;
+	border: solid 1px #ccc;
 }
 
-.bhs_button{
-	float : right;
-	width : 150px;
-	height : 30px;
+input[type=text] {
+	border: solid 1px #ccc;
+	height: 30px;
+}
+
+.bhs_button {
+	float: right;
+	width: 150px;
+	height: 30px;
 	color: #fff;
-	background-color:#5f0080;
+	background-color: #5f0080;
 	border-style: none;
-	float : right;
+	float: right;
 	display: inline-block;
-	
 }
 
+#ifm_order {
+	display: block;
+	width: 560px;
+	height: 390.222px;
+	background-color: #fff;
+	position: absolute; 
+	left: 0px;
+	top: 0px;
+	border: 1px solid #ccc;
+}
 </style>
-<link rel="stylesheet"
-	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-<script
-	src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<script
-	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-<script type="text/javascript"
-	src="/ShoppingMall/js/jquery-3.3.1.min.js"></script>
+<link rel="stylesheet"	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+<script	src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="/ShoppingMall/js/jquery-3.3.1.min.js"></script>
 <script type="text/javascript" src="/ShoppingMall/util/myutil.js"></script>
 <script type="text/javascript">
 	
+	
+	
+	$(document).ready(function(){
+				
+		$("#ifm_order").hide();
+		$("#bhs_order_button").click(function(){
+			
+			$("#ifm_order").show();
+			
+		});
+		
+		
+	   
+	});//end of $(document).ready(function(){})------------------------
+        	
+	
+	
+	//== 저장 클릭시 필수값 입력 검사후 제출  ==
+	function goRegister() {
+
+		//만약 선택해주세요 값 눌렀을 때 
+		if($("select[name='fk_category_num'] option:selected").index()<1){
+			alert("제목 부분의 문의사항을 체크해주세요 ");
+			$("select[name='fk_category_num']:eq(0)").focus();
+			return;
+		}
+		
+		//제목 입력 
+		if($("#subject").val().trim()==""){
+			alert("제목을 입력해주세요");
+			$(this).focus();					
+			return;
+		}
+		
+		if($("#text_content").val().trim()==""){
+			alert("내용을 입력해주세요");
+			$(this).focus();
+			return;
+		}
+		
+		var boolEmailFlag = $("input:checkbox[name='emailFlag']").is(":checked");
+		//alert(bool);
+		if(boolEmailFlag){
+			$("input:checkbox[name='emailFlag']").val("1");
+		}else{
+			$("input:checkbox[name='emailFlag']").val("0");
+		}
+		
+		var boolSmsFlag = $("input:checkbox[name='smsFlag']").is(":checked");
+		//alert(bool);
+		if(boolSmsFlag){
+			$("input:checkbox[name='smsFlag']").val("1");
+		}else{
+			$("input:checkbox[name='smsFlag']").val("0");
+		}
+		
+		
+		//alert($("input:checkbox[name='mailling']").val());
+		//alert($("input:checkbox[name='smsFlag']").val());
+		
+		var frm = document.boardWritefrm;
+		frm.method = "POST";
+		frm.action = "<%=ctxPath%>/service/serviceCenterMyQboardWrite.do";
+		frm.submit();
+		
+		//alert("문의가 등록되었습니다");
+
+	}// end of function goRegister(event)----------
+	
+	function goWriteOrderNumToText(orderNum) {
+		$("#fk_order_num").val(orderNum);
+	}
 </script>
 </head>
 <body>
@@ -143,50 +221,52 @@ input[type=text]{
 						<h3 style="display: inline-block">1:1문의</h3>
 					</div>
 					
-						<form name="frm" id="frm" method="post" action="#" style="height: 100%;">
+						<form name="boardWritefrm" id="boardWritefrm" style="height: 100%;">
 							<table style="border-top: solid 2px purple;" class="boardTable table">
 								<colgroup><col width="14%" align="right"></colgroup>
 									<tbody>
 									<tr>
 										<th class="input_txt" style="border-top: solid 2px purple;">제목</th>
-										<td><select name="itemcd" required class="select">
-												<option value="">선택해주세요.</option>
-												<option value="01">배송지연/불만</option>
-												<option value="11">컬리패스 (무료배송)</option>
-												<option value="02">반품문의</option>
-												<option value="03">A/S문의</option>
-												<option value="06">환불문의</option>
-												<option value="07">주문결제문의</option>
-												<option value="08">회원정보문의</option>
-												<option value="04">취소문의</option>
-												<option value="05">교환문의</option>
-												<option value="09">상품정보문의</option>
-												<option value="10">기타문의</option>
-										</select><br> <input type="text" name="subject" style="width: 100%" required value=""></td>
+										<td><select name="fk_category_num" id="fk_category_num" required class="select">
+											<option value="">선택해주세요.</option>
+											<option value="1">배송지연/불만</option>
+											<option value="2">컬리패스 (무료배송)</option>
+											<option value="3">반품문의</option>
+											<option value="4">A/S문의</option>
+											<option value="5">환불문의</option>
+											<option value="6">주문결제문의</option>
+											<option value="7">회원정보문의</option>
+											<option value="8">취소문의</option>
+											<option value="9">교환문의</option>
+											<option value="10">상품정보문의</option>
+											<option value="11">기타문의</option>
+									</select><br> 
+										<input type="text" id="subject" name="subject" style="width: 100%" required value=""></td>
 									</tr>
 									
 									<tr>
 										<th class="input_txt">주문번호</th>
 										<td>
-										<input type="text" name="ordno" style="width:25%" value="" readonly="readonly"">
-										<input onclick="order_open()" type="button" class="bhs_button" value="주문조회" style="float:none; line-height:27px; width:100px;">
-										<div style="position:relative;">
-										<iframe id="ifm_order" style="display:none;position:absolute;width:560px;height:380px;background-color:#fff;position:absolute;left:0;top:0;border:1px solid #000"></iframe>
-										</div>
+										<input type="text" name="fk_order_num" id="fk_order_num" style="width:25%" readonly="readonly" value="">
+										<input id="bhs_order_button" type="button" class="bhs_button" value="주문조회" style="float:none; line-height:27px; width:100px;">
+										<div style="position:relative;z-index:1">
+										<iframe id="ifm_order" src="<%= ctxPath%>/service/serviceCenterQboardWriteOrder.do"></iframe>
+										</div>										
 										</td>
 									</tr>
 									<tr>
 										<th class="input_txt">이메일</th>
-										<td><input type="text" name="email" value="userId@naver.com" size="26" readonly="readonly" class="read_only"> 
+										<td><input type="text" name="email" value="${sessionScope.loginuser.email}" size="26" readonly="readonly" class="read_only" style = "padding-left:5px; color:#949296;"> 
 										<span class="noline smalle" style="padding-left: 10px">
-										<input type="checkbox" name="mailling"><span style="font-size: 8pt; padding-left: 5px">답변수신을 이메일로 받겠습니다.</span></span></td>
+										<input type="checkbox" name="emailFlag" value="1"><span style="font-size: 8pt; padding-left: 5px">답변수신을 이메일로 받겠습니다.</span></span></td>
+										
 									</tr>
 									
 									<tr>
 										<th class="input_txt">문자메시지</th>
-										<td><input type="text" name="mobile" value="010-2345-6789" readonly="readonly" class="read_only">
+										<td><input type="text" name="mobile" value="${sessionScope.loginuser.mobile}" readonly="readonly" class="read_only" style = "padding-left:5px; color:#949296;">
 										<span class="noline smalle" style="padding-left: 10px">
-										<input type="checkbox" name="sms"><span style="font-size: 8pt; padding-left: 5px">답변수신을 문자메시지로 받겠습니다.</span></span></td>
+										<input type="checkbox" name="smsFlag" value="1"><span style="font-size: 8pt; padding-left: 5px">답변수신을 문자메시지로 받겠습니다.</span></span></td>
 									</tr>
 									<tr>
 										<th class="input_txt">내용</th>
@@ -221,14 +301,14 @@ input[type=text]{
 													</dd>
 												</dl>
 											</div>
-										<textarea name="contents" style="width: 100%; height: 474px;" class="editing_area" required > </textarea>
+										<textarea name="content" id="text_content" style="resize: none; width: 100%; height: 474px; border:solid 1px #ccc" class="editing_area" required > </textarea>
 									</td>
 								</tr>
 								
 								<tbody>
 								<tr> 
-								<td colspan="2" style= "border:none" id="submit" align="right"; >
-									<input type="submit" class="bhs_button" value="저장">
+								<td colspan="2" style= "border:none" id="submit" align="right" >
+									<input type="button" class="bhs_button" value="저장" onclick="goRegister();">
 								</td>
 								</tr>
 								</tbody>

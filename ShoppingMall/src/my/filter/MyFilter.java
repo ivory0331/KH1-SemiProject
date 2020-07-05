@@ -10,7 +10,7 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 
 /*
-	=== 필터란 ? ===
+	=== 필터란 ? === 
 	필터란 Servlet 2.3 버전에 추가된 것으로,
 	클라이언트의 요청을 서블릿이 받기 전에 가로채어 필터에 작성된 내용을 수행하는 것을 말한다. 
 	따라서 필터를 사용하면 클라이언트의 요청을 가로채서 서버 컴포넌트의 추가적인 다른 기능을 수행시킬 수 있다.
@@ -20,7 +20,8 @@ import javax.servlet.ServletResponse;
 	2. /WEB-INF/web.xml 에 filter 엘리먼트를 사용하여 필터 클래스를 등록한다. 
 */
 
-public class MyFilter implements Filter {  
+public class MyFilter implements Filter {      
+
 
 	@Override
 	public void destroy() {

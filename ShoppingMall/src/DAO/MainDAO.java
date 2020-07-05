@@ -20,7 +20,7 @@ public class MainDAO {
 		try {
 			Context initContext = new InitialContext();
 		    Context envContext  = (Context)initContext.lookup("java:/comp/env");
-		    ds = (DataSource)envContext.lookup("jdbc/semiProject");
+		    ds = (DataSource)envContext.lookup("jdbc/myoracle");
 		} catch(NamingException e) {
 			e.printStackTrace();
 		}

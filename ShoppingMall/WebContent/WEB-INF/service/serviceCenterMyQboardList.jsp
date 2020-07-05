@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <% String ctxPath = request.getContextPath(); %>
 <!DOCTYPE html>
 <html>
@@ -35,6 +36,7 @@
 		background-color: purple;
 		color:white;
 		float: right;
+		cursor:pointer;
 	}
 	
 	.paging{
@@ -61,6 +63,10 @@
 	.panel-none{
 		display: none;
 	}
+	
+	.one_content{
+		min-height: 300px;
+	}
 
 </style>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
@@ -84,6 +90,10 @@
 				$target.toggleClass("panel-none");
 			  });
 			}
+		
+		$(".writeBtn").click(function(){
+			location.href="<%=ctxPath%>/service/serviceCenterMyQboardWrite.do";
+		})
 	})
 </script>
 </head>
@@ -96,63 +106,69 @@
 				<div class="sideMenu">
 					<jsp:include page="../include/serviceCenterSide.jsp"></jsp:include>
 				</div>
+				<form name="oneInquiryFrm">
 				<div class="serviceCenter-board">
 					<div class="boardInfo">
 						<h3 style="display:inline-block">1:1문의</h3>
 						
 					</div>
-					<table style="border-top:solid 2px purple;" class="boardTable table">
+					<table class="boardTable table" style="border-top:solid 2px purple;">
 						<tr style="border-bottom:solid 1px black;">
 							<th class="txt_center">번호</th>
 							<th class="txt_center">카테고리</th>
 							<th class="txt_center board-title">제목</th>
 							<th class="txt_center">작성자</th>
 							<th class="txt_center">작성날짜</th>
-							<th class="txt_center">조회수</th>
 						</tr>
-						
-						<%-- DB에서 갖고온 결과물 뿌리는 부분 --%>
-						<tr class="accordion">
-							<td class="txt_center">1</td>
-							<td class="txt_center">회원정보 문의</td>
-							<td>제목</td>
-							<td class="txt_center">test</td>
-							<td class="txt_center">2020-06-06</td>
-							<td class="txt_center">0</td>
-						</tr>
-						<tr class="panel panel-none">
-							<td colspan="6" >test입니다. 안녕하세요1</td>
-						</tr>
-						<tr class="accordion">
-							<td class="txt_center">1</td>
-							<td class="txt_center">회원정보 문의</td>
-							<td>제목</td>
-							<td class="txt_center">test</td>
-							<td class="txt_center">2020-06-06</td>
-							<td class="txt_center">0</td>
-						</tr>
-						<tr class="panel panel-none">
-							<td colspan="6" >test입니다. 안녕하세요1</td>
-						</tr>
-						<tr class="accordion">
-							<td class="txt_center">1</td>
-							<td class="txt_center">회원정보 문의</td>
-							<td>제목</td>
-							<td class="txt_center">test</td>
-							<td class="txt_center">2020-06-06</td>
-							<td class="txt_center">0</td>
-						</tr>
-						<tr class="panel panel-none">
-							<td colspan="6" >test입니다. 안녕하세요1</td>
-						</tr>
+						<c:if test="${empty oneInquiryList}">
+							<tr>
+								<td colspan="5"> 1:1문의 게시판 준비중 입니다. </td>
+							</tr>
+						</c:if>
+						<c:if test="${not empty oneInquiryList }">
+							<c:forEach var="item" items="${oneInquiryList}">
+							<tr class="accordion">
+								<td class="txt_center">${item.one_inquiry_num}</td>
+								<td class="txt_center">${item.category_content}</td>
+								<td>${item.subject}</td>
+								<td>${item.member.name}</td>
+								<td>${item.write_date}</td>
+							</tr>
+							<tr class="panel panel-none">
+								<td colspan="5" >
+								<div class="one_content">${item.content}</div>
+									<c:if test="${sessionScope.loginuser.member_num==item.member.member_num}">
+									<div class="userBtn" align="right">
+										<span onclick = "goUpdate('${item.one_inquiry_num}')">수정</span><span onclick = "goDelete('${item.one_inquiry_num}')">삭제</span>
+									</div>
+									</c:if>
+								</td>
+							</tr>
+							<c:if test="${not empty item.answer}">
+								<tr class="accordion">
+								<td class="txt_center">Re</td>
+								<td class="txt_center"></td>
+								<td>안녕하세요, 고객님 답변드립니다.</td>
+								<td>MarketKurly</td>
+								<td>${item.write_date}</td>
+							</tr>
+							<tr class="panel panel-none">
+								<td colspan="5" >
+									<div class="one_content">
+										${item.answer}
+									</div>
+								</td>
+							</tr>
+							</c:if>
+							</c:forEach>
+						</c:if>
 					</table>
-					
 					<div class="paging">
-						<a>페이징 처리</a>
-						<span class="writeBtn">글쓰기</span>
+						${pageBar}
+						<span class="writeBtn" onclick="javascript:location.href='<%= request.getContextPath()%>/service/serviceCenterMyQboardWrite.do'">글쓰기</span>
 					</div>
 				</div>
-				
+				</form>
 			</div>
 		</div>
 		<div style="clear:both;">
