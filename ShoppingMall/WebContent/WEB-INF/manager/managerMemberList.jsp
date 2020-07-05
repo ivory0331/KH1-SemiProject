@@ -11,12 +11,18 @@
 <!-- 차트 링크 --> 
 <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script> 
 <style type="text/css">
+
+	select{
+		border-color : #949296;
+	}
+	
 	.sideMenu{
 		margin-top:10px;
 		display: inline-block;
 		width: 150px;
 		float:left;
 	}
+	
 	.memberList{
 		display:inline-block;
 		width:800px;
@@ -28,36 +34,39 @@
 		text-align: center;
 	}
 	
+	.title{
+		font-weight: bolder;
+	}
+	
 	.member-search{
-		width:100%;
-		margin-bottom:5px;
+		display:inline-block;
+		float: right;
+		margin-bottom:8px;
 	}
 	
 	.member-count{
-		float: right;
-	}
-	
-	.board-title{
-		width: 400px;
-	}
-	
-	.type{
-		border:solid 1px purple;
-		margin-left:10px;
-		padding:10px 20px;
-		color:purple;
-	}
-	
-	.type:hover{
-		cursor: pointer;
-		background-color: purple;
-		color:white;
-	}
+		display : inline-block;
+		margin:5px 0;
+		font-weight: bolder;
+ 	}
 	
 	td.click{
 		cursor: pointer;
 	}
 	
+	.member_list_btn{
+		background-color: #5F0080;
+		color: #fff;
+		padding:5px 10px;
+		font-weight : normal;
+		font-size: 9px;
+	}
+	
+	.member_list_btn:hover{
+		cursor:pointer;
+	}
+	
+
 	
 </style>
 <!-- 부트스트랩 -->
@@ -68,6 +77,10 @@
 <script type="text/javascript" src="/ShoppingMall/util/myutil.js"></script>
 <script type="text/javascript">
 	$(document).ready(function(){
+		
+		
+		
+		
 		// 검색 상황 유지
 	    if("${searchWord}" != "") {
 		 	  $("#searchType").val("${searchType}");
@@ -80,6 +93,7 @@
 		  	  $("#searchWord").val("");  	  
 		});
 		     
+		
 		  
 		// 페이지처리
 		$("#sizePerPage").val("${sizePerPage}");	  
@@ -111,23 +125,13 @@
 		})
 		
 		
+		
+		
+		
+		
 	});
 	
 	
-	<%-- 
-	function func_pop(){
-		window.name="parentFrm";
-		var emailArr = "";
-		$("input:checkbox").each(function(index, item){
-			if() //체크된 것을 if구분
-			{
-				emailArr+=","
-			}
-		})
-		sessionStorage.setItem("recieve",emailArr);
-		console.log(sessionStorage.getItem("recieve"));
-		var win = window.open("<%=ctxPath%>/manager/popup.do","childFrm","left=100px, top=100px, width=400px, height=350px");
-	} --%>
 
 	
 	 // 검색
@@ -136,19 +140,50 @@
 		  frm.method = "GET";
 		  frm.action = "managerMemberList.do";
 		  frm.submit(); 
+		  
 	  }
+	 
+	 
+	 
+
+	 // 전체 선택
+	 var bool = true;
+	 function allCheck(){			
+		
+		 for(var i=0; i<$(".member-table tr").length; i++){
+			 $(".memberList_check").prop('checked',bool);
+		 	 bool = !bool;
+		 }
+	 } 
+ 
+	 
+	 
 	 
 	 //삭제
 	 function member_delete(){
-		if (confirm("해당 회원을 삭제하시겠습니까?") == true){ //확인 누르면 전송
-			var frm = document.manager_memberTableFrm;
-			frm.method = "POST";
-			frm.action = "managerMemberDelete.do";
-			frm.submit();		
-		}else{   //취소
-		    return;
+		 
+		var bCkecked = false; 
+		$(".memberList_check").each(function(){
+			if($(this).is(":checked")){
+				bCkecked = true;
+			};
+		});
+		
+		if(bCkecked){
+			 if (confirm("해당 회원을 삭제하시겠습니까?") == true){ //확인 누르면 전송
+					var frm = document.manager_memberTableFrm;
+					frm.method = "POST";
+					frm.action = "managerMemberDelete.do";
+					frm.submit();		
+			}else{   //취소
+			    return;
+			}	 
+			
 		}
-	 } 
+				
+	};
+	 
+	 
 	
 </script>
 </head>
@@ -161,36 +196,49 @@
 					<jsp:include page="../include/managerSide.jsp"></jsp:include>
 				</div>
 				<div class="memberList" align="left">
-					<div class="member-search">
-						<h4>회원관리</h4>
-						<form name="memberFrm">
-							<select id="searchType" name="searchType">
-								<option value="name">회원명</option>
-								<option value="userid">id</option>
-								<option value="address">주소</option>
-							</select>
-							<input type="text" id="searchWord" name="searchWord" />
-							<button type="button" onclick="goSearch();" style="margin-right: 30px;">검색</button>
-							
-							<span style="color: red; font-weight: bold; font-size: 12pt;">페이지당 회원명수-</span>
-							<select id="sizePerPage" name="sizePerPage">
-								<option value="10">10</option>
-								<option value="5">5</option>
-								<option value="3">3</option>
-							</select>
-						</form>
-						<span class="member-count">전체 회원 수 : ${all}</span>
+					<div style="margin:10px 0;">
+						<h3 style="margin:25px 0;">회원관리</h3>
 					</div>
+					<div style="width:100%">
+						<form name="memberFrm">							
+							<div class="member-count">
+								
+								<span>전체 회원 수 : 
+									<c:if test="${empty searchWord}">
+										${all}
+									</c:if>
+									<c:if test="${not empty searchWord}">
+										${searchAll}
+									</c:if>
+								명</span>
+							</div>
+							<div class="member-search">
+								<select id="searchType" name="searchType">
+									<option value="name">회원명</option>
+									<option value="userid">id</option>
+									<option value="address">주소</option>
+								</select>
+								<input type="text" id="searchWord" name="searchWord" />
+								<button type="button" onclick="goSearch();">검색</button>
+								<select id="sizePerPage" name="sizePerPage">
+									<option value="10">10</option>
+									<option value="5">5</option>
+									<option value="3">3</option>
+								</select>
+							</div>
+						</form>
+					</div>
+					
 					<form name="manager_memberTableFrm">
 						<table class="table member-table" style="border-top:solid 2px purple;">
 							<thead>
 								<tr>
-									<th>선택</th>
-									<th>No.</th>
-									<th>회원명</th>
-									<th>id</th>
-									<th class="board-title">주소</th>
-									<th>모바일</th>
+									<td class="title">선택</td>
+									<td class="title">No.</td>
+									<td class="title" style="width:15%">회원명</td>
+									<td class="title" style="width:15%">id</td>
+									<td class="title" style="width:40$">주소</td>
+									<td class="title"style="width:20%">모바일</td>
 								</tr>
 							</thead>
 							<tbody>
@@ -202,29 +250,33 @@
 								<c:if test="${not empty memberList}">		
 									<c:forEach var="mvo" items="${memberList}">
 										<tr>
-											<td><input type="checkbox" name="member_num" value="${mvo.member_num}" /></td>
+											<td><input type="checkbox" class="memberList_check" name="member_num" value="${mvo.member_num}" /></td>
 											<td class="click member_num">${mvo.member_num}</td>
 											<td class="click">${mvo.name}</td>
 											<td class="click">${mvo.userid}</td>
-											<td class="click board-title">${mvo.address}</td>
-											<td class="click">핸드폰번호</td>
+											<c:if test="${empty mvo.address}">
+												<td class="click board-title">설정 안 함</td>
+											</c:if>
+											<c:if test="${not empty mvo.address}">
+												<td class="click board-title">${mvo.address}</td>
+											</c:if>
+											<td class="click">${mvo.mobile}</td>
 										</tr>
 									</c:forEach>	
 								</c:if>
 							</tbody>
 						</table>
 					</form>
-					
-					${pageBar}
-					
+					<div class="managerBtn" style="margin-bottom: 20px;">
+						<span class="member_list_btn" id="btnAllCheck" onclick="allCheck();">전체선택</span>
+						<span class="member_list_btn" style="float:right;"onclick="member_delete()">선택 탈퇴</span>
+					</div>					
+					<div align="center">
+						${pageBar}
+					</div>
 				</div>
 				<div style="clear:both;"></div>
-				<div class="managerBtn" align="right">
-					<span class="type" onclick="member_delete()">선택 탈퇴</span>
-				</div>
-				<div class="paging">
-					
-				</div>
+				
 			</div>
 		</div>
 		<jsp:include page="../include/footer.jsp"></jsp:include>

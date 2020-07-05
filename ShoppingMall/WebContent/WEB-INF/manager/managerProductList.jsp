@@ -27,6 +27,7 @@
 		display:inline-block;
 		width:800px;
 		margin-top: 10px;
+		margin-bottom:40px;
 	}
 	
 	.member-search{
@@ -39,26 +40,30 @@
 		text-align: center;
 	}
 	
-	.goods-add{
-		float: right;
-		margin-bottom:5px;
+	.goodsListHeader{
+		text-align: center;
 	}
+	
+	
+	/* .goods-add{
+		float: right;
+	} */
 	
 	.board-title{
 		width: 150px;
 	}
 	
 	.type{
-		border:solid 1px purple;
-		margin-left:10px;
-		padding:10px 20px;
-		color:purple;
+		background-color : #5F0080;
+		color : #fff;
+		padding:5px 10px;
+		font-weight: normal !important;
+		font-size: 9px;		
 	}
 	
 	.type:hover{
 		cursor: pointer;
-		background-color: purple;
-		color:white;
+	
 	}
 	
 	td#product_click{
@@ -70,6 +75,8 @@
 		width:80px;
 		height:100px;
 	}
+	
+	
 	
 	
 </style>
@@ -196,25 +203,30 @@
 	}
 	
 	
+	// 삭제
 	function product_delete(){
-		if (confirm("해당 상품을 삭제하시겠습니까?") == true){ //확인 누르면 전송
-			/* 
-			var selectedProductsNum = "";
-			$("input:checkbox[name=product_num]").each(function(index,item){
-				if($(this).checked){
-					selectedProductsNum += this.value + ",";
-				}
-			});
-			 */
+		
+		var bCkecked = false; 
+		$(".goodsList_check").each(function(){
+			if($(this).is(":checked")){
+				bCkecked = true;
+			};
+		});
+		
+		if(bCkecked){
+			if (confirm("해당 상품을 삭제하시겠습니까?") == true){ //확인 누르면 전송
+				
+				var frm = document.manager_productTableFrm;
+				frm.method = "POST";
+				frm.action = "managerProductDelete.do";
+				frm.submit();					
+				
+			}else{   //취소
+			    return;
+			}
 			
-			var frm = document.manager_productTableFrm;
-			frm.method = "POST";
-			frm.action = "managerProductDelete.do";
-			frm.submit();		
-			
-		}else{   //취소
-		    return;
 		}
+		
 	}
 	
 	
@@ -237,46 +249,56 @@
 				</div>
 				<div class="memberList" align="left">
 					<div class="member-search">
-						<h4>상품관리</h4>
-						<form name="manager_productFrm">
-							<div>
-								<select id="fk_category_num" name="fk_category_num" class="bigSelect">
-									<option class="bigSelect" value="0">=== 대분류 ===</option>
-									<c:forEach var="map" items="${requestScope.categoryList}">
-								    	<option class="bigSelect" value="${map.category_num}">${map.category_content}</option>
-								    </c:forEach>	
-								</select>
-								<select id="fk_subcategory_num" name="fk_subcategory_num" disabled>
-									<option value="0">=== 소분류 ===</option>
-									<c:forEach var="map" items="${subCategoryList}">
-								    	<option class="smallSelect" value="${map.subcategory_num}">${map.subcategory_content}</option>
-								    </c:forEach>	
-								</select>
-							</div>
-							<input type="text" id ="searchWord" name="searchWord"/>	
-							<button type="button" onclick="goSearch();">검색</button>
-							<select id="sizePerPage" name="sizePerPage">
-								<option value="10">10</option>
-								<option value="5">5</option>
-								<option value="3">3</option>
-							</select>									
-						</form>		
-						<span class="type goods-add" onclick="product_insert()">상품 추가</span>
+						<div style="margin:10px 0;">
+							<h3 style="margin:25px 0;">상품관리</h3>
+						</div>
+						
+						<div style="width:100%;">
+							<form name="manager_productFrm">						
+								<div>
+									<select id="fk_category_num" name="fk_category_num" class="bigSelect">
+										<option class="bigSelect" value="0">=== 대분류 ===</option>
+										<c:forEach var="map" items="${requestScope.categoryList}">
+									    	<option class="bigSelect" value="${map.category_num}">${map.category_content}</option>
+									    </c:forEach>	
+									</select>
+									<select id="fk_subcategory_num" name="fk_subcategory_num" disabled>
+										<option value="0">=== 소분류 ===</option>
+										<c:forEach var="map" items="${subCategoryList}">
+									    	<option class="smallSelect" value="${map.subcategory_num}">${map.subcategory_content}</option>
+									    </c:forEach>	
+									</select>
+									<input type="text" id ="searchWord" name="searchWord"/>	
+									<button type="button" onclick="goSearch();">검색</button>
+									<select id="sizePerPage" name="sizePerPage">
+										<option value="10">10</option>
+										<option value="5">5</option>
+										<option value="3">3</option>
+									</select>														
+								</div>
+							</form>
+						</div>	
+						
+						<div class="managerBtn" style="width:100%; margin:10px 0; padding:0;">
+							<span class="type" onclick="allCheck();">전체선택</span>
+							<span class="type" style="float:right; margin-bottom: 5px;"onclick="product_insert()">상품 추가</span>								
+							<span class="type" onclick="product_delete()">삭제</span>
+						</div>	
+						
 					</div>
 					
-					<button type="button" id="btnAllCheck" onclick="allCheck();">전체선택</button>
 					<form name="manager_productTableFrm">
-					<table class="table goodsList" style="border-top:solid 2px purple;">
+					<table class="table goodsList" style="width:100%; border-top:solid 2px purple;">
 						<thead>
 							<tr>
-								<th>선택</th>
-								<th>No.</th>
-								<th>대분류</th>
-								<th>소분류</th>
-								<th class="board-title">상품 이미지</th>
-								<th>상품명</th>
-								<th>가격</th>
-								<th>재고수</th>
+								<th class="goodsListHeader" style="width:6%;">선택</th>
+								<th class="goodsListHeader" style="width:5%">No.</th>
+								<th class="goodsListHeader" style="width:10%">대분류</th>
+								<th class="goodsListHeader" style="width:15%">소분류</th>
+								<th class="goodsListHeader" style="width:12%" class="board-title">상품 이미지</th>
+								<th class="goodsListHeader">상품명</th>
+								<th class="goodsListHeader" style="width:10%">가격</th>
+								<th class="goodsListHeader" style="width:8%">재고수</th>
 							</tr>
 						</thead>	
 						<tbody>		
@@ -304,16 +326,14 @@
 						</tbody>
 					</table>
 					</form>
-				</div>
+					
+					<div style="clear:both;"></div>
 				
-				<div style="clear:both;"></div>
-				
-				<div class="managerBtn" align="right">
-					<span class="type" onclick="product_delete()">삭제</span>
-				</div>
-				
-				<div class="paging">
-					${pageBar}	
+					
+					<div class="paging" align="center">
+						${pageBar}	
+					</div>
+					
 				</div>
 				
 			</div>

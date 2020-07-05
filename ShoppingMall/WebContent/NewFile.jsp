@@ -403,9 +403,6 @@
 						bool = false;
 					});
 				}
-				
-				
-				
 
 			}else{
 				$("div#address_default_main_list").hide();

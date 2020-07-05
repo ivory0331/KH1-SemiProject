@@ -19,9 +19,10 @@ public class ManagerProductListAction extends AbstractController {
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		
-		HttpSession session = request.getSession();
-   	 	MemberVO loginuser = (MemberVO)session.getAttribute("loginuser");
 		
+		
+		
+   	 	
 		// 1. 로그인 해야 가능		
 		if(!super.checkLogin(request)) {
 			
@@ -34,24 +35,31 @@ public class ManagerProductListAction extends AbstractController {
 	         super.setRedirect(false);
 	         super.setViewPage("/WEB-INF/msg.jsp");
 	         
-	         return;
-	         
+	         return;	         
 		}
+		
 		//2. 관리자로 로그인 해야 가능
-		else if(super.checkLogin(request) && loginuser.getStatus()!=2){
-	    	       
-            String message = "권한이 없습니다.";
-            String loc = "/ShoppingMall/index.do";
-   
-            request.setAttribute("message", message);
-            request.setAttribute("loc", loc);
-            
-            super.setRedirect(false);
-            super.setViewPage("/WEB-INF/msg.jsp");
-            
-            return;         
+		else {
+			 HttpSession session = request.getSession();
+	   	 	 MemberVO loginuser = (MemberVO)session.getAttribute("loginuser");
+	         int status = loginuser.getStatus();
 	         
-	    }else {
+	         if(status!=2) {
+	        	String message = "권한이 없습니다.";
+	            String loc = "/ShoppingMall/index.do";
+	            
+	            request.setAttribute("message", message);
+	            request.setAttribute("loc", loc);
+	            
+	            super.setRedirect(false);
+	            super.setViewPage("/WEB-INF/msg.jsp");
+	            
+	            return;
+	         }
+	         
+	      }		
+		
+		
 		    
 	   	 	InterProductDAO productDAO = new ProductDAO();
 	   	 	
@@ -156,4 +164,3 @@ public class ManagerProductListAction extends AbstractController {
        
    }
 
-}

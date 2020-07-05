@@ -15,6 +15,7 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script> 
 <style type="text/css">
 
+
 	.sideMenu{
 		margin-top:10px;
 		display: inline-block;
@@ -26,54 +27,110 @@
 		display:inline-block;
 		width: 900px;
 		margin-left:10px;
+		margin-bottom: 100px;
 		
 	}
 	
 	.detailTablePart{
-		margin-top:50px;
+		margin-top:100px;
 	}
 	
 	/* Style the tab */
 	.tab {
 	  overflow: hidden;
 	  background-color: white;
-	  border-bottom: solid 2px purple;
+	  border-bottom: solid 1px #bfbfbf;
 	  margin-bottom: 5px;
 	}
 	
 	/* Style the buttons inside the tab */
 	.tab a{
 		text-decoration: none;
-		color:black;
+		color: #4C4C4C;
 	}
 	
-	.choice{
-		background-color: purple;
-		color:white;
-		font-weight: bold;
-	}
 	
 	.tab button {
 	  float: left;
 	  cursor: pointer;
-	  padding: 14px 0;
-	  width: 100px;
+	  padding: 14px 20px;
 	  transition: 0.3s;
 	  font-size: 17px;
 	  border:none;
-	  border-top: solid 1px purple;
+	  border-top: solid 1px #bfbfbf;
 	  outline: none;
-	  border-left:solid 1px purple;
+	  border-left:solid 1px #bfbfbf;
+	  width:120px;
 	}
 	
+	.choice{
+		background-color: #FFFFFF;
+		color: #4C4C4C;
+		font-weight: bold;
+		border-top: solid 1px #bfbfbf;
+		outline: none;
+	    border-right:solid 1px #bfbfbf;		
+	}
+	
+	/* 
 	.tableTitle{
 		font-size: 18pt;
+		color: #4C4C4C;
+	} */
+	
+	
+	.detailTablePart{
+		border-bottom:solid 1px #ddd;
+		padding-bottom: 30px;	
 	}
 	
+	.infoTable{
+		width:100%;
+	}
+	
+	
+	.infoTable th{
+		height:35px;	
+		width: 200px;
+		font-weight: bolder;	
+		margin-left: 20px;
+		padding-left: 20px;
+	}
+	
+
+	.infoTable td{
+		height:40px;
+	}	
+	
+	
+	.recipientTable{
+		width:100%;
+		border-top: solid 1px #bfbfbf;
+		margin-top : 10px;
+		
+	}
+	
+	
+	.recipientTable th{
+		height:35px;	
+		width: 200px;
+		font-weight: bolder;	
+		margin-left: 20px;
+		padding-left: 20px;
+	}
+	
+
+	.recipientTable td{
+		height:40px;
+	}	
+	
+	
+	
+	/* 
 	#userBtn{
 		margin-top:10px;
 		
-	}
+	} */
 	
 	.type{
 		text-align:center;
@@ -122,20 +179,26 @@
 		background-color:#f0eef1;
 		padding-top: 20px;
 		padding-bottom:20px;;
-		margin:10px auto;
+		margin-top:10px;
 		width:100%;		
 	}
 	
 	
 	
-	.td_count{
-		width: 15%;
+	.table_header{
+		text-align: center;
 	}
 	
-	
-	.td_price{
-		width: 20%;
+	.panelListTable{
+		margin : 10px;
+		width:100%;
 	}
+	/* 
+	.panelListTable tr,td{
+		padding: 10px 0;
+	} */
+	
+	
 	
 	
 </style>
@@ -165,26 +228,17 @@
 		// 리뷰 클릭 아코디언
 		$(document).on("click", ".accordion", function(){
 			var $target = $(this).next();
-		    var targetDisplay = $target.css('display');			
-			var $other = $(this).siblings();	
-			
+			var $other = $target.siblings();	
+						
 
-			$other.each(function(index2, item2){
-				if($(item2).hasClass("panel")){
-					$(item2).addClass("panel-none");	
+			$other.each(function(index, item){
+				if($(item).hasClass("panel")){
+					$(item).addClass("panel-none");	
 				}
-			});			
+			});			 
 			
-			if($(item).hasClass("panel-none")){
-				$(item).removeClass("panel-none");				
-			}else{
-				$(item).addClass("panel-none");				
-
-			}
 		
-			//$target.toggleClass("panel-none");		
-
-			
+			$target.toggleClass("panel-none");		
 			
 		})
 		
@@ -253,12 +307,13 @@
 		        	
 		        	$(item.orderProductList).each(function(index2, item2){
 		        		html += "<div>"
-		        			+ "<table>"
+		        			+ "<table class='panelListTable'>"
 			        		+ "<tr>"
-			        		+ "<td><img src='/ShoppingMall/images/"+item2.product.representative_img+"' style='width:80px;height:100px;'></td>"
-			        		+ "<td>"+item2.product.product_name+"</td>"
-			        		+ "<td class='td_count'>"+item2.count+"</td>"
-			        		+ "<td class='td_price'>"+item2.price+"</td>"
+			        		+ "<td style='width: 10%;'><img src='/ShoppingMall/images/"+item2.product.representative_img+"' style='width:80px;height:100px;'></td>"
+			        		+ "<td style='width:50%;'><span>"+item2.product.product_name+"</span>"
+			        		+ "<br/><span style='color:#999999;'>개당/"+func_comma(item2.price)+"원</span></td>"
+			        		+ "<td style='width:10%;'class='td_count'>"+item2.count+"개 </td>"
+			        		+ "<td style='width:20%; text-align:right; padding-right:10px;'>총 "+func_comma((item2.price)*(item2.count))+"원 </td>"
 		        			+ "</tr>"
 			        		+ "</table>"			        		
 			        		+ "</div>";		 		        		
@@ -266,7 +321,7 @@
 		     
 		        				        				        		
 		        	html += "<div>"
-		        		+ "<table>"
+		        		+ "<table class=recipientTable>"
 		        		+ "<tr><th>수령인</th><td>"+item.recipient+"</td></tr>"
 		        		+ "<tr><th>전화번호</th><td>"+item.recipient_mobile+"</td></tr>"
 		        		+ "<tr><th>우편번호</th><td>"+item.recipient_postcode+"</td></tr>"
@@ -433,19 +488,18 @@
 					<jsp:include page="../include/managerSide.jsp"></jsp:include>
 				</div>
 				<div class="memberInfo">
-					<div id="userBtn" align="right">
-						<span class="type">탈퇴</span>
-					</div>
-					
 					<!-- 1. 회원정보 -->						
 					<div class="detailTablePart" id="info">
 						<div class="tab">
 							<button class="tablinks choice" onclick="goTable('0')">회원정보</button>
 							<button class="tablinks" onclick="goTable('1')">구매내역</button>
-							<button class="tablinks" onclick="goTable('2')" style="border-right:solid 1px black">후기</button>
-							<button class="tablinks" onclick="goTable('3')" style="border-right:solid 1px black">1:1문의</button>							
+							<button class="tablinks" onclick="goTable('2')">후기</button>
+							<button class="tablinks" onclick="goTable('3')" style="border-right:solid 1px #bfbfbf;" >1:1문의</button>							
 						</div>					
-							<table class="table">
+							<table class="infoTable">
+								<tr>
+									<td colspan="2" style="height:20px;" ></td>
+								</tr>
 								<tr>
 									<th>회원번호</th>
 									<td>${mvo.member_num}</td>
@@ -511,10 +565,11 @@
 										</c:choose>
 									</td>
 								</tr>
-								<tr>
+								<tr id="last">
 									<th>가입날짜</th>
 									<td>${mvo.registerdate}</td>
-								</tr>							
+								</tr>	
+													
 							</table>					
 						</div>
 
@@ -524,26 +579,21 @@
 						<div class="tab">
 							<button class="tablinks" onclick="goTable('0')">회원정보</button>
 							<button class="tablinks choice" onclick="goTable('1')">구매내역</button>
-							<button class="tablinks" onclick="goTable('2')" style="border-right:solid 1px black">후기</button>
-							<button class="tablinks" onclick="goTable('3')" style="border-right:solid 1px black">1:1문의</button>
+							<button class="tablinks" onclick="goTable('2')">후기</button>
+							<button class="tablinks" onclick="goTable('3')"  style="border-right:solid 1px #bfbfbf;" >1:1문의</button>
 						</div>
-						<table class="table sales">	
+						<table class="table sales"> 	
 							<thead>						
 								<tr>
-									<th>주문 번호</th>
-									<th>주문 내역</th>
-									<th>결제 금액</th>
-									<th>주문일</th>
-									<th>주문 상태</th>
+									<th class="table_header" style="width:10%;">주문 번호</th>
+									<th class="table_header" style="width:50%">주문 내역</th>
+									<th class="table_header">결제 금액</th>
+									<th class="table_header">주문일</th>
+									<th class="table_header" style="width:10%">주문 상태</th>
 								</tr>
 							</thead>
 							<tbody id="order">
-							<tr>
-							<td>
-							<div><table></table></div>
-							</td>
-							</tr>
-							
+												
 							</tbody>						
 						</table>
 						<div id="orderPageBar"></div>	
@@ -553,16 +603,16 @@
 						<div class="tab">
 							<button class="tablinks" onclick="goTable('0')">회원정보</button>
 							<button class="tablinks" onclick="goTable('1')">구매내역</button>
-							<button class="tablinks choice" onclick="goTable('2')" style="border-right:solid 1px black">후기</button>
-							<button class="tablinks" onclick="goTable('3')" style="border-right:solid 1px black">1:1문의</button>
+							<button class="tablinks choice" onclick="goTable('2')">후기</button>
+							<button class="tablinks" onclick="goTable('3')"  style="border-right:solid 1px #bfbfbf;" >1:1문의</button>
 						</div>
 						<table class="table review">
 							<thead>
 								<tr>
-									<th>글번호</th>
-									<th>상품명</th>
-									<th>제목</th>
-									<th>작성일</th>
+									<th class="table_header" style="width:8%">글번호</th>
+									<th class="table_header" style="width:40%">상품명</th>
+									<th class="table_header" style="width:35%">제목</th>
+									<th class="table_header" >작성일</th>
 								</tr>
 							</thead>
 							<tbody id="review">							
@@ -577,17 +627,17 @@
 						<div class="tab">
 							<button class="tablinks" onclick="goTable('0')">회원정보</button>
 							<button class="tablinks" onclick="goTable('1')">구매내역</button>
-							<button class="tablinks" onclick="goTable('2')" style="border-right:solid 1px black">후기</button>
-							<button class="tablinks choice" onclick="goTable('3')" style="border-right:solid 1px black">1:1문의</button>
+							<button class="tablinks" onclick="goTable('2')">후기</button>
+							<button class="tablinks choice" onclick="goTable('3')"  style="border-right:solid 1px #bfbfbf;" >1:1문의</button>
 						</div>
 						<table class="table question">
 							<thead>
 								<tr>
-									<th>글번호</th>
-									<th>카테고리</th>
-									<th>글제목</th>
-									<th>작성일</th>
-									<th>답변 상태</th>
+									<th class="table_header" style="width:8%;">글번호</th>
+									<th class="table_header" style="width:20%;">카테고리</th>
+									<th class="table_header" style="width:40%;">글제목</th>
+									<th class="table_header" >작성일</th>
+									<th class="table_header" >답변 상태</th>
 								</tr>
 							</thead>	
 							<tbody id="question">							

@@ -44,8 +44,11 @@ create table member_table
 ,constraint ck_member_table_status CHECK (status in(0,1,2))
 );
 
-select*
-from member_table;
+select member_num, name, userid, address
+from member_table 
+where status!=2
+order by member_num desc ;
+
 
 update member_table set pwd='9695b88a59a1610320897fa84cb7e144cc51f2984520efb77111d94b402a8382'
 where userid='hyeminj98';
@@ -336,6 +339,10 @@ create table order_table
 select * from order_table;
 select * from order_product_table;
 select * from basket_table;
+
+update order_table set fk_category_num = 3 where fk_member_num=5;
+
+commit;
 
 select*
 from order_table;
@@ -686,8 +693,6 @@ insert into inquiry_category_table(category_num, category_content) values(3, '�
 insert into inquiry_category_table(category_num, category_content) values(4, '서비스 이용 및 기타');
 
 commit;
-
-
 
 
 -- 자주하는 질문 테이블에서 사용할 시퀀스 생성 --
@@ -1104,17 +1109,22 @@ values(4,'1등급 한우 알사태 수육용 500g(냉장).png','1등급 한우 �
 select * from product_category_table union select * from product_subcategory_table;
 
 insert into member_table (member_num, name, userid, pwd, email, mobile, status) 
-values (seq_member_table.nextval, '관리자', 'admin', 'qwer1234!','2wnaud@naver.com','010-9101-8698','2');
+values (seq_member_table.nextval, '관리자', 'admin', 'qwer1234!','2wnaud@naver.com','010-9101-8698','1');
+
+
+rollback;
 
 commit;
 
 
 select * from member_table;
 update member_table set status=2 where userid='admin1';
+select ceil(count(*)/5) as totalPage
+from member_table where status!=2;
 
 commit;
 
-delete from member_table;
+delete from member_table where member_num=8;
 
 select count(*) from basket_table where fk_member_num = ;
 

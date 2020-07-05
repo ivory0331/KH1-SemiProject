@@ -16,11 +16,28 @@
 <title>알뜰쇼핑 리스트</title>
 </head>
 <style>
+
+	#catefont {
+	    font-size: 14pt;
+	    font-weight: bold;
+	}
+
 	div#smallT, .productList {
 		border: solid 0px gray;
 		display: inline-block;
 		margin: 30px;
+		margin-top: 20px;
 	}
+	
+	.smallT{
+		color: purple;
+	    border-bottom: 2px solid purple;
+	    width: 70px;
+		font-weight: normal;
+		font-size: 15px;
+		margin-top: 10px;
+	}	
+    
 	.contents h3{
 		margin-left: 30px;
 	}
@@ -97,6 +114,7 @@
 		<div class="section" align="center">
 			
 		<div class="productList" align="center">
+		
 		<table>
 	        <tbody id="pList" align="center">
 				<%-- 일단은 페이징처리를 안한 관리자를 제외한 모든 회원정보를 조회하도록 한다. --%>
