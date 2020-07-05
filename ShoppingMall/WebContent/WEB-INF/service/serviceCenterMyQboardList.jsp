@@ -122,7 +122,7 @@
 						</tr>
 						<c:if test="${empty oneInquiryList}">
 							<tr>
-								<td colspan="5"> 1:1문의 게시판 준비중 입니다. </td>
+								<td colspan="5"> 작성한 1:1 문의가 없습니다. </td>
 							</tr>
 						</c:if>
 						<c:if test="${not empty oneInquiryList }">

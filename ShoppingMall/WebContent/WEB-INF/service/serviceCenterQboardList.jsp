@@ -64,6 +64,22 @@
 		cursor: pointer;
 		
 	}
+	
+	.writeBtn{
+		display: inline-block;
+		border:solid 1px black;
+		padding: 5px 30px;
+		background-color: purple;
+		color:white;
+		float: right;
+		cursor:pointer;
+	}
+	
+	.writeBtn:hover{
+		cursor: pointer;
+		background-color: white;
+		color:purple;
+	}
 
 </style>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
@@ -176,8 +192,14 @@
 					<span style="float:right; border:solid 1px black;">
 							<input type="text" style="float:left; border:none;" name="searchWord"  id="searchWord" value="${searchWord}" /><span style="cursor: pointer;" onclick = "goInquiry()"><img src="<%=ctxPath%>/images/search.png" style="display:inline-block; width:25px; height: 25px; "/></span>
 					</span>
+					<div style="clear:both; margin-top: 20px;">
+					<c:if test="${sessionScope.loginuser.status=='2'}">
+						<span class="writeBtn" onclick="javascript:location.href='<%= request.getContextPath()%>/manager/mangerBoardWrite.do'">게시글 작성</span>
+					</c:if>
+					</div>
 				</div>
 				</form>
+				
 			</div>
 		</div>
 		<div style="clear:both;">

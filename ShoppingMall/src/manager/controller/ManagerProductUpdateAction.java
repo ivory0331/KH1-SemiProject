@@ -104,6 +104,9 @@ public class ManagerProductUpdateAction extends AbstractController {
 			  String unit = mtrequest.getParameter("unit");
 			  String packing = mtrequest.getParameter("packing");
 			  String origin = mtrequest.getParameter("origin");			 
+			  String shelf = mtrequest.getParameter("shelf");
+			  String weight = mtrequest.getParameter("weight");
+			  String information = mtrequest.getParameter("information");
 			  int price = Integer.parseInt(mtrequest.getParameter("price"));
 			  
 			  String getSale = mtrequest.getParameter("sale");
@@ -125,8 +128,11 @@ public class ManagerProductUpdateAction extends AbstractController {
 			  int stock = Integer.parseInt(mtrequest.getParameter("stock"));
 			  String explain = mtrequest.getParameter("explain");
 	
-			   explain =  MyUtil.replaceParameter(explain);			
-			  // explain = explain.replaceAll("\r\n", "<br>");
+			  information = MyUtil.replaceParameter(information);
+			  information = information.replaceAll("\r\n", "<br>");
+			  
+			  explain =  MyUtil.replaceParameter(explain);			
+			  explain = explain.replaceAll("\r\n", "<br>");
 			  
 			  InterProductDAO pdao = new ProductDAO();
 			  ProductVO pvo = new ProductVO();
@@ -146,6 +152,9 @@ public class ManagerProductUpdateAction extends AbstractController {
 			  pvo.setSeller_phone(seller_phone);
 			  pvo.setStock(stock);
 			  pvo.setExplain(explain);
+			  pvo.setShelf(shelf);
+			  pvo.setWeight(weight);
+			  pvo.setInformation(information);
 
 			  int n = pdao.productUpdate(pvo);
 			  			  
@@ -181,15 +190,10 @@ public class ManagerProductUpdateAction extends AbstractController {
 			  String message = "";
 			  String loc = "";
 			  
-			  if(n==1&&(m==1||m==2)) {
+			  if(n==1) {
 				  
 				  message = "제품 수정이 완료되었습니다.";
 				  loc = request.getContextPath()+"/manager/managerProductList.do";				  
-				  
-			  }else if(n==1&&m==0) {
-				  
-				  message = "상세 이미지 업로드를 확인해주세요.";
-				  loc = request.getContextPath()+"/manager/managerProductList.do";		
 				  
 			  }
 			  else {

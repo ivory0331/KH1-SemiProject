@@ -107,7 +107,10 @@ public class ManagerProductInsertAction extends AbstractController {
            String product_name = mtrequest.getParameter("product_name");
            String unit = mtrequest.getParameter("unit");
            String packing = mtrequest.getParameter("packing");
-           String origin = mtrequest.getParameter("origin");          
+           String origin = mtrequest.getParameter("origin");      
+           String shelf = mtrequest.getParameter("shelf");
+           String weight = mtrequest.getParameter("weight");
+           String information = mtrequest.getParameter("information");
            int price = Integer.parseInt(mtrequest.getParameter("price"));
            
            String getSale = mtrequest.getParameter("sale");
@@ -129,8 +132,11 @@ public class ManagerProductInsertAction extends AbstractController {
            int stock = Integer.parseInt(mtrequest.getParameter("stock"));
            String explain = mtrequest.getParameter("explain");
    
-           explain =  MyUtil.replaceParameter(explain);         
-          // explain = explain.replaceAll("\r\n", "<br/>");
+           information = MyUtil.replaceParameter(information);
+           information = information.replaceAll("\r\n", "<br>");
+           
+           explain =  MyUtil.replaceParameter(explain);
+           explain = explain.replaceAll("\r\n", "<br>");
    
            ProductVO pvo = new ProductVO();
            
@@ -148,6 +154,9 @@ public class ManagerProductInsertAction extends AbstractController {
            pvo.setSeller_phone(seller_phone);
            pvo.setStock(stock);
            pvo.setExplain(explain);
+           pvo.setShelf(shelf);
+           pvo.setWeight(weight);
+           pvo.setInformation(information);
 
            int n = pdao.productInsert(pvo);
            

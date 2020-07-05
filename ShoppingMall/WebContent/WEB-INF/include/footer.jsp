@@ -6,12 +6,14 @@
 <meta charset="UTF-8">
 <title>footer.jsp</title>
 <style type="text/css">
+	/* footer 전체 영역 */
 	.footer{
 		min-width:1080px;
 		max-width: 1700px;
 		background-color: white;
 	}
 	
+	/* footer 안에서 좌측의 영역 */
 	.firstInfo{
 		display: inline-block;
 		margin-right:10px;
@@ -25,6 +27,7 @@
 		color:#333;
 	}
 	
+	/* first 안에서 top 영역 */
 	.cc_call{
 		height: 100px;
 	}
@@ -39,6 +42,7 @@
 		color:#333;
 	}
 	
+	/* first 안에서 li태그에 주는 class  */
 	.cc_list{
 		list-style: none;
 		display: inline-block;
@@ -48,7 +52,7 @@
 		font-weight: 400;
 	}
 	
-	
+	/* first 안에서 middle 영역  */
 	.cc_kakao{
 		height: 80px;
 	}
@@ -67,6 +71,7 @@
 		color: #333;
 	}
 	
+	/* first 안에서 bottom 영역  */
 	.cc_qua{
 		height: 80px;
 	}
@@ -84,6 +89,8 @@
 		text-align: center;
 		color: #333;
 	}
+	
+	/* footer 안에서 우측의 영역 */
 	.secondInfo{
 		display: inline-block;
 		text-align: left;
@@ -91,6 +98,7 @@
 		font-size: 8pt;
 		line-height: 20px;
 	}
+	
 	#minicenter {
 		border: solid 0px red;
 		font-size: 18px;

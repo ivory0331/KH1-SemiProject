@@ -174,7 +174,8 @@
 <script type="text/javascript">
 
 	$(document).ready(function(){
-	
+		var price = Number("${OrderInfoDetail.price}")-3000;
+		$(".orderProduct-price").html(func_comma(price)+"원");
 	});
 
 	function goReview(num){
@@ -257,9 +258,8 @@
 								<table class="info">
 									<tr>
 										<th class="info">총주문금액</th>
-										<td class="info">
-											<c:set var="price" value="${OrderInfodetail.price-3000}"/>
-											<fmt:formatNumber value="${price}" pattern="###,###"/> 원
+										<td class="info orderProduct-price">
+											
 										</td>
 									</tr>
 									<tr>

@@ -557,13 +557,21 @@
 										<input type="text" id="unit" name="unit" class="goddsUnit"/>
 									</li>
 									<li>
+										<label for="weight">중량/용량</label>
+										<input type="text" id="weight" name="weight" class="goddsWeight"/>
+									</li>
+									<li>
 										<label for="packing">포장타입</label>
 										<input type="text" id="packing" name="packing" class="packageType"/>
 									</li>
 									<li>
 										<label for="origin">원산지</label>
 										<input type="text" id="origin" name="origin" class="goodsOrigin"/>
-									</li>									
+									</li>
+									<li>
+										<label for="shelf">유통기한</label>
+										<input type="text" id="shelf" name="shelf" class="goodsShelf"/>
+									</li>										
 									<li>
 										<label for="price">가격(원)</label>
 										<input type="text" id="price" name="price" class="goodsPrice" style="background-color:#e6e6ff" placeholder="※필수※  숫자로 입력 ex)10000"/>
@@ -591,8 +599,12 @@
 								</ul>
 							</div>
 							<div align="center">
+								<label>안내사항</label>
+								<textarea style="width:95%; height:150px; resize: none" name="information"></textarea>
+							</div>
+							<div align="center">
 								<label>상품 상세 설명</label>
-								<textarea style="width:95%; height:150px; " name="explain"></textarea>
+								<textarea style="width:95%; height:150px; resize: none" name="explain"></textarea>
 							</div>
 							
 							

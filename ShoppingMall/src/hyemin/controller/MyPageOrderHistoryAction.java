@@ -45,9 +45,6 @@ public class MyPageOrderHistoryAction extends AbstractController {
 			// 기간의 옵션 값 구하기
 			int option = orderdao.termOption();
 			request.setAttribute("option", option);
-			
-			// *** 페이징처리를 안 한, 특정 회원의 모든 주문내역 보여주기 *** //
-		//	List<OrderHistoryVO> orderHistoryList = orderdao.selectOneMemberAllOrder(loginuser.getMember_num());
 
 			
 			// *** 페이징처리를 한, 특정 회원의 모든 주문내역 보여주기 *** //

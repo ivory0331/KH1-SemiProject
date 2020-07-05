@@ -195,11 +195,12 @@
 	// 전체 선택
 	var bool = true;
 	function allCheck(){			
-		
+		console.log("전채선택");
 		for(var i=0; i<$(".goodsList tr").length; i++){
+			console.log(i);
 			$(".goodsList_check").prop('checked',bool);
-			bool = !bool;
 		}
+		bool = !bool;
 	}
 	
 	

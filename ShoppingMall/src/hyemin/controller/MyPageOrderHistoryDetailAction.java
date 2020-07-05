@@ -19,7 +19,7 @@ public class MyPageOrderHistoryDetailAction extends AbstractController {
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		
-		// == 본인 아이디로 로그인 했을때만 조회가 가능하도록 한다. ==
+		// == 본인 아이디로 로그인 했을때만 조회가 가능하도록 한다. == //
 		HttpSession session = request.getSession();
 		MemberVO loginuser = (MemberVO)session.getAttribute("loginuser");
 		

@@ -180,7 +180,7 @@ public class OrderDAO implements InterOrderDAO {
 			
 			String sql = " select O.price, " + 
 						 "        M.name, to_char(O.order_date, 'yyyy-mm-dd hh24:mi:ss'), OS.order_state, " + 
-						 "        O.recipient, O.recipient_mobile, O.recipient_postcode, O.recipient_address, O.recipient_detailaddress, O.memo " + 
+						 "        O.recipient, O.recipient_mobile, O.recipient_postcode, O.recipient_address, O.recipient_detailaddress, O.memo, O.fk_category_num " + 
 						 " from order_table O join member_table M " + 
 						 " on O.fk_member_num = M.member_num " + 
 						 " join order_state_table OS " + 
@@ -204,7 +204,8 @@ public class OrderDAO implements InterOrderDAO {
 				String recipient_address = rs.getString(8);
 				String recipient_detailaddress = rs.getString(9);
 				String memo = rs.getString(10);
-				System.out.println("확인용:"+name+"/"+order_date+"/"+order_state+"/"+recipient);
+				int category_num = rs.getInt(11);
+				
 				MemberVO mvo = new MemberVO();
 				mvo.setName(name);
 				
@@ -219,6 +220,7 @@ public class OrderDAO implements InterOrderDAO {
 				ovo.setRecipient_detailAddress(recipient_detailaddress);
 				ovo.setMemo(memo);
 				ovo.setMember(mvo);
+				ovo.setFk_category_num(category_num);
 
 			}// end of while----------------------------------
 			

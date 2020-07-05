@@ -29,6 +29,7 @@ public class MyPageMyInfoUpdateEndAction extends AbstractController {
 		}
 		
 		else {
+			// 개인정보 수정 페이지에서 입력받은 값들 각각 변수에 대입
 			String member_num = request.getParameter("member_num");
 			String userid = request.getParameter("userid");
 			String pwd = request.getParameter("pwd");
@@ -39,7 +40,7 @@ public class MyPageMyInfoUpdateEndAction extends AbstractController {
 			String birthyear = request.getParameter("birthyear");
 			String birthmonth = request.getParameter("birthmonth");
 			String birthday = request.getParameter("birthday");
-			System.out.println("userid:"+userid+"/pwd:"+pwd+"/name:"+name+"/email:"+email+"/mobile:"+mobile+"/gender:"+gender+"/birthyear:"+birthyear);
+			
 			MemberVO membervo = new MemberVO();
 			membervo.setMember_num(Integer.parseInt(member_num));
 			membervo.setUserid(userid);			
@@ -52,12 +53,13 @@ public class MyPageMyInfoUpdateEndAction extends AbstractController {
 			
 			InterMemberDAO memberdao = new MemberDAO();
 			
+			// 회원의 정보 수정
 			int n = memberdao.updateMember(membervo);
 						
 			String message = "";
 			String loc = "";
 			
-			if(n == 1) {
+			if(n == 1) { // 회원의 정보가 정상적으로 수정되었을 경우
 				message = "회원정보가 수정되었습니다.";
 				
 				// session 에 저장된 loginuser 를 변경된 사용자의 정보값으로 변경해주어야 한다.
@@ -76,7 +78,7 @@ public class MyPageMyInfoUpdateEndAction extends AbstractController {
 				
 				loc = request.getContextPath()+"/member/myPageMyInfoUpdatePW.do";
 			}
-			else {
+			else { // 회원의 정보가 정상적으로 수정되지 않았을 경우
 				message = "회원정보 수정에 실패했습니다.";
 				loc = "javascript:history.back()";
 			}

@@ -18,6 +18,9 @@ public class ProductVO {
 	private int best_point;
 	private String seller;
 	private String seller_phone;
+	private String shelf;
+	private String information;
+	private String weight;
 	private String explain;
 	private int fk_category_num;
 	private int fk_subcategory_num;
@@ -204,6 +207,35 @@ public class ProductVO {
 
 	public void setImageList(List<ImageVO> imageList) {
 		this.imageList = imageList;
+	}
+
+	
+	
+	
+	
+	
+	public String getShelf() {
+		return shelf;
+	}
+
+	public void setShelf(String shelf) {
+		this.shelf = shelf;
+	}
+
+	public String getInformation() {
+		return information;
+	}
+
+	public void setInformation(String information) {
+		this.information = information;
+	}
+
+	public String getWeight() {
+		return weight;
+	}
+
+	public void setWeight(String weight) {
+		this.weight = weight;
 	}
 
 	////////////////////////////////////////////////////////////

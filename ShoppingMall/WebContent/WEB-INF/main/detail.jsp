@@ -446,7 +446,7 @@
 				      + "<td>"+item.write_date+"</td>"
 				      + "</tr>"
 				      + "<tr class='panel panel-none'>"
-				      + "<td colspan='5' ><div class='review_content'>"+item.content+"</div>";
+				      + "<td colspan='5' ><div class='review_content'><div>"+item.content+"</div>";
 					  if(item.imageList.length > 0){
 						  $(item.imageList).each(function(index2, item2){
 							  html+="<div><img src='<%=ctxPath%>/Upload/"+item2+"' / style='margin-bottom:10px;'></div>";
@@ -458,7 +458,8 @@
 							     +" </div> ";
 						}
 					  
-			    html += "</td>"
+			    html += "</div>"
+			   		  + "</td> "
 					  + "</tr>";
 			    if(item.answer!=null && item.answer.trim()!=""){
 					  html +="<tr class='accordion'>"
@@ -635,7 +636,7 @@
 							<c:set var="list" value="${product.information}" />
 							<dd>
 								<ul>
-								<c:forEach items="${fn:split(list, '.') }" var="item">
+								<c:forEach items="${fn:split(list, '<br>') }" var="item">
 								    <li>${item}</li>
 								</c:forEach>
 								</ul>
@@ -668,8 +669,8 @@
 						<div id="mainImage" style="width:100%; padding-bottom:10px; border-bottom:solid 1px #bfbfbf;">
 							<c:if test="${product.imageList!=null}">
 								<c:forEach var="image" items="${product.imageList}" varStatus="status">
-									<c:if test="${status.index == 0 && not empty(image)}">
-										<img src="<%=ctxPath %>/images/${image}"  style="margin:20px 0;"/>
+									<c:if test="${status.index == 0 && not empty(image.image)}">
+										<img src="<%=ctxPath %>/images/${image.image}"  style="margin:20px 0;"/>
 									</c:if>
 								</c:forEach>
 							</c:if>
@@ -681,8 +682,8 @@
 						</div>
 						<c:if test="${product.imageList!=null}">
 							<c:forEach var="image" items="${product.imageList}" varStatus="status">
-								<c:if test="${status.index != 0 && not empty(image)}">
-									<img src="<%=ctxPath %>/images/${image}"  style="margin:20px 0;"/>
+								<c:if test="${status.index != 0 && not empty(image.image)}">
+									<div style="max-width:900px; max-height:700px;"><img src="<%=ctxPath %>/images/${image.image}"  style="margin:20px 0;"/></div>
 								</c:if>
 							</c:forEach>
 						</c:if>

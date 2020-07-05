@@ -22,11 +22,11 @@ public class InBasketAction extends AbstractController {
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		HttpSession session = request.getSession();
-		System.out.println(request.getParameter("product_num")+"/"+ request.getParameter("price")+"/"+request.getParameter("count"));
 		boolean check = true;
 		String message="";
 		int n = 0;
 		
+		// 로그인 유무 확인
 		boolean loginFlag = super.checkLogin(request);
 		if(!loginFlag) {
 			String goBackURL = request.getContextPath()+"/detail.do?product_num="+request.getParameter("product_num");
@@ -43,6 +43,7 @@ public class InBasketAction extends AbstractController {
 			orderMap.put("count", request.getParameter("count"));
 			orderMap.put("member_num",String.valueOf(loginuser.getMember_num()));
 			
+			// 유저가 이미 해당 상품을 장바구니에 담았는지 확인하고 없으면 장바구니에 담고 있으면 담지 않는다.
 			InterIndexDAO dao = new IndexDAO();
 			check = dao.basketSelect(orderMap);
 			

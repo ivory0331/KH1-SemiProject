@@ -20,16 +20,18 @@ public class InquiryDelAction extends AbstractController {
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		String inquiry_num = request.getParameter("inquiry_num");
-		System.out.println("확인용 => inquiry_num="+inquiry_num);
+		
 		String message = "문의삭제 도중 오류가 발생했습니다.";
 		InterIndexDAO dao = new IndexDAO();
 		List<String> delFileName = dao.DelImgFind(inquiry_num);
 		
 		
 		int result = dao.inquiryDel(inquiry_num);
-		if(result != 0) {
+		if(result != 0) { //상품문의가 정상적으로 삭제되었을 경우
 			message = "문의가 삭제되었습니다.";
 			ServletContext context = request.getSession().getServletContext();
+			
+			// 삭제된 문의에 사용된 실제 이미지 파일들을 삭제
 			String realPath = context.getRealPath("Upload")+"/";
 			for(int i=0; i<delFileName.size(); i++) {
 				realPath+=delFileName.get(i);

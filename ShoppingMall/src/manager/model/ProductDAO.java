@@ -487,8 +487,8 @@ public class ProductDAO implements InterProductDAO {
 				
 				String sql = "insert into product_table(product_num, product_name, price, stock "+
 						                                " ,origin, packing, unit, sale, best_point "+
-						                                " ,seller, seller_phone, explain, representative_img, fk_category_num, fk_subcategory_num ) "+
-						     " values(seq_product_table.nextval,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+						                                " ,seller, seller_phone, explain, representative_img, fk_category_num, fk_subcategory_num, weight, shelf, information ) "+
+						     " values(seq_product_table.nextval,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 				
 				pstmt = conn.prepareStatement(sql);
 				
@@ -506,7 +506,9 @@ public class ProductDAO implements InterProductDAO {
 				pstmt.setString(12, pvo.getRepresentative_img());
 				pstmt.setInt(13, pvo.getFk_category_num());
 				pstmt.setInt(14, pvo.getFk_subcategory_num());
-
+				pstmt.setString(15, pvo.getWeight());
+				pstmt.setString(16, pvo.getShelf());
+				pstmt.setString(17, pvo.getInformation());
 					
 				result = pstmt.executeUpdate();
 				
@@ -558,7 +560,7 @@ public class ProductDAO implements InterProductDAO {
 						" P.fk_category_num as CATEGORY_NUM, P.fk_subcategory_num as SUBCATEGORY_NUM, "+
 						" P.product_name as PRODUCT_NAME, P.unit as UNIT, P.packing as PACKING, P.origin as ORIGIN, P.price as PRICE, P.sale as SALE, " + 
 						" P.best_point as BEST_POINT, P.seller as SELLER, P.seller_phone as SELLER_PHONE, P.stock as STOCK, " + 
-						" P.explain as EXPLAIN, P.representative_img as REPRESENTATIVE_IMG " + 
+						" P.explain as EXPLAIN, P.representative_img as REPRESENTATIVE_IMG, P.weight as WEIGHT, P.shelf as SHELF, P.information as INFORMATION " + 
 						" from product_table P join product_category_table C " + 
 						" on P.fk_category_num = C.category_num " + 
 						" join product_subcategory_table S " + 
@@ -587,9 +589,28 @@ public class ProductDAO implements InterProductDAO {
 				pvo.setSeller(rs.getString("SELLER"));
 				pvo.setSeller_phone(rs.getString("SELLER_PHONE"));
 				pvo.setStock(rs.getInt("STOCK")); 
-				pvo.setExplain(rs.getString("EXPLAIN"));
 				pvo.setRepresentative_img(rs.getString("REPRESENTATIVE_IMG"));
-										
+				pvo.setWeight(rs.getString("WEIGHT"));
+				pvo.setShelf(rs.getString("SHELF"));
+				
+				String information = rs.getString("INFORMATION");
+				if(information != null && !information.trim().isEmpty()) {
+					information = information.replaceAll("&gt;", ">");
+					information = information.replaceAll("&lt;", "<");
+					information = information.replaceAll("<br>", "\r\n");
+				}
+				
+				
+				String explain = rs.getString("EXPLAIN");
+				if(explain != null && !explain.trim().isEmpty()) {
+					explain = explain.replaceAll("&gt;", ">");
+					explain = explain.replaceAll("&lt;", "<");
+					explain = explain.replaceAll("<br>", "\r\n");
+				}
+				
+				
+				pvo.setExplain(explain);
+				pvo.setInformation(information);						
 				
 			} finally {
 				close();
@@ -656,7 +677,7 @@ public class ProductDAO implements InterProductDAO {
 				}
 						
 				sql += " fk_category_num = ?, fk_subcategory_num=?, product_name=?, "
-					+" unit=?,packing=?,origin=?,price=?,sale=?,best_point=?,seller=?,seller_phone=?,stock=?,explain=? "
+					+" unit=?,packing=?,origin=?,price=?,sale=?,best_point=?,seller=?,seller_phone=?,stock=?,explain=?,weight=?,shelf=?,information=? "
 					+" where product_num=? ";					
 				
 				pstmt = conn.prepareStatement(sql);
@@ -676,7 +697,11 @@ public class ProductDAO implements InterProductDAO {
 					pstmt.setString(12, pvo.getSeller_phone());
 					pstmt.setInt(13, pvo.getStock()); 
 					pstmt.setString(14, pvo.getExplain());
-					pstmt.setInt(15, pvo.getProduct_num());
+					pstmt.setString(15, pvo.getWeight());
+					pstmt.setString(16, pvo.getShelf());
+					pstmt.setString(17, pvo.getInformation());
+					pstmt.setInt(18, pvo.getProduct_num());
+					
 				}else {
 					pstmt.setInt(1, pvo.getFk_category_num());
 					pstmt.setInt(2, pvo.getFk_subcategory_num());
@@ -691,7 +716,10 @@ public class ProductDAO implements InterProductDAO {
 					pstmt.setString(11, pvo.getSeller_phone());
 					pstmt.setInt(12, pvo.getStock()); 
 					pstmt.setString(13, pvo.getExplain());
-					pstmt.setInt(14, pvo.getProduct_num());
+					pstmt.setString(14, pvo.getWeight());
+					pstmt.setString(15, pvo.getShelf());
+					pstmt.setString(16, pvo.getInformation());
+					pstmt.setInt(17, pvo.getProduct_num());
 					
 				}
 								

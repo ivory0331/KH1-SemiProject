@@ -208,7 +208,7 @@
 	/*첫번째 하위 navi 안에 있는 li태그에 hover 했을 때 그 li태그의 배경색 변경*/
 	/*.navi-categori .list:hover{background-color: #f1f1f1;}*/
 	
-	
+	/*장바구니 아이콘 */
 	.navi-basket > img{
 		width:40px;
 		heigth:40px;
@@ -216,6 +216,7 @@
 		margin-bottom: 10px;
 	}
 	
+	/*장바구니 아이콘 위에 덮어씌워지는 숫자가 들어가는 div */
 	#basketCnt{
 		position: absolute;
 		top: -7px;
@@ -238,7 +239,7 @@
 
 
 $(document).ready(function(){
-	printNavi();
+	printNavi(); // 전체 카테고리에 들어가는 navi(대분류 카테고리) 그리는 함수
 	var $list = $(".list"); //하위 navi에 존재하는 li태그들 (배열)
 
 	// 하위 navi에 존재하는 li태그에 hover했을 때 function
@@ -262,7 +263,7 @@ $(document).ready(function(){
 	},function(){
 		 $(".navi-dropdown-content").css({"display":"none","min-width":"150px"}); //원래 있던대로 display와 width 수정
 		 $(".navi-categori2").css("display","none");
-	});
+	}); // end of $(".navi-dropdown").hover()-----------------------------------------------
 	
 	
 	// 고객센터 span태그에 hover했을 때 function
@@ -270,14 +271,14 @@ $(document).ready(function(){
 		$(".serviceCenter-dropdown-content").css("display","block"); //하위 navi가 존재하는 영역 display 변경
 	},function(){
 		$(".serviceCenter-dropdown-content").css({"display":"none"}); //원래 있던대로 display와 width 수정
-	});
+	}); // end of $(".serviceCenter-dropdown").hover()-----------------------------------------------
 	
 	// 회원된 span태그에 hover했을 때 function
 	$(".mypage-dropdown").hover(function(){
 		$(".mypage-dropdown-content").css("display","block"); //하위 navi가 존재하는 영역 display 변경
 	},function(){
 		$(".mypage-dropdown-content").css({"display":"none"}); //원래 있던대로 display와 width 수정
-	});
+	}); // end of $(".mypage-dropdown").hover()-------------------------------------------------
 	
 	
 	// === 상단 navi 스크롤 사용 시와 브라우저 가로 길이 변경했을 때 고정하도록 하는 내용 === //
@@ -298,21 +299,23 @@ $(document).ready(function(){
 			$(".header-navi").removeAttr('style'); //고정으로 주고 있었던 css를 리셋
 			
 		}
-	});
+	}); // end of $(window).scroll()-----------------------------------------------------------------
+	
+	
 	
 	// 브라우저의 가로길이에 변화가 있을 때 실행되는 function
 	$(window).resize(function(){
 		var width = $(".header").css("width"); //header(로고+링크)영역의 width값 변수에 대입
 		$(".scroll_fixed").css("width",width); //해당 width값을 scroll_fixed(상단navi)클래스에 적용하는 css에 추가
-	});
+	}); // end of $(window).resize()------------------------------------------------------------------
 	
 	
 	// 전체 카테고리에서 서브 카테고리 변화주기 //
 	var $category = $(".navi-categori").find(".list");
 	$category.each(function(index, item){
 		var idx = index	
+		
 		$(item).mouseover(function(){
-			console.log(idx);
 			subArr = [{"num":11,"content":"기본채소"},{"num":12,"content":"쌈 샐러드"},{"num":13,"content":"특수채소"},
 				      {"num":21,"content":"국산과일"},{"num":21,"content":"수입과일"},{"num":21,"content":"냉동 건과일"},
 				      {"num":31,"content":"생선류"},{"num":32,"content":"오징어 낙지 문어"},{"num":33,"content":"새우 게 랍스타"},
@@ -323,16 +326,16 @@ $(document).ready(function(){
 			
 			for(var i=0; i<subArr.length; i++){
 				if(parseInt(subArr[i].num/10)==(idx+1)){
-					// $(".navi-categori2").find(".listType:eq("+i+")").html(subArr[i]);
 					var html="<li class='list'><span class='listType' onclick='goList("+subArr[i].num+")'>"+subArr[i].content+"</span></li>";
 					$(".navi-categori2").append(html); 
 				}	
 			}	
-		});
+		}); // end of $(item).mouseover()---------------------------------------------------------
 	
-	});
+	}); // end of $category.each()-----------------------------------------------------------------
 	
 	
+	// 로그인한 회원이 있으면 해당 회원이 장바
 	if( ${sessionScope.loginuser!=null} ) {
 		func_basketCnt();
 	}
@@ -343,25 +346,17 @@ $(document).ready(function(){
 		}
 	})
 	
-});
+}); // end of $(document).ready()------------------------------------------------------------------
 	
+	// 장바구니 페이지 이동
 	function goBasket(){
     	location.href="<%= ctxPath%>/product/basketList.do";
- 	}
+ 	}// end of goBasket()--------------------------------------------------------------------------
 	
 	
 	
-	function che(){
-		$("input:checkbox").each(function(index, item){
-			
-			if($(item).prop("checked")){
-				html+=$(item).val()+","	
-			}
-		})
-	}
 	
-	
-	
+	/* DB에 있는 product_category_table 테이블에서 값 가져오는 함수  */
 	function printNavi(){
 		$.ajax({
 			url:"<%=ctxPath%>/naviCategoryCall.do",
@@ -379,8 +374,9 @@ $(document).ready(function(){
 				console.log(e);
 			}
 		});
-	}
+	} // end of function printNavi()----------------------------------------------------------
 	
+	/* 장바구니에 담긴 물품들의 수를 확인하는 함수 */
 	function func_basketCnt(){
 		$.ajax({
 			url:"<%=ctxPath%>/basketCnt.do",
@@ -397,8 +393,9 @@ $(document).ready(function(){
 				console.log(e);
 			}
 		});
-	}
+	} // end of function func_basketCnt()---------------------------------------------------------
 	
+	// 로그아웃 함수
 	function logout(){
 		$.ajax({
 			url:"<%=ctxPath%>/member/logout.do",
@@ -415,7 +412,7 @@ $(document).ready(function(){
 				console.log(e);
 			}
 		});
-	}
+	}// end of logout()-----------------------------------------------------------------------------
 
 	function goList(num){
 		var category = 0;
@@ -476,8 +473,10 @@ $(document).ready(function(){
 				</div>
 				</div>
 			 </c:if>
+			 
 			<div class="serviceCenter-dropdown" style="display:inline-block;">
 				<a href="javascript:location.href='<%=ctxPath%>/service.do'">고객센터</a> <span class="underIcon">▼</span>
+				<c:if test="${sessionScope.loginuser.status!='2'}">
 				<div class="serviceCenter-dropdown-content" align="left">
 					<ul class="serviceCenter-categori">
 						<li class="list"><a href="javascript:location.href='<%=ctxPath%>/service/board.do'"><span class="listType">공지사항</span></a></li>
@@ -485,6 +484,7 @@ $(document).ready(function(){
 						<li class="list"><a href="javascript:location.href='<%=ctxPath%>/service/MyQue.do'"><span class="listType">1:1문의</span></a></li>
 					</ul>
 				</div>
+				</c:if>
 			</div>
 		</div>
 		<div class="logo">

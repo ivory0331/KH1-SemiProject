@@ -47,6 +47,22 @@
 		margin-top:10px;
 	}
 	
+	.writeBtn{
+		display: inline-block;
+		border:solid 1px black;
+		padding: 5px 30px;
+		background-color: purple;
+		color:white;
+		float: right;
+		cursor:pointer;
+	}
+	
+	.writeBtn:hover{
+		cursor: pointer;
+		background-color: white;
+		color:purple;
+	}
+	
 	
 </style>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
@@ -77,11 +93,6 @@ $(document).ready(function(){
 function goSearch() {
 	  if($("input[name='searchType']:checked").length==0){
 		  alert("검색할 타입을 선택해야 합니다.");
-		  return false;
-	  }
-	  
-	  if($("#searchWord").val().trim().length < 2){
-		  alert("최소 두 글자를 입력해야 합니다.");
 		  return false;
 	  }
 	  
@@ -157,7 +168,11 @@ function goSearch() {
 							</span>
 						</div>
 					</form>
-					
+					<div style="clear:both; margin-top: 20px;">
+				<c:if test="${sessionScope.loginuser.status=='2'}">
+					<span class="writeBtn" onclick="javascript:location.href='<%= request.getContextPath()%>/manager/mangerBoardWrite.do'">게시글 작성</span>
+				</c:if>
+				</div>
 				</div>
 				<div style="clear:both;"></div>
 			</div>

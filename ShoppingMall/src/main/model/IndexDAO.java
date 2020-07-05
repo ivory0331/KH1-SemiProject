@@ -134,7 +134,7 @@ public class IndexDAO implements InterIndexDAO{
 	@Override
 	public ProductVO productDetail(String idx) throws SQLException {
 		ProductVO product = null;
-		List<String> imageList = new ArrayList<String>();
+		List<ImageVO> imageList = new ArrayList<ImageVO>();
 		try {
 			conn = ds.getConnection();
 			String sql = " select P.product_num, P.product_name, P.price, P.sale, P.stock, P.origin, P.packing, P.unit, P.representative_img, P.explain, C.category_content , S.subcategory_content, "
@@ -172,13 +172,15 @@ public class IndexDAO implements InterIndexDAO{
 			rs.close();
 			
 			// 해당 상품 상세 이미지 불러오기
-			sql = " select image from product_image_table where fk_product_num = ? order by product_image_num asc";
+			sql = " select product_image_num, image from product_image_table where fk_product_num = ? order by product_image_num asc";
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, idx);
 			rs = pstmt.executeQuery();
 			while(rs.next()) {
-				String image = rs.getString("image");
-				imageList.add(image);
+				ImageVO img = new ImageVO();
+				img.setImg_num(rs.getInt("product_image_num"));
+				img.setImage(rs.getString("image"));
+				imageList.add(img);
 			}
 			product.setImageList(imageList);
 		}

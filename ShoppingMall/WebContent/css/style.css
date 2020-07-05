@@ -13,6 +13,7 @@
 .contents{
 	width: 1080px;
 	background-color: white;
+	min-height: 400px;
 }
 
 .underLine{

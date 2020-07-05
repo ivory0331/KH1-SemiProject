@@ -40,9 +40,6 @@ public class MyPageProductPossibleReviewAction extends AbstractController {
 			
 			InterReviewDAO rdao = new ReviewDAO();
 			
-			// *** 페이징처리를 안 한, 특정 회원의 모든 작성가능 후기내역 보여주기 *** //
-		//	List<OrderProductVO> possibleReviewList = rdao.selectPossibleReview(loginuser.getMember_num());
-			
 
 			// *** 페이징처리를 한, 특정 회원의 모든 작성가능 후기내역 보여주기 *** //
 			String currentShowPageNo = request.getParameter("currentShowPageNo");

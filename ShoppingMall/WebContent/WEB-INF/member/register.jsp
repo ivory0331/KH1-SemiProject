@@ -515,7 +515,7 @@ div.check_event{
       });// end of $("#tel").focus()-------------
       
       
-      //==인증번호 받기 (인증번호 클릭하면 telCk_error나오게 )
+    <%--   //==인증번호 받기 (인증번호 클릭하면 telCk_error나오게 )
       $("#btn_tel").click(function(event){
     	  $(".txt_guide:eq(3)").show();
     	  
@@ -544,7 +544,7 @@ div.check_event{
 					alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
 			    }
 			});	
-      });
+      }); --%>
       
       
       // == 인증번호 확인버튼 효과주기 
@@ -574,7 +574,7 @@ div.check_event{
      });// end of $("#tel_confirm").keyup(function(event) ------------
     		 
        
-      //==인증번호 동일 한지 확인                 
+     <%--  //==인증번호 동일 한지 확인                 
       $("#btnCheck_tel").click(function(){    	  
     	  
     	if($("#tel_confirm").val().trim()==""){
@@ -605,7 +605,7 @@ div.check_event{
     	 
       	});
     	 
-      });// end of $("#passwdCk").blur()--------------
+      });// end of $("#passwdCk").blur()-------------- --%>
       
       
       //==주소검색
@@ -848,17 +848,17 @@ div.check_event{
 	         alert("이름을 입력하세요");
 	         return;
 	    }
-		//휴대폰 번호 검사 체크여부 
+		/* //휴대폰 번호 검사 체크여부 
 		if(!bTelDuplicateCheck){
 	        alert("휴대폰 번호 인증을 해주세요");
 	        return;
-	    }
+	    } */
 		
-		//휴대폰 인증검사 체크여부 
+	/* 	//휴대폰 인증검사 체크여부 
 		if(!bTelCheckDuplicateCheck){
 	        alert("휴대폰 번호 인증을 해주세요");
 	        return;
-	    }
+	    } */
 		
 		//생년월일 인증검사 체크 
 		if(!bBirthDuplicateCheck){

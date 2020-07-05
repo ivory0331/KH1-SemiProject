@@ -40,10 +40,9 @@ public class MyPageProductCompleteReviewAction extends AbstractController {
 			HttpSession session = request.getSession();
 			MemberVO loginuser = (MemberVO) session.getAttribute("loginuser");
 			
-			InterReviewDAO rdao = new ReviewDAO();
 			
-			// *** 페이징처리를 안 한, 특정 회원의 모든 작성완료 후기내역 보여주기 *** //
-		//	List<ReviewVO> completeReviewList = rdao.selectCompleteReview(loginuser.getMember_num());
+			
+			InterReviewDAO rdao = new ReviewDAO();
 			
 			
 			// *** 페이징처리를 한, 특정 회원의 모든 작성완료 후기내역 보여주기 *** //

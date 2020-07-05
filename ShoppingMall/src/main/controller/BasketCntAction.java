@@ -22,6 +22,8 @@ public class BasketCntAction extends AbstractController {
 		MemberVO loginuser = (MemberVO) session.getAttribute("loginuser");
 		
 		int basketCnt = 0;
+		
+		// 로그인 한 유저가 있을 경우 DB에서 해당 유저가 장바구니에 담은 상품 수 알아오기
 		if(loginuser!=null) {
 			basketCnt = dao.basketCnt(loginuser.getMember_num());
 		}

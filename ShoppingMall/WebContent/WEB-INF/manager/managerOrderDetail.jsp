@@ -217,13 +217,14 @@
 <script type="text/javascript">
 	
 	$(document).ready(function(){
-		var price = Number(${OrderInfoDetail.price})-3000;
+		var price = Number("${OrderInfoDetail.price}")-3000;
 		$(".orderProduct-price").html(func_comma(price)+"원");
 	});
 		
 	function goChange(num){
 		var bool = "";
-		if("${order.order_state}" < num ){
+		
+		if("${OrderInfoDetail.fk_category_num}" > num ){
 			bool = confirm("상품의 배송상태를 이전상태로 바꾸시겠습니까?");
 		}
 		else{

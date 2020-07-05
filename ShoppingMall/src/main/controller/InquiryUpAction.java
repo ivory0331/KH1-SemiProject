@@ -29,6 +29,7 @@ public class InquiryUpAction extends AbstractController {
 		MemberVO loginuser = (MemberVO) session.getAttribute("loginuser");
 		String method = request.getMethod();
 		
+		// method가 get인 경우(페이지 이동)
 		if("get".equalsIgnoreCase(method)) {
 			String member_num = request.getParameter("member_num");
 			if(loginuser.getMember_num() != Integer.parseInt(member_num)) {
@@ -57,6 +58,8 @@ public class InquiryUpAction extends AbstractController {
 			request.setAttribute("pivo", pivo);
 			super.setViewPage("/WEB-INF/main/productQupdate.jsp");
 		}
+		
+		// method가 post인 경우(업데이트 기능)
 		else {
 			InterIndexDAO dao = new IndexDAO();
 			ServletContext context = request.getSession().getServletContext();

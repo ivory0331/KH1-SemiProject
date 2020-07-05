@@ -152,8 +152,8 @@
 		
 		 for(var i=0; i<$(".member-table tr").length; i++){
 			 $(".memberList_check").prop('checked',bool);
-		 	 bool = !bool;
 		 }
+		 bool = !bool;
 	 } 
  
 	 

@@ -20,12 +20,12 @@ public class DetailAction extends AbstractController {
 		ProductVO pvo = idao.productDetail(idx);
 		
 		
-		
-		if(pvo!=null) {
+		// URL창에서 상품 번호를 임의로 수정했을 경우 방지
+		if(pvo!=null) { // 임의로 바꾼 번호의 상품이 있을 경우
 			request.setAttribute("product", pvo);
 			super.setViewPage("/WEB-INF/main/detail.jsp");
 		}
-		else {
+		else { // 임의로 바꾼 번호의 상품이 없을 경우
 			String message = "상품정보가 없습니다.";
 			String loc = "javascript:history.back()";
 			request.setAttribute("message", message);

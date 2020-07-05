@@ -38,11 +38,13 @@ public class MyPageMyInfoUpdateAction extends AbstractController {
 			InterMemberDAO mdao = new MemberDAO();
 			int pwdCheck = mdao.updatePwdCheck(loginuser.getUserid(), passwd);
 
+			// 입력한 비밀번호가 현재 로그인한 회원의 비밀번호와 동일한 경우
 			if(pwdCheck == 1) {
 				// super.setRedirect(false);
 				super.setViewPage("/WEB-INF/member/myPageMyInfoUpdate.jsp");			
 			}
 			
+			// 입력한 비밀번호가 현재 로그인한 회원의 비밀번호와 다른 경우
 			else {
 				String message = "비밀번호를 정확하게 입력해 주세요.";
 				String loc = "javascript:history.back()";

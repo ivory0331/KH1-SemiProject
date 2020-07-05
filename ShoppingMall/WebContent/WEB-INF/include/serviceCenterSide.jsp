@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%
 	String ctxPath = request.getContextPath();
 %>
@@ -39,7 +40,9 @@
 	<ul class="menu">
 		<li class="underLine" onclick="goService('board.do')">공지사항</li>
 		<li class="underLine" onclick="goService('FAQ.do')">자주하는 질문</li>
+		 <c:if test="${sessionScope.loginuser.status!='2'}">
 		<li onclick="goService('MyQue.do')">1:1 문의</li>
+		</c:if>
 	</ul>
 </body>
 </html>

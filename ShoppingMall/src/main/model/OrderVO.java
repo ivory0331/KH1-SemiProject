@@ -12,6 +12,7 @@ public class OrderVO {
 	private String recipient_detailAddress;
 	private int price;
 	private String memo;
+	private int fk_category_num;
 	private String order_state;
 	private MemberVO member;
 	private int rowNum;
@@ -133,6 +134,16 @@ public class OrderVO {
 	public void setRowNum(int rowNum) {
 		this.rowNum = rowNum;
 	}
+
+	public int getFk_category_num() {
+		return fk_category_num;
+	}
+
+	public void setFk_category_num(int fk_category_num) {
+		this.fk_category_num = fk_category_num;
+	}
+	
+	
 	
 	
 	

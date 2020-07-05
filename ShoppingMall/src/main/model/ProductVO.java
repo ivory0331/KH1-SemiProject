@@ -24,8 +24,7 @@ public class ProductVO {
 	private String subcategory_content;
 	private String representative_img;
 	private String explain;
-	private List<String> imageList; // 상품 상세정보페이지에서 사용할 이미지 파일들
-	private List<ImageVO> imageList2;
+	private List<ImageVO> imageList;
 	
 	private int finalPrice;
 	private int totalPrice;
@@ -35,7 +34,7 @@ public class ProductVO {
 	public ProductVO(int product_num, String product_name, int price, int stock, String origin, String packing,
 			String unit, String registerdate, int sale, int fk_category_num, int fk_subcategory_num, int category_num,
 			String category_content, int subcategory_num, String subcategory_content, String representative_img,
-			String explain, List<String> imageList) {
+			String explain, List<ImageVO> imageList) {
 		super();
 		this.product_num = product_num;
 		this.product_name = product_name;
@@ -173,14 +172,6 @@ public class ProductVO {
 	public void setExplain(String explain) {
 		this.explain = explain;
 	}
-
-	public List<String> getImageList() {
-		return imageList;
-	}
-
-	public void setImageList(List<String> imageList) {
-		this.imageList = imageList;
-	}
 	
 	
 	public String getWeight() {
@@ -243,12 +234,12 @@ public class ProductVO {
 		return finalPrice;
 	}
 
-	public List<ImageVO> getImageList2() {
-		return imageList2;
+	public List<ImageVO> getImageList() {
+		return imageList;
 	}
 
-	public void setImageList2(List<ImageVO> imageList2) {
-		this.imageList2 = imageList2;
+	public void setImageList(List<ImageVO> imageList) {
+		this.imageList = imageList;
 	}
 
 	
