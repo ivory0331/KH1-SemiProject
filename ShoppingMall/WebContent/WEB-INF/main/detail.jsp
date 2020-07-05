@@ -383,7 +383,7 @@
 			var html = "";
 			$(json.reviewList).each(function(index, item){
 					html += "<tr class='accordion'>"
-			         	 + "<td>"+item.review_num+"<input type='hidden' class='writer' value='"+item.fk_member_num+"' /></td>"
+			         	 + "<td>"+item.rowNum+"<input type='hidden' class='writer' value='"+item.fk_member_num+"' /></td>"
 			         	 + "<td class='content-title'>"+item.subject+"</td>"
 			         	 + "<td>"+item.name+"</td>"
 			         	 + "<td>"+item.write_date+"</td>"
@@ -440,7 +440,7 @@
 			var html="";
 			$(json.productQList).each(function(index, item){
 				html += "<tr class='accordion' onclick='inquiryOpen(this)'>"
-				      + "<td>"+item.inquiry_num+"<input type='hidden' class='secret' value='"+item.secretFlag+"'/></td>"
+				      + "<td>"+item.rowNum+"<input type='hidden' class='secret' value='"+item.secretFlag+"'/></td>"
 				      + "<td class='content-title'>"+item.subject+"<input type='hidden' class='writer' value='"+item.fk_member_num+"'</td>"
 				      + "<td>"+item.name+"</td>"
 				      + "<td>"+item.write_date+"</td>"
@@ -495,7 +495,11 @@
 		console.log($target);
 		
 		$target.toggleClass("panel-none");
-		offSet[2] = $(".detailTablePart")[2].offsetTop;
+		
+		for(var i=0; i<$(".detailTablePart").length; i++){
+			offSet[i] = $(".detailTablePart")[i].offsetTop;
+			console.log(offSet[i]);
+		}
 	}
 	
 	function goInquiryDelete(num){
@@ -652,7 +656,7 @@
 						<div id="mainImage" style="width:100%; padding-bottom:10px; border-bottom:solid 1px #bfbfbf;">
 							<c:if test="${product.imageList!=null}">
 								<c:forEach var="image" items="${product.imageList}" varStatus="status">
-									<c:if test="${status.index == 0}">
+									<c:if test="${status.index == 0 && not empty(image)}">
 										<img src="<%=ctxPath %>/images/${image}"  style="margin:20px 0;"/>
 									</c:if>
 								</c:forEach>
@@ -665,7 +669,7 @@
 						</div>
 						<c:if test="${product.imageList!=null}">
 							<c:forEach var="image" items="${product.imageList}" varStatus="status">
-								<c:if test="${status.index != 0}">
+								<c:if test="${status.index != 0 && not empty(image)}">
 									<img src="<%=ctxPath %>/images/${image}"  style="margin:20px 0;"/>
 								</c:if>
 							</c:forEach>

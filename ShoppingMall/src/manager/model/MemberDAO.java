@@ -282,7 +282,7 @@ public class MemberDAO implements InterMemberDAO {
 				conn = ds.getConnection();		
 				
 				String sql = "select member_num, name, userid, email, mobile, "
-						+ " postcode, address, detailaddress,gender,to_char(birthday,'yyyy-mm-dd') as birthday, "
+						+ " postcode, address, detailaddress,gender, birthday, "
 						+ " to_char(registerdate,'yyyy-mm-dd') as registerdate "
 						+ " from member_table " 
 						+ " where member_num=? ";	

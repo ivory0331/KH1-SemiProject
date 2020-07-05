@@ -257,7 +257,10 @@
 								<table class="info">
 									<tr>
 										<th class="info">총주문금액</th>
-										<td class="info"><fmt:formatNumber value="${OrderInfoDetail.price}" pattern="###,###"/> 원</td>
+										<td class="info">
+											<c:set var="price" value="${OrderInfodetail.price-3000}"/>
+											<fmt:formatNumber value="${price}" pattern="###,###"/> 원
+										</td>
 									</tr>
 									<tr>
 										<th class="info">배송비</th>

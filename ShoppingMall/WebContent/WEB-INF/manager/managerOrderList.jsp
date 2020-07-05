@@ -130,13 +130,17 @@
 			data:{"value":num, "state":state},
 			dataType:"JSON",
 			success:function(json){
-				alert(json);
+				alert(json.message);
 				goOrderSelect();
 			},
 			error:function(e){
 				alert(e);
 			}
 		}); 
+	}
+	
+	function goOrderDetail(num){
+		location.href="<%=ctxPath%>/manager/managerOrderDetail.do?order_num="+num;
 	}
 </script>
 </head>
@@ -161,7 +165,7 @@
 						
 						
 						<select id="orderState" name="orderState" style="float:right;">
-							<option value="0">==배송상태==</option>
+							<option value="-1">==배송상태==</option>
 							<c:forEach var="state" items="${stateList}">
 								<c:if test="${state.num == orderState}">
 									<option value="${state.num}" selected>${state.state}</option>
@@ -189,7 +193,7 @@
 						</c:if>
 						<c:if test="${not empty orderList}">		
 							<c:forEach var="order" items="${orderList}">
-									<tr id="order${order.order_num}">
+									<tr style="cursor: pointer;" onclick ="goOrderDetail('${order.order_num}')">
 										<td><input type="checkbox" name="state" value="${order.order_num}" /></td>
 										<td>${order.order_num}</td>
 										<td>${order.member.name}</td>
@@ -205,7 +209,10 @@
 						${pageBar}
 					</div>
 					<div class="userBtn" align="right">
-						<span onclick = "goChange('1')">상품출하</span><span onclick = "goChange('1')">배송중</span><span onclick = "goChange('1')">배송완료</span>
+						<span onclick = "goChange('0')">상품준비중</span>
+						<span onclick = "goChange('1')">상품출하</span>
+						<span onclick = "goChange('2')">배송중</span>
+						<span onclick = "goChange('3')">배송완료</span>
 					</div>
 					</form>
 				</div>

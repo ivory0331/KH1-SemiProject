@@ -214,7 +214,8 @@ public class IndexDAO implements InterIndexDAO{
 		List<ReviewVO> reviewList = new ArrayList<ReviewVO>();
 		try {
 			conn = ds.getConnection();
-			String sql = " select RON, review_num, content, write_date,"
+			String sql = " select SON, RON, review_num, subject, content, write_date, hit, favorite, fk_product_num, fk_order_num, fk_member_num, name "
+					   + " from(select rownum as SON, RON, review_num, subject, content, write_date,"
 					   + " hit, favorite, fk_product_num, fk_order_num, fk_member_num, name"
 					   + " from "
 					   + " (select rownum as RON, review_num, subject, content, write_date,"
@@ -222,8 +223,8 @@ public class IndexDAO implements InterIndexDAO{
 					   + " from"
 					   + " 		(select R.review_num, R.subject, R.content, to_char(R.write_date,'yyyy-mm-dd') as write_date,"
 					   + " 		R.hit, R.favorite, R.fk_product_num, R.fk_order_num, R.fk_member_num, M.name"
-					   + " 		from review_table R join member_table M on R.fk_member_num = M.member_num where R.fk_product_num = ? order by review_num desc)V" 
-					   + " )T where T.RON between ? and ?";
+					   + " 		from review_table R join member_table M on R.fk_member_num = M.member_num where R.fk_product_num = ? order by review_num asc)V" 
+					   + " )T order by review_num desc) S where S.SON between ? and ?";
 			
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setInt(1, paraMap.get("product_num"));
@@ -233,16 +234,17 @@ public class IndexDAO implements InterIndexDAO{
 			rs = pstmt.executeQuery();
 			while(rs.next()) {
 				ReviewVO review = new ReviewVO();
-				review.setReview_num(rs.getInt(1));
-				review.setSubject(rs.getString(2));
-				review.setContent(rs.getString(3));
-				review.setWrite_date(rs.getString(4));
-				review.setHit(rs.getInt(5));
-				review.setFavorite(rs.getInt(6));
-				review.setFk_product_num(rs.getInt(7));
-				review.setFk_order_num(rs.getInt(8));
-				review.setFk_member_num(rs.getInt(9));
-				review.setName(rs.getString(10));
+				review.setRowNum(rs.getInt(2));
+				review.setReview_num(rs.getInt(3));
+				review.setSubject(rs.getString(4));
+				review.setContent(rs.getString(5));
+				review.setWrite_date(rs.getString(6));
+				review.setHit(rs.getInt(7));
+				review.setFavorite(rs.getInt(8));
+				review.setFk_product_num(rs.getInt(9));
+				review.setFk_order_num(rs.getInt(10));
+				review.setFk_member_num(rs.getInt(11));
+				review.setName(rs.getString(12));
 				reviewList.add(review);
 			}
 			rs.close();
@@ -279,12 +281,13 @@ public class IndexDAO implements InterIndexDAO{
 		
 		try {
 			conn = ds.getConnection();
-			String sql = " select T.RON, inquiry_num, subject, content, write_date, answer, emailFlag, smsFlag, secretFlag, fk_member_num, name"
+			String sql = " select SON, RON, inquiry_num, subject, content, write_date, answer, emailFlag, smsFlag, secretFlag, fk_member_num, name "
+					   + " from(select rownum as SON, T.RON, inquiry_num, subject, content, write_date, answer, emailFlag, smsFlag, secretFlag, fk_member_num, name"
 					   + " from (select rownum as RON, PI.inquiry_num, PI.subject, PI.content, to_char(PI.write_date,'yyyy-mm-dd') as write_date,"
 					   + " PI.answer, PI.emailFlag, PI.smsFlag, PI.secretFlag, PI.fk_member_num, M.name "
 					   + " from product_inquiry_table PI join member_table M "
 					   + " on PI.fk_member_num = M.member_num "
-					   + " where PI.fk_product_num = ?)T where T.RON between ? and ?";
+					   + " where PI.fk_product_num = ? order by PI.inquiry_num asc)T order by inquiry_num desc)S where S.SON between ? and ?";
 			
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setInt(1, paraMap.get("product_num"));
@@ -293,16 +296,17 @@ public class IndexDAO implements InterIndexDAO{
 			rs = pstmt.executeQuery();
 			while(rs.next()) {
 				ProductInquiryVO productQ = new ProductInquiryVO();
-				productQ.setInquiry_num(rs.getInt(2));
-				productQ.setSubject(rs.getString(3));
-				productQ.setContent(rs.getString(4));
-				productQ.setWrite_date(rs.getString(5));
-				productQ.setAnswer(rs.getString(6));
-				productQ.setEmailFlag(rs.getInt(7));
-				productQ.setSmsFlag(rs.getInt(8));
-				productQ.setSecretFlag(rs.getInt(9));
-				productQ.setFk_member_num(rs.getInt(10));
-				productQ.setName(rs.getString(11));
+				productQ.setRowNum(rs.getInt(2));
+				productQ.setInquiry_num(rs.getInt(3));
+				productQ.setSubject(rs.getString(4));
+				productQ.setContent(rs.getString(5));
+				productQ.setWrite_date(rs.getString(6));
+				productQ.setAnswer(rs.getString(7));
+				productQ.setEmailFlag(rs.getInt(8));
+				productQ.setSmsFlag(rs.getInt(9));
+				productQ.setSecretFlag(rs.getInt(10));
+				productQ.setFk_member_num(rs.getInt(11));
+				productQ.setName(rs.getString(12));
 				productQList.add(productQ);
 			}
 			rs.close();
@@ -553,7 +557,7 @@ public class IndexDAO implements InterIndexDAO{
 				}
 			rs.close();
 				
-			sql = " select image from product_inquiry_image_table where fk_inquiry_num = ? ";
+			sql = " select image from product_inquiry_image_table where fk_inquiry_num = ?  ";
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, inquiry_num);
 			rs = pstmt.executeQuery();
@@ -1689,7 +1693,7 @@ public class IndexDAO implements InterIndexDAO{
 			String orderState = paraMap.get("orderState");
 			String searchType = paraMap.get("searchType");
 			
-			if((searchWord != null && !searchWord.trim().isEmpty()) && (orderState != null && !"0".equals(orderState))) {      
+			if((searchWord != null && !searchWord.trim().isEmpty()) && (orderState != null && !"-1".equals(orderState))) {      
 				sql += " where "+searchType+" like '%'||?||'%'  and fk_category_num = ? ";                          
 			}
 	    
@@ -1697,7 +1701,7 @@ public class IndexDAO implements InterIndexDAO{
 				sql += " where "+searchType+" like '%'||?||'%' ";
 			}
 			
-			else if(orderState != null && !"0".equals(orderState)){
+			else if(orderState != null && !"-1".equals(orderState)){
 				sql += " where fk_category_num = ? ";
 			}
 			
@@ -1711,7 +1715,7 @@ public class IndexDAO implements InterIndexDAO{
 			int currentShowPageNo = Integer.parseInt(paraMap.get("currentShowPageNo"));
 			int sizePerPage = Integer.parseInt(paraMap.get("sizePerPage"));
 			
-			if((searchWord != null && !searchWord.trim().isEmpty()) && (orderState != null && !"0".equals(orderState))) {      
+			if((searchWord != null && !searchWord.trim().isEmpty()) && (orderState != null && !"-1".equals(orderState))) {      
 				pstmt.setString(1, searchWord);
 				pstmt.setString(2, orderState);
 				pstmt.setInt(3, (currentShowPageNo*sizePerPage)-(sizePerPage-1));
@@ -1724,7 +1728,7 @@ public class IndexDAO implements InterIndexDAO{
 				pstmt.setInt(3, (currentShowPageNo*sizePerPage) );
 			}
 			
-			else if(orderState != null && !"0".equals(orderState)){
+			else if(orderState != null && !"-1".equals(orderState)){
 				pstmt.setString(1, orderState);
 				pstmt.setInt(2, (currentShowPageNo*sizePerPage)-(sizePerPage-1));
 				pstmt.setInt(3, (currentShowPageNo*sizePerPage) );
@@ -1793,6 +1797,7 @@ public class IndexDAO implements InterIndexDAO{
 		return orderStateList;
 	}
 
+	// 회원주문 조회 게시글 수 
 	@Override
 	public int getTotalPageOrder(HashMap<String, String> paraMap) throws SQLException {
 		int totalPage = 0;
@@ -1808,7 +1813,7 @@ public class IndexDAO implements InterIndexDAO{
 			String searchType = paraMap.get("searchType");
 			
 			
-			if((searchWord != null && !searchWord.trim().isEmpty()) && (orderState != null && !"0".equals(orderState))) {      
+			if((searchWord != null && !searchWord.trim().isEmpty()) && (orderState != null && !"-1".equals(orderState))) {      
 				sql += " where "+searchType+" like '%'||?||'%'  and fk_category_num = ? ";                          
 			}
 	    
@@ -1816,7 +1821,7 @@ public class IndexDAO implements InterIndexDAO{
 				sql += " where "+searchType+" like '%'||?||'%' ";
 			}
 			
-			else if(orderState != null && !"0".equals(orderState)){
+			else if(orderState != null && !"-1".equals(orderState)){
 				sql += " where fk_category_num = ? ";
 			}
 			
@@ -1826,7 +1831,7 @@ public class IndexDAO implements InterIndexDAO{
 			System.out.println("확인용sql:"+sql);
 			
 
-			if((searchWord != null && !searchWord.trim().isEmpty()) && (orderState != null && !"0".equals(orderState))) {      
+			if((searchWord != null && !searchWord.trim().isEmpty()) && (orderState != null && !"-1".equals(orderState))) {      
 				pstmt.setInt(1,sizePerPage);
 				pstmt.setString(2, searchWord);
 				pstmt.setString(3, orderState);
@@ -1837,7 +1842,7 @@ public class IndexDAO implements InterIndexDAO{
 				pstmt.setString(2, searchWord);
 			}
 			
-			else if(orderState != null && !"0".equals(orderState)){
+			else if(orderState != null && !"-1".equals(orderState)){
 				pstmt.setInt(1,sizePerPage);
 				pstmt.setString(2, orderState);
 			}
@@ -1866,8 +1871,40 @@ public class IndexDAO implements InterIndexDAO{
 
 	@Override
 	public int orderStateChane(Map<String, String> paraMap) throws SQLException {
-		// TODO Auto-generated method stub
-		return 0;
+		int result = 0;
+		try {
+			conn = ds.getConnection();
+			conn.setAutoCommit(false);
+			String sql = " update order_table set fk_category_num = ? where order_num in (";
+			
+			String[] state = paraMap.get("state").split(",");
+			String value = paraMap.get("value");
+			
+			for(int i=0; i<state.length; i++) {
+				sql += (i<state.length-1)?" ?,":" ?";
+			}
+			sql += ")";
+			System.out.println("확인용sql:"+sql);
+			
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, value);
+			
+			for(int i=0; i<state.length; i++) {
+				pstmt.setString(i+2, state[i]);
+			}
+			
+			result = pstmt.executeUpdate();
+			if(result == state.length) conn.commit();
+			else {
+				conn.rollback();
+				return 0;
+			}
+		}
+		finally {
+			close();
+		}
+		
+		return result;
 	}
 
 	

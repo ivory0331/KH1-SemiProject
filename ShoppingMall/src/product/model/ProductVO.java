@@ -2,6 +2,8 @@ package product.model;
 
 import java.util.List;
 
+import main.model.ImageVO;
+
 public class ProductVO {
 	
 	private int product_num;
@@ -24,7 +26,7 @@ public class ProductVO {
 	private int subcategory_num;
 	private String subcategory_content;
 	private String representative_img;
-	private List<String> imageList; // 상품 상세정보페이지에서 사용할 이미지 파일들
+	private List<ImageVO> imageList;
 	
 	private int finalPrice;
 	private int totalPrice;
@@ -34,7 +36,7 @@ public class ProductVO {
 	public ProductVO(int product_num, String product_name, int price, int stock, String origin, String packing,
 			String unit, String registerdater, int sale, int best_point, int fk_category_num, int fk_subcategory_num, int category_num,
 			String category_content, int subcategory_num, String subcategory_content, String representative_img,
-			List<String> imageList) {
+			List<ImageVO> imageList) {
 		super();
 		this.product_num = product_num;
 		this.product_name = product_name;
@@ -196,11 +198,11 @@ public class ProductVO {
 		this.representative_img = representative_img;
 	}
 
-	public List<String> getImageList() {
+	public List<ImageVO> getImageList() {
 		return imageList;
 	}
 
-	public void setImageList(List<String> imageList) {
+	public void setImageList(List<ImageVO> imageList) {
 		this.imageList = imageList;
 	}
 

@@ -166,11 +166,11 @@ create table product_image_table
 ,constraint pk_product_image_table primary key (product_image_num)
 ,constraint fk_prodcut_detail_num FOREIGN key (fk_product_num) REFERENCES product_table(product_num) on DELETE CASCADE
 );
+drop table product_image_table;
 
-
-drop sequence seq_product_table;
+drop sequence seq_product_image;
 -- 상품 이미지에서 사용할 시퀀스 -- 
-create sequence seq_product_table
+create sequence seq_product_image
 start with 1
 increment by 1
 nomaxvalue
@@ -213,23 +213,13 @@ nocache;
 
 -- 상품문의 이미지 테이블 --
 create table product_inquiry_image_table
-(inquiry_image_num number not null
-,fk_inquiry_num number not null
+(fk_inquiry_num number not null
 ,image varchar2(100)
-,constraint pk_inquiry_image_num primary key (inquiry_image_num)
 ,constraint fk_inquiry_image FOREIGN key (fk_inquiry_num) REFERENCES product_inquiry_table(inquiry_num) on delete CASCADE
 );
 
 
-drop sequence seq_product_inquiry_image;
--- 상품문의 이미지 테이블에 사용할 시퀀스 생성 --
-create sequence seq_product_inquiry_image
-start with 1
-increment by 1
-nomaxvalue
-nominvalue
-nocycle
-nocache;
+
 
 
 -- 배송상테 테이블 생성 --
@@ -349,23 +339,14 @@ nocache;
 
 -- 후기테이블용 이미지 테이블 생성 --
 create table review_image_table
-(review_image_num number not null
-,fk_review_num number not null
+(fk_review_num number not null
 ,image varchar2(100)
-,constraint pk_review_image primary key(review_image_num)
 ,constraint fk_review_image FOREIGN key (fk_review_num) REFERENCES review_table(review_num)on delete cascade
 );
- 
 
-drop sequence seq_review_image_table;
--- 리뷰이미지 테이블에 사용할 시퀀스 생성 --
-create sequence seq_review_image_table
-start with 1
-increment by 1
-nomaxvalue
-nominvalue
-nocycle
-nocache;
+
+
+
 
 
 -- 1:1문의 카테고리 테이블 생성 --
@@ -639,22 +620,40 @@ select * from product_image_table order by product_image_num asc;
 
 
 -- 돼지고기
-insert into product_table (product_num, product_name, price, stock, origin, packing, unit, sale, seller, seller_phone, fk_category_num, fk_subcategory_num, representative_img) 
-values(seq_product_table.nextval, '국내산 목살 양념구이', '12900', '15', '국내산', '냉동/종이포장', '1팩', '10', '김진하', '01075653393', 4, 42, '국내산 목살 양념구이.png');
-insert into product_table (product_num, product_name, price, stock, origin, packing, unit, sale, seller, seller_phone, fk_category_num, fk_subcategory_num, representative_img) 
-values(seq_product_table.nextval, '매콤한맛 삼겹살구이 (냉동)', '4900', '10', '돼지고기(브라질산)', '냉동/종이포장', '1팩', '10', '김진하', '01075653393', 4, 42, '매콤한맛 삼겹살구이 (냉동).png');
-insert into product_table (product_num, product_name, price, stock, origin, packing, unit, sale, seller, seller_phone, fk_category_num, fk_subcategory_num, representative_img) 
-values(seq_product_table.nextval, '무한생제 1등급 한동 다짐육 300g(냉장)', '58000', '5', '국내산', '냉장/종이포장', '1팩', '0', '김진하', '01075653393', 4, 42,  '무한생제 1등급 한동 다짐육 300g(냉장).png');
+insert into product_table (product_num, product_name, price, stock, origin, packing, unit, sale, seller, seller_phone, fk_category_num, fk_subcategory_num, representative_img,explain) 
+values(seq_product_table.nextval, '국내산 목살 양념구이', '12900', '800', '국내산', '냉동/종이포장', '1팩', '10', '김진하', '01075653393', 4, 42, '국내산 목살 양념구이.png'
+,'양념된 돼지고기 하면 갈비 부위를 먼저 떠올리실 텐데요. 갈비가 아닌 목살 부위를 엄선한 뒤 마늘,배,양파,설탕,생강 등으로 만든 특제 간장 양념을 입혔습니다.
+목살은 갈비보다 기름기가 적고 살코기의 품질을 유지하기에도 좋기 때문이지요. 양념 목살의 표면을 보면 사선으로 촘촘히 선이 새겨져 있는 것을 알 수 있습니다.
+기계가 아닌 사람의 손이 일일이 칼집을 넣어 육질을 부드럽게 만든 흔적이에요. 돼지 양념 목살을 집에서 노릇노릇하게 구워 드셔보세요.');
+
+insert into product_table (product_num, product_name, price, stock, origin, packing, unit, sale, seller, seller_phone, fk_category_num, fk_subcategory_num, representative_img,weight, information, explain) 
+values(seq_product_table.nextval, '매콤한맛 삼겹살구이 (냉동)', '4900', '100', '돼지고기(브라질산)', '냉동/종이포장', '1팩', '10', '김진하', '01075653393', 4, 42, '매콤한맛 삼겹살구이 (냉동).png'
+,'320g','대두, 밀이 함유가 되어있습니다. 알레르기를 유발할 수 있다는 점을 안내드립니다.'
+,'라면 끓이듯 간편하게 양념 삼겹살을 만들어 보세요. 컬리가 소개하는 돈쉐이크 삼겹살구이는 양념구이가 얼마나 쉬울 수 있는지 보여줍니다. 패키지를 열고, 동봉된 시즈닝을 패키지 안에 뿌린 뒤 고기와 잘 흔들어주세요.
+그리고 팬이나 에어프라이어에 구워내면 완성입니다. 매콤한 맛 시즈닝을 뿌리면 양념맛이 살아있는 삼겹살구이가 완성됩니다. 후끈하게 매운 맛은 아니어서 부담없이 먹을 수 있이요.');
+
+insert into product_table (product_num, product_name, price, stock, origin, packing, unit, sale, seller, seller_phone, fk_category_num, fk_subcategory_num, representative_img,weight,information,best_point, explain) 
+values(seq_product_table.nextval, '[태우한우]무한생제 1등급 한동 다짐육 300g(냉장)', '58000', '500', '국내산', '냉장/종이포장', '1팩', '5', '김진하', '01075653393', 4, 42,  '무한생제 1등급 한동 다짐육 300g(냉장).png'
+,'300g(30gX10)','해당 상품은 냉동 상품입니다. 보관기간이 신선도에 많은 영향을 주는 정육식품이기 때문에 수령후 최대한 빠른 시일내에 섭취를 권장드립니다.','15'
+,'태우한우 다짐육은 무항생제 1등급 이상의 한우만을 엄선해 풍미 좋고 건강한 고기를 전해요. 기름기가 거의 없는 우둔과 설도만을 사용해 아기들이 소화하는데 부담이 없죠.
+가늘게 다져낸 다짐육은 부드러운 결과 식감이 참 곱답니다. 세균 번식을 막아주는 음이온 시설에서 가공되는 점도 컬리의 마음을 끌었죠.1회분씩 소분 포장한 한우 다짐육을 그때그때 꺼내어 간편하게 요리하세요.
+우리 아기를 위한 소고기 요리, 태우한우 다짐육과 함께라면 더이상 번거롭지 않아요.');
+
 insert into product_table (product_num, product_name, price, stock, origin, packing, unit, sale, seller, seller_phone, fk_category_num, fk_subcategory_num, representative_img) 
 values(seq_product_table.nextval, '바베큐맛 삼겹살구이 (냉동)', '4900', '12', '돼지고기(브라질산)', '냉동/종이포장', '1팩', '0', '김진하', '01075653393', 4, 42, '바베큐맛 삼겹살구이 (냉동).png');
+
 insert into product_table (product_num, product_name, price, stock, origin, packing, unit, sale, seller, seller_phone, fk_category_num, fk_subcategory_num, representative_img) 
 values(seq_product_table.nextval, '베요타 프레사 구이용 200g(냉동)', '18000', '14', '스페인산', '냉동/종이포장', '1팩', '20', '김진하', '01075653393', 4, 42, '베요타 프레사 구이용 200g(냉동).png');
+
 insert into product_table (product_num, product_name, price, stock, origin, packing, unit, sale, seller, seller_phone, fk_category_num, fk_subcategory_num, representative_img) 
 values(seq_product_table.nextval, '베요타 플루마 구이용 200g(냉동)', '18500', '10', '스페인산', '냉동/종이포장', '1팩', '0', '김진하', '01075653393', 4, 42, '베요타 플루마 구이용 200g(냉동).png');
+
 insert into product_table (product_num, product_name, price, stock, origin, packing, unit, sale, seller, seller_phone, fk_category_num, fk_subcategory_num, representative_img) 
 values(seq_product_table.nextval, '세보데깜뽀 플루마 구이용 200g(냉동)', '16500', '10', '스페인산', '냉동/종이포장', '1팩', '10', '김진하', '01075653393', 4, 42, '세보데깜뽀 플루마 구이용 200g(냉동).png');
+
 insert into product_table (product_num, product_name, price, stock, origin, packing, unit, sale, seller, seller_phone, fk_category_num, fk_subcategory_num, representative_img) 
 values(seq_product_table.nextval, '연저육찜', '15000', '6', '국내산', '냉장/종이포장', '1팩', '0', '김진하', '01075653393', 4, 42, '연저육찜.png');
+
 insert into product_table (product_num, product_name, price, stock, origin, packing, unit, sale, seller, seller_phone, fk_category_num, fk_subcategory_num, representative_img) 
 values(seq_product_table.nextval, '짭쪼름한맛 삼겹살구이 (냉동)', '4900', '15', '돼지고기(브라질산)', '냉동/종이포장', '1팩', '30', '김진하', '01075653393', 4, 42, '짭쪼름한맛 삼겹살구이 (냉동).png');
 
@@ -896,8 +895,8 @@ values (seq_member_table.nextval, '관리자', 'admin', 'qwer1234!','2wnaud@nave
 
 commit;
 
-
-
+select * from order_product_table;
+select * from review_table;
 
 
 

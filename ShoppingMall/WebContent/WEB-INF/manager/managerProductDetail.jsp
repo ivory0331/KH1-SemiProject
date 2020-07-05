@@ -512,36 +512,36 @@
 								<div class="detailImgDiv">
 									<div class="detail_img">
 										<div class="upload_image_detail detail1">
-											<c:if test="${not empty pvo.imageList[0] }">
-												<img class="detail_img" id="img1" src="/ShoppingMall/images/${pvo.imageList[0]}">
+											<c:if test="${not empty pvo.imageList[0].image }">
+												<img class="detail_img" id="img1" src="/ShoppingMall/images/${pvo.imageList[0].image}">
 											</c:if>
 										</div>
-										<input class="upload_name" name="upload_name1" id="upload_name1" value="${pvo.imageList[0]}" readonly>
-										<input type="hidden" class="old_name" name="old_name1" id="old_name1" value="${pvo.imageList[0]}">
+										<input class="upload_name" name="upload_name1" id="upload_name1" value="${pvo.imageList[0].image}" readonly>
+										<input type="hidden" class="old_name" name="old_name1" id="old_name1" value="${pvo.imageList[0].img_num}">
 										<label for="image1_btn">찾기</label>
 										<input type="file" class="upload_image" id="image1_btn" name="detail_img1" />`	
 										<label class="image_delete" id="image1_delete">삭제</label>
 									</div>
 									<div class="detail_img">
 										<div class="upload_image_detail detail2">	
-											<c:if test="${not empty pvo.imageList[1] }">
-												<img class="detail_img" id="img2" src="/ShoppingMall/images/${pvo.imageList[1]}">
+											<c:if test="${not empty pvo.imageList[1].image }">
+												<img class="detail_img" id="img2" src="/ShoppingMall/images/${pvo.imageList[1].image}">
 											</c:if>
 										</div>
-										<input class="upload_name" name="upload_name2" id="upload_name2" value="${pvo.imageList[1]}" readonly>
-										<input type="hidden" class="old_name" name="old_name2" id="old_name2" value="${pvo.imageList[1]}">
+										<input class="upload_name" name="upload_name2" id="upload_name2" value="${pvo.imageList[1].image}" readonly>
+										<input type="hidden" class="old_name" name="old_name2" id="old_name2" value="${pvo.imageList[1].img_num}">
 										<label for="image2_btn">찾기</label>
 										<input type="file" class="upload_image" id="image2_btn" name="detail_img2" />
 										<label class="image_delete" id="image2_delete">삭제</label>										
 									</div>
 									<div class="detail_img">
 										<div class="upload_image_detail detail3">
-											<c:if test="${not empty pvo.imageList[2] }">
-												<img class="detail_img" id="img3" src="/ShoppingMall/images/${pvo.imageList[2]}">
+											<c:if test="${not empty pvo.imageList[2].image }">
+												<img class="detail_img" id="img3" src="/ShoppingMall/images/${pvo.imageList[2].image}">
 											</c:if>																		
 										</div>
-										<input class="upload_name" name="upload_name3" id="upload_name3" value="${pvo.imageList[2]}" readonly>
-										<input type="hidden" class="old_name" name="old_name3" id="old_name3" value="${pvo.imageList[2]}">
+										<input class="upload_name" name="upload_name3" id="upload_name3" value="${pvo.imageList[2].image}" readonly>
+										<input type="hidden" class="old_name" name="old_name3" id="old_name3" value="${pvo.imageList[2].img_num}">
 										<label for="image3_btn">찾기</label>
 										<input type="file" class="upload_image" id="image3_btn" name="detail_img3" />
 										<label class="image_delete" id="image3_delete">삭제</label>

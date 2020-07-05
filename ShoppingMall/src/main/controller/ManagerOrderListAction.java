@@ -47,7 +47,7 @@ public class ManagerOrderListAction extends AbstractController {
     	 
     	paraMap.put("currentShowPageNo", currentShowPageNo);
     	paraMap.put("sizePerPage", sizePerPage);
-    	if(orderState != null && !("0".equals(orderState))) {paraMap.put("orderState", orderState);}
+    	if(orderState != null && !("-1".equals(orderState))) {paraMap.put("orderState", orderState);}
 		
     	// 검색	    	 
 	   	String searchWord = request.getParameter("searchWord");
@@ -80,7 +80,7 @@ public class ManagerOrderListAction extends AbstractController {
 	   	 
 	   	 // [이전]
 	   	 if(pageNo!=1) {
-	   		 pageBar += "&nbsp;<a href='"+request.getContextPath()+"/service/FAQ.do?currentShowPageNo="+(pageNo-1)+"&searchWord="+searchWord+"&orderState="+orderState+"'>[이전]</a>&nbsp;";
+	   		 pageBar += "&nbsp;<a href='"+request.getContextPath()+"/manager/managerOrderList.do?currentShowPageNo="+(pageNo-1)+"&searchWord="+searchWord+"&orderState="+orderState+"'>[이전]</a>&nbsp;";
 	   	 }
 	   	 
 	   	 // 페이지바

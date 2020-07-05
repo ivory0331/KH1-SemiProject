@@ -206,7 +206,7 @@
 	
 	function goTable(num){
 			
-		var top = offSet[num]-Number("81");
+		var top = offSet[num]-Number("150");
 		console.log("top:"+top);
 		$('html, body').animate({scrollTop : top}, 0);		
 	}

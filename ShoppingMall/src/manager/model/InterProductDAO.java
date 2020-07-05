@@ -4,6 +4,7 @@ import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
 
+import main.model.ImageVO;
 import product.model.ProductVO;
 
 public interface InterProductDAO {
@@ -44,7 +45,7 @@ public interface InterProductDAO {
 	ProductVO detailProduct(String product_num) throws SQLException;
 
 	// 제품 상세 정보 보기 - 상세 이미지
-	List<String> detailProductImg(String product_num) throws SQLException;
+	List<ImageVO> detailProductImg(String product_num) throws SQLException;
 
 	// 제품 수정
 	int productUpdate(ProductVO pvo) throws SQLException;

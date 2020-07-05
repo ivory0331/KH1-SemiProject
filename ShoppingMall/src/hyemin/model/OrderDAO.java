@@ -204,7 +204,7 @@ public class OrderDAO implements InterOrderDAO {
 				String recipient_address = rs.getString(8);
 				String recipient_detailaddress = rs.getString(9);
 				String memo = rs.getString(10);
-				
+				System.out.println("확인용:"+name+"/"+order_date+"/"+order_state+"/"+recipient);
 				MemberVO mvo = new MemberVO();
 				mvo.setName(name);
 				

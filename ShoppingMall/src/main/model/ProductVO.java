@@ -25,6 +25,7 @@ public class ProductVO {
 	private String representative_img;
 	private String explain;
 	private List<String> imageList; // 상품 상세정보페이지에서 사용할 이미지 파일들
+	private List<ImageVO> imageList2;
 	
 	private int finalPrice;
 	private int totalPrice;
@@ -242,6 +243,16 @@ public class ProductVO {
 		return finalPrice;
 	}
 
+	public List<ImageVO> getImageList2() {
+		return imageList2;
+	}
+
+	public void setImageList2(List<ImageVO> imageList2) {
+		this.imageList2 = imageList2;
+	}
+
+	
+	
 	
 	
 }

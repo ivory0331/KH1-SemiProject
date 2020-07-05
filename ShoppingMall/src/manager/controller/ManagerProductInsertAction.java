@@ -130,7 +130,7 @@ public class ManagerProductInsertAction extends AbstractController {
            String explain = mtrequest.getParameter("explain");
    
            explain =  MyUtil.replaceParameter(explain);         
-           explain = explain.replaceAll("\r\n", "<br/>");
+          // explain = explain.replaceAll("\r\n", "<br/>");
    
            ProductVO pvo = new ProductVO();
            
@@ -159,9 +159,11 @@ public class ManagerProductInsertAction extends AbstractController {
           // 상품 상세 이미지 업로드 
            int m = 0; 
            if(n==1) {
-              int imageCount = Integer.parseInt(mtrequest.getParameter("imageCount"));
-              for(int i=0; i<imageCount; i++) {
-                 String detail_img = mtrequest.getFilesystemName("detail_img"+(i+1));
+              for(int i=0; i<3; i++) {
+            	  String detail_img = null;
+            	  if(mtrequest.getFilesystemName("detail_img"+(i+1)) != null) {
+            		  detail_img = mtrequest.getFilesystemName("detail_img"+(i+1));
+            	  }
                  m = pdao.productImageInsert(product_num, detail_img);    
               }              
            }

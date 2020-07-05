@@ -5,6 +5,7 @@ import java.util.*;
 import javax.naming.*;
 import javax.sql.DataSource;
 
+import main.model.ImageVO;
 import product.model.ProductVO;
 
 public class ProductDAO implements InterProductDAO {
@@ -525,8 +526,8 @@ public class ProductDAO implements InterProductDAO {
 			try {
 				conn = ds.getConnection();
 				
-				String sql = " insert into product_image_table(fk_product_num, image) "
-							+" values(?,?) ";
+				String sql = " insert into product_image_table(product_image_num,fk_product_num, image) "
+							+" values(seq_product_image.nextval,?,?) ";
 				
 				pstmt = conn.prepareStatement(sql);
 
@@ -601,14 +602,14 @@ public class ProductDAO implements InterProductDAO {
 
 		// 상세이미지 불러오기
 		@Override
-		public List<String> detailProductImg(String product_num) throws SQLException {
+		public List<ImageVO> detailProductImg(String product_num) throws SQLException {
 			
-			List<String> imageList = new ArrayList<String>();
+			List<ImageVO> imageList = new ArrayList<ImageVO>();
 			
 			try {
 				conn = ds.getConnection();
 				
-				String sql = " select image "
+				String sql = " select product_image_num, image "
 							+" from product_image_table "
 							+" where fk_product_num= ? ";
 
@@ -619,8 +620,10 @@ public class ProductDAO implements InterProductDAO {
 				rs = pstmt.executeQuery();	
 				
 				while(rs.next()) {					
-					
-					imageList.add(rs.getString("IMAGE"));
+					ImageVO img = new ImageVO();
+					img.setImg_num(rs.getInt("product_image_num"));
+					img.setImage(rs.getString("image"));
+					imageList.add(img);
 				
 				}
 													
@@ -715,7 +718,7 @@ public class ProductDAO implements InterProductDAO {
 				conn = ds.getConnection();
 				
 				String sql = " update product_image_table set image=? "
-							+" where image=? ";
+							+" where product_image_num =? ";
 				
 				pstmt = conn.prepareStatement(sql);
 
@@ -766,7 +769,7 @@ public class ProductDAO implements InterProductDAO {
 			try {
 				conn = ds.getConnection();
 				
-				String sql = " delete from product_image_table where image =? ";
+				String sql = " update product_image_table set image='' where product_image_num =? ";
 				
 				pstmt = conn.prepareStatement(sql);
 

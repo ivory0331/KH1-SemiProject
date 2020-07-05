@@ -125,8 +125,8 @@ public class ManagerProductUpdateAction extends AbstractController {
 			  int stock = Integer.parseInt(mtrequest.getParameter("stock"));
 			  String explain = mtrequest.getParameter("explain");
 	
-			  explain =  MyUtil.replaceParameter(explain);			
-			  explain = explain.replaceAll("\r\n", "<br/>");
+			   explain =  MyUtil.replaceParameter(explain);			
+			  // explain = explain.replaceAll("\r\n", "<br>");
 			  
 			  InterProductDAO pdao = new ProductDAO();
 			  ProductVO pvo = new ProductVO();
@@ -159,21 +159,12 @@ public class ManagerProductUpdateAction extends AbstractController {
 					  if(mtrequest.getFilesystemName("detail_img"+(i+1))!=null) {
 						  String detail_img = mtrequest.getFilesystemName("detail_img"+(i+1));
 						  String old_name = mtrequest.getParameter("old_name"+(i+1));
-						  System.out.println(">>>>>>> 올드네임"+old_name);
+						  System.out.println(">>>>>>> 위치값"+old_name);
 						  
 						
-						  if("".equals(old_name)) { 
-							  old_name = "noimage"; 
-						  }
+						  // 교체 및 새등록
+						 m = pdao.productImageReplace(detail_img, old_name);	
 						  
-						  // 교체
-						  if(!"noimage".equals(old_name)&&old_name!=null) {
-							  m = pdao.productImageReplace(detail_img, old_name);	
-						  }
-						  // 새등록
-						  else if("noimage".equals(old_name)) {
-							  m = pdao.productImageInsert(product_num, detail_img);
-						  }
 					  }else { //삭제
 						  if(("이미지 선택"+(i+1)).equals(mtrequest.getParameter("upload_name"+(i+1)))) {
 							  String old_name = mtrequest.getParameter("old_name"+(i+1));
