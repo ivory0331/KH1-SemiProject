@@ -11,6 +11,7 @@ public class OneInquiryVO {
 	private String content;
 	private String write_date;
 	private String answer;
+	private String answer_date;
 	private String emailFlag;
 	private String smsFlag;
 	private String category_content;
@@ -166,6 +167,14 @@ public class OneInquiryVO {
 
 	public void setAnswer_content(String answer_content) {
 		this.answer_content = answer_content;
+	}
+
+	public String getAnswer_date() {
+		return answer_date;
+	}
+
+	public void setAnswer_date(String answer_date) {
+		this.answer_date = answer_date;
 	}
 
 	

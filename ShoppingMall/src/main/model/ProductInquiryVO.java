@@ -20,6 +20,7 @@ public class ProductInquiryVO {
 	private MemberVO member;
 	private String product_name;
 	private int rowNum;
+	private String answer_date;
 	
 	
 	
@@ -173,6 +174,18 @@ public class ProductInquiryVO {
 
 	public void setRowNum(int rowNum) {
 		this.rowNum = rowNum;
+	}
+
+
+
+	public String getAnswer_date() {
+		return answer_date;
+	}
+
+
+
+	public void setAnswer_date(String answer_date) {
+		this.answer_date = answer_date;
 	}
 	
 	

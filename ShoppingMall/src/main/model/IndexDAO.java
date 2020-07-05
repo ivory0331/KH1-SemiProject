@@ -281,10 +281,10 @@ public class IndexDAO implements InterIndexDAO{
 		
 		try {
 			conn = ds.getConnection();
-			String sql = " select SON, RON, inquiry_num, subject, content, write_date, answer, emailFlag, smsFlag, secretFlag, fk_member_num, name "
-					   + " from(select rownum as SON, T.RON, inquiry_num, subject, content, write_date, answer, emailFlag, smsFlag, secretFlag, fk_member_num, name"
+			String sql = " select SON, RON, inquiry_num, subject, content, write_date, answer, emailFlag, smsFlag, secretFlag, fk_member_num, name, answer_date "
+					   + " from(select rownum as SON, T.RON, inquiry_num, subject, content, write_date, answer, answer_date, emailFlag, smsFlag, secretFlag, fk_member_num, name"
 					   + " from (select rownum as RON, PI.inquiry_num, PI.subject, PI.content, to_char(PI.write_date,'yyyy-mm-dd') as write_date,"
-					   + " PI.answer, PI.emailFlag, PI.smsFlag, PI.secretFlag, PI.fk_member_num, M.name "
+					   + " PI.answer, to_char(PI.answer_date,'yyyy-mm-dd') as answer_date, PI.emailFlag, PI.smsFlag, PI.secretFlag, PI.fk_member_num, M.name "
 					   + " from product_inquiry_table PI join member_table M "
 					   + " on PI.fk_member_num = M.member_num "
 					   + " where PI.fk_product_num = ? order by PI.inquiry_num asc)T order by inquiry_num desc)S where S.SON between ? and ?";
@@ -307,6 +307,7 @@ public class IndexDAO implements InterIndexDAO{
 				productQ.setSecretFlag(rs.getInt(10));
 				productQ.setFk_member_num(rs.getInt(11));
 				productQ.setName(rs.getString(12));
+				productQ.setAnswer_date(rs.getString(13));
 				productQList.add(productQ);
 			}
 			rs.close();
@@ -1616,10 +1617,10 @@ public class IndexDAO implements InterIndexDAO{
 		try {
 			conn = ds.getConnection();
 			if("product".equals(paraMap.get("type"))) {
-				sql = " update product_inquiry_table set answer = ? where inquiry_num = ? ";
+				sql = " update product_inquiry_table set answer = ?, answer_date = sysdate where inquiry_num = ? ";
 			}
 			else {
-				sql = " update one_inquiry_table set answer = ? where one_inquiry_num = ? ";	
+				sql = " update one_inquiry_table set answer = ? answer_date = sysdate where one_inquiry_num = ? ";	
 			}
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, paraMap.get("answer"));

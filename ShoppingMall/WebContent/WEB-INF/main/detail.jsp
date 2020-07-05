@@ -252,7 +252,7 @@
 		$(".numPrice").val(money);
 		$(".money").html(func_comma(money));
 		
-		$(document).on("click", ".review .accordion", function(){
+		$(document).on("click", ".accordion", function(){
 			var $target = $(this).next();
 			var $other = $target.siblings();
 			$other.each(function(index, item){
@@ -267,7 +267,7 @@
 				var hit = $(this).find(".hit");
 				console.log(hit);
 				console.log(writer);
-				if(writer != "${sessionScope.loginuser.member_num}"){
+				if(writer != "${sessionScope.loginuser.member_num}" && $(this).hasClass("review")){
 					$.ajax({
 						url:"<%=ctxPath%>/reviewHitUp.do",
 						data:{"review_num":num},
@@ -439,14 +439,14 @@
 		if($(json.productQList).length > 0){
 			var html="";
 			$(json.productQList).each(function(index, item){
-				html += "<tr class='accordion' onclick='inquiryOpen(this)'>"
+				html += "<tr style='text-align:center;' onclick='inquiryOpen(this)'>"
 				      + "<td>"+item.rowNum+"<input type='hidden' class='secret' value='"+item.secretFlag+"'/></td>"
 				      + "<td class='content-title'>"+item.subject+"<input type='hidden' class='writer' value='"+item.fk_member_num+"'</td>"
 				      + "<td>"+item.name+"</td>"
 				      + "<td>"+item.write_date+"</td>"
 				      + "</tr>"
 				      + "<tr class='panel panel-none'>"
-				      + "<td colspan='5' class='review_content'>"+item.content;
+				      + "<td colspan='5' ><div class='review_content'>"+item.content+"</div>";
 					  if(item.imageList.length > 0){
 						  $(item.imageList).each(function(index2, item2){
 							  html+="<div><img src='<%=ctxPath%>/Upload/"+item2+"' / style='margin-bottom:10px;'></div>";
@@ -457,8 +457,20 @@
 							     +" <span onclick='goInquiryUpdate("+item.inquiry_num+","+item.fk_member_num+")'>수정</span><span onclick ='goInquiryDelete("+item.inquiry_num+")'>삭제</span> "
 							     +" </div> ";
 						}
+					  
 			    html += "</td>"
 					  + "</tr>";
+			    if(item.answer!=null && item.answer.trim()!=""){
+					  html +="<tr class='accordion'>"
+					        +"<td>Re</td>"
+					        +"<td class='content-title'>안녕하세요, 고객님 답변드립니다.</td>"
+					        +"<td>MarketKurly</td>"
+					        +"<td>"+item.answer_date+"</td>"
+					        +"</tr>"
+					        +"<tr class='panel panel-none'>"
+					        +"<td colspan='5' ><div class='review_content'>"+item.answer+"</div></td>"
+					        +"</tr>";
+				  }
 			});
 			$("#question tbody").html(html); 
 			$("#inqueruyPageBar").html(json.pageBar);
