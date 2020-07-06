@@ -832,7 +832,7 @@ values(seq_product_table.nextval, '[바로이즙] ABC 착즙주스 2종', '11000
 insert into product_table (product_num, product_name, price, stock, packing, unit, sale, seller, seller_phone, fk_category_num, fk_subcategory_num,  representative_img)
 values(seq_product_table.nextval, '[산타니올] 스페인 클래식 탄산수 750ml 1박스 (6개입)', '19980', '10', '상온/종이포장', '1박스','0', '이주명', '01056785678', 5, 51, '스페인 클래식 탄산수 750ml 1박스 (6개입).jpg');
 insert into product_table (product_num, product_name, price, stock, packing, unit, sale, seller, seller_phone, fk_category_num, fk_subcategory_num,  representative_img)
-values(seq_product_table.nextval, '[산토리니] 스파클링 4종 (묶음)', '11900', '10', '상온/종이포장', '1박스','10', '이주명', '01056785678', 5, 51, '스파클링 4종 (묶음).jpg');
+values(seq_product_table.nextval, '[산토리니] 스파클링 4종 (묶음)', '11900', '10', '상온/종이포장', '1박스','0', '이주명', '01056785678', 5, 51, '스파클링 4종 (묶음).jpg');
 insert into product_table (product_num, product_name, price, stock, packing, unit, sale, seller, seller_phone, fk_category_num, fk_subcategory_num,  representative_img)
 values(seq_product_table.nextval, '[오늘의 일상] 에이드 베이스 4종', '16000', '10', '냉장/종이포장', '1병','0', '이주명', '01056785678', 5, 51, '에이드 베이스 4종.jpg');
 
@@ -845,8 +845,8 @@ insert into product_table (product_num, product_name, price, stock, packing, uni
 values(seq_product_table.nextval, '[모모스커피] RTD 콜드브루 (파나마 펄시 게샤)', '4500', '20', '냉장/종이포장', '1캔','0', '이주명', '01056785678', 5, 52, 'RTD 콜드브루 (파나마 펄시 게샤).jpg');
 insert into product_table (product_num, product_name, price, stock, packing, unit, sale, seller, seller_phone, fk_category_num, fk_subcategory_num,  representative_img)
 values(seq_product_table.nextval, '[연경재] 냉침커피 트로픽가드너(Tropic Gardener)', '4000', '10', '냉장/종이포장', '1캔','0', '이주명', '01056785678', 5, 52, '냉침커피 트로픽가드너(Tropic Gardener).jpg');
-insert into product_table (product_num, product_name, price, stock, origin, packing, unit, sale, seller, seller_phone, fk_category_num, fk_subcategory_num,  representative_img)
-values(seq_product_table.nextval, '[연경재] 커피원두 젤리빈(Jelly Bean)', '25000', '10', '콜롬비아', '상온/종이포장', '1캔','0', '이주명', '01056785678', 5, 52, '커피원두 젤리빈(Jelly Bean).jpg'); -- 원산지 있음
+insert into product_table (product_num, product_name, price, stock, origin, packing, unit, sale, seller, seller_phone, fk_category_num, fk_subcategory_num,  representative_img,best_point)
+values(seq_product_table.nextval, '[연경재] 커피원두 젤리빈(Jelly Bean)', '25000', '10', '콜롬비아', '상온/종이포장', '1캔','0', '이주명', '01056785678', 5, 52, '커피원두 젤리빈(Jelly Bean).jpg','20'); -- 원산지 있음
      
 -- 음료 우유 두유 요거트
 insert into product_table (product_num, product_name, price, stock, origin, packing, unit, sale, seller, seller_phone, fk_category_num, fk_subcategory_num,  representative_img)
@@ -857,8 +857,8 @@ insert into product_table (product_num, product_name, price, stock, packing, uni
 values(seq_product_table.nextval, '[매일] 오리지널 우유 1.5L', '3980', '5', '냉장/종이포장', '1통','0', '이주명', '01056785678', 5, 53, '오리지널 우유 1.5L.jpg');
 insert into product_table (product_num, product_name, price, stock, packing, unit, sale, seller, seller_phone, fk_category_num, fk_subcategory_num,  representative_img)
 values(seq_product_table.nextval, '[매일] 저지방 우유 1.5L', '3980', '5', '냉장/종이포장', '1통', '10','이주명', '01056785678', 5, 53, '저지방 우유 1.5L.jpg');
-insert into product_table (product_num, product_name, price, stock, packing, unit, sale, seller, seller_phone, fk_category_num, fk_subcategory_num,  representative_img)
-values(seq_product_table.nextval, '[베지밀] 건강맘 두유', '14000', '10', '상온/종이포장', '1박스','10', '이주명', '01056785678', 5, 53, '건강맘 두유.jpg');
+insert into product_table (product_num, product_name, price, stock, packing, unit, sale, seller, seller_phone, fk_category_num, fk_subcategory_num,  representative_img, best_point)
+values(seq_product_table.nextval, '[베지밀] 건강맘 두유', '14000', '10', '상온/종이포장', '1박스','10', '이주명', '01056785678', 5, 53, '건강맘 두유.jpg','20');
 
 commit;
 
@@ -1067,11 +1067,237 @@ values(seq_FAQ_table.nextval, '현금영수증 발행을 취소하고 싶어요'
 국세청 승인 전이라면 1:1문의 또는 고객센터로 문의 바랍니다.', 2);
 
 insert into FAQ_table (faq_num, subject, content, fk_category_num)
-values(seq_FAQ_table.nextval, '배송 가능 지역인지',
-'현재 전화주문이 불가합니다.(오프라인 매장 보유X)<br>
-모든 주문은 온라인으로 가능하오니 인터넷으로 접속하셔서 원하시는 상품을 주문하세요!!', 3);
+values(seq_FAQ_table.nextval, '배송 가능 지역인지 어떻게 확인하나요',
+'배송은 국내에 한해서 전 지역 다 됩니다.', 3);
 insert into FAQ_table (faq_num, subject, content, fk_category_num)
-values(seq_FAQ_table.nextval, '현금영수증 발행을 취소하고 싶어요',
-'고객의 요청에 의해 발급된 현금영수증은 국세청 승인 후에는 변경 불가합니다.<br>
-국세청 승인 전이라면 1:1문의 또는 고객센터로 문의 바랍니다.', 3);
+values(seq_FAQ_table.nextval, '배송완료 알림톡 또는 문자는 언제 오나요?',
+'배송완료 알림톡 또는 문자는 고객님께서 주문서에 기입하신 옵션대로 배송 직후 또는 아침 7시에 전송됩니다.', 3);
 
+insert into FAQ_table (faq_num, subject, content, fk_category_num)
+values(seq_FAQ_table.nextval, '배송 가능 지역인지 어떻게 확인하나요',
+'배송은 국내에 한해서 전 지역 다 됩니다.', 3);
+insert into FAQ_table (faq_num, subject, content, fk_category_num)
+values(seq_FAQ_table.nextval, '배송완료 알림톡 또는 문자는 언제 오나요?',
+'배송완료 알림톡 또는 문자는 고객님께서 주문서에 기입하신 옵션대로 배송 직후 또는 아침 7시에 전송됩니다.', 3);
+
+insert into FAQ_table (faq_num, subject, content, fk_category_num)
+values(seq_FAQ_table.nextval, '배송 가능 지역인지 어떻게 확인하나요',
+'배송은 국내에 한해서 전 지역 다 됩니다.', 3);
+insert into FAQ_table (faq_num, subject, content, fk_category_num)
+values(seq_FAQ_table.nextval, '배송완료 알림톡 또는 문자는 언제 오나요?',
+'배송완료 알림톡 또는 문자는 고객님께서 주문서에 기입하신 옵션대로 배송 직후 또는 아침 7시에 전송됩니다.', 3);
+
+insert into FAQ_table (faq_num, subject, content, fk_category_num)
+values(seq_FAQ_table.nextval, '배송 가능 지역인지 어떻게 확인하나요',
+'배송은 국내에 한해서 전 지역 다 됩니다.', 3);
+insert into FAQ_table (faq_num, subject, content, fk_category_num)
+values(seq_FAQ_table.nextval, '배송완료 알림톡 또는 문자는 언제 오나요?',
+'배송완료 알림톡 또는 문자는 고객님께서 주문서에 기입하신 옵션대로 배송 직후 또는 아침 7시에 전송됩니다.', 3);
+
+insert into FAQ_table (faq_num, subject, content, fk_category_num)
+values(seq_FAQ_table.nextval, '배송 가능 지역인지 어떻게 확인하나요',
+'배송은 국내에 한해서 전 지역 다 됩니다.', 3);
+insert into FAQ_table (faq_num, subject, content, fk_category_num)
+values(seq_FAQ_table.nextval, '배송완료 알림톡 또는 문자는 언제 오나요?',
+'배송완료 알림톡 또는 문자는 고객님께서 주문서에 기입하신 옵션대로 배송 직후 또는 아침 7시에 전송됩니다.', 3);
+
+insert into FAQ_table (faq_num, subject, content, fk_category_num)
+values(seq_FAQ_table.nextval, '배송 가능 지역인지 어떻게 확인하나요',
+'배송은 국내에 한해서 전 지역 다 됩니다.', 3);
+insert into FAQ_table (faq_num, subject, content, fk_category_num)
+values(seq_FAQ_table.nextval, '배송완료 알림톡 또는 문자는 언제 오나요?',
+'배송완료 알림톡 또는 문자는 고객님께서 주문서에 기입하신 옵션대로 배송 직후 또는 아침 7시에 전송됩니다.', 3);
+
+insert into FAQ_table (faq_num, subject, content, fk_category_num)
+values(seq_FAQ_table.nextval, '팝업이 안 보여요',
+'고객님께 유용하고 중요한 정보를 팝업으로 안내드리고 있습니다.<br>
+팝업차단을 해제하면 더 많은 좋은 쇼핑기회를 얻을 수 있습니다.<br>
+해결방법<br>
+(1)팝업창이 나오지 않을 경우, 주소입력(URL)단 밑에 노란 표시줄을 더블 클릭<br>
+(2)안내창 더블클릭 > 현재사이트의 팝업을 항상 허용', 4);
+insert into FAQ_table (faq_num, subject, content, fk_category_num)
+values(seq_FAQ_table.nextval, '상품문의 어떻게 하나요?',
+'상품문의는 상품상세 > 상품문의 <br>
+에 남겨주시면 영업일 기준 1~2일 내에 답변드립니다.', 4);
+
+insert into FAQ_table (faq_num, subject, content, fk_category_num)
+values(seq_FAQ_table.nextval, '팝업이 안 보여요',
+'고객님께 유용하고 중요한 정보를 팝업으로 안내드리고 있습니다.<br>
+팝업차단을 해제하면 더 많은 좋은 쇼핑기회를 얻을 수 있습니다.<br>
+해결방법<br>
+(1)팝업창이 나오지 않을 경우, 주소입력(URL)단 밑에 노란 표시줄을 더블 클릭<br>
+(2)안내창 더블클릭 > 현재사이트의 팝업을 항상 허용', 4);
+insert into FAQ_table (faq_num, subject, content, fk_category_num)
+values(seq_FAQ_table.nextval, '상품문의 어떻게 하나요?',
+'상품문의는 상품상세 > 상품문의 <br>
+에 남겨주시면 영업일 기준 1~2일 내에 답변드립니다.', 4);
+
+insert into FAQ_table (faq_num, subject, content, fk_category_num)
+values(seq_FAQ_table.nextval, '팝업이 안 보여요',
+'고객님께 유용하고 중요한 정보를 팝업으로 안내드리고 있습니다.<br>
+팝업차단을 해제하면 더 많은 좋은 쇼핑기회를 얻을 수 있습니다.<br>
+해결방법<br>
+(1)팝업창이 나오지 않을 경우, 주소입력(URL)단 밑에 노란 표시줄을 더블 클릭<br>
+(2)안내창 더블클릭 > 현재사이트의 팝업을 항상 허용', 4);
+insert into FAQ_table (faq_num, subject, content, fk_category_num)
+values(seq_FAQ_table.nextval, '상품문의 어떻게 하나요?',
+'상품문의는 상품상세 > 상품문의 <br>
+에 남겨주시면 영업일 기준 1~2일 내에 답변드립니다.', 4);
+
+insert into FAQ_table (faq_num, subject, content, fk_category_num)
+values(seq_FAQ_table.nextval, '팝업이 안 보여요',
+'고객님께 유용하고 중요한 정보를 팝업으로 안내드리고 있습니다.<br>
+팝업차단을 해제하면 더 많은 좋은 쇼핑기회를 얻을 수 있습니다.<br>
+해결방법<br>
+(1)팝업창이 나오지 않을 경우, 주소입력(URL)단 밑에 노란 표시줄을 더블 클릭<br>
+(2)안내창 더블클릭 > 현재사이트의 팝업을 항상 허용', 4);
+insert into FAQ_table (faq_num, subject, content, fk_category_num)
+values(seq_FAQ_table.nextval, '상품문의 어떻게 하나요?',
+'상품문의는 상품상세 > 상품문의 <br>
+에 남겨주시면 영업일 기준 1~2일 내에 답변드립니다.', 4);
+
+insert into FAQ_table (faq_num, subject, content, fk_category_num)
+values(seq_FAQ_table.nextval, '팝업이 안 보여요',
+'고객님께 유용하고 중요한 정보를 팝업으로 안내드리고 있습니다.<br>
+팝업차단을 해제하면 더 많은 좋은 쇼핑기회를 얻을 수 있습니다.<br>
+해결방법<br>
+(1)팝업창이 나오지 않을 경우, 주소입력(URL)단 밑에 노란 표시줄을 더블 클릭<br>
+(2)안내창 더블클릭 > 현재사이트의 팝업을 항상 허용', 4);
+insert into FAQ_table (faq_num, subject, content, fk_category_num)
+values(seq_FAQ_table.nextval, '상품문의 어떻게 하나요?',
+'상품문의는 상품상세 > 상품문의 <br>
+에 남겨주시면 영업일 기준 1~2일 내에 답변드립니다.', 4);
+
+insert into FAQ_table (faq_num, subject, content, fk_category_num)
+values(seq_FAQ_table.nextval, '팝업이 안 보여요',
+'고객님께 유용하고 중요한 정보를 팝업으로 안내드리고 있습니다.<br>
+팝업차단을 해제하면 더 많은 좋은 쇼핑기회를 얻을 수 있습니다.<br>
+해결방법<br>
+(1)팝업창이 나오지 않을 경우, 주소입력(URL)단 밑에 노란 표시줄을 더블 클릭<br>
+(2)안내창 더블클릭 > 현재사이트의 팝업을 항상 허용', 4);
+insert into FAQ_table (faq_num, subject, content, fk_category_num)
+values(seq_FAQ_table.nextval, '상품문의 어떻게 하나요?',
+'상품문의는 상품상세 > 상품문의 <br>
+에 남겨주시면 영업일 기준 1~2일 내에 답변드립니다.', 4);
+
+-- 상품 문의 게시글 데이터 추가 --
+desc product_inquiry_table;
+insert into product_inquiry_table(inquiry_num, subject, content, fk_member_num, fk_product_num)
+values(seq_product_inquiry.nextval, '상품이 없어요','안녕하세요, 상품이 없어요, 어떻게 된거에요',2,1);
+
+insert into product_inquiry_table(inquiry_num, subject, content, fk_member_num, fk_product_num)
+values(seq_product_inquiry.nextval, '상품이 없어요','안녕하세요, 상품이 없어요, 어떻게 된거에요',2,1);
+insert into product_inquiry_table(inquiry_num, subject, content, fk_member_num, fk_product_num)
+values(seq_product_inquiry.nextval, '상품이 없어요','안녕하세요, 상품이 없어요, 어떻게 된거에요',2,1);
+insert into product_inquiry_table(inquiry_num, subject, content, fk_member_num, fk_product_num)
+values(seq_product_inquiry.nextval, '상품이 없어요','안녕하세요, 상품이 없어요, 어떻게 된거에요',2,1);
+insert into product_inquiry_table(inquiry_num, subject, content, fk_member_num, fk_product_num)
+values(seq_product_inquiry.nextval, '상품이 없어요','안녕하세요, 상품이 없어요, 어떻게 된거에요',2,1);
+insert into product_inquiry_table(inquiry_num, subject, content, fk_member_num, fk_product_num)
+values(seq_product_inquiry.nextval, '상품이 없어요','안녕하세요, 상품이 없어요, 어떻게 된거에요',2,1);
+insert into product_inquiry_table(inquiry_num, subject, content, fk_member_num, fk_product_num)
+values(seq_product_inquiry.nextval, '상품이 없어요','안녕하세요, 상품이 없어요, 어떻게 된거에요',2,1);
+insert into product_inquiry_table(inquiry_num, subject, content, fk_member_num, fk_product_num)
+values(seq_product_inquiry.nextval, '상품이 없어요','안녕하세요, 상품이 없어요, 어떻게 된거에요',2,1);
+insert into product_inquiry_table(inquiry_num, subject, content, fk_member_num, fk_product_num)
+values(seq_product_inquiry.nextval, '상품이 없어요','안녕하세요, 상품이 없어요, 어떻게 된거에요',2,1);
+insert into product_inquiry_table(inquiry_num, subject, content, fk_member_num, fk_product_num)
+values(seq_product_inquiry.nextval, '상품이 없어요','안녕하세요, 상품이 없어요, 어떻게 된거에요',2,1);
+insert into product_inquiry_table(inquiry_num, subject, content, fk_member_num, fk_product_num)
+values(seq_product_inquiry.nextval, '상품이 없어요','안녕하세요, 상품이 없어요, 어떻게 된거에요',2,1);
+insert into product_inquiry_table(inquiry_num, subject, content, fk_member_num, fk_product_num)
+values(seq_product_inquiry.nextval, '상품이 없어요','안녕하세요, 상품이 없어요, 어떻게 된거에요',2,1);
+insert into product_inquiry_table(inquiry_num, subject, content, fk_member_num, fk_product_num)
+values(seq_product_inquiry.nextval, '상품이 없어요','안녕하세요, 상품이 없어요, 어떻게 된거에요',2,1);
+insert into product_inquiry_table(inquiry_num, subject, content, fk_member_num, fk_product_num)
+values(seq_product_inquiry.nextval, '상품이 없어요','안녕하세요, 상품이 없어요, 어떻게 된거에요',2,1);
+insert into product_inquiry_table(inquiry_num, subject, content, fk_member_num, fk_product_num)
+values(seq_product_inquiry.nextval, '상품이 없어요','안녕하세요, 상품이 없어요, 어떻게 된거에요',2,1);
+insert into product_inquiry_table(inquiry_num, subject, content, fk_member_num, fk_product_num)
+values(seq_product_inquiry.nextval, '상품이 없어요','안녕하세요, 상품이 없어요, 어떻게 된거에요',2,1);
+insert into product_inquiry_table(inquiry_num, subject, content, fk_member_num, fk_product_num)
+values(seq_product_inquiry.nextval, '상품이 없어요','안녕하세요, 상품이 없어요, 어떻게 된거에요',2,1);
+insert into product_inquiry_table(inquiry_num, subject, content, fk_member_num, fk_product_num)
+values(seq_product_inquiry.nextval, '상품이 없어요','안녕하세요, 상품이 없어요, 어떻게 된거에요',2,1);
+insert into product_inquiry_table(inquiry_num, subject, content, fk_member_num, fk_product_num)
+values(seq_product_inquiry.nextval, '상품이 없어요','안녕하세요, 상품이 없어요, 어떻게 된거에요',2,1);
+insert into product_inquiry_table(inquiry_num, subject, content, fk_member_num, fk_product_num)
+values(seq_product_inquiry.nextval, '상품이 없어요','안녕하세요, 상품이 없어요, 어떻게 된거에요',2,1);
+insert into product_inquiry_table(inquiry_num, subject, content, fk_member_num, fk_product_num)
+values(seq_product_inquiry.nextval, '상품이 없어요','안녕하세요, 상품이 없어요, 어떻게 된거에요',2,1);
+
+
+
+insert into product_inquiry_table(inquiry_num, subject, content, fk_member_num, fk_product_num)
+values(seq_product_inquiry.nextval, '상품이 없어요','안녕하세요, 상품이 없어요, 어떻게 된거에요',2,2);
+insert into product_inquiry_table(inquiry_num, subject, content, fk_member_num, fk_product_num)
+values(seq_product_inquiry.nextval, '상품이 없어요','안녕하세요, 상품이 없어요, 어떻게 된거에요',2,2);
+insert into product_inquiry_table(inquiry_num, subject, content, fk_member_num, fk_product_num)
+values(seq_product_inquiry.nextval, '상품이 없어요','안녕하세요, 상품이 없어요, 어떻게 된거에요',2,2);
+insert into product_inquiry_table(inquiry_num, subject, content, fk_member_num, fk_product_num)
+values(seq_product_inquiry.nextval, '상품이 없어요','안녕하세요, 상품이 없어요, 어떻게 된거에요',2,2);
+insert into product_inquiry_table(inquiry_num, subject, content, fk_member_num, fk_product_num)
+values(seq_product_inquiry.nextval, '상품이 없어요','안녕하세요, 상품이 없어요, 어떻게 된거에요',2,2);
+insert into product_inquiry_table(inquiry_num, subject, content, fk_member_num, fk_product_num)
+values(seq_product_inquiry.nextval, '상품이 없어요','안녕하세요, 상품이 없어요, 어떻게 된거에요',2,2);
+insert into product_inquiry_table(inquiry_num, subject, content, fk_member_num, fk_product_num)
+values(seq_product_inquiry.nextval, '상품이 없어요','안녕하세요, 상품이 없어요, 어떻게 된거에요',2,2);
+insert into product_inquiry_table(inquiry_num, subject, content, fk_member_num, fk_product_num)
+values(seq_product_inquiry.nextval, '상품이 없어요','안녕하세요, 상품이 없어요, 어떻게 된거에요',2,2);
+insert into product_inquiry_table(inquiry_num, subject, content, fk_member_num, fk_product_num)
+values(seq_product_inquiry.nextval, '상품이 없어요','안녕하세요, 상품이 없어요, 어떻게 된거에요',2,2);
+insert into product_inquiry_table(inquiry_num, subject, content, fk_member_num, fk_product_num)
+values(seq_product_inquiry.nextval, '상품이 없어요','안녕하세요, 상품이 없어요, 어떻게 된거에요',2,2);
+insert into product_inquiry_table(inquiry_num, subject, content, fk_member_num, fk_product_num)
+values(seq_product_inquiry.nextval, '상품이 없어요','안녕하세요, 상품이 없어요, 어떻게 된거에요',2,2);
+insert into product_inquiry_table(inquiry_num, subject, content, fk_member_num, fk_product_num)
+values(seq_product_inquiry.nextval, '상품이 없어요','안녕하세요, 상품이 없어요, 어떻게 된거에요',2,2);
+insert into product_inquiry_table(inquiry_num, subject, content, fk_member_num, fk_product_num)
+values(seq_product_inquiry.nextval, '상품이 없어요','안녕하세요, 상품이 없어요, 어떻게 된거에요',2,2);
+insert into product_inquiry_table(inquiry_num, subject, content, fk_member_num, fk_product_num)
+values(seq_product_inquiry.nextval, '상품이 없어요','안녕하세요, 상품이 없어요, 어떻게 된거에요',2,2);
+insert into product_inquiry_table(inquiry_num, subject, content, fk_member_num, fk_product_num)
+values(seq_product_inquiry.nextval, '상품이 없어요','안녕하세요, 상품이 없어요, 어떻게 된거에요',2,2);
+insert into product_inquiry_table(inquiry_num, subject, content, fk_member_num, fk_product_num)
+values(seq_product_inquiry.nextval, '상품이 없어요','안녕하세요, 상품이 없어요, 어떻게 된거에요',2,2);
+insert into product_inquiry_table(inquiry_num, subject, content, fk_member_num, fk_product_num)
+values(seq_product_inquiry.nextval, '상품이 없어요','안녕하세요, 상품이 없어요, 어떻게 된거에요',2,2);
+insert into product_inquiry_table(inquiry_num, subject, content, fk_member_num, fk_product_num)
+values(seq_product_inquiry.nextval, '상품이 없어요','안녕하세요, 상품이 없어요, 어떻게 된거에요',2,2);
+insert into product_inquiry_table(inquiry_num, subject, content, fk_member_num, fk_product_num)
+values(seq_product_inquiry.nextval, '상품이 없어요','안녕하세요, 상품이 없어요, 어떻게 된거에요',2,2);
+insert into product_inquiry_table(inquiry_num, subject, content, fk_member_num, fk_product_num)
+values(seq_product_inquiry.nextval, '상품이 없어요','안녕하세요, 상품이 없어요, 어떻게 된거에요',2,2);
+
+commit;
+
+-- 주문내역 데이터 추가 --
+desc order_table;
+/*
+ORDER_NUM               NOT NULL NUMBER        
+ORDER_DATE                       DATE          
+RECIPIENT               NOT NULL VARCHAR2(50)  
+RECIPIENT_MOBILE        NOT NULL VARCHAR2(100) 
+RECIPIENT_POSTCODE      NOT NULL VARCHAR2(100) 
+RECIPIENT_ADDRESS       NOT NULL VARCHAR2(200) 
+RECIPIENT_DETAILADDRESS NOT NULL VARCHAR2(200) 
+PRICE                   NOT NULL NUMBER        
+MEMO                             VARCHAR2(200) 
+FK_MEMBER_NUM                    NUMBER        
+FK_CATEGORY_NUM         NOT NULL NUMBER  
+*/
+select * from order_table;
+select * from order_product_table;
+
+insert into order_table(order_num, recipient, recipient_mobile, recipient_postcode, recipient_address, recipient_detailaddress, price, fk_member_num, fk_category_num)
+values(seq_order_table.nextval, '이주명', '01091018698' , '21519','인천 남동구 서판로 30(만수동, 대성유니드 별빛마을 아파트)','103동 1701호', 12600,2,0);
+insert into order_product_table(product_count, fk_order_num, fk_product_num, price)
+values(3,2,90,3000);
+
+
+update order_table set order_date = sysdate-30 where order_num > 2;
+update order_table set order_date = sysdate-60 where order_num > 7;
+update order_table set order_date = sysdate-90 where order_num > 10;
+update order_table set order_date = sysdate-120 where order_num > 19;
+update order_table set order_date = sysdate-141 where order_num > 23;
+commit;
