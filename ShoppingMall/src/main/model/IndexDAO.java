@@ -225,8 +225,8 @@ public class IndexDAO implements InterIndexDAO{
 					   + " from"
 					   + " 		(select R.review_num, R.subject, R.content, to_char(R.write_date,'yyyy-mm-dd') as write_date,"
 					   + " 		R.hit, R.favorite, R.fk_product_num, R.fk_order_num, R.fk_member_num, M.name"
-					   + " 		from review_table R join member_table M on R.fk_member_num = M.member_num where R.fk_product_num = ? order by review_num asc)V" 
-					   + " )T order by review_num desc) S where S.SON between ? and ?";
+					   + " 		from review_table R join member_table M on R.fk_member_num = M.member_num where R.fk_product_num = ? order by review_num desc)V" 
+					   + " )T order by RON desc) S where S.SON between ? and ?";
 			
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setInt(1, paraMap.get("product_num"));
@@ -289,7 +289,7 @@ public class IndexDAO implements InterIndexDAO{
 					   + " PI.answer, to_char(PI.answer_date,'yyyy-mm-dd') as answer_date, PI.emailFlag, PI.smsFlag, PI.secretFlag, PI.fk_member_num, M.name "
 					   + " from product_inquiry_table PI join member_table M "
 					   + " on PI.fk_member_num = M.member_num "
-					   + " where PI.fk_product_num = ? order by PI.inquiry_num asc)T order by inquiry_num desc)S where S.SON between ? and ?";
+					   + " where PI.fk_product_num = ? order by PI.inquiry_num desc)T order by RON desc)S where S.SON between ? and ?";
 			
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setInt(1, paraMap.get("product_num"));
@@ -1809,7 +1809,7 @@ public class IndexDAO implements InterIndexDAO{
 			conn=ds.getConnection();
 			
 			String sql = " select ceil(count(*)/?) as totalPage "
-						+" from order_table ";
+						+" from order_table join member_table on fk_member_num = member_num ";
 			
 			String searchWord = paraMap.get("searchWord");
 			String orderState = paraMap.get("orderState");

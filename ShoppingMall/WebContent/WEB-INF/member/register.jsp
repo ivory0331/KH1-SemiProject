@@ -860,11 +860,11 @@ div.check_event{
 	        return;
 	    } */
 		
-		//생년월일 인증검사 체크 
+		/* //생년월일 인증검사 체크 
 		if(!bBirthDuplicateCheck){
 			alert("정확한 생년월일을 기입해주세요")
 			return;
-		}
+		} */
 		//아이디 중복체크 검사 
 		if (!bIdDuplicateCheck) {
 			alert("아이디 중복확인을 해주세요");

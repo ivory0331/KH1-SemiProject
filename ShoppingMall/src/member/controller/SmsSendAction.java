@@ -19,10 +19,10 @@ public class SmsSendAction extends AbstractController {
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
 
 		  //String api_key = "발급받은 본인의 API Key";  // 발급받은 본인 API Key
-			String api_key = "NCSEDIIYGACWHY05";  // 
+			String api_key = "NCSJXWJS4V4VUD9F";  // 
 		  
 		  //String api_secret = "발급받은 본인의 API Secret";  // 발급받은 본인 API Secret
-			String api_secret = "UECEI6N6LAD33NRR1FLP9CV6G5YU6AUI";  // 
+			String api_secret = "D9GSBY20F8XZ17AEHCX7EMTS7BOJGYWP";  // 
 			
 			Message coolsms = new Message(api_key, api_secret);
 			// net.nurigo.java_sdk.api.Message 임. 

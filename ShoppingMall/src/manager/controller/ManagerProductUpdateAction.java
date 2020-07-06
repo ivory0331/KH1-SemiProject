@@ -170,9 +170,18 @@ public class ManagerProductUpdateAction extends AbstractController {
 						  String old_name = mtrequest.getParameter("old_name"+(i+1));
 						  System.out.println(">>>>>>> 위치값"+old_name);
 						  
-						
-						  // 교체 및 새등록
-						 m = pdao.productImageReplace(detail_img, old_name);	
+						  if("".equals(old_name)) {
+		                       old_name="no_image";
+		                       System.out.println(">>>>>>>>>>>>>>>>>>>>>>old_name : "+old_name);
+		                    }
+		                    
+		                    if("no_image".equals(old_name)) {
+		                       m=pdao.productImageInsert(product_num, detail_img);
+		                    }else {
+		                     // 교체 및 새등록
+		                       m = pdao.productImageReplace(detail_img, old_name);   
+		                    }
+	
 						  
 					  }else { //삭제
 						  if(("이미지 선택"+(i+1)).equals(mtrequest.getParameter("upload_name"+(i+1)))) {

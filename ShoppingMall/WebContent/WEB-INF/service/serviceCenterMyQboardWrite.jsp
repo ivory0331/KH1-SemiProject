@@ -62,7 +62,6 @@
 }
 
 .Mycontainer {
-	font-family: noto sans;
 	letter-spacing: 0.7;
 }
 

@@ -193,11 +193,11 @@
 						</c:if>
 						<c:if test="${not empty orderList}">		
 							<c:forEach var="order" items="${orderList}">
-									<tr style="cursor: pointer;" onclick ="goOrderDetail('${order.order_num}')">
+									<tr>
 										<td><input type="checkbox" name="state" value="${order.order_num}" /></td>
 										<td>${order.order_num}</td>
-										<td>${order.member.name}</td>
-										<td>${order.recipient_address}</td>
+										<td onclick ="goOrderDetail('${order.order_num}')" style="cursor: pointer;">${order.member.name}</td>
+										<td onclick ="goOrderDetail('${order.order_num}')" style="cursor: pointer;">${order.recipient_address}</td>
 										<td>${order.price}</td>
 										<td>${order.order_state}</td>
 									</tr>

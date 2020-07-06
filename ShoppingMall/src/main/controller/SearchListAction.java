@@ -37,20 +37,22 @@ public class SearchListAction extends AbstractController {
 		pageNo = ( ( Integer.parseInt(currentShowPageNo) - 1) / blockSize ) * blockSize + 1;
 		
 		
-		String pageBar = "";
+		String pageBar = "<nav aria-label='Page navigation'>"
+				   + "<ul class='pagination'>"
+				   + "<li class=disabled>";
 		
 		// *** [이전] 만들기 *** //
 		if( pageNo != 1 ) {
-			pageBar += "&nbsp;<a href='searchList.do?productSearchWord="+productSearchWord+"&currentShowPageNo="+(pageNo-1)+"'>[이전]</a>&nbsp;";
+			pageBar += "&nbsp;<a aria-label='Previous' href='searchList.do?productSearchWord="+productSearchWord+"&currentShowPageNo="+(pageNo-1)+"'><span aria-hidden='true'>«</span></a></li>&nbsp";
 		}
 				
 		while( !(loop > blockSize || pageNo > totalPage) ) {
 			
 			if(pageNo == Integer.parseInt(currentShowPageNo)) {
-				pageBar += "&nbsp;<span style='color: red; border: solid 1px gray; padding: 2px 4px;'>"+pageNo+"</span>&nbsp;";
+				pageBar += "&nbsp;<li class='active'><span style='color:#5F0080; border: solid 0.5px #e6e6e6; background-color:#f2f2f2;'>"+pageNo+"</span></li>&nbsp;";
 			}
 			else {
-				pageBar += "&nbsp;<a href='searchList.do?productSearchWord="+productSearchWord+"&currentShowPageNo="+pageNo+"'>"+pageNo+"</a>&nbsp;";
+				pageBar += "&nbsp;<li><a href='searchList.do?productSearchWord="+productSearchWord+"&currentShowPageNo="+pageNo+"'><span style='color:#333;'>"+pageNo+"</span></a></li>&nbsp;";
 			}		
 			pageNo++; // 1 2 3 4 5 6 7 8 9 10 11 12 13 14 ... 40 41 42
 			loop++;	  // 1 2 3 4 5 6 7 8 9 10
@@ -59,8 +61,10 @@ public class SearchListAction extends AbstractController {
 		
 		// *** [다음] 만들기 *** //
 		if( !(pageNo > totalPage) ) {
-				pageBar += "&nbsp;<a href='searchList.do?productSearchWord="+productSearchWord+"&currentShowPageNo="+pageNo+"'>[다음]</a>&nbsp;";
+				pageBar += "&nbsp;<li><a aria-label='Next' href='searchList.do?productSearchWord="+productSearchWord+"&currentShowPageNo="+pageNo+"'><span aria-hidden='true'>»</span></a></li>&nbsp;";
 		}
+		
+		pageBar += "</li></ul></nav>";
 		
 		request.setAttribute("pageBar", pageBar);
 		
