@@ -526,7 +526,7 @@ FK_SUBCATEGORY_NUM NOT NULL NUMBER
 -- 소고기
 insert into product_table (product_num, product_name, price, stock, origin, packing, unit, shelf, information, sale, best_point, seller, seller_phone, fk_category_num, fk_subcategory_num, representative_img, explain) 
 values(seq_product_table.nextval, '1등급 한우 갈빗살 구이용 200g(냉장)', '31000', '1000', '국내산(한우)', '냉장/종이포장','1팩', '포장일로부터 최소5일 이내 제품을 보내드립니다.',
-'본 제품은 알레르기를 유발할 수 있습니다.배닐포당 등에 의해 산소가 공급되지 않아 간혹 검붉게 변하는 현상이 발생할 수 있으나, 산소와 접촉하면 선홍색으로 돌아오는 점 안내드립니다.', '10','5', '김진하', '01075653393', 4, 41, '1등급 한우 갈빗살 구이용 200g(냉장).png'
+'본 제품은 알레르기를 유발할 수 있습니다.<br>비닐 포장 등에 의해 산소가 공급되지 않아 간혹 검붉게 변하는 현상이 발생할 수 있으나, 산소와 접촉하면 선홍색으로 돌아오는 점 안내드립니다.', '10','5', '김진하', '01075653393', 4, 41, '1등급 한우 갈빗살 구이용 200g(냉장).png'
 ,'컬리가 좋은 소식처럼 들려드리고 싶은 소고기, 소식의 1등급 한후 갈빗살 구이용을 만나보세요. 
 소식은 전국 최대 도축물량을 자랑하는 음성축산공판장에서 선별을 마친 고기를 즉시 가공하는데요.
 엄선한 1등급 한우의 갈빗살을 정육해 담았답니다. 냉동하지 않은 냉장 제품으리 고기의 육즙이 그대로 보존돼 있어요. 
@@ -864,4 +864,214 @@ commit;
 
 select * from product_table where product_num = 1;
 
+-- 공지사항 테이블 데이터 추가 --
+
+insert into notice_table (notice_num, subject, content) 
+values(seq_notice_table.nextval,'취소/반품/환불요청은 어떻게 하나요','주문 취소는 제품 배송 전일 오후 6시까지 고객 행복센터(1644-1107)/1:1문의게시판으로 접수 부탁드립니다.
+<br>-오후 6시 이후에는 주문 취소가 불가합니다.<br>-고객 행복 센터 운영종료 시간인 오후 4시 이후부터는 1:1문의 게시판 접수만 가능합니다.');
+
+insert into notice_table (notice_num, subject, content) 
+values(seq_notice_table.nextval,'[필독] 고객님, 구매 전 꼭 확인해 주세요','주문 취소는 제품 배송 전일 오후 6시까지 고객 행복센터(1644-1107)/1:1문의게시판으로 접수 부탁드립니다.
+<br>-오후 6시 이후에는 주문 취소가 불가합니다.<br>-고객 행복 센터 운영종료 시간인 오후 4시 이후부터는 1:1문의 게시판 접수만 가능합니다.');
+
+insert into notice_table (notice_num, subject, content) 
+values(seq_notice_table.nextval,'취소/반품/환불요청은 어떻게 하나요','주문 취소는 제품 배송 전일 오후 6시까지 고객 행복센터(1644-1107)/1:1문의게시판으로 접수 부탁드립니다.
+<br>-오후 6시 이후에는 주문 취소가 불가합니다.<br>-고객 행복 센터 운영종료 시간인 오후 4시 이후부터는 1:1문의 게시판 접수만 가능합니다.');
+
+insert into notice_table (notice_num, subject, content) 
+values(seq_notice_table.nextval,'취소/반품/환불요청은 어떻게 하나요','주문 취소는 제품 배송 전일 오후 6시까지 고객 행복센터(1644-1107)/1:1문의게시판으로 접수 부탁드립니다.
+<br>-오후 6시 이후에는 주문 취소가 불가합니다.<br>-고객 행복 센터 운영종료 시간인 오후 4시 이후부터는 1:1문의 게시판 접수만 가능합니다.');
+
+insert into notice_table (notice_num, subject, content) 
+values(seq_notice_table.nextval,'취소/반품/환불요청은 어떻게 하나요','주문 취소는 제품 배송 전일 오후 6시까지 고객 행복센터(1644-1107)/1:1문의게시판으로 접수 부탁드립니다.
+<br>-오후 6시 이후에는 주문 취소가 불가합니다.<br>-고객 행복 센터 운영종료 시간인 오후 4시 이후부터는 1:1문의 게시판 접수만 가능합니다.');
+
+insert into notice_table (notice_num, subject, content) 
+values(seq_notice_table.nextval,'취소/반품/환불요청은 어떻게 하나요','주문 취소는 제품 배송 전일 오후 6시까지 고객 행복센터(1644-1107)/1:1문의게시판으로 접수 부탁드립니다.
+<br>-오후 6시 이후에는 주문 취소가 불가합니다.<br>-고객 행복 센터 운영종료 시간인 오후 4시 이후부터는 1:1문의 게시판 접수만 가능합니다.');
+
+insert into notice_table (notice_num, subject, content) 
+values(seq_notice_table.nextval,'취소/반품/환불요청은 어떻게 하나요','주문 취소는 제품 배송 전일 오후 6시까지 고객 행복센터(1644-1107)/1:1문의게시판으로 접수 부탁드립니다.
+<br>-오후 6시 이후에는 주문 취소가 불가합니다.<br>-고객 행복 센터 운영종료 시간인 오후 4시 이후부터는 1:1문의 게시판 접수만 가능합니다.');
+
+insert into notice_table (notice_num, subject, content) 
+values(seq_notice_table.nextval,'취소/반품/환불요청은 어떻게 하나요','주문 취소는 제품 배송 전일 오후 6시까지 고객 행복센터(1644-1107)/1:1문의게시판으로 접수 부탁드립니다.
+<br>-오후 6시 이후에는 주문 취소가 불가합니다.<br>-고객 행복 센터 운영종료 시간인 오후 4시 이후부터는 1:1문의 게시판 접수만 가능합니다.');
+
+insert into notice_table (notice_num, subject, content) 
+values(seq_notice_table.nextval,'취소/반품/환불요청은 어떻게 하나요','주문 취소는 제품 배송 전일 오후 6시까지 고객 행복센터(1644-1107)/1:1문의게시판으로 접수 부탁드립니다.
+<br>-오후 6시 이후에는 주문 취소가 불가합니다.<br>-고객 행복 센터 운영종료 시간인 오후 4시 이후부터는 1:1문의 게시판 접수만 가능합니다.');
+
+insert into notice_table (notice_num, subject, content) 
+values(seq_notice_table.nextval,'취소/반품/환불요청은 어떻게 하나요','주문 취소는 제품 배송 전일 오후 6시까지 고객 행복센터(1644-1107)/1:1문의게시판으로 접수 부탁드립니다.
+<br>-오후 6시 이후에는 주문 취소가 불가합니다.<br>-고객 행복 센터 운영종료 시간인 오후 4시 이후부터는 1:1문의 게시판 접수만 가능합니다.');
+
+insert into notice_table (notice_num, subject, content) 
+values(seq_notice_table.nextval,'취소/반품/환불요청은 어떻게 하나요','주문 취소는 제품 배송 전일 오후 6시까지 고객 행복센터(1644-1107)/1:1문의게시판으로 접수 부탁드립니다.
+<br>-오후 6시 이후에는 주문 취소가 불가합니다.<br>-고객 행복 센터 운영종료 시간인 오후 4시 이후부터는 1:1문의 게시판 접수만 가능합니다.');
+
+insert into notice_table (notice_num, subject, content) 
+values(seq_notice_table.nextval,'취소/반품/환불요청은 어떻게 하나요','주문 취소는 제품 배송 전일 오후 6시까지 고객 행복센터(1644-1107)/1:1문의게시판으로 접수 부탁드립니다.
+<br>-오후 6시 이후에는 주문 취소가 불가합니다.<br>-고객 행복 센터 운영종료 시간인 오후 4시 이후부터는 1:1문의 게시판 접수만 가능합니다.');
+
+insert into notice_table (notice_num, subject, content) 
+values(seq_notice_table.nextval,'취소/반품/환불요청은 어떻게 하나요','주문 취소는 제품 배송 전일 오후 6시까지 고객 행복센터(1644-1107)/1:1문의게시판으로 접수 부탁드립니다.
+<br>-오후 6시 이후에는 주문 취소가 불가합니다.<br>-고객 행복 센터 운영종료 시간인 오후 4시 이후부터는 1:1문의 게시판 접수만 가능합니다.');
+
+insert into notice_table (notice_num, subject, content) 
+values(seq_notice_table.nextval,'취소/반품/환불요청은 어떻게 하나요','주문 취소는 제품 배송 전일 오후 6시까지 고객 행복센터(1644-1107)/1:1문의게시판으로 접수 부탁드립니다.
+<br>-오후 6시 이후에는 주문 취소가 불가합니다.<br>-고객 행복 센터 운영종료 시간인 오후 4시 이후부터는 1:1문의 게시판 접수만 가능합니다.');
+
+insert into notice_table (notice_num, subject, content) 
+values(seq_notice_table.nextval,'취소/반품/환불요청은 어떻게 하나요','주문 취소는 제품 배송 전일 오후 6시까지 고객 행복센터(1644-1107)/1:1문의게시판으로 접수 부탁드립니다.
+<br>-오후 6시 이후에는 주문 취소가 불가합니다.<br>-고객 행복 센터 운영종료 시간인 오후 4시 이후부터는 1:1문의 게시판 접수만 가능합니다.');
+
+insert into notice_table (notice_num, subject, content) 
+values(seq_notice_table.nextval,'취소/반품/환불요청은 어떻게 하나요','주문 취소는 제품 배송 전일 오후 6시까지 고객 행복센터(1644-1107)/1:1문의게시판으로 접수 부탁드립니다.
+<br>-오후 6시 이후에는 주문 취소가 불가합니다.<br>-고객 행복 센터 운영종료 시간인 오후 4시 이후부터는 1:1문의 게시판 접수만 가능합니다.');
+
+insert into notice_table (notice_num, subject, content) 
+values(seq_notice_table.nextval,'취소/반품/환불요청은 어떻게 하나요','주문 취소는 제품 배송 전일 오후 6시까지 고객 행복센터(1644-1107)/1:1문의게시판으로 접수 부탁드립니다.
+<br>-오후 6시 이후에는 주문 취소가 불가합니다.<br>-고객 행복 센터 운영종료 시간인 오후 4시 이후부터는 1:1문의 게시판 접수만 가능합니다.');
+
+insert into notice_table (notice_num, subject, content) 
+values(seq_notice_table.nextval,'취소/반품/환불요청은 어떻게 하나요','주문 취소는 제품 배송 전일 오후 6시까지 고객 행복센터(1644-1107)/1:1문의게시판으로 접수 부탁드립니다.
+<br>-오후 6시 이후에는 주문 취소가 불가합니다.<br>-고객 행복 센터 운영종료 시간인 오후 4시 이후부터는 1:1문의 게시판 접수만 가능합니다.');
+
+insert into notice_table (notice_num, subject, content) 
+values(seq_notice_table.nextval,'취소/반품/환불요청은 어떻게 하나요','주문 취소는 제품 배송 전일 오후 6시까지 고객 행복센터(1644-1107)/1:1문의게시판으로 접수 부탁드립니다.
+<br>-오후 6시 이후에는 주문 취소가 불가합니다.<br>-고객 행복 센터 운영종료 시간인 오후 4시 이후부터는 1:1문의 게시판 접수만 가능합니다.');
+
+insert into notice_table (notice_num, subject, content) 
+values(seq_notice_table.nextval,'취소/반품/환불요청은 어떻게 하나요','주문 취소는 제품 배송 전일 오후 6시까지 고객 행복센터(1644-1107)/1:1문의게시판으로 접수 부탁드립니다.
+<br>-오후 6시 이후에는 주문 취소가 불가합니다.<br>-고객 행복 센터 운영종료 시간인 오후 4시 이후부터는 1:1문의 게시판 접수만 가능합니다.');
+
+insert into notice_table (notice_num, subject, content) 
+values(seq_notice_table.nextval,'취소/반품/환불요청은 어떻게 하나요','주문 취소는 제품 배송 전일 오후 6시까지 고객 행복센터(1644-1107)/1:1문의게시판으로 접수 부탁드립니다.
+<br>-오후 6시 이후에는 주문 취소가 불가합니다.<br>-고객 행복 센터 운영종료 시간인 오후 4시 이후부터는 1:1문의 게시판 접수만 가능합니다.');
+
+insert into notice_table (notice_num, subject, content) 
+values(seq_notice_table.nextval,'취소/반품/환불요청은 어떻게 하나요','주문 취소는 제품 배송 전일 오후 6시까지 고객 행복센터(1644-1107)/1:1문의게시판으로 접수 부탁드립니다.
+<br>-오후 6시 이후에는 주문 취소가 불가합니다.<br>-고객 행복 센터 운영종료 시간인 오후 4시 이후부터는 1:1문의 게시판 접수만 가능합니다.');
+
+insert into notice_table (notice_num, subject, content) 
+values(seq_notice_table.nextval,'취소/반품/환불요청은 어떻게 하나요','주문 취소는 제품 배송 전일 오후 6시까지 고객 행복센터(1644-1107)/1:1문의게시판으로 접수 부탁드립니다.
+<br>-오후 6시 이후에는 주문 취소가 불가합니다.<br>-고객 행복 센터 운영종료 시간인 오후 4시 이후부터는 1:1문의 게시판 접수만 가능합니다.');
+
+insert into notice_table (notice_num, subject, content) 
+values(seq_notice_table.nextval,'취소/반품/환불요청은 어떻게 하나요','주문 취소는 제품 배송 전일 오후 6시까지 고객 행복센터(1644-1107)/1:1문의게시판으로 접수 부탁드립니다.
+<br>-오후 6시 이후에는 주문 취소가 불가합니다.<br>-고객 행복 센터 운영종료 시간인 오후 4시 이후부터는 1:1문의 게시판 접수만 가능합니다.');
+
+insert into notice_table (notice_num, subject, content) 
+values(seq_notice_table.nextval,'취소/반품/환불요청은 어떻게 하나요','주문 취소는 제품 배송 전일 오후 6시까지 고객 행복센터(1644-1107)/1:1문의게시판으로 접수 부탁드립니다.
+<br>-오후 6시 이후에는 주문 취소가 불가합니다.<br>-고객 행복 센터 운영종료 시간인 오후 4시 이후부터는 1:1문의 게시판 접수만 가능합니다.');
+
+insert into notice_table (notice_num, subject, content) 
+values(seq_notice_table.nextval,'취소/반품/환불요청은 어떻게 하나요','주문 취소는 제품 배송 전일 오후 6시까지 고객 행복센터(1644-1107)/1:1문의게시판으로 접수 부탁드립니다.
+<br>-오후 6시 이후에는 주문 취소가 불가합니다.<br>-고객 행복 센터 운영종료 시간인 오후 4시 이후부터는 1:1문의 게시판 접수만 가능합니다.');
+
+insert into notice_table (notice_num, subject, content) 
+values(seq_notice_table.nextval,'취소/반품/환불요청은 어떻게 하나요','주문 취소는 제품 배송 전일 오후 6시까지 고객 행복센터(1644-1107)/1:1문의게시판으로 접수 부탁드립니다.
+<br>-오후 6시 이후에는 주문 취소가 불가합니다.<br>-고객 행복 센터 운영종료 시간인 오후 4시 이후부터는 1:1문의 게시판 접수만 가능합니다.');
+
+insert into notice_table (notice_num, subject, content) 
+values(seq_notice_table.nextval,'취소/반품/환불요청은 어떻게 하나요','주문 취소는 제품 배송 전일 오후 6시까지 고객 행복센터(1644-1107)/1:1문의게시판으로 접수 부탁드립니다.
+<br>-오후 6시 이후에는 주문 취소가 불가합니다.<br>-고객 행복 센터 운영종료 시간인 오후 4시 이후부터는 1:1문의 게시판 접수만 가능합니다.');
+
+insert into notice_table (notice_num, subject, content) 
+values(seq_notice_table.nextval,'취소/반품/환불요청은 어떻게 하나요','주문 취소는 제품 배송 전일 오후 6시까지 고객 행복센터(1644-1107)/1:1문의게시판으로 접수 부탁드립니다.
+<br>-오후 6시 이후에는 주문 취소가 불가합니다.<br>-고객 행복 센터 운영종료 시간인 오후 4시 이후부터는 1:1문의 게시판 접수만 가능합니다.');
+commit;
+
+-- 자주하는 질문 테이블 데이터 추가 --
+desc FAQ_table;
+insert into FAQ_table (faq_num, subject, content, fk_category_num)
+values(seq_FAQ_table.nextval, '아이디와 비밀번호가 생각나지 않아요. 어떻게 찾을 수 있나요?',
+'(PC)오른쪽 위의 [로그인] > 화면 아래[아이디 찾기][비밀번호 찾기]<br>를 통해 확인이 가능하며,
+임시 비밀번호의 경우 회원가입시 등록하신 메일로 발송됩니다.<br>
+가입시 기재한 메일 주소가 기억나지 않으시거나 오류가 발생한 경우,<br>
+고객행복센터(1644-1107)로 문의 주시면 신속하게 도움 드리겠습니다.', 1);
+
+insert into FAQ_table (faq_num, subject, content, fk_category_num)
+values(seq_FAQ_table.nextval, '회원가입은 무료인가요?',
+'컬리는 배송지역 상관없이 회원가입은 무료입니다. <br>
+회원가입 후 다양한 혜택과 상품을 만나보세요', 1);
+
+insert into FAQ_table (faq_num, subject, content, fk_category_num)
+values(seq_FAQ_table.nextval, '아이디와 비밀번호가 생각나지 않아요. 어떻게 찾을 수 있나요?',
+'(PC)오른쪽 위의 [로그인] > 화면 아래[아이디 찾기][비밀번호 찾기]<br>를 통해 확인이 가능하며,
+임시 비밀번호의 경우 회원가입시 등록하신 메일로 발송됩니다.<br>
+가입시 기재한 메일 주소가 기억나지 않으시거나 오류가 발생한 경우,<br>
+고객행복센터(1644-1107)로 문의 주시면 신속하게 도움 드리겠습니다.', 1);
+
+insert into FAQ_table (faq_num, subject, content, fk_category_num)
+values(seq_FAQ_table.nextval, '회원가입은 무료인가요?',
+'컬리는 배송지역 상관없이 회원가입은 무료입니다. <br>
+회원가입 후 다양한 혜택과 상품을 만나보세요', 1);
+
+insert into FAQ_table (faq_num, subject, content, fk_category_num)
+values(seq_FAQ_table.nextval, '아이디와 비밀번호가 생각나지 않아요. 어떻게 찾을 수 있나요?',
+'(PC)오른쪽 위의 [로그인] > 화면 아래[아이디 찾기][비밀번호 찾기]<br>를 통해 확인이 가능하며,
+임시 비밀번호의 경우 회원가입시 등록하신 메일로 발송됩니다.<br>
+가입시 기재한 메일 주소가 기억나지 않으시거나 오류가 발생한 경우,<br>
+고객행복센터(1644-1107)로 문의 주시면 신속하게 도움 드리겠습니다.', 1);
+
+insert into FAQ_table (faq_num, subject, content, fk_category_num)
+values(seq_FAQ_table.nextval, '회원가입은 무료인가요?',
+'컬리는 배송지역 상관없이 회원가입은 무료입니다. <br>
+회원가입 후 다양한 혜택과 상품을 만나보세요', 1);
+
+insert into FAQ_table (faq_num, subject, content, fk_category_num)
+values(seq_FAQ_table.nextval, '전화로도 주문할 수 있나요?',
+'현재 전화주문이 불가합니다.(오프라인 매장 보유X)<br>
+모든 주문은 온라인으로 가능하오니 인터넷으로 접속하셔서 원하시는 상품을 주문하세요!!', 2);
+insert into FAQ_table (faq_num, subject, content, fk_category_num)
+values(seq_FAQ_table.nextval, '현금영수증 발행을 취소하고 싶어요',
+'고객의 요청에 의해 발급된 현금영수증은 국세청 승인 후에는 변경 불가합니다.<br>
+국세청 승인 전이라면 1:1문의 또는 고객센터로 문의 바랍니다.', 2);
+
+insert into FAQ_table (faq_num, subject, content, fk_category_num)
+values(seq_FAQ_table.nextval, '전화로도 주문할 수 있나요?',
+'현재 전화주문이 불가합니다.(오프라인 매장 보유X)<br>
+모든 주문은 온라인으로 가능하오니 인터넷으로 접속하셔서 원하시는 상품을 주문하세요!!', 2);
+insert into FAQ_table (faq_num, subject, content, fk_category_num)
+values(seq_FAQ_table.nextval, '현금영수증 발행을 취소하고 싶어요',
+'고객의 요청에 의해 발급된 현금영수증은 국세청 승인 후에는 변경 불가합니다.<br>
+국세청 승인 전이라면 1:1문의 또는 고객센터로 문의 바랍니다.', 2);
+
+insert into FAQ_table (faq_num, subject, content, fk_category_num)
+values(seq_FAQ_table.nextval, '전화로도 주문할 수 있나요?',
+'현재 전화주문이 불가합니다.(오프라인 매장 보유X)<br>
+모든 주문은 온라인으로 가능하오니 인터넷으로 접속하셔서 원하시는 상품을 주문하세요!!', 2);
+insert into FAQ_table (faq_num, subject, content, fk_category_num)
+values(seq_FAQ_table.nextval, '현금영수증 발행을 취소하고 싶어요',
+'고객의 요청에 의해 발급된 현금영수증은 국세청 승인 후에는 변경 불가합니다.<br>
+국세청 승인 전이라면 1:1문의 또는 고객센터로 문의 바랍니다.', 2);
+
+insert into FAQ_table (faq_num, subject, content, fk_category_num)
+values(seq_FAQ_table.nextval, '전화로도 주문할 수 있나요?',
+'현재 전화주문이 불가합니다.(오프라인 매장 보유X)<br>
+모든 주문은 온라인으로 가능하오니 인터넷으로 접속하셔서 원하시는 상품을 주문하세요!!', 2);
+insert into FAQ_table (faq_num, subject, content, fk_category_num)
+values(seq_FAQ_table.nextval, '현금영수증 발행을 취소하고 싶어요',
+'고객의 요청에 의해 발급된 현금영수증은 국세청 승인 후에는 변경 불가합니다.<br>
+국세청 승인 전이라면 1:1문의 또는 고객센터로 문의 바랍니다.', 2);
+
+insert into FAQ_table (faq_num, subject, content, fk_category_num)
+values(seq_FAQ_table.nextval, '전화로도 주문할 수 있나요?',
+'현재 전화주문이 불가합니다.(오프라인 매장 보유X)<br>
+모든 주문은 온라인으로 가능하오니 인터넷으로 접속하셔서 원하시는 상품을 주문하세요!!', 2);
+insert into FAQ_table (faq_num, subject, content, fk_category_num)
+values(seq_FAQ_table.nextval, '현금영수증 발행을 취소하고 싶어요',
+'고객의 요청에 의해 발급된 현금영수증은 국세청 승인 후에는 변경 불가합니다.<br>
+국세청 승인 전이라면 1:1문의 또는 고객센터로 문의 바랍니다.', 2);
+
+insert into FAQ_table (faq_num, subject, content, fk_category_num)
+values(seq_FAQ_table.nextval, '배송 가능 지역인지',
+'현재 전화주문이 불가합니다.(오프라인 매장 보유X)<br>
+모든 주문은 온라인으로 가능하오니 인터넷으로 접속하셔서 원하시는 상품을 주문하세요!!', 3);
+insert into FAQ_table (faq_num, subject, content, fk_category_num)
+values(seq_FAQ_table.nextval, '현금영수증 발행을 취소하고 싶어요',
+'고객의 요청에 의해 발급된 현금영수증은 국세청 승인 후에는 변경 불가합니다.<br>
+국세청 승인 전이라면 1:1문의 또는 고객센터로 문의 바랍니다.', 3);
 
