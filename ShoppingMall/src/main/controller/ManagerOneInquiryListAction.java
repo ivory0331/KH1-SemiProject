@@ -73,7 +73,11 @@ public class ManagerOneInquiryListAction extends AbstractController {
 	   	 pageNo = ((Integer.parseInt(currentShowPageNo)-1)/blockSize)*blockSize+1;	    	 
 	   	 
 	   	 String pageBar="";	    	 
-	   	 
+	 	if(searchType==null) { //널이면 주소에 글자 'null'로 들어가기 때문에 공백 설정을 해줘야함
+		      searchWord="";
+		      searchType="";
+		      searchCategory="0";
+	   	}
 	   	 // [이전]
 	   	 if(pageNo!=1) {
 	   		 pageBar += "&nbsp;<a href='"+request.getContextPath()+"/manager/managerOneInquiryList.do?currentShowPageNo="+(pageNo-1)+"&searchWord="+searchWord+"&searchType="+searchType+"&searchCategory="+searchCategory+"'>[이전]</a>&nbsp;";

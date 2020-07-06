@@ -63,6 +63,10 @@
 		color:purple;
 	}
 	
+	input[name='searchWord']:focus{
+		outline: none;
+	}
+		
 	
 </style>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
@@ -124,8 +128,8 @@ function goSearch() {
 					<jsp:include page="../include/serviceCenterSide.jsp"></jsp:include>
 				</div>
 				<div class="serviceCenter-board">
-					<div class="boardInfo">
-						<h3 style="display:inline-block">공지사항</h3>
+					<div class="boardInfo" style=" margin-bottom: 20px;">
+						<h3 style="display:inline-block;">공지사항</h3>
 						<span style="margin-left:10px; font-size:8pt; font-weight: bold;">새로운 소식들과 유용한 정보들을 한곳에 확인하세요.</span>
 					</div>
 					<form name="noticeFrm">

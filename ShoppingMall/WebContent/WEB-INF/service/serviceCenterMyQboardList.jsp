@@ -31,7 +31,7 @@
 	
 	.writeBtn{
 		display: inline-block;
-		border:solid 1px black;
+		border:solid 1px #ddd;
 		padding: 5px 30px;
 		background-color: purple;
 		color:white;
@@ -67,6 +67,8 @@
 	.one_content{
 		min-height: 300px;
 	}
+	
+	
 
 </style>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">

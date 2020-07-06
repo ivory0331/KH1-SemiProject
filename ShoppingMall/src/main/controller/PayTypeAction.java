@@ -56,7 +56,7 @@ public class PayTypeAction extends AbstractController {
 			delivery.put("deliveryMemo", request.getParameter("deliveryMemo"));
 			
 			int result = idao.order(loginuser, delivery, cartList);
-			if(result == (2*cartList.size())+1) {
+			if(result == (3*cartList.size())+1) {
 				session.setAttribute("payResult", result);
 				super.setRedirect(true);
 				super.setViewPage(request.getContextPath()+"/payment.do");

@@ -92,20 +92,22 @@ public class MyQboardListAction extends AbstractController {
 	   	 // pageNo 구하기
 	   	 pageNo = ((Integer.parseInt(currentShowPageNo)-1)/blockSize)*blockSize+1;	    	 
 	   	 
-	   	 String pageBar="";	    	 
+	   	String pageBar = "<nav aria-label='Page navigation'>"
+				       + "<ul class='pagination'>"
+				       + "<li class=disabled>";  	 
 	   	 
 	   	 // [이전]
 	   	 if(pageNo!=1) {
-	   		 pageBar += "&nbsp;<a href='"+request.getContextPath()+"/service/MyQue.do?currentShowPageNo="+(pageNo-1)+"'>[이전]</a>&nbsp;";
+	   		 pageBar += "&nbsp;<a aria-label='Previous' href='"+request.getContextPath()+"/service/MyQue.do?currentShowPageNo="+(pageNo-1)+"'><span aria-hidden='true'>«</span></a></li>&nbsp;";
 	   	 }
 	   	 
 	   	 // 페이지바
 	   	 while(!(loop > blockSize || pageNo > totalPage)) {
 	  		  
 		   		  if(pageNo == Integer.parseInt(currentShowPageNo)) {
-		   			  pageBar += "&nbsp;<span style='color: red; padding: 2px 4px'>" + pageNo + "</span>&nbsp;";			  
+		   			  pageBar += "&nbsp;<li class='active'><span style='color:#5F0080; border: solid 0.5px #e6e6e6; background-color:#f2f2f2;'>"+pageNo+"</span></li>&nbsp;";			  
 		   		  } else {	
-		   			  pageBar += "&nbsp;<a href='"+request.getContextPath()+"/service/MyQue.do?currentShowPageNo="+pageNo+"'>"+pageNo+"</a>&nbsp;";
+		   			  pageBar += "&nbsp;<li><a href='"+request.getContextPath()+"/service/MyQue.do?currentShowPageNo="+pageNo+"'><span style='color:#333;'>"+pageNo+"</span></a></li>";
 		   		  }
 	
 		   		  pageNo++;	// 1 2 3 4 5... (pageNo이 1이라면).... 40 41 42
@@ -115,9 +117,10 @@ public class MyQboardListAction extends AbstractController {
 	   	 
 	   	 // [다음]
 	   	 if(!(pageNo > totalPage)) {
-		    	 pageBar += "&nbsp;<a href='"+request.getContextPath()+"/service/MyQue.do?currentShowPageNo="+pageNo+"'>[다음]</a>&nbsp;";
+		    	 pageBar += "&nbsp;<li><a aria-label='Next' href='"+request.getContextPath()+"/service/MyQue.do?currentShowPageNo="+pageNo+"'>»</span></a></li>&nbsp;";
 	   	 }
 	   	 
+	   	pageBar += "</li></ul></nav>";
 	   	 
 	   	 request.setAttribute("pageBar", pageBar);	  
 	   	 request.setAttribute("oneInquiryList", oneInquiryList);

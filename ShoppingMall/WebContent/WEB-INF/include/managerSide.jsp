@@ -14,7 +14,7 @@
 		list-style: none;
 		padding: 0;
 		width: 100%;
-		border: solid 1px black;
+		border: solid 1px #ddd;
 	}
 	
 	.menu > li{

@@ -76,25 +76,27 @@ public class BoardListAction extends AbstractController {
 	   	 // pageNo 구하기
 	   	 pageNo = ((Integer.parseInt(currentShowPageNo)-1)/blockSize)*blockSize+1;	    	 
 	   	 
-	   	 String pageBar="";	    	 
+	   	String pageBar = "<nav aria-label='Page navigation'>"
+				   + "<ul class='pagination'>"
+				   + "<li class=disabled>";    	 
 	   	 
 	   	 // [이전]
 	   	 if(pageNo!=1) {
-	   		 pageBar += "&nbsp;<a href='"+request.getContextPath()+"/service/board.do?currentShowPageNo="+(pageNo-1)+"&searchType="+searchType1+"&searchType="+searchType2+"&searchWord="+searchWord+"'>[이전]</a>&nbsp;";
+	   		 pageBar += "&nbsp;<a aria-label='Previous' href='"+request.getContextPath()+"/service/board.do?currentShowPageNo="+(pageNo-1)+"&searchType="+searchType1+"&searchType="+searchType2+"&searchWord="+searchWord+"'><span aria-hidden='true'>«</span></a></li>&nbsp;";
 	   	 }
 	   	 
 	   	 // 페이지바
 	   	 while(!(loop > blockSize || pageNo > totalPage)) {
 	  		  
 		   		  if(pageNo == Integer.parseInt(currentShowPageNo)) {
-		   			  pageBar += "&nbsp;<span style='color: red; padding: 2px 4px'>" + pageNo + "</span>&nbsp;";			  
+		   			  pageBar += "&nbsp;<li class='active'><span style='color:#5F0080; border: solid 0.5px #e6e6e6; background-color:#f2f2f2;'>"+pageNo+"</span></li>&nbsp;";			  
 		   		  } else {	
 		   			  if(searchType==null) { //널이면 주소에 글자 'null'로 들어가기 때문에 공백 설정을 해줘야함
 					      searchType1="";
 					      searchType2="";
 		   				  searchWord="";
 		   			  }
-		   			  pageBar += "&nbsp;<a href='"+request.getContextPath()+"/service/board.do?currentShowPageNo="+pageNo+"&searchType="+searchType1+"&searchType="+searchType2+"&searchWord="+searchWord+"'>"+pageNo+"</a>&nbsp;";
+		   			  pageBar += "&nbsp;<li><a href='"+request.getContextPath()+"/service/board.do?currentShowPageNo="+pageNo+"&searchType="+searchType1+"&searchType="+searchType2+"&searchWord="+searchWord+"'><span style='color:#333;'>"+pageNo+"</span></a></li>&nbsp";
 		   		  }
 	
 		   		  pageNo++;	// 1 2 3 4 5... (pageNo이 1이라면).... 40 41 42
@@ -104,9 +106,10 @@ public class BoardListAction extends AbstractController {
 	   	 
 	   	 // [다음]
 	   	 if(!(pageNo > totalPage)) {
-		    	 pageBar += "&nbsp;<a href='"+request.getContextPath()+"/service/board.do?currentShowPageNo="+pageNo+"&searchType="+searchType1+"&searchType="+searchType2+"&searchWord="+searchWord+"'>[다음]</a>&nbsp;";
+		    	 pageBar += "&nbsp;<li><a aria-label='Next' href='"+request.getContextPath()+"/service/board.do?currentShowPageNo="+pageNo+"&searchType="+searchType1+"&searchType="+searchType2+"&searchWord="+searchWord+"'><span aria-hidden='true'>»</span></a></li>&nbsp;";
 	   	 }
 	   	 
+	   	pageBar += "</li></ul></nav>";
 	   	 
 	   	 request.setAttribute("pageBar", pageBar);	  
 	   	 request.setAttribute("searchWord", searchWord);	    	 

@@ -252,6 +252,12 @@
 		$(".numPrice").val(money);
 		$(".money").html(func_comma(money));
 		
+		for(var i=0; i<$(".detailTablePart").length; i++){
+			offSet[i] = $(".detailTablePart")[i].offsetTop;
+			console.log(offSet[i]);
+		}
+		
+		
 		$(document).on("click", ".accordion", function(){
 			var $target = $(this).next();
 			var $other = $target.siblings();
@@ -285,13 +291,14 @@
 				
 			}
 			$target.toggleClass("panel-none");
-		})
+			for(var i=0; i<$(".detailTablePart").length; i++){
+				offSet[i] = $(".detailTablePart")[i].offsetTop;
+				console.log(offSet[i]);
+			}
+		});
 		
 		
-		for(var i=0; i<$(".detailTablePart").length; i++){
-			offSet[i] = $(".detailTablePart")[i].offsetTop;
-			console.log(offSet[i]);
-		}
+		
 		
 		
 		func_reviewCall();
@@ -302,8 +309,8 @@
 		var $num = $("#count").val();
 		var $money = $(".numPrice").val();
 		
-		if("${product.stock}" < 100){
-			if($num<"${product.stock}"){
+		if(Number("${product.stock}") < 100){
+			if(Number($num)<Number("${product.stock}")){
 				$num++;
 			}else{
 				alert("상품의 재고가 부족합니다.");
@@ -401,17 +408,19 @@
 			         	 + "<td class='hit'>"+item.hit+"</td>"
 			         	 + "</tr>"
 				         + "<tr class='panel panel-none'>"
-				         + "<td colspan='5' class='review_content'>"+item.content;
+				         + "<td colspan='5'>";
 				if(item.imageList.length>0){
 					 $(item.imageList).each(function(index2, item2){
 						  html+="<div><img src='<%=ctxPath%>/Upload/"+item2+"' / style='margin-bottom:10px;'></div>";
 					  });
 				}
+				html+="<div class='review_content'>"+item.content+"<div>";
 				if(item.fk_member_num == "${sessionScope.loginuser.member_num}"){
 					html+=" <div class='userBtn' align='right'>"
 					     +" <span>수정</span><span onclick='goReviewDel("+item.review_num+")'>삭제</span> "
 					     +" </div> ";
 				}
+				
 				html += "</td>"
 			         + "</tr>";
 			         	 
@@ -431,6 +440,10 @@
 		var url="/reviewDel.do";
 		var data={"review_num":num};
 		reqServer(url, data);
+		for(var i=0; i<$(".detailTablePart").length; i++){
+			offSet[i] = $(".detailTablePart")[i].offsetTop;
+			console.log(offSet[i]);
+		} 
 	}
 	
 	
@@ -443,6 +456,10 @@
 				   	"totalPage":productQ_totalPage
 		           };
 		reqServer(url, data);
+		for(var i=0; i<$(".detailTablePart").length; i++){
+			offSet[i] = $(".detailTablePart")[i].offsetTop;
+			console.log(offSet[i]);
+		} 
 	}
 	
 	function printProductInquiry(json){
@@ -457,7 +474,7 @@
 				      + "<td>"+item.write_date+"</td>"
 				      + "</tr>"
 				      + "<tr class='panel panel-none'>"
-				      + "<td colspan='5' ><div class='review_content'><div>"+item.content+"</div>";
+				      + "<td colspan='5' ><div class='review_content'>"+item.content+"</div>";
 					  if(item.imageList.length > 0){
 						  $(item.imageList).each(function(index2, item2){
 							  html+="<div><img src='<%=ctxPath%>/Upload/"+item2+"' / style='margin-bottom:10px;'></div>";
@@ -469,8 +486,7 @@
 							     +" </div> ";
 						}
 					  
-			    html += "</div>"
-			   		  + "</td> "
+			    html += "</td> "
 					  + "</tr>";
 			    if(item.answer!=null && item.answer.trim()!=""){
 					  html +="<tr class='accordion'>"
@@ -523,7 +539,7 @@
 		for(var i=0; i<$(".detailTablePart").length; i++){
 			offSet[i] = $(".detailTablePart")[i].offsetTop;
 			console.log(offSet[i]);
-		}
+		} 
 	}
 	
 	function goInquiryDelete(num){

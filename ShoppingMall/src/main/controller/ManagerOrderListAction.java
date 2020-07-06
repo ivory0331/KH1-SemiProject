@@ -108,7 +108,7 @@ public class ManagerOrderListAction extends AbstractController {
 	   	 if(!(pageNo > totalPage)) {
 		    	 pageBar += "&nbsp;<a href='"+request.getContextPath()+"/service/FAQ.do?currentShowPageNo="+pageNo+"&searchWord="+searchWord+"&searchType="+searchType+"&orderState="+orderState+"'>[다음]</a>&nbsp;";
 	   	 }
-	   	
+	   	System.out.println("pageBar"+pageBar);
 	   	request.setAttribute("orderList", orderList);
 	   	request.setAttribute("sizePerPage", sizePerPage);
 	   	request.setAttribute("stateList", stateList);

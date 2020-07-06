@@ -123,6 +123,9 @@ public interface InterIndexDAO {
 	// 특정 주문정보의 배송상태 변경
 	int orderStateChane(Map<String, String> paraMap)throws SQLException;
 
+	// 상품문의 테이블 게시글 수 조회
+	int getTotalPageProductInquiry(HashMap<String, String> paraMap)throws SQLException;
+
 
 	
 

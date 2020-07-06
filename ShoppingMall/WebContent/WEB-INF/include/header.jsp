@@ -22,7 +22,7 @@
 	.logo_login{
 		width:1080px;
 		margin: 10px auto;
-		border:solid 0px black;
+		border:solid 0px #ddd;
 		background-color: white;
 	}
 	
@@ -60,7 +60,7 @@
 		z-index: 5;
 		min-width: 100px;
 		background-color: white;
-		border:solid 1px black;
+		border:solid 1px #ddd;
 	}
 	
 	/*고객센터 하위의 메뉴가 되는 ul*/
@@ -95,7 +95,7 @@
 	.header-navi{
 		max-width:1700px;
 		min-width:1080px;
-		border:solid 0px black;
+		border:solid 0px #ddd;
 		margin: 0 auto;
 		z-index: 4;
 		background-color: white;
@@ -163,7 +163,7 @@
 		z-index: 5;
 		width:170px;
 		background-color: white;
-		border:solid 1px black;
+		border:solid 1px #ddd;
 	}
 	
 	/*전체 카테고리 하위의 navi가 되는 ul*/
@@ -232,7 +232,9 @@
 	}
 
 	.navi-categori .list:hover{background-color: #f1f1f1;}
-	input[name='searchWord']:focus{outline: none;}
+	
+	input[name='productSearchWord']:focus{outline: none;}
+	
 </style>
 
 <script type="text/javascript">

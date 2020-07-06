@@ -848,7 +848,23 @@ public class IndexDAO implements InterIndexDAO{
 					pstmt.setInt(1, loginuser.getMember_num());
 					result += pstmt.executeUpdate();
 					if(result == (2*cartList.size())+1) {
-						conn.commit();
+						sql = " update product_table set stock = stock - ? where product_num = ?";
+						pstmt = conn.prepareStatement(sql);
+						for(int i=0; i<cartList.size(); i++) {
+							pstmt.setInt(1, cartList.get(i).getProduct_count());
+							pstmt.setInt(2, cartList.get(i).getProduct_num());
+							result+=pstmt.executeUpdate();
+						}
+						if(result == (3*cartList.size())+1) {
+							conn.commit();
+						}else {
+							conn.rollback();
+							result = 0;
+						}
+						
+					}else {
+						conn.rollback();
+						result = 0;
 					}
 				}
 				else {
@@ -858,6 +874,7 @@ public class IndexDAO implements InterIndexDAO{
 			}
 			else {
 				conn.rollback();
+				result = 0;
 			}
 		}
 		finally {
@@ -1908,6 +1925,79 @@ public class IndexDAO implements InterIndexDAO{
 		}
 		
 		return result;
+	}
+
+	@Override
+	public int getTotalPageProductInquiry(HashMap<String, String> paraMap) throws SQLException {
+		int totalPage = 0;
+		int sizePerPage = Integer.parseInt(paraMap.get("sizePerPage"));
+		try {
+			conn=ds.getConnection();
+			
+			String sql = " select ceil(count(*)/?) as totalPage "
+						+" from product_inquiry_table join member_table on fk_member_num = member_num join product_table on fk_product_num = product_num";
+			
+			String searchWord = paraMap.get("searchWord");
+			String category = paraMap.get("category");
+			String searchType = paraMap.get("searchType");
+			
+			
+			if((searchWord != null && !searchWord.trim().isEmpty()) && (category != null && !category.trim().isEmpty())) {      
+				sql += " where ? like '%'||?||'%'  and fk_category_num = ? ";                          
+			}
+	    
+			else if(searchWord != null && !searchWord.trim().isEmpty()) {
+				sql += " where ? like '%'||?||'%' ";
+			}
+			
+			else if(category != null && !category.trim().isEmpty()){
+				sql += " where fk_category_num = ? ";
+			}
+			
+			
+			
+			pstmt = conn.prepareStatement(sql);
+			
+			
+
+			if((searchWord != null && !searchWord.trim().isEmpty()) && (category != null && !category.trim().isEmpty())) {      
+				pstmt.setInt(1,sizePerPage);
+				pstmt.setString(2, searchType);
+				pstmt.setString(3, searchWord);
+				pstmt.setString(4, category);
+			}
+	    
+			else if(searchWord != null && !searchWord.trim().isEmpty()) {
+				pstmt.setInt(1,sizePerPage);
+				pstmt.setString(2, searchType);
+				pstmt.setString(3, searchWord);
+			}
+			
+			else if(category != null && !category.trim().isEmpty()){
+				pstmt.setInt(1,sizePerPage);
+				pstmt.setString(2, category);
+			}
+			else {
+				pstmt.setInt(1,sizePerPage);
+			}
+			
+			
+			rs = pstmt.executeQuery();
+			
+			rs.next();
+			
+			totalPage = rs.getInt(1);
+			
+			System.out.println("totalPage : "+totalPage);
+			
+		}catch(Exception e){
+			e.printStackTrace();
+		} finally {
+			close();
+		}
+		
+		
+		return totalPage;
 	}
 
 	
