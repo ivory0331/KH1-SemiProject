@@ -302,9 +302,20 @@
 		var $num = $("#count").val();
 		var $money = $(".numPrice").val();
 		
-		if($num<100){
-			$num++;
+		if("${product.stock}" < 100){
+			if($num<"${product.stock}"){
+				$num++;
+			}else{
+				alert("상품의 재고가 부족합니다.");
+			}
+		}else{
+			if($num < 100){
+				$num++;
+			}else{
+				alert("상품은 한번 구매 시에 최대 100개 까지만 선택할 수 있습니다.");
+			}
 		}
+		
 		
 		var result = Number($num)*Number(money)+"";
 		$("#count").val($num);
@@ -683,7 +694,7 @@
 						<c:if test="${product.imageList!=null}">
 							<c:forEach var="image" items="${product.imageList}" varStatus="status">
 								<c:if test="${status.index != 0 && not empty(image.image)}">
-									<div style="max-width:900px; max-height:700px;"><img src="<%=ctxPath %>/images/${image.image}"  style="margin:20px 0;"/></div>
+									<div style="max-width:900px; max-height:600px;"><img style="max-width:900px; max-height:600px;" src="<%=ctxPath %>/images/${image.image}"  style="margin:20px 0;"/></div>
 								</c:if>
 							</c:forEach>
 						</c:if>

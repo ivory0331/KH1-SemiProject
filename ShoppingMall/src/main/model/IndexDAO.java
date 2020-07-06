@@ -144,7 +144,7 @@ public class IndexDAO implements InterIndexDAO{
 					" on P.fk_category_num = C.category_num  " + 
 					" join product_subcategory_table S" + 
 					" on P.fk_subcategory_num = S.subcategory_num " + 
-					" where P.product_num = ? ";
+					" where P.product_num = ? and P.stock > 0";
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, idx);
 			rs = pstmt.executeQuery();

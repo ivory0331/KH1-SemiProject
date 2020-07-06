@@ -636,7 +636,7 @@
 					
 					<div class="btn_area" align="right" >
 							<span class="managerBtn" onclick="goSubmit()">확인</span>
-							<span class="managerBtn">취소</span>
+							<span class="managerBtn" onclick="javascript:history.back();">취소</span>
 					</div>
 				</div>
 				
