@@ -1286,6 +1286,9 @@ MEMO                             VARCHAR2(200)
 FK_MEMBER_NUM                    NUMBER        
 FK_CATEGORY_NUM         NOT NULL NUMBER  
 */
+
+alter table order_table modify RECIPIENT_DETAILADDRESS varchar2(200) null;
+
 select * from order_table;
 select * from order_product_table;
 
@@ -1301,3 +1304,5 @@ update order_table set order_date = sysdate-90 where order_num > 10;
 update order_table set order_date = sysdate-120 where order_num > 19;
 update order_table set order_date = sysdate-141 where order_num > 23;
 commit;
+
+select product_num, product_name, stock from product_table where fk_category_num=3;
