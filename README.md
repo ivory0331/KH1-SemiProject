@@ -17,7 +17,7 @@
 <br/>
 
 ## <a name="projectintro">프로젝트 소개</a>
-<strong>[마켓컬리 웹사이트 클로닝]</strong><br/>
+[마켓컬리 웹사이트 클로닝]<br/>
 마켓컬리는 현재 샛별배송으로 대한민국에서 떠오르는 스타트업 기업이자 전 연령을 아우르고 있는 기업입니다.<br/> 
 이에, 전 연령에게 적합한 UI/UX기반으로 웹사이트가 운영되고 있어 클로닝하기 좋은 사이트라 생각되어 선택하게 되었습니다. 기존의 사이트를 기반으로 사용자들에게 좀 더 직관적으로 보여주기 위해 색감과 단순한 기능위주로 구현해 보았으며, 배운 것들을 활용하여 개발하는 것이 목표였습니다.
 
@@ -51,18 +51,19 @@
 
 - 회원가입 페이지
 <img alt="Register" src="https://user-images.githubusercontent.com/66661653/92554617-babf2680-f2a0-11ea-9efe-0b39d715d964.png">
+<img alt="Register1" src="https://user-images.githubusercontent.com/66661653/92561367-0d9fda80-f2af-11ea-80b0-b4a18ffb55af.png">
 
 - 아이디 찾기
-<img alt="Register" src="https://user-images.githubusercontent.com/66661653/92556542-2dca9c00-f2a5-11ea-8086-7ee2145a3500.png">
+<img alt="IdSearch" src="https://user-images.githubusercontent.com/66661653/92556542-2dca9c00-f2a5-11ea-8086-7ee2145a3500.png">
 
 - 비밀번호 찾기
-<img alt="Register" src="https://user-images.githubusercontent.com/66661653/92556607-5f436780-f2a5-11ea-9692-05a6dc39f538.png">
+<img alt="PwSearch" src="https://user-images.githubusercontent.com/66661653/92556607-5f436780-f2a5-11ea-9692-05a6dc39f538.png">
 
 - 탈퇴하기
-<img alt="Register" src="https://user-images.githubusercontent.com/66661653/92556787-be08e100-f2a5-11ea-97dd-ae94ffeba831.png">
+<img alt="Dropout" src="https://user-images.githubusercontent.com/66661653/92561262-dd583c00-f2ae-11ea-929b-b55e4c96fe17.png">
 
 - 1:1 문의 
-<img alt="Register" src="https://user-images.githubusercontent.com/66661653/92556713-9580e700-f2a5-11ea-9aa3-6fc694290e3f.png">
+<img alt="Question" src="https://user-images.githubusercontent.com/66661653/92561490-417b0000-f2af-11ea-946a-5cfa98cfad34.png">
 
 <br/>
 <br/>
