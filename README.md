@@ -24,13 +24,13 @@
 
 <br/>
 
-## <a name="team">팀원 소개</a>
+## <a name="team">팀원 소개 😊</a>
 팀명 : 독수리 5남매 <br/>
 팀원 : 김은혜 김진하 문상아 이주명 정혜민
 
 <br/>
 
-## <a name="settings">개발 환경</a>
+## <a name="settings">개발 환경 🔧</a>
 <img width="487" alt="개발환경" src="https://user-images.githubusercontent.com/51870028/92546447-8aba5800-f28d-11ea-8c79-db4b9cd01ba5.PNG">
 
 <br/>
