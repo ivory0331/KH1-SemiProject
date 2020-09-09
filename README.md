@@ -9,7 +9,7 @@
 - <a href="#team">팀원 소개</a>
 - <a href="#settings">개발 환경</a>
 - <a href="#db">DB 설계</a>
-- <a href="#pageintro">페이지 소개</a>
+- <a href="#pageintro">구현 미리보기</a>
 
 -------------
 
@@ -39,7 +39,7 @@
 
 <br/>
 
-## <a name="pageintro">페이지 소개</a>
+## <a name="pageintro">구현 미리보기</a>
 - 메인페이지
 <img alt="Index" src="https://user-images.githubusercontent.com/51870028/92546929-b5f17700-f28e-11ea-8864-7653684e25fa.png">
 
