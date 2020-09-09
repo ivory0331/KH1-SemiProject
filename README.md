@@ -50,3 +50,8 @@
 - 장바구니 페이지
 <img alt="ShoppingCart" src="https://user-images.githubusercontent.com/51870028/92547397-c1916d80-f28f-11ea-9310-745188b23b4a.png">
 
+<br/>
+<br/>
+
+-참고 자료- <br/>
+<a href="https://m.blog.naver.com/jooeun0502/221956294941">readme 작성하는 법</a>
