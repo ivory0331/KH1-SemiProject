@@ -42,13 +42,28 @@
 
 ## 페이지 소개
 - 메인페이지
-<img alt="index" src="https://user-images.githubusercontent.com/51870028/92546929-b5f17700-f28e-11ea-8864-7653684e25fa.png">
+<img alt="Index" src="https://user-images.githubusercontent.com/51870028/92546929-b5f17700-f28e-11ea-8864-7653684e25fa.png">
 
 - 상품리스트 페이지
 <img alt="productList" src="https://user-images.githubusercontent.com/51870028/92547242-6a8b9880-f28f-11ea-8625-edaedaa91f8b.png">
 
 - 장바구니 페이지
 <img alt="ShoppingCart" src="https://user-images.githubusercontent.com/51870028/92547397-c1916d80-f28f-11ea-9310-745188b23b4a.png">
+
+- 회원가입 페이지
+<img alt="Register" src="https://user-images.githubusercontent.com/66661653/92554617-babf2680-f2a0-11ea-9efe-0b39d715d964.png">
+
+- 아이디 찾기
+<img alt="Register" src="https://user-images.githubusercontent.com/66661653/92556542-2dca9c00-f2a5-11ea-8086-7ee2145a3500.png">
+
+- 비밀번호 찾기
+<img alt="Register" src="https://user-images.githubusercontent.com/66661653/92556607-5f436780-f2a5-11ea-9692-05a6dc39f538.png">
+
+- 탈퇴하기
+<img alt="Register" src="https://user-images.githubusercontent.com/66661653/92556787-be08e100-f2a5-11ea-97dd-ae94ffeba831.png">
+
+- 1:1 문의 
+<img alt="Register" src="https://user-images.githubusercontent.com/66661653/92556713-9580e700-f2a5-11ea-9aa3-6fc694290e3f.png">
 
 <br/>
 <br/>
