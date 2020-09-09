@@ -5,18 +5,18 @@
 <br/>
 
 ## 목차
-- 프로젝트 소개
-- 팀원 소개
-- 개발 환경
-- DB 설계
-- 페이지 소개
+- <a href="#projectintro">프로젝트 소개</a>
+- <a href="#team">팀원 소개</a>
+- <a href="#settings">개발 환경</a>
+- <a href="#db">DB 설계</a>
+- <a href="#pageintro">페이지 소개</a>
 
 -------------
 
 <br/>
 <br/>
 
-## 프로젝트 소개
+## <a name="projectintro">프로젝트 소개</a>
 저희 팀은 쇼핑몰 사이트 구현을 목표로 모델링 할 사이트를 찾아보았습니다. 
 그러던 중 최근에 가장 핫한 쇼핑몰 사이트 중 웹 UI/UX 디자인이 깔끔하고
 활용해 보고 싶었던 기능이 다 들어있던 마켓컬리가 눈에 들어오게 되었고 
@@ -24,23 +24,23 @@
 
 <br/>
 
-## 팀원 소개
+## <a name="team">팀원 소개</a>
 팀명 : 독수리 5남매 <br/>
 팀원 : 김은혜 김진하 문상아 이주명 정혜민
 
 <br/>
 
-## 개발 환경
+## <a name="settings">개발 환경</a>
 <img width="487" alt="개발환경" src="https://user-images.githubusercontent.com/51870028/92546447-8aba5800-f28d-11ea-8c79-db4b9cd01ba5.PNG">
 
 <br/>
 
-## DB 설계
+## <a name="db">DB 설계</a>
 <img width="624" alt="semiprojectexerd" src="https://user-images.githubusercontent.com/51870028/92545488-3a41fb00-f28b-11ea-839f-79e188672071.png">
 
 <br/>
 
-## 페이지 소개
+## <a name="pageintro">페이지 소개</a>
 - 메인페이지
 <img alt="Index" src="https://user-images.githubusercontent.com/51870028/92546929-b5f17700-f28e-11ea-8864-7653684e25fa.png">
 
