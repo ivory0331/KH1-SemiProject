@@ -47,7 +47,7 @@
 <img alt="productList" src="https://user-images.githubusercontent.com/51870028/92547242-6a8b9880-f28f-11ea-8625-edaedaa91f8b.png">
 
 - 장바구니 페이지
-<img alt="ShoppingCart" src="https://user-images.githubusercontent.com/51870028/92547397-c1916d80-f28f-11ea-9310-745188b23b4a.png">
+<img alt="ShoppingCart" src="https://user-images.githubusercontent.com/51870028/92559681-03c8a800-f2ac-11ea-998b-dde17b836c8d.png">
 
 - 회원가입 페이지
 <img alt="Register" src="https://user-images.githubusercontent.com/66661653/92554617-babf2680-f2a0-11ea-9efe-0b39d715d964.png">
